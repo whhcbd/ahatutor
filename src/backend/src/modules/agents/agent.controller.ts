@@ -16,23 +16,32 @@ import { ResourceType } from '@shared/types/skill.types';
 
 class PipelineDto implements SixAgentInput {
   @ApiProperty({ description: '目标概念' })
+  @IsString()
   concept!: string;
 
   @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
+  @IsOptional()
+  @IsEnum(['beginner', 'intermediate', 'advanced'] as const)
   userLevel?: 'beginner' | 'intermediate' | 'advanced';
 
   @ApiProperty({ description: '学习目标', required: false })
+  @IsOptional()
+  @IsString()
   learningGoal?: string;
 
   @ApiProperty({ description: '关注领域', required: false, type: [String] })
+  @IsOptional()
   focusAreas?: string[];
 }
 
 class ExploreDto {
   @ApiProperty({ description: '目标概念' })
+  @IsString()
   concept!: string;
 
   @ApiProperty({ description: '递归深度', required: false })
+  @IsOptional()
+  @IsNumber()
   maxDepth?: number;
 }
 
@@ -95,51 +104,72 @@ class SimilarQuestionDto {
 
 class VisualDesignDto {
   @ApiProperty({ description: '目标概念' })
+  @IsString()
   concept!: string;
 
   @ApiProperty({ description: '包含遗传学丰富内容', required: false })
+  @IsOptional()
   includeEnrichment?: boolean;
 
   @ApiProperty({ description: '包含前置知识树', required: false })
+  @IsOptional()
   includePrerequisites?: boolean;
 }
 
 class NarrativeDto {
   @ApiProperty({ description: '目标概念' })
+  @IsString()
   concept!: string;
 
   @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
+  @IsOptional()
+  @IsEnum(['beginner', 'intermediate', 'advanced'] as const)
   userLevel?: 'beginner' | 'intermediate' | 'advanced';
 }
 
 class WebSearchDto {
   @ApiProperty({ description: '搜索查询' })
+  @IsString()
   query!: string;
 
   @ApiProperty({ description: '结果数量', required: false })
+  @IsOptional()
+  @IsNumber()
   numResults?: number;
 
   @ApiProperty({ description: '语言', required: false })
+  @IsOptional()
+  @IsString()
   language?: string;
 
   @ApiProperty({ description: '时间范围', enum: ['day', 'week', 'month', 'year', 'all'], required: false })
+  @IsOptional()
+  @IsEnum(['day', 'week', 'month', 'year', 'all'] as const)
   timeRange?: 'day' | 'week' | 'month' | 'year' | 'all';
 }
 
 class ResourceRecommendDto {
   @ApiProperty({ description: '目标概念' })
+  @IsString()
   concept!: string;
 
   @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
+  @IsOptional()
+  @IsEnum(['beginner', 'intermediate', 'advanced'] as const)
   userLevel?: 'beginner' | 'intermediate' | 'advanced';
 
   @ApiProperty({ description: '资源类型', enum: ['video', 'article', 'paper', 'book', 'course', 'interactive'], required: false, type: [String] })
+  @IsOptional()
   preferredTypes?: ResourceType[];
 
   @ApiProperty({ description: '语言', required: false })
+  @IsOptional()
+  @IsString()
   language?: string;
 
   @ApiProperty({ description: '推荐数量', required: false })
+  @IsOptional()
+  @IsNumber()
   count?: number;
 }
 

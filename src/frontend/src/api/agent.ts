@@ -12,7 +12,10 @@ import type {
   QuestionType,
 } from '@shared/types/genetics.types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+
+// Agent API base URL includes the /api prefix
+const AGENT_API_BASE = `${API_BASE_URL}/api`;
 
 // ==================== Types ====================
 
@@ -132,7 +135,7 @@ export interface PipelineOutput {
 class AgentApiClient {
   private baseUrl: string;
 
-  constructor(baseUrl: string = API_BASE_URL) {
+  constructor(baseUrl: string = AGENT_API_BASE) {
     this.baseUrl = baseUrl;
   }
 

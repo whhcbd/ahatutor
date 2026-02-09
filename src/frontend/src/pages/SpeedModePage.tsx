@@ -32,7 +32,6 @@ export default function SpeedModePage() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [showSelfAssessment, setShowSelfAssessment] = useState(false);
-  const [explanationLevel, setExplanationLevel] = useState(1);
   const [stats, setStats] = useState({ total: 0, correct: 0 });
   const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +42,6 @@ export default function SpeedModePage() {
     setSelectedAnswer(null);
     setIsCorrect(null);
     setShowSelfAssessment(false);
-    setExplanationLevel(1);
 
     try {
       const topic = GENETICS_TOPICS[currentTopicIndex];
@@ -105,7 +103,6 @@ export default function SpeedModePage() {
 
   const continueToNext = () => {
     setCurrentTopicIndex((prev) => (prev + 1) % GENETICS_TOPICS.length);
-    setSessionState(SpeedModeState.QUESTIONING);
     setTimeout(() => {
       startQuiz();
     }, 500);

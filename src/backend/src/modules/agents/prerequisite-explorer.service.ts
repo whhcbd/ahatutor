@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMService } from '../llm/llm.service';
+import { KnowledgeBaseService } from '../knowledge-base/knowledge-base.service';
 import { PrerequisiteNode } from '@shared/types/agent.types';
 
 /**
@@ -8,6 +9,8 @@ import { PrerequisiteNode } from '@shared/types/agent.types';
  *
  * 职责：递归构建遗传学知识树
  * 这是 AhaTutor 的核心创新功能
+ *
+ * 优化：优先从知识库获取，仅对未知概念调用 AI
  */
 @Injectable()
 export class PrerequisiteExplorerService {
@@ -20,7 +23,10 @@ export class PrerequisiteExplorerService {
     '配子', '等位基因', '纯合子', '杂合子',
   ]);
 
-  constructor(private readonly llmService: LLMService) {}
+  constructor(
+    private readonly llmService: LLMService,
+    private readonly knowledgeBase: KnowledgeBaseService,
+  ) {}
 
   /**
    * 探索概念的前置知识（核心功能）
@@ -32,6 +38,18 @@ export class PrerequisiteExplorerService {
   async explorePrerequisites(concept: string, maxDepth: number = 3): Promise<PrerequisiteNode> {
     this.logger.log(`Exploring prerequisites for: "${concept}" (max depth: ${maxDepth})`);
 
+    // 1. 首先尝试从知识库获取
+    const kbPrerequisites = this.knowledgeBase.getPrerequisites(concept);
+    if (kbPrerequisites) {
+      this.logger.log(`✅ Found prerequisites in knowledge base for: ${concept}`);
+      // 如果知识库数据是完整的，直接返回
+      if (kbPrerequisites.prerequisites && kbPrerequisites.prerequisites.length > 0) {
+        this.logger.log(`Prerequisite exploration complete: ${concept} has ${this.countNodes(kbPrerequisites)} nodes (from KB)`);
+        return kbPrerequisites;
+      }
+    }
+
+    // 2. 知识库未找到或不完整，使用递归探索
     const result = await this.recursiveExplore(concept, 0, maxDepth);
 
     this.logger.log(`Prerequisite exploration complete: ${concept} has ${this.countNodes(result)} nodes`);
@@ -65,8 +83,17 @@ export class PrerequisiteExplorerService {
       };
     }
 
-    // 询问 LLM 获取前置知识
-    const prerequisites = await this.getPrerequisitesFromLLM(concept);
+    // 先从知识库获取前置知识
+    let prerequisites: string[] = [];
+    const kbPrerequisites = this.knowledgeBase.getPrerequisites(concept);
+    if (kbPrerequisites?.prerequisites) {
+      // 提取前置概念名称
+      prerequisites = kbPrerequisites.prerequisites.map(p => p.concept);
+      this.logger.log(`✅ Using KB prerequisites for ${concept}: ${prerequisites.join(', ')}`);
+    } else {
+      // 知识库未找到，询问 LLM
+      prerequisites = await this.getPrerequisitesFromLLM(concept);
+    }
 
     // 递归探索每个前置概念
     const exploredPrerequisites = await Promise.all(
@@ -84,9 +111,11 @@ export class PrerequisiteExplorerService {
   }
 
   /**
-   * 从 LLM 获取直接前置知识
+   * 从 LLM 获取直接前置知识（仅当知识库未找到时使用）
    */
   private async getPrerequisitesFromLLM(concept: string): Promise<string[]> {
+    this.logger.log(`🤖 Calling AI for prerequisites of: ${concept}`);
+
     const prompt = `你是一位遗传学教育专家。
 
 请回答：要理解"${concept}"，学生必须先掌握哪些概念？

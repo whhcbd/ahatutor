@@ -4,7 +4,7 @@ import { KnowledgeGraph } from '../components/Visualization';
 import type { GraphNode, GraphEdge } from '../components/Visualization/KnowledgeGraph';
 
 // API 基础 URL
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
 export default function DepthModePage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,7 +23,7 @@ export default function DepthModePage() {
       if (rootNode) params.append('root', rootNode);
       if (searchQuery) params.append('domain', searchQuery);
 
-      const response = await fetch(`${API_BASE}/graph/visualize?${params}`);
+      const response = await fetch(`${API_BASE}/api/graph/visualize?${params}`);
       if (!response.ok) throw new Error('Failed to fetch graph data');
 
       const data = await response.json();
@@ -40,7 +40,7 @@ export default function DepthModePage() {
     setIsSearching(true);
     try {
       // 调用 Agent 探索前置知识
-      const agentResponse = await fetch(`${API_BASE}/agent/explore`, {
+      const agentResponse = await fetch(`${API_BASE}/api/agent/explore`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

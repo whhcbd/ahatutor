@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, Sparkles, Loader2 } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { VisualDesignerView } from '../components/Visualization/VisualDesignerView';
 
 // 遗传学知识点列表

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMService } from '../llm/llm.service';
+import { KnowledgeBaseService } from '../knowledge-base/knowledge-base.service';
 import { GeneticsEnrichment, VisualizationSuggestion } from '@shared/types/agent.types';
 
 /**
@@ -7,6 +8,8 @@ import { GeneticsEnrichment, VisualizationSuggestion } from '@shared/types/agent
  * "精确的遗传学原理是什么？"
  *
  * 职责：为概念添加详细的遗传学教学内容
+ *
+ * 优化：优先从知识库获取，仅对未知概念调用 AI
  */
 
 interface GeneticsEnrichmentResponse {
@@ -38,7 +41,10 @@ interface GeneticsEnrichmentResponse {
 export class GeneticsEnricherService {
   private readonly logger = new Logger(GeneticsEnricherService.name);
 
-  constructor(private readonly llmService: LLMService) {}
+  constructor(
+    private readonly llmService: LLMService,
+    private readonly knowledgeBase: KnowledgeBaseService,
+  ) {}
 
   /**
    * 丰富遗传学概念的教学内容
@@ -46,6 +52,22 @@ export class GeneticsEnricherService {
   async enrichConcept(concept: string): Promise<GeneticsEnrichment> {
     this.logger.log(`Enriching concept: "${concept}"`);
 
+    // 1. 首先尝试从知识库获取
+    const kbEnrichment = this.knowledgeBase.getEnrichment(concept);
+    if (kbEnrichment) {
+      this.logger.log(`✅ Found enrichment in knowledge base for: ${concept}`);
+      return kbEnrichment;
+    }
+
+    // 2. 知识库未找到，调用 AI
+    this.logger.log(`🤖 Calling AI for enrichment of: ${concept}`);
+    return await this.enrichWithAI(concept);
+  }
+
+  /**
+   * 使用 AI 丰富概念（仅当知识库未找到时使用）
+   */
+  private async enrichWithAI(concept: string): Promise<GeneticsEnrichment> {
     const prompt = `你是一位遗传学教师。请为以下遗传学概念添加详细的教学内容：
 
 概念：${concept}
@@ -139,10 +161,10 @@ export class GeneticsEnricherService {
         }) as VisualizationSuggestion,
       };
 
-      this.logger.log(`Concept enriched: ${enrichment.concept}`);
+      this.logger.log(`✅ AI enrichment complete: ${enrichment.concept}`);
       return enrichment;
     } catch (error) {
-      this.logger.error('Failed to enrich concept:', error);
+      this.logger.error('Failed to enrich concept with AI:', error);
       throw error;
     }
   }
@@ -151,6 +173,15 @@ export class GeneticsEnricherService {
    * 生成概念的简要描述
    */
   async getSummary(concept: string): Promise<string> {
+    // 首先尝试从知识库获取
+    const kbEnrichment = this.knowledgeBase.getEnrichment(concept);
+    if (kbEnrichment?.definition) {
+      this.logger.log(`✅ Found summary in knowledge base for: ${concept}`);
+      return kbEnrichment.definition;
+    }
+
+    // 知识库未找到，调用 AI
+    this.logger.log(`🤖 Calling AI for summary of: ${concept}`);
     const prompt = `请用一句话解释"${concept}"这个遗传学概念，要求通俗易懂。`;
 
     try {
@@ -169,6 +200,18 @@ export class GeneticsEnricherService {
    * 获取相关例题
    */
   async getExamples(concept: string, count: number = 3): Promise<Array<{ name: string; description: string }>> {
+    // 首先尝试从知识库获取
+    const kbEnrichment = this.knowledgeBase.getEnrichment(concept);
+    if (kbEnrichment?.examples && kbEnrichment.examples.length > 0) {
+      this.logger.log(`✅ Found examples in knowledge base for: ${concept}`);
+      return kbEnrichment.examples.map(e => ({
+        name: e.name,
+        description: e.description,
+      }));
+    }
+
+    // 知识库未找到，调用 AI
+    this.logger.log(`🤖 Calling AI for examples of: ${concept}`);
     const prompt = `请为"${concept}"这个遗传学概念提供 ${count} 个经典例题或实例。`;
 
     try {

@@ -7,6 +7,7 @@ import { RAGModule } from './modules/rag/rag.module';
 import { GraphModule } from './modules/knowledge-graph/graph.module';
 import { MistakeModule } from './modules/mistake/mistake.module';
 import { ReportModule } from './modules/report/report.module';
+import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
 
 // 模块占位 - 这些模块将在后续实现
 // import { AuthModule } from './modules/auth/auth.module';
@@ -29,6 +30,7 @@ import { ReportModule } from './modules/report/report.module';
 
     // AI 服务模块
     LLMModule.register(),
+    KnowledgeBaseModule,
     AgentModule.register(),
     RAGModule,
     GraphModule,

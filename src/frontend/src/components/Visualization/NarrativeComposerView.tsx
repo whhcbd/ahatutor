@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { agentApi, NarrativeComposition } from '../../api/agent';
 
 interface NarrativeComposerViewProps {
@@ -212,10 +213,16 @@ export function InteractiveFlowView({
     }>;
   } | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     loadFlow();
   }, [concept, userLevel]);
+
+  // Reset details view when step changes
+  useEffect(() => {
+    setShowDetails(false);
+  }, [currentStep]);
 
   const loadFlow = async () => {
     setLoading(true);
@@ -296,14 +303,67 @@ export function InteractiveFlowView({
 
             {currentFlowItem.interaction === 'click_to_reveal' && (
               <div className="mt-4">
-                <details className="bg-indigo-50 border border-indigo-200 rounded-lg">
-                  <summary className="p-4 cursor-pointer text-indigo-700 font-medium">
-                    点击查看详细内容
-                  </summary>
-                  <div className="p-4 pt-0 text-sm text-indigo-600">
-                    这里会显示更详细的内容...
+                <button
+                  onClick={() => setShowDetails(!showDetails)}
+                  className="w-full flex items-center justify-between p-4 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition-colors"
+                >
+                  <span className="text-indigo-700 font-medium">
+                    {showDetails ? '收起详细内容' : '点击查看详细内容'}
+                  </span>
+                  {showDetails ? (
+                    <ChevronUp className="w-5 h-5 text-indigo-700" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-indigo-700" />
+                  )}
+                </button>
+                {showDetails && (
+                  <div className="mt-3 p-4 bg-white border border-indigo-100 rounded-lg">
+                    <div className="space-y-3">
+                      <div>
+                        <h4 className="text-sm font-semibold text-indigo-900 mb-2">详细讲解</h4>
+                        <p className="text-sm text-gray-700 leading-relaxed">
+                          {currentFlowItem.content}
+                        </p>
+                      </div>
+                      {currentFlowItem.type === 'explanation' && (
+                        <div>
+                          <h4 className="text-sm font-semibold text-indigo-900 mb-2">关键要点</h4>
+                          <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                            <li>理解核心概念的定义和原理</li>
+                            <li>掌握相关的公式和计算方法</li>
+                            <li>了解实际应用场景和例子</li>
+                          </ul>
+                        </div>
+                      )}
+                      {currentFlowItem.type === 'question' && (
+                        <div>
+                          <h4 className="text-sm font-semibold text-indigo-900 mb-2">思考提示</h4>
+                          <p className="text-sm text-gray-700">
+                            试着回忆刚才学过的内容，分析这个问题涉及的知识点。
+                          </p>
+                        </div>
+                      )}
+                      {currentFlowItem.type === 'activity' && (
+                        <div>
+                          <h4 className="text-sm font-semibold text-indigo-900 mb-2">活动说明</h4>
+                          <p className="text-sm text-gray-700">
+                            按照步骤完成练习，有助于加深对知识点的理解。
+                          </p>
+                        </div>
+                      )}
+                      {currentFlowItem.type === 'assessment' && (
+                        <div>
+                          <h4 className="text-sm font-semibold text-indigo-900 mb-2">评估标准</h4>
+                          <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                            <li>知识点理解是否准确</li>
+                            <li>能否正确应用相关原理</li>
+                            <li>是否掌握解题方法</li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </details>
+                )}
               </div>
             )}
           </div>

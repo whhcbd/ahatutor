@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Sparkles, MessageSquare } from 'lucide-react';
+import { BookOpen, MessageSquare } from 'lucide-react';
 import { NarrativeComposerView, InteractiveFlowView } from '../components/Visualization/NarrativeComposerView';
 
 // 遗传学知识点列表

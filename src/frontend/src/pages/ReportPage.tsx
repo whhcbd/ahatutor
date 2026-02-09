@@ -9,7 +9,7 @@ import {
 import ReactECharts from 'echarts-for-react';
 
 // API 基础 URL
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
 type ReportType = 'daily' | 'weekly' | 'topic' | 'mistake' | 'progress';
 
@@ -22,11 +22,11 @@ export default function ReportPage() {
   const fetchReport = async (type: ReportType) => {
     setLoading(true);
     try {
-      const endpoint = type === 'daily' ? '/report/daily' :
-                       type === 'weekly' ? '/report/weekly' :
-                       type === 'mistake' ? '/report/mistake' :
-                       type === 'progress' ? '/report/progress' :
-                       '/report/daily';
+      const endpoint = type === 'daily' ? '/api/report/daily' :
+                       type === 'weekly' ? '/api/report/weekly' :
+                       type === 'mistake' ? '/api/report/mistake' :
+                       type === 'progress' ? '/api/report/progress' :
+                       '/api/report/daily';
 
       const response = await fetch(`${API_BASE}${endpoint}`);
       if (!response.ok) throw new Error('Failed to fetch report');
