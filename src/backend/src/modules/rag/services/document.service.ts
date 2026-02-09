@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import type { Document, DocumentStatus, DocumentType, DocumentChunk } from '../../../../shared/types/rag.types';
+import { DocumentStatus, DocumentType } from '@shared/types/rag.types';
+import type { Document, DocumentChunk } from '@shared/types/rag.types';
 import { ChunkService } from './chunk.service';
 import { EmbeddingService } from './embedding.service';
 import { VectorStoreService } from './vector-store.service';
@@ -91,7 +92,8 @@ export class DocumentService {
       return document;
     } catch (error) {
       document.status = DocumentStatus.ERROR;
-      throw new Error(`Failed to process document: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to process document: ${message}`);
     }
   }
 
@@ -122,7 +124,7 @@ export class DocumentService {
   /**
    * 检测文档类型
    */
-  private detectDocumentType(name: string, content: string): DocumentType {
+  private detectDocumentType(name: string, _content: string): DocumentType {
     const ext = name.split('.').pop()?.toLowerCase();
     if (ext === 'md') return DocumentType.MARKDOWN;
     if (ext === 'pdf') return DocumentType.PDF;

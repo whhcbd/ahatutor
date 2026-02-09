@@ -19,7 +19,8 @@ export class EmbeddingService {
       const embedding = await this.llmService.generateEmbedding(text);
       return embedding;
     } catch (error) {
-      throw new Error(`Failed to generate embedding: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to generate embedding: ${message}`);
     }
   }
 

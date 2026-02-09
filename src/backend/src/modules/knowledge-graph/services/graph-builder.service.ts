@@ -78,7 +78,8 @@ export class GraphBuilderService {
     let nodeId: string;
 
     if (existing.length > 0) {
-      nodeId = existing[0].n.properties.id;
+      const node = existing[0]['n'] as any;
+      nodeId = node.properties.id;
     } else {
       // 创建新节点
       nodeId = uuidv4();

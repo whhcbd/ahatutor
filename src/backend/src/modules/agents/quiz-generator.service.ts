@@ -8,6 +8,55 @@ import { QuizQuestion, Difficulty, QuestionType } from '@shared/types/genetics.t
  *
  * 职责：生成遗传学题目和评估
  */
+
+interface QuizQuestionResponse {
+  question: string;
+  options?: Array<{
+    id: string;
+    label: string;
+    content: string;
+  }>;
+  correctAnswer: string;
+  explanation: {
+    level1: string;
+    level2: string;
+    level3: string;
+    level4: string;
+    level5: string;
+  };
+  topic?: string;
+  tags?: string[];
+}
+
+interface QuizEvaluationResponse {
+  isCorrect: boolean;
+  confidence: number;
+  reason: string;
+  needsSelfAssessment: boolean;
+}
+
+interface SimilarQuestionItem {
+  question: string;
+  options?: Array<{
+    id: string;
+    label: string;
+    content: string;
+  }>;
+  correctAnswer: string;
+  explanation: {
+    level1: string;
+    level2: string;
+    level3: string;
+    level4: string;
+    level5: string;
+  };
+  variation: string;
+}
+
+interface SimilarQuestionsResponse {
+  similarQuestions: SimilarQuestionItem[];
+}
+
 @Injectable()
 export class QuizGeneratorService {
   private readonly logger = new Logger(QuizGeneratorService.name);
@@ -63,7 +112,7 @@ export class QuizGeneratorService {
     };
 
     try {
-      const response = await this.llmService.structuredChat<typeof schema>(
+      const response = await this.llmService.structuredChat<QuizQuestionResponse>(
         [{ role: 'user', content: prompt }],
         schema,
         { temperature: 0.7 }
@@ -82,8 +131,8 @@ export class QuizGeneratorService {
           isCorrect: opt.id === response.correctAnswer,
         })),
         correctAnswer: response.correctAnswer,
-        explanation: response.explanation as any,
-        tags: response.tags || [params.topic],
+        explanation: response.explanation,
+        tags: response.tags ?? [params.topic],
       };
 
       this.logger.log(`Question generated: ${question.id}`);
@@ -165,7 +214,7 @@ export class QuizGeneratorService {
     };
 
     try {
-      const response = await this.llmService.structuredChat<typeof schema>(
+      const response = await this.llmService.structuredChat<QuizEvaluationResponse>(
         [{ role: 'user', content: prompt }],
         schema,
         { temperature: 0.3 }
@@ -242,13 +291,13 @@ export class QuizGeneratorService {
     };
 
     try {
-      const response = await this.llmService.structuredChat<typeof schema>(
+      const response = await this.llmService.structuredChat<SimilarQuestionsResponse>(
         [{ role: 'user', content: prompt }],
         schema,
         { temperature: 0.7 }
       );
 
-      return response.similarQuestions.map((sq, index) => ({
+      return response.similarQuestions.map((sq) => ({
         id: this.generateId(),
         type: params.question.type,
         difficulty: params.question.difficulty,
@@ -261,7 +310,7 @@ export class QuizGeneratorService {
           isCorrect: opt.id === sq.correctAnswer,
         })),
         correctAnswer: sq.correctAnswer,
-        explanation: sq.explanation as any,
+        explanation: sq.explanation,
         tags: [...params.question.tags, '举一反三'],
         metadata: {
           source: `similar-to-${params.question.id}`,

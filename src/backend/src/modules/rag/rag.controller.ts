@@ -8,7 +8,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { RagService } from './services/rag.service';
+import { RAGService } from './services/rag.service';
 import {
   UploadDocumentDto,
   QueryDto,
@@ -18,7 +18,7 @@ import {
 
 @Controller('rag')
 export class RAGController {
-  constructor(private readonly ragService: RagService) {}
+  constructor(private readonly ragService: RAGService) {}
 
   /**
    * 上传文档内容（文本/Markdown）

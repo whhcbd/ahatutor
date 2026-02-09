@@ -3,13 +3,23 @@
  * Handles all communication with the backend Agent services
  */
 
+import type {
+  QuizQuestion,
+  Difficulty as SharedDifficulty,
+  ErrorType as SharedErrorType,
+  QuizExplanation,
+  Option,
+  QuestionType,
+} from '@shared/types/genetics.types';
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 // ==================== Types ====================
 
 export type UserLevel = 'beginner' | 'intermediate' | 'advanced';
-export type Difficulty = 'easy' | 'medium' | 'hard';
-export type ErrorType = 'low_level' | 'high_level';
+// 使用共享类型的 Difficulty，但为了向后兼容，重新导出
+export type Difficulty = SharedDifficulty;
+export type ErrorType = SharedErrorType;
 export type ResourceType = 'video' | 'article' | 'paper' | 'book' | 'course' | 'interactive';
 
 export interface ConceptAnalysis {
@@ -71,23 +81,8 @@ export interface NarrativeComposition {
   difficultyProgression: 'linear' | 'spiral' | 'hierarchical';
 }
 
-export interface QuizQuestion {
-  id: string;
-  type: 'multiple_choice' | 'fill_blank' | 'short_answer';
-  difficulty: Difficulty;
-  topic: string;
-  content: string;
-  options?: string[];
-  correctAnswer: string;
-  explanation: {
-    level1: string;
-    level2: string;
-    level3: string;
-    level4: string;
-    level5: string;
-  };
-  tags: string[];
-}
+// 重新导出共享类型
+export type { QuizQuestion, QuizExplanation, Option, QuestionType };
 
 export interface SearchResult {
   title: string;

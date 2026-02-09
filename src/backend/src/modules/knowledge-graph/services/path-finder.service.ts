@@ -13,16 +13,10 @@ export class PathFinderService {
    * 查找最短路径
    */
   async findShortestPath(from: string, to: string): Promise<string[]> {
-    const cypher = `
-      MATCH path = shortestPath(
-        (start:KnowledgeNode {name: $from})<-[:PREREQUISITE*]-(end:KnowledgeNode {name: $to})
-      )
-      RETURN [node in nodes(path) | node.id] as nodeIds
-      ORDER BY length(path)
-      LIMIT 1
-    `;
+    const cypher = `MATCH path = shortestPath((start:KnowledgeNode {name: $from})<-[:PREREQUISITE*]-(end:KnowledgeNode {name: $to})) RETURN [node in nodes(path) | node.id] as nodeIds ORDER BY length(path) LIMIT 1`;
     const result = await this.neo4j.run(cypher, { from, to });
-    return result[0]?.nodeIds || [];
+    const nodeIds = result[0]?.['nodeIds'];
+    return Array.isArray(nodeIds) ? nodeIds : [];
   }
 
   /**
@@ -33,13 +27,13 @@ export class PathFinderService {
     to: string,
     maxDepth: number = 10,
   ): Promise<string[][]> {
-    const cypher = `
-      MATCH path = (start:KnowledgeNode {name: $from})<-[:PREREQUISITE*0..${maxDepth}]-(end:KnowledgeNode {name: $to})
-      RETURN [node in nodes(path) | node.id] as nodeIds
-      ORDER BY length(path)
-    `;
+    const maxDepthStr = maxDepth.toString();
+    const cypher = `MATCH path = (start:KnowledgeNode {name: $from})<-[:PREREQUISITE*0..${maxDepthStr}]-(end:KnowledgeNode {name: $to}) RETURN [node in nodes(path) | node.id] as nodeIds ORDER BY length(path)`;
     const result = await this.neo4j.run(cypher, { from, to });
-    return result.map((r: any) => r.nodeIds);
+    return result.map((r) => {
+      const nodeIds = r['nodeIds'];
+      return Array.isArray(nodeIds) ? nodeIds : [];
+    });
   }
 
   /**
@@ -51,28 +45,14 @@ export class PathFinderService {
     totalNodes: number;
     estimatedTime: number;
   }> {
-    const cypher = `
-      MATCH path = (target:KnowledgeNode {name: $target})<-[:PREREQUISITE*]-(foundation:KnowledgeNode)
-      WHERE foundation.isFoundation = true OR NOT ()<-[:PREREQUISITE]-(foundation)
-      WITH target, foundation, path
-      ORDER BY length(path) ASC
-      WITH target, collect(DISTINCT foundation) as foundations
-      MATCH path = (target)<-[:PREREQUISITE*]-(f)
-      WHERE f in foundations
-      UNWIND nodes(path) as node
-      RETURN DISTINCT
-        node.id as id,
-        node.name as name,
-        node.level as level
-      ORDER BY level, name
-    `;
+    const cypher = `MATCH path = (target:KnowledgeNode {name: $target})<-[:PREREQUISITE*]-(foundation:KnowledgeNode) WHERE foundation.isFoundation = true OR NOT ()<-[:PREREQUISITE]-(foundation) WITH target, foundation, path ORDER BY length(path) ASC WITH target, collect(DISTINCT foundation) as foundations MATCH path = (target)<-[:PREREQUISITE*]-(f) WHERE f in foundations UNWIND nodes(path) as node RETURN DISTINCT node.id as id, node.name as name, node.level as level ORDER BY level, name`;
 
     const result = await this.neo4j.run(cypher, { target: targetConcept });
 
-    const path = result.map((r: any) => ({
-      id: r.id,
-      name: r.name,
-      level: r.level || 0,
+    const path = result.map((r) => ({
+      id: r['id'] as string,
+      name: r['name'] as string,
+      level: (r['level'] as number | undefined) ?? 0,
     }));
 
     // 估算学习时间（每个节点 15 分钟）
@@ -95,22 +75,16 @@ export class PathFinderService {
     nodes: Array<any>;
     edges: Array<any>;
   }> {
-    const cypher = `
-      MATCH (root:KnowledgeNode {id: $rootId})
-      MATCH (root)<-[:PREREQUISITE*0..${maxDepth}]-(descendant:KnowledgeNode)
-      WITH root, collect(DISTINCT descendant) as descendants
-      UNWIND descendants as d
-      OPTIONAL MATCH (d)<-[r:PREREQUISITE]-(related:KnowledgeNode)
-      WHERE related in descendants
-      RETURN DISTINCT
-        d as node,
-        collect(DISTINCT {from: related.id, to: d.id, type: 'PREREQUISITE'}) as edges
-    `;
+    const maxDepthStr = maxDepth.toString();
+    const cypher = `MATCH (root:KnowledgeNode {id: $rootId}) MATCH (root)<-[:PREREQUISITE*0..${maxDepthStr}]-(descendant:KnowledgeNode) WITH root, collect(DISTINCT descendant) as descendants UNWIND descendants as d OPTIONAL MATCH (d)<-[r:PREREQUISITE]-(related:KnowledgeNode) WHERE related in descendants RETURN DISTINCT d as node, collect(DISTINCT {from: related.id, to: d.id, type: 'PREREQUISITE'}) as edges`;
 
     const result = await this.neo4j.run(cypher, { rootId });
 
-    const nodes = result.map((r: any) => r.node);
-    const edges = result.flatMap((r: any) => r.edges).filter((e: any) => e.from);
+    const nodes = result.map((r) => r['node']);
+    const edges = result.flatMap((r) => {
+      const edgeArray = r['edges'];
+      return Array.isArray(edgeArray) ? edgeArray : [];
+    }).filter((e: any) => e?.from);
 
     return { nodes, edges };
   }
@@ -122,14 +96,13 @@ export class PathFinderService {
     nodeId: string,
     limit: number = 5,
   ): Promise<Array<{ id: string; name: string; relation: string }>> {
-    const cypher = `
-      MATCH (n:KnowledgeNode {id: $nodeId})
-      MATCH (n)-[r:PREREQUISITE|RELATED]-(related:KnowledgeNode)
-      RETURN related.id as id, related.name as name, type(r) as relation
-      LIMIT $limit
-    `;
+    const cypher = 'MATCH (n:KnowledgeNode {id: $nodeId}) MATCH (n)-[r:PREREQUISITE|RELATED]-(related:KnowledgeNode) RETURN related.id as id, related.name as name, type(r) as relation LIMIT $limit';
     const result = await this.neo4j.run(cypher, { nodeId, limit });
-    return result as any;
+    return result.map((r) => ({
+      id: r['id'] as string,
+      name: r['name'] as string,
+      relation: r['relation'] as string,
+    }));
   }
 
   /**
@@ -139,14 +112,10 @@ export class PathFinderService {
     canLearn: boolean;
     missingPrerequisites: string[];
   }> {
-    const cypher = `
-      MATCH (n:KnowledgeNode {id: $nodeId})
-      MATCH (n)<-[:PREREQUISITE]-(prereq:KnowledgeNode)
-      RETURN prereq.id as id, prereq.name as name
-    `;
+    const cypher = 'MATCH (n:KnowledgeNode {id: $nodeId}) MATCH (n)<-[:PREREQUISITE]-(prereq:KnowledgeNode) RETURN prereq.id as id, prereq.name as name';
 
     const result = await this.neo4j.run(cypher, { nodeId });
-    const prerequisites = result.map((r: any) => r.id);
+    const prerequisites = result.map((r) => r['id'] as string);
 
     const missing = prerequisites.filter((id) => !masteredNodes.includes(id));
 

@@ -1,5 +1,6 @@
 import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { IsString, IsEnum, IsOptional, IsNumber } from 'class-validator';
 import { AgentPipelineService } from './agent-pipeline.service';
 import { ConceptAnalyzerService } from './concept-analyzer.service';
 import { PrerequisiteExplorerService } from './prerequisite-explorer.service';
@@ -10,12 +11,12 @@ import { QuizGeneratorService } from './quiz-generator.service';
 import { WebSearchService } from './skills/web-search.service';
 import { ResourceRecommendService } from './skills/resource-recommend.service';
 import { SixAgentInput } from '@shared/types/agent.types';
-import { Difficulty } from '@shared/types/genetics.types';
-import { ResourceType, SkillType } from '@shared/types/skill.types';
+import { Difficulty, QuestionType } from '@shared/types/genetics.types';
+import { ResourceType } from '@shared/types/skill.types';
 
 class PipelineDto implements SixAgentInput {
   @ApiProperty({ description: '目标概念' })
-  concept: string;
+  concept!: string;
 
   @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
   userLevel?: 'beginner' | 'intermediate' | 'advanced';
@@ -29,7 +30,7 @@ class PipelineDto implements SixAgentInput {
 
 class ExploreDto {
   @ApiProperty({ description: '目标概念' })
-  concept: string;
+  concept!: string;
 
   @ApiProperty({ description: '递归深度', required: false })
   maxDepth?: number;
@@ -37,49 +38,64 @@ class ExploreDto {
 
 class GenerateQuizDto {
   @ApiProperty({ description: '知识点' })
-  topic: string;
+  @IsString()
+  topic!: string;
 
   @ApiProperty({ description: '难度', enum: ['easy', 'medium', 'hard'] })
-  difficulty: Difficulty;
+  @IsEnum(Difficulty)
+  difficulty!: Difficulty;
 
   @ApiProperty({ description: '题目数量', required: false })
+  @IsOptional()
+  @IsNumber()
   count?: number;
 
   @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
+  @IsOptional()
+  @IsEnum(['beginner', 'intermediate', 'advanced'] as const)
   userLevel?: 'beginner' | 'intermediate' | 'advanced';
 }
 
 class EvaluateAnswerDto {
   @ApiProperty({ description: '题目内容' })
-  question: string;
+  @IsString()
+  question!: string;
 
   @ApiProperty({ description: '正确答案' })
-  correctAnswer: string;
+  @IsString()
+  correctAnswer!: string;
 
   @ApiProperty({ description: '用户答案' })
-  userAnswer: string;
+  @IsString()
+  userAnswer!: string;
 }
 
 class SimilarQuestionDto {
   @ApiProperty({ description: '原题内容' })
-  question: string;
+  @IsString()
+  question!: string;
 
   @ApiProperty({ description: '考点' })
-  topic: string;
+  @IsString()
+  topic!: string;
 
   @ApiProperty({ description: '用户错误答案' })
-  userAnswer: string;
+  @IsString()
+  userAnswer!: string;
 
   @ApiProperty({ description: '错误类型', enum: ['low_level', 'high_level'] })
-  errorType: 'low_level' | 'high_level';
+  @IsEnum(['low_level', 'high_level'] as const)
+  errorType!: 'low_level' | 'high_level';
 
   @ApiProperty({ description: '生成数量', required: false })
+  @IsOptional()
+  @IsNumber()
   count?: number;
 }
 
 class VisualDesignDto {
   @ApiProperty({ description: '目标概念' })
-  concept: string;
+  concept!: string;
 
   @ApiProperty({ description: '包含遗传学丰富内容', required: false })
   includeEnrichment?: boolean;
@@ -90,7 +106,7 @@ class VisualDesignDto {
 
 class NarrativeDto {
   @ApiProperty({ description: '目标概念' })
-  concept: string;
+  concept!: string;
 
   @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
   userLevel?: 'beginner' | 'intermediate' | 'advanced';
@@ -98,7 +114,7 @@ class NarrativeDto {
 
 class WebSearchDto {
   @ApiProperty({ description: '搜索查询' })
-  query: string;
+  query!: string;
 
   @ApiProperty({ description: '结果数量', required: false })
   numResults?: number;
@@ -112,7 +128,7 @@ class WebSearchDto {
 
 class ResourceRecommendDto {
   @ApiProperty({ description: '目标概念' })
-  concept: string;
+  concept!: string;
 
   @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
   userLevel?: 'beginner' | 'intermediate' | 'advanced';
@@ -201,12 +217,18 @@ export class AgentController {
     return await this.quizGenerator.evaluateAnswer({
       question: {
         id: 'temp',
-        type: 'multiple_choice' as const,
-        difficulty: 'medium' as const,
+        type: QuestionType.MULTIPLE_CHOICE,
+        difficulty: Difficulty.MEDIUM,
         topic: 'temp',
         content: dto.question,
         correctAnswer: dto.correctAnswer,
-        explanation: {} as any,
+        explanation: {
+          level1: '',
+          level2: '',
+          level3: '',
+          level4: '',
+          level5: '',
+        },
         tags: [],
       },
       userAnswer: dto.userAnswer,
@@ -219,12 +241,18 @@ export class AgentController {
     return await this.quizGenerator.generateSimilarQuestions({
       question: {
         id: 'temp',
-        type: 'multiple_choice' as const,
-        difficulty: 'medium' as const,
+        type: QuestionType.MULTIPLE_CHOICE,
+        difficulty: Difficulty.MEDIUM,
         topic: dto.topic,
         content: dto.question,
         correctAnswer: 'A',
-        explanation: {} as any,
+        explanation: {
+          level1: '',
+          level2: '',
+          level3: '',
+          level4: '',
+          level5: '',
+        },
         tags: [],
       },
       userAnswer: dto.userAnswer,
@@ -405,9 +433,14 @@ export class AgentController {
     @Query('count') count: number = 5,
     @Query('userLevel') userLevel?: 'beginner' | 'intermediate' | 'advanced',
   ) {
+    const difficultyMap: Record<string, Difficulty> = {
+      easy: Difficulty.EASY,
+      medium: Difficulty.MEDIUM,
+      hard: Difficulty.HARD,
+    };
     return await this.pipelineService.generateQuizForTopic({
       topic,
-      difficulty,
+      difficulty: difficultyMap[difficulty],
       count,
       userLevel,
     });

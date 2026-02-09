@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMService } from '../llm/llm.service';
-import { GeneticsEnrichment } from '@shared/types/agent.types';
+import { GeneticsEnrichment, VisualizationSuggestion } from '@shared/types/agent.types';
 
 /**
  * Agent 3: GeneticsEnricher
@@ -8,6 +8,32 @@ import { GeneticsEnrichment } from '@shared/types/agent.types';
  *
  * 职责：为概念添加详细的遗传学教学内容
  */
+
+interface GeneticsEnrichmentResponse {
+  concept: string;
+  definition: string;
+  principles?: string[];
+  formulas?: Array<{
+    key: string;
+    latex: string;
+    variables: Record<string, unknown>;
+    explanation: string;
+  }>;
+  examples?: Array<{
+    name: string;
+    description: string;
+    cross?: string;
+    result?: string;
+  }>;
+  misconceptions?: string[];
+  visualization?: {
+    type: 'knowledge_graph' | 'animation' | 'chart' | 'diagram';
+    elements?: string[];
+    colors?: Record<string, string>;
+    suggestion?: string;
+  };
+}
+
 @Injectable()
 export class GeneticsEnricherService {
   private readonly logger = new Logger(GeneticsEnricherService.name);
@@ -87,7 +113,7 @@ export class GeneticsEnricherService {
     };
 
     try {
-      const response = await this.llmService.structuredChat<typeof schema>(
+      const response = await this.llmService.structuredChat<GeneticsEnrichmentResponse>(
         [{ role: 'user', content: prompt }],
         schema,
         { temperature: 0.5 }
@@ -96,21 +122,21 @@ export class GeneticsEnricherService {
       const enrichment: GeneticsEnrichment = {
         concept: response.concept,
         definition: response.definition,
-        principles: response.principles || [],
-        formulas: (response.formulas || []).map(f => ({
+        principles: response.principles ?? [],
+        formulas: (response.formulas ?? []).map(f => ({
           key: f.key,
           latex: f.latex,
           variables: f.variables as Record<string, string>,
         })),
-        examples: (response.examples || []).map(e => ({
+        examples: (response.examples ?? []).map(e => ({
           name: e.name,
           description: e.description,
         })),
-        misconceptions: response.misconceptions || [],
-        visualization: response.visualization || {
+        misconceptions: response.misconceptions ?? [],
+        visualization: (response.visualization ?? {
           type: 'knowledge_graph',
           elements: [],
-        },
+        }) as VisualizationSuggestion,
       };
 
       this.logger.log(`Concept enriched: ${enrichment.concept}`);

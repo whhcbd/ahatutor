@@ -1,3 +1,5 @@
+import type { QuizQuestion } from './genetics.types';
+
 /**
  * Agent 相关类型定义
  */
@@ -86,6 +88,14 @@ export interface VisualizationSuggestion {
   type: 'knowledge_graph' | 'animation' | 'chart' | 'diagram';
   elements: string[];
   colors?: Record<string, string>;
+  layout?: 'force' | 'hierarchical' | 'circular' | 'grid';
+  interactions?: Array<'click' | 'hover' | 'zoom' | 'drag' | 'select'>;
+  annotations?: string[];
+  animationConfig?: {
+    duration: number;
+    easing: string;
+    autoplay: boolean;
+  };
 }
 
 // 叙事作曲结果

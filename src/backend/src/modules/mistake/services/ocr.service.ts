@@ -66,9 +66,10 @@ export class OcrService {
         },
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'OCR识别失败';
       return {
         success: false,
-        error: error.message || 'OCR识别失败',
+        error: message,
       };
     }
   }

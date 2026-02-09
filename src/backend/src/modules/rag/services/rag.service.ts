@@ -105,7 +105,7 @@ export class RAGService {
   /**
    * 转换为响应 DTO
    */
-  private toDocumentResponse(document): DocumentResponseDto {
+  private toDocumentResponse(document: any): DocumentResponseDto {
     return {
       id: document.id,
       name: document.name,

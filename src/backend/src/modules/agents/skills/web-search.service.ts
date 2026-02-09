@@ -134,7 +134,7 @@ class BingProvider implements SearchProvider {
 class MockSearchProvider implements SearchProvider {
   private readonly logger = new Logger(MockSearchProvider.name);
 
-  async search(query: string, options: WebSearchInput): Promise<SearchResult[]> {
+  async search(query: string, _options: WebSearchInput): Promise<SearchResult[]> {
     this.logger.log(`Mock search for: ${query}`);
 
     // 返回模拟结果

@@ -5,6 +5,30 @@ import { LLMService } from '../../llm/llm.service';
  * 举一反三服务
  * 基于错题生成相似题目
  */
+
+export interface SimilarQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  variation: string;
+}
+
+interface SimilarQuestionsResponse {
+  similarQuestions: SimilarQuestion[];
+}
+
+interface TopicQuestionsResponse {
+  questions: Array<{
+    id: string;
+    question: string;
+    options: string[];
+    correctAnswer: number;
+    explanation: string;
+  }>;
+}
+
 @Injectable()
 export class SimilarQuestionService {
   constructor(private readonly llmService: LLMService) {}
@@ -50,7 +74,7 @@ ${mistake.options ? `选项：${mistake.options.join('\\n')}` : ''}
 }`;
 
     try {
-      const result = await this.llmService.structuredChat(
+      const result = await this.llmService.structuredChat<SimilarQuestionsResponse>(
         [{ role: 'user', content: prompt }],
         {
           type: 'object',
@@ -80,7 +104,8 @@ ${mistake.options ? `选项：${mistake.options.join('\\n')}` : ''}
         generatedAt: new Date(),
       };
     } catch (error) {
-      throw new Error(`生成相似题失败: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`生成相似题失败: ${message}`);
     }
   }
 
@@ -115,7 +140,7 @@ ${mistake.options ? `选项：${mistake.options.join('\\n')}` : ''}
 }`;
 
     try {
-      const result = await this.llmService.structuredChat(
+      const result = await this.llmService.structuredChat<TopicQuestionsResponse>(
         [{ role: 'user', content: prompt }],
         {
           type: 'object',
@@ -143,7 +168,8 @@ ${mistake.options ? `选项：${mistake.options.join('\\n')}` : ''}
         generatedAt: new Date(),
       };
     } catch (error) {
-      throw new Error(`生成练习题失败: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`生成练习题失败: ${message}`);
     }
   }
 
@@ -173,7 +199,7 @@ ${mistake.options ? `选项：${mistake.options.join('\\n')}` : ''}
     // 为每个知识点生成复习题
     const reviewQuestions = [];
 
-    for (const [topic, topicMistakes] of topicGroups) {
+    for (const [_topic, topicMistakes] of topicGroups) {
       const similar = await this.generate(topicMistakes[0], { count: 2 });
       reviewQuestions.push(...similar.similarQuestions);
     }

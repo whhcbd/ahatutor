@@ -29,7 +29,7 @@ export class GraphService {
       throw new Error('Neo4j is not connected');
     }
 
-    const nodeId = `node_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const nodeId = `node_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 
     const node = await this.neo4j.createNode('KnowledgeNode', {
       id: nodeId,
@@ -121,44 +121,43 @@ export class GraphService {
     }
 
     if (dto.root) {
-      const depth = dto.depth || 2;
-      cypher = `
-        MATCH (root:KnowledgeNode {id: $root})
-        MATCH (root)<-[:PREREQUISITE*0..${depth}]-(n:KnowledgeNode)
-        ${dto.domain ? 'WHERE n.domain = $domain' : ''}
-        RETURN DISTINCT n
-      `;
+      const depth = dto.depth ?? 2;
+      const depthStr = depth.toString();
+      cypher = `MATCH (root:KnowledgeNode {id: $root}) MATCH (root)<-[:PREREQUISITE*0..${depthStr}]-(n:KnowledgeNode) ${dto.domain ? 'WHERE n.domain = $domain' : ''} RETURN DISTINCT n`;
       params.root = dto.root;
     } else {
       cypher += ' RETURN n LIMIT 100';
     }
 
     const nodeResults = await this.neo4j.run(cypher, params);
-    const nodeIds = new Set(nodeResults.map((r: any) => r.n.properties.id));
+    const nodeIds = new Set(nodeResults.map((r) => {
+      const node = r['n'] as any;
+      return node.properties.id;
+    }));
 
     // 获取节点之间的关系
-    const edgeCypher = `
-      MATCH (a:KnowledgeNode)-[r:PREREQUISITE]->(b:KnowledgeNode)
-      WHERE a.id IN $nodeIds AND b.id IN $nodeIds
-      RETURN a.id as from, b.id as to, r.weight as weight
-    `;
+    const edgeCypher = 'MATCH (a:KnowledgeNode)-[r:PREREQUISITE]->(b:KnowledgeNode) WHERE a.id IN $nodeIds AND b.id IN $nodeIds RETURN a.id as from, b.id as to, r.weight as weight';
 
     const edgeResults = await this.neo4j.run(edgeCypher, { nodeIds: Array.from(nodeIds) });
 
     // 转换为 D3.js 格式
-    const nodes = nodeResults.map((r: any) => ({
-      id: r.n.properties.id,
-      name: r.n.properties.name,
-      type: r.n.properties.type,
-      level: r.n.properties.level || 0,
-      mastery: r.n.properties.mastery || 0,
-      group: r.n.properties.level || 0,
-    }));
+    const nodes = nodeResults.map((r) => {
+      const node = r['n'] as any;
+      const props = node.properties || {};
+      return {
+        id: props.id,
+        name: props.name,
+        type: props.type,
+        level: props.level || 0,
+        mastery: props.mastery || 0,
+        group: props.level || 0,
+      };
+    });
 
-    const edges = edgeResults.map((r: any) => ({
-      source: r.from,
-      target: r.to,
-      weight: r.weight || 1,
+    const edges = edgeResults.map((r) => ({
+      source: r['from'],
+      target: r['to'],
+      weight: r['weight'] ?? 1,
     }));
 
     return { nodes, edges };

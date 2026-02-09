@@ -17,7 +17,7 @@ export class MistakeService {
   async uploadImage(file: Express.Multer.File): Promise<string> {
     // MVP: 返回 base64 或本地路径
     // 生产环境: 上传到 MinIO 或对象存储服务
-    const filename = `mistake_${Date.now()}_${file.originalname}`;
+    // const filename = `mistake_${Date.now()}_${file.originalname}`;
 
     // 这里简化处理，返回 base64
     const base64 = file.buffer.toString('base64');

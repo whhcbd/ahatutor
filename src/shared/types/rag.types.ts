@@ -55,6 +55,7 @@ export interface QueryOptions {
   topK?: number; // 返回结果数量
   threshold?: number; // 相似度阈值
   filter?: {
+    documentId?: string;
     tags?: string[];
     chapter?: string;
   };

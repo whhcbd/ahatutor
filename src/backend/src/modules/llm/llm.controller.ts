@@ -1,11 +1,11 @@
-import { Controller, Post, Body, Sse, Header, Res } from '@nestjs/common';
+import { Controller, Post, Body, Header, Res } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiProperty } from '@nestjs/swagger';
 import { LLMService, ChatMessage } from './llm.service';
 import { Response } from 'express';
 
 class ChatDto {
   @ApiProperty({ description: '聊天消息列表' })
-  messages: ChatMessage[];
+  messages!: ChatMessage[];
 
   @ApiProperty({ description: 'LLM 提供商', required: false, enum: ['openai', 'claude', 'deepseek', 'glm'] })
   provider?: string;

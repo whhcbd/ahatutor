@@ -13,7 +13,7 @@ export enum ReportType {
  */
 export class GenerateReportDto {
   @IsEnum(ReportType)
-  type: ReportType;
+  type!: ReportType;
 
   @IsOptional()
   @IsString()
@@ -32,7 +32,7 @@ export class GenerateReportDto {
   topic?: string;
 
   @IsOptional()
-  includeCharts?: boolean = true;
+  includeCharts?: boolean;
 }
 
 /**

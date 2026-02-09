@@ -35,7 +35,7 @@ export class MistakeController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadMistake(
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: { subject?: string; tags?: string },
+    @Body() _body: { subject?: string; tags?: string },
   ) {
     const imageUrl = await this.mistakeService.uploadImage(file);
     return { imageUrl };

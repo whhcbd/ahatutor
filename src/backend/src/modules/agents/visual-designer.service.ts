@@ -12,6 +12,20 @@ import { VisualizationSuggestion, ConceptAnalysis, GeneticsEnrichment, Prerequis
  * - 定义交互逻辑
  * - 生成渲染配置
  */
+
+interface VisualizationDesignResponse {
+  elements: string[];
+  colors?: Record<string, string>;
+  layout?: 'force' | 'hierarchical' | 'circular' | 'grid';
+  interactions?: Array<'click' | 'hover' | 'zoom' | 'drag' | 'select'>;
+  annotations?: string[];
+  animationConfig?: {
+    duration: number;
+    easing: string;
+    autoplay: boolean;
+  };
+}
+
 @Injectable()
 export class VisualDesignerService {
   private readonly logger = new Logger(VisualDesignerService.name);
@@ -264,14 +278,14 @@ ${prerequisiteTree ? `
     };
 
     try {
-      const response = await this.llmService.structuredChat<typeof schema>(
+      const response = await this.llmService.structuredChat<VisualizationDesignResponse>(
         [{ role: 'user', content: prompt }],
         schema,
         { temperature: 0.3 }
       );
 
       return {
-        elements: response.elements || [],
+        elements: response.elements ?? [],
         colors: response.colors,
         layout: response.layout,
         interactions: response.interactions,
@@ -309,16 +323,19 @@ ${prerequisiteTree ? `
     for (const { keywords, template } of specialCases) {
       if (keywords.some(k => conceptLower.includes(k))) {
         this.logger.debug(`Applying special template: ${template.type}`);
+        const templateColors = 'colors' in template ? template.colors : undefined;
+        const templateLayout = 'layout' in template ? template.layout : undefined;
+        const templateAnimConfig = 'animationConfig' in template ? template.animationConfig : undefined;
         return {
           type: template.type as VisualizationSuggestion['type'],
           elements: design.elements,
-          colors: { ...template.colors, ...design.colors },
-          layout: design.layout || (template as any).layout,
+          colors: { ...(templateColors || {}), ...(design.colors || {}) },
+          layout: design.layout || templateLayout,
           interactions: design.interactions,
           annotations: design.annotations,
-          animationConfig: design.animationConfig || (template as any).animationConfig,
+          animationConfig: design.animationConfig || templateAnimConfig,
           template,  // 保存完整模板供渲染使用
-        };
+        } as VisualizationSuggestion;
       }
     }
 
@@ -330,8 +347,8 @@ ${prerequisiteTree ? `
     return {
       type: 'knowledge_graph',
       elements: design.elements,
-      colors: { ...defaultTemplate.colors, ...design.colors },
-      layout: design.layout || defaultTemplate.layout,
+      colors: { ...(defaultTemplate.colors as Record<string, string>), ...(design.colors || {}) },
+      layout: (design.layout || defaultTemplate.layout) as 'force' | 'hierarchical' | 'circular' | 'grid',
       interactions: design.interactions || ['click', 'hover', 'zoom'],
       annotations: design.annotations,
     };

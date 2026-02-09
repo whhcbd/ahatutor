@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import type { DocumentChunk } from '../../../../shared/types/rag.types';
+import type { DocumentChunk } from '@shared/types/rag.types';
 
 /**
  * 内存向量存储服务

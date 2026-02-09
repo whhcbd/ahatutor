@@ -8,6 +8,16 @@ import { ConceptAnalysis } from '@shared/types/agent.types';
  *
  * 职责：分析用户输入，提取核心概念
  */
+
+interface ConceptAnalysisResponse {
+  coreConcept: string;
+  domain: string;
+  complexity: 'basic' | 'intermediate' | 'advanced';
+  visualizationPotential?: number;
+  suggestedVisualizations?: string[];
+  keyTerms?: string[];
+}
+
 @Injectable()
 export class ConceptAnalyzerService {
   private readonly logger = new Logger(ConceptAnalyzerService.name);
@@ -56,7 +66,7 @@ export class ConceptAnalyzerService {
     };
 
     try {
-      const response = await this.llmService.structuredChat<typeof schema>(
+      const response = await this.llmService.structuredChat<ConceptAnalysisResponse>(
         [{ role: 'user', content: prompt }],
         schema,
         { temperature: 0.3 }
@@ -66,9 +76,9 @@ export class ConceptAnalyzerService {
         concept: response.coreConcept,
         domain: response.domain,
         complexity: response.complexity,
-        visualizationPotential: response.visualizationPotential,
-        suggestedVisualizations: response.suggestedVisualizations || [],
-        keyTerms: response.keyTerms || [],
+        visualizationPotential: response.visualizationPotential ?? 0,
+        suggestedVisualizations: response.suggestedVisualizations ?? [],
+        keyTerms: response.keyTerms ?? [],
       };
 
       this.logger.log(`Concept analyzed: ${analysis.concept} (${analysis.complexity})`);

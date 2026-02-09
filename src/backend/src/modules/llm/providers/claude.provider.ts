@@ -1,6 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import Anthropic from '@anthropic-ai/sdk';
-import { ChatMessage, ChatOptions, LLMResponse } from '../llm.service';
+import { ChatMessage, ChatOptions, LLMResponse, ChatMessageContent } from '../llm.service';
+
+type TextBlock = { type: 'text'; text: string };
+type ImageBlock = { type: 'image'; source: { type: 'base64'; media_type: string; data: string } };
+type ClaudeMessageContent = string | Array<TextBlock | ImageBlock>;
 
 @Injectable()
 export class ClaudeProvider {
@@ -21,16 +25,47 @@ export class ClaudeProvider {
     this.model = process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-20241022';
   }
 
+  /**
+   * Convert ChatMessageContent to Claude's expected format
+   */
+  private convertContentToClaudeFormat(content: ChatMessageContent): ClaudeMessageContent {
+    if (typeof content === 'string') {
+      return content;
+    }
+
+    return content.map((part): TextBlock | ImageBlock => {
+      if (part.type === 'text') {
+        return { type: 'text', text: part.text };
+      } else if (part.type === 'image_url') {
+        return {
+          type: 'image',
+          source: {
+            type: 'base64',
+            media_type: 'image/png',
+            data: part.image_url.url,
+          },
+        };
+      }
+      return { type: 'text', text: '' };
+    });
+  }
+
   async chat(messages: ChatMessage[], options?: ChatOptions): Promise<LLMResponse> {
     try {
       // Claude 需要分离系统消息
       const systemMessage = messages.find((m) => m.role === 'system');
       const chatMessages = messages.filter((m) => m.role !== 'system');
 
+      // Convert messages to Claude's format
+      const claudeMessages = chatMessages.map((msg) => ({
+        role: msg.role as 'user' | 'assistant',
+        content: this.convertContentToClaudeFormat(msg.content),
+      }));
+
       const response = await this.client.messages.create({
         model: this.model as Anthropic.MessageCreateParams['model'],
-        system: systemMessage?.content,
-        messages: chatMessages as Anthropic.MessageCreateParams['messages'],
+        system: typeof systemMessage?.content === 'string' ? systemMessage.content : undefined,
+        messages: claudeMessages as Anthropic.MessageParam[],
         max_tokens: options?.maxTokens ?? 2000,
         temperature: options?.temperature ?? 0.7,
       });
@@ -64,10 +99,16 @@ export class ClaudeProvider {
       const systemMessage = messages.find((m) => m.role === 'system');
       const chatMessages = messages.filter((m) => m.role !== 'system');
 
+      // Convert messages to Claude's format
+      const claudeMessages = chatMessages.map((msg) => ({
+        role: msg.role as 'user' | 'assistant',
+        content: this.convertContentToClaudeFormat(msg.content),
+      }));
+
       const stream = await this.client.messages.create({
         model: this.model as Anthropic.MessageCreateParams['model'],
-        system: systemMessage?.content,
-        messages: chatMessages as Anthropic.MessageCreateParams['messages'],
+        system: typeof systemMessage?.content === 'string' ? systemMessage.content : undefined,
+        messages: claudeMessages as Anthropic.MessageParam[],
         max_tokens: options?.maxTokens ?? 2000,
         temperature: options?.temperature ?? 0.7,
         stream: true,
@@ -87,7 +128,11 @@ export class ClaudeProvider {
   /**
    * Vision API - 图像理解
    */
-  async analyzeImage(imageBase64: string, prompt: string, mimeType = 'image/png'): Promise<string> {
+  async analyzeImage(
+    imageBase64: string,
+    prompt: string,
+    mimeType: 'image/png' | 'image/jpeg' | 'image/gif' | 'image/webp' = 'image/png',
+  ): Promise<string> {
     try {
       const response = await this.client.messages.create({
         model: this.model as Anthropic.MessageCreateParams['model'],
@@ -101,7 +146,7 @@ export class ClaudeProvider {
                 type: 'image',
                 source: {
                   type: 'base64',
-                  media_type: mimeType as Anthropic.ImageBlock['source']['media_type'],
+                  media_type: mimeType,
                   data: imageBase64,
                 },
               },

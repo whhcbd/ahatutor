@@ -1,15 +1,15 @@
 import { IsString, IsOptional, IsNumber, IsObject } from 'class-validator';
-import { DocumentType, DocumentStatus } from '../../../../shared/types/rag.types';
+import { DocumentType, DocumentStatus } from '@shared/types/rag.types';
 
 /**
  * 上传文档 DTO
  */
 export class UploadDocumentDto {
   @IsString()
-  name: string;
+  name!: string;
 
   @IsString()
-  content: string;
+  content!: string;
 
   @IsOptional()
   type?: DocumentType;
@@ -29,15 +29,15 @@ export class UploadDocumentDto {
  */
 export class QueryDto {
   @IsString()
-  query: string;
+  query!: string;
 
   @IsOptional()
   @IsNumber()
-  topK?: number = 5;
+  topK?: number;
 
   @IsOptional()
   @IsNumber()
-  threshold?: number = 0.7;
+  threshold?: number;
 
   @IsOptional()
   documentId?: string;

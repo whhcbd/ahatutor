@@ -17,6 +17,22 @@ import {
  * - 添加类比和记忆技巧
  * - 创造知识间的"桥梁"
  */
+
+interface NarrativeStoryResponse {
+  title: string;
+  narrative: string;
+  keyMoments?: string[];
+  hooks?: string[];
+}
+
+interface LearningScriptResponse {
+  script: string;
+  estimatedTime: number;
+  checkpoints: string[];
+  discussionQuestions?: string[];
+  takeaways?: string[];
+}
+
 @Injectable()
 export class NarrativeComposerService {
   private readonly logger = new Logger(NarrativeComposerService.name);
@@ -250,7 +266,7 @@ export class NarrativeComposerService {
     };
 
     try {
-      const response = await this.llmService.structuredChat<typeof schema>(
+      const response = await this.llmService.structuredChat<NarrativeStoryResponse>(
         [{ role: 'user', content: prompt }],
         schema,
         { temperature: 0.8 }  // 较高的温度以获得更有创意的故事
@@ -370,7 +386,7 @@ ${narrative.connectingStories.join('\n')}
     };
 
     try {
-      const response = await this.llmService.structuredChat<typeof schema>(
+      const response = await this.llmService.structuredChat<LearningScriptResponse>(
         [{ role: 'user', content: prompt }],
         schema,
         { temperature: 0.7 }

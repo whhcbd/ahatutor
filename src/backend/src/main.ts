@@ -10,8 +10,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   // 启用 CORS
+  const frontendPort = process.env.FRONTEND_PORT || '5173';
   app.enableCors({
-    origin: process.env.FRONTEND_PORT || 'http://localhost:5173',
+    origin: [`http://localhost:${frontendPort}`, `http://127.0.0.1:${frontendPort}`],
     credentials: true,
   });
 

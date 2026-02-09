@@ -78,14 +78,12 @@ export default function SpeedModePage() {
       });
 
       setIsCorrect(result.isCorrect);
-
       if (result.isCorrect) {
         setStats((prev) => ({ ...prev, correct: prev.correct + 1 }));
-        setSessionState(SpeedModeState.EXPLAINING);
-      } else {
-        setSessionState(SpeedModeState.SELF_ASSESS);
-        setShowSelfAssessment(true);
       }
+      // 直接显示解析，不再需要先自评
+      setSessionState(SpeedModeState.EXPLAINING);
+      setShowSelfAssessment(true);
     } catch (err) {
       console.error('Failed to evaluate answer:', err);
       // 回退到客户端判断
@@ -93,21 +91,16 @@ export default function SpeedModePage() {
       setIsCorrect(correct);
       if (correct) {
         setStats((prev) => ({ ...prev, correct: prev.correct + 1 }));
-        setSessionState(SpeedModeState.EXPLAINING);
-      } else {
-        setSessionState(SpeedModeState.SELF_ASSESS);
-        setShowSelfAssessment(true);
       }
+      // 直接显示解析
+      setSessionState(SpeedModeState.EXPLAINING);
+      setShowSelfAssessment(true);
     }
   };
 
   const handleSelfAssessment = (errorType: 'low_level' | 'high_level') => {
-    setShowSelfAssessment(false);
-    if (errorType === 'low_level') {
-      continueToNext();
-    } else {
-      setSessionState(SpeedModeState.EXPLAINING);
-    }
+    // 自评只是记录，不改变流程
+    console.log('用户自评:', errorType);
   };
 
   const continueToNext = () => {
@@ -224,58 +217,46 @@ export default function SpeedModePage() {
             </div>
           )}
 
-          {/* 用户自评 */}
-          {showSelfAssessment && (
-            <div className="mb-6 p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <h3 className="font-semibold mb-4 flex items-center">
-                <Lightbulb className="w-5 h-5 mr-2 text-yellow-600" />
-                答案错误，请选择原因
-              </h3>
-              <div className="space-y-3">
-                <button
-                  onClick={() => handleSelfAssessment('low_level')}
-                  className="w-full text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-300 transition-colors"
-                >
-                  <div className="font-medium mb-1">低级错误</div>
-                  <div className="text-sm text-gray-500">笔误、手滑、计算失误</div>
-                </button>
-                <button
-                  onClick={() => handleSelfAssessment('high_level')}
-                  className="w-full text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-red-300 transition-colors"
-                >
-                  <div className="font-medium mb-1">高级错误（知识性）</div>
-                  <div className="text-sm text-gray-500">概念不理解、原理不清楚</div>
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* 解析区域 */}
           {sessionState === SpeedModeState.EXPLAINING && currentQuestion.explanation && (
             <div className="border-t border-gray-200 pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold">题目解析</h3>
-                <div className="flex items-center space-x-1">
-                  {[1, 2, 3, 4, 5].map((level) => (
+              <h3 className="font-semibold mb-4">题目解析</h3>
+              <div className="p-4 bg-gray-50 rounded-lg space-y-4">
+                {[1, 2, 3, 4, 5].map((level) => (
+                  <div key={level} className="border-l-2 border-blue-200 pl-3">
+                    <div className="text-sm font-medium text-blue-600 mb-1">解析等级 {level}</div>
+                    <div className="whitespace-pre-line text-gray-700 text-sm">
+                      {currentQuestion.explanation[`level${level}` as keyof typeof currentQuestion.explanation]}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* 自评区域（可选） */}
+              {showSelfAssessment && !isCorrect && (
+                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                    <Lightbulb className="w-4 h-4 mr-2 text-yellow-600" />
+                    这道题答错了，是什么原因呢？（可选）
+                  </h4>
+                  <div className="flex gap-2">
                     <button
-                      key={level}
-                      onClick={() => setExplanationLevel(level)}
-                      className={`px-3 py-1 text-sm rounded ${
-                        explanationLevel === level
-                          ? 'bg-blue-500 text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
+                      onClick={() => handleSelfAssessment('low_level')}
+                      className="flex-1 py-2 px-3 bg-white rounded-lg border border-gray-200 hover:border-orange-300 transition-colors text-sm"
                     >
-                      {level}
+                      低级错误
+                      <span className="block text-xs text-gray-400">笔误、手滑</span>
                     </button>
-                  ))}
+                    <button
+                      onClick={() => handleSelfAssessment('high_level')}
+                      className="flex-1 py-2 px-3 bg-white rounded-lg border border-gray-200 hover:border-red-300 transition-colors text-sm"
+                    >
+                      高级错误
+                      <span className="block text-xs text-gray-400">概念不理解</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <div className="whitespace-pre-line text-gray-700">
-                  {currentQuestion.explanation[`level${explanationLevel}` as keyof typeof currentQuestion.explanation]}
-                </div>
-              </div>
+              )}
             </div>
           )}
 

@@ -18,7 +18,7 @@ export enum Subject {
  */
 export class UploadMistakeDto {
   @IsString()
-  question: string;
+  question!: string;
 
   @IsOptional()
   @IsString()
@@ -90,7 +90,7 @@ export class UpdateMistakeDto {
 export class GenerateSimilarDto {
   @IsOptional()
   @IsNumber()
-  count?: number = 3;
+  count?: number;
 
   @IsOptional()
   difficulty?: 'easy' | 'medium' | 'hard';

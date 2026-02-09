@@ -1,11 +1,12 @@
-# AhaTutor - 遗传学可视化交互解答平台
+1# AhaTutor - 遗传学可视化交互解答平台
 
 > 基于 AI 的遗传学学习平台，实现"自然语言输入 + AI理解 + 实时可视化 + 交互探索"，打造真正的"顿悟时刻"(Aha Moment)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18-61DAFB)](https://react.dev/)
+[![React](https://img.shields.io/badge/React-19-61DAFB)](https://react.dev/)
 [![NestJS](https://img.shields.io/badge/NestJS-10-E0234E)](https://nestjs.com/)
+[![Strict Mode](https://img.shields.io/badge/TypeScript-Strict_Mode-3178c6)](https://www.typescriptlang.org/tsconfig#strict)
 
 ---
 
@@ -36,14 +37,13 @@
 | **错题管理** | ✅ | OCR 识别 + 举一反三变式练习 |
 | **学情报告** | ✅ | 数据统计 + ECharts 图表 |
 | **Agent Skills** | ✅ | 联网搜索 + 资源推荐 |
-| **ReportModule** | ✅ | 已注册到主应用 |
+| **TypeScript 严格模式** | ✅ | 完整的类型安全，零编译错误 |
+| **多模态内容支持** | ✅ | LLM 服务支持文本和图像内容 |
 
 ### ⏳ 待完成功能
 
 | 模块 | 状态 | 说明 |
 |------|:------:|------|
-| **VisualDesigner** | ✅ | 可视化设计 Agent |
-| **NarrativeComposer** | ✅ | 叙事作曲 Agent |
 | **AuthModule** | ⏳ | 用户认证模块 |
 | **QuizModule** | ⏳ | 智能组卷服务 |
 | **CacheModule** | ⏳ | Redis 缓存优化 |
@@ -135,7 +135,7 @@ AI 出题 → 用户回答 → AI 判断 → 用户自评 → 分级解析 → �
 ### 4. 错题管理
 
 - 📷 拍照上传错题（调用设备相机）
-- 🔍 OCR 自动识别题目内容
+- 🔍 OCR 自动识别题目内容（支持多模态）
 - 🔄 举一反三：基于错题自动生成相似题
 - 📁 错题分类存储和个人错题库
 
@@ -153,9 +153,9 @@ AI 出题 → 用户回答 → AI 判断 → 用户自评 → 分级解析 → �
 
 | 技术 | 版本 | 用途 |
 |------|------|------|
-| React | 18 | UI 框架 |
-| TypeScript | 5.5 | 类型安全 |
-| Vite | 5.4 | 构建工具 |
+| React | 19 | UI 框架 |
+| TypeScript | 5.5 | 类型安全（Strict Mode） |
+| Vite | 7 | 构建工具 |
 | Zustand / Redux | - | 状态管理 |
 | Framer Motion | - | 动画库 |
 | D3.js | - | 知识图谱可视化 |
@@ -168,15 +168,16 @@ AI 出题 → 用户回答 → AI 判断 → 用户自评 → 分级解析 → �
 | 技术 | 版本 | 用途 |
 |------|------|------|
 | NestJS | 10 | API 框架 |
-| TypeScript | 5.5 | 类型安全 |
-| | | |
+| TypeScript | 5.5 | 类型安全（Strict Mode） |
+| Neo4j Driver | 5.x | 图数据库连接 |
+| Pinecone | - | 向量存储 |
 
 ### AI 层
 
 | 服务 | 提供商 | 用途 |
 |------|--------|------|
-| OpenAI | GPT-4 | 通用场景、代码生成 |
-| Anthropic | Claude | 复杂推理、长文本 |
+| OpenAI | GPT-4 | 通用场景、代码生成、视觉理解 |
+| Anthropic | Claude | 复杂推理、长文本、图像分析 |
 | DeepSeek | - | 成本优化、中文理解 |
 | GLM | - | 国产模型支持 |
 
@@ -185,8 +186,49 @@ AI 出题 → 用户回答 → AI 判断 → 用户自评 → 分级解析 → �
 | 数据库 | 用途 |
 |--------|------|
 | Neo4j | 知识图谱存储与查询 |
-| Redis | 缓存、会话管理 |
-| PostgreSQL | 用户数据（可选） |
+| Pinecone | 向量检索 |
+| Redis | 缓存、会话管理（计划中） |
+
+---
+
+## 类型系统亮点
+
+项目采用 **TypeScript Strict Mode**，确保完整的类型安全：
+
+### 核心类型定义
+
+```typescript
+// 多模态消息内容
+export type ChatMessageContent = string | Array<ChatMessageTextPart | ChatMessageImagePart>;
+
+// 遗传学枚举
+export enum GeneticsLaw {
+  MENDEL_FIRST = 'mendel_first_law',      // 分离定律
+  MENDEL_SECOND = 'mendel_second_law',    // 自由组合定律
+  LINKAGE = 'linkage_law',                // 连锁定律
+  SEX_LINKED = 'sex_linked_inheritance',  // 伴性遗传
+}
+
+// LLM 提供商类型安全的响应
+interface LLMResponse {
+  content: string;
+  model: string;
+  usage: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
+}
+```
+
+### 类型修复记录
+
+| 问题类别 | 修复方案 |
+|----------|----------|
+| Neo4j Record 类型冲突 | 使用 `Record as Neo4jRecord` 别名 |
+| 多模态内容类型 | 扩展 `ChatMessageContent` 联合类型 |
+| 枚举类型不匹配 | 统一使用字符串字面量到枚举转换 |
+| LLM 响应类型 | 添加完整的响应接口定义 |
 
 ---
 
@@ -228,8 +270,19 @@ ahatutor/
 │   │       │   │   │   └── resource-recommend.service.ts
 │   │       │   │   └── agent.controller.ts
 │   │       │   ├── llm/                 # LLM 多管道
+│   │       │   │   ├── llm.service.ts   # 统一接口
+│   │       │   │   └── providers/       # 各厂商适配器
+│   │       │   │       ├── openai.provider.ts
+│   │       │   │       ├── claude.provider.ts
+│   │       │   │       ├── deepseek.provider.ts
+│   │       │   │       └── glm.provider.ts
 │   │       │   ├── rag/                 # RAG 框架
 │   │       │   ├── knowledge-graph/     # 知识图谱
+│   │       │   │   └── services/
+│   │       │   │       ├── neo4j.service.ts
+│   │       │   │       ├── graph.service.ts
+│   │       │   │       ├── graph-builder.service.ts
+│   │       │   │       └── path-finder.service.ts
 │   │       │   ├── mistake/             # 错题管理
 │   │       │   └── report/              # 学情报告
 │   │       ├── shared/
@@ -240,12 +293,14 @@ ahatutor/
 │       └── types/                       # 类型定义
 │           ├── agent.types.ts
 │           ├── genetics.types.ts
+│           ├── rag.types.ts
 │           └── skill.types.ts
 │
 ├── documents/                           # 教材文档
 ├── prompts/                             # Prompt 模板
 ├── docker-compose.yml                   # 本地开发环境
 ├── package.json
+├── pnpm-workspace.yaml                  # pnpm 工作区配置
 └── README.md
 ```
 
@@ -256,7 +311,7 @@ ahatutor/
 ### 环境要求
 
 - Node.js 18+
-- Redis（可选，用于缓存）
+- pnpm 8+（推荐）
 - Neo4j（可选，用于知识图谱）
 - LLM API Key（OpenAI/Claude/DeepSeek 至少一个）
 
@@ -270,12 +325,10 @@ cd ahatutor
 ### 2. 安装依赖
 
 ```bash
-# 安装后端依赖
-cd src/backend
-npm install
+# 使用 pnpm（推荐）
+pnpm install
 
-# 安装前端依赖
-cd ../frontend
+# 或使用 npm
 npm install
 ```
 
@@ -287,7 +340,7 @@ npm install
 # LLM 配置（至少配置一个）
 DEFAULT_LLM_PROVIDER=openai
 OPENAI_API_KEY=your_openai_key
-CLAUDE_API_KEY=your_claude_key
+ANTHROPIC_API_KEY=your_claude_key
 DEEPSEEK_API_KEY=your_deepseek_key
 GLM_API_KEY=your_glm_key
 
@@ -296,8 +349,10 @@ NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j
 NEO4J_PASSWORD=ahatutor123
 
-REDIS_HOST=localhost
-REDIS_PORT=6379
+# Pinecone 向量数据库
+PINECONE_API_KEY=your_pinecone_key
+PINECONE_ENVIRONMENT=your_environment
+PINECONE_INDEX=ahatutor
 
 # 网络搜索（可选）
 WEB_SEARCH_PROVIDER=mock  # tavily | bing | mock
@@ -313,8 +368,8 @@ VITE_API_BASE_URL=http://localhost:3000
 ### 4. 启动数据库服务
 
 ```bash
-# 启动 Redis 和 Neo4j（使用 Docker）
-docker-compose up -d redis neo4j
+# 启动 Neo4j（使用 Docker）
+docker-compose up -d neo4j
 ```
 
 ### 5. 启动开发服务器
@@ -322,13 +377,13 @@ docker-compose up -d redis neo4j
 ```bash
 # 启动后端（端口 3000）
 cd src/backend
-npm run start:dev
+pnpm run start:dev
 
 # 启动前端（端口 5173）
 cd src/frontend
-npm run dev
+pnpm run dev
 ```
-
+  
 ### 6. 访问应用
 
 打开浏览器访问: `http://localhost:5173`
@@ -458,6 +513,7 @@ function InteractiveLearningPage({ concept }) {
 - [x] LLM 多管道
 - [x] Agent Skills
 - [x] 前后端 API 对接
+- [x] TypeScript Strict Mode 类型修复
 
 ### 🔄 Phase 2: 用户体验优化（进行中）
 
@@ -484,6 +540,7 @@ function InteractiveLearningPage({ concept }) {
 - ✅ 速通模式完整流程可运行
 - ✅ 知识图谱正确展示概念关系
 - ✅ 学习叙事生成连贯的故事
+- ✅ TypeScript 严格模式零编译错误
 
 ### 性能验收
 

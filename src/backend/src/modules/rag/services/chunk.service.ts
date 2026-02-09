@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { DocumentChunk } from '../../../../shared/types/rag.types';
+import type { DocumentChunk } from '@shared/types/rag.types';
 
 /**
  * 文本分块服务

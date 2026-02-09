@@ -190,7 +190,7 @@ ${JSON.stringify(weaknessStats, null, 2)}
   /**
    * 获取学习进度
    */
-  async getLearningProgress(userId?: string) {
+  async getLearningProgress(_userId?: string) {
     const sessions = Array.from(this.learningSessions.values());
     const mistakes = await this.mistakeService.findAll();
 
@@ -311,7 +311,7 @@ ${JSON.stringify(weaknessStats, null, 2)}
     return Array.from(topics);
   }
 
-  private calculateTopicMastery(topic: string): number {
+  private calculateTopicMastery(_topic: string): number {
     // 简化计算，实际应基于正确率和复习次数
     return Math.floor(Math.random() * 100);
   }
@@ -332,11 +332,11 @@ ${JSON.stringify(weaknessStats, null, 2)}
     return [];
   }
 
-  private calculateStreaks(sessions: any[]): { current: number; longest: number } {
+  private calculateStreaks(_sessions: any[]): { current: number; longest: number } {
     return { current: 3, longest: 7 };
   }
 
-  private generateLineChartData(sessions: any[], period?: string): any {
+  private generateLineChartData(sessions: any[], _period?: string): any {
     return {
       labels: sessions.slice(-7).map((s) => s.date?.split('T')[0]),
       datasets: [
@@ -379,7 +379,7 @@ ${JSON.stringify(weaknessStats, null, 2)}
     };
   }
 
-  private generateRadarChartData(sessions: any[]): any {
+  private generateRadarChartData(_sessions: any[]): any {
     return {
       labels: ['遗传学', '细胞生物学', '进化论', '生态学', '分子生物学'],
       datasets: [

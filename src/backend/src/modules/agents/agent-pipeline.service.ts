@@ -6,6 +6,7 @@ import { VisualDesignerService } from './visual-designer.service';
 import { NarrativeComposerService } from './narrative-composer.service';
 import { QuizGeneratorService } from './quiz-generator.service';
 import { SixAgentInput, SixAgentOutput } from '@shared/types/agent.types';
+import { Difficulty } from '@shared/types/genetics.types';
 
 /**
  * Agent 流水线服务
@@ -84,7 +85,7 @@ export class AgentPipelineService {
         this.logger.debug('Step 6: QuizGenerator');
         const question = await this.quizGenerator.generateQuestion({
           topic: input.concept,
-          difficulty: input.userLevel === 'beginner' ? 'easy' : input.userLevel === 'advanced' ? 'hard' : 'medium',
+          difficulty: input.userLevel === 'beginner' ? Difficulty.EASY : input.userLevel === 'advanced' ? Difficulty.HARD : Difficulty.MEDIUM,
           userLevel: input.userLevel,
         });
         quiz = question;
@@ -111,8 +112,8 @@ export class AgentPipelineService {
    * 快速模式：只执行概念分析和前置知识探索
    */
   async quickAnalyze(concept: string): Promise<{
-    analysis: ReturnType<ConceptAnalyzerService['analyze']>;
-    tree: ReturnType<PrerequisiteExplorerService['explorePrerequisites']>;
+    analysis: Awaited<ReturnType<ConceptAnalyzerService['analyze']>>;
+    tree: Awaited<ReturnType<PrerequisiteExplorerService['explorePrerequisites']>>;
   }> {
     this.logger.log(`Quick analysis for: ${concept}`);
 
@@ -127,10 +128,10 @@ export class AgentPipelineService {
    */
   async generateLearningPath(
     concept: string,
-    userLevel: 'beginner' | 'intermediate' | 'advanced' = 'intermediate'
+    _userLevel: 'beginner' | 'intermediate' | 'advanced' = 'intermediate'
   ): Promise<{
     path: string[];
-    enrichedContent: Map<string, any>;
+    enrichedContent: Map<string, unknown>;
   }> {
     this.logger.log(`Generating learning path for: ${concept}`);
 
@@ -159,7 +160,7 @@ export class AgentPipelineService {
    */
   async generateQuizForTopic(params: {
     topic: string;
-    difficulty: 'easy' | 'medium' | 'hard';
+    difficulty: Difficulty;
     count: number;
     userLevel?: 'beginner' | 'intermediate' | 'advanced';
   }) {

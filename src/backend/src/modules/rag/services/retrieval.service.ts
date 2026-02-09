@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EmbeddingService } from './embedding.service';
 import { VectorStoreService } from './vector-store.service';
-import type { QueryResult, QueryOptions } from '../../../../shared/types/rag.types';
+import type { QueryResult, QueryOptions, DocumentChunk } from '@shared/types/rag.types';
 
 /**
  * 检索服务
@@ -73,18 +73,78 @@ export class RetrievalService {
 
   /**
    * 关键词搜索
+   * 基于倒排索引的关键词匹配
    */
   private async keywordSearch(
     query: string,
     options: QueryOptions,
   ): Promise<QueryResult[]> {
-    // 简单的关键词匹配实现
-    const queryLower = query.toLowerCase();
-    const queryTerms = queryLower.split(/\s+/).filter((term) => term.length > 2);
+    // 从向量存储获取所有相关 chunks
+    const allChunks: DocumentChunk[] = [];
 
-    // TODO: 实现更复杂的关键词搜索（如倒排索引）
-    // 这里作为占位，返回空数组
-    return [];
+    // 如果指定了文档 ID，只搜索该文档
+    if (options.filter?.documentId) {
+      const chunks = await this.vectorStore.getChunksByDocument(
+        options.filter.documentId,
+      );
+      allChunks.push(...chunks);
+    } else {
+      // 否则搜索所有文档（需要 VectorStoreService 提供 getAllChunks 方法）
+      // 暂时返回空数组，需要在 VectorStoreService 中添加 getAllChunks 方法
+      return [];
+    }
+
+    // 提取查询关键词
+    const queryLower = query.toLowerCase();
+    const queryTerms = queryLower.split(/\s+/).filter((term) => term.length > 1);
+
+    if (queryTerms.length === 0) {
+      return [];
+    }
+
+    // 计算每个 chunk 的关键词匹配分数
+    const results: QueryResult[] = [];
+    for (const chunk of allChunks) {
+      const contentLower = chunk.content.toLowerCase();
+      let matchScore = 0;
+      let matchedTerms = 0;
+
+      for (const term of queryTerms) {
+        // 精确匹配（完整词）
+        const wordRegex = new RegExp(`\\b${term}\\b`, 'gi');
+        const exactMatches = (contentLower.match(wordRegex) || []).length;
+        matchScore += exactMatches * 2;
+
+        // 部分匹配（子串）
+        if (contentLower.includes(term) && exactMatches === 0) {
+          matchScore += 0.5;
+        }
+
+        // 元数据匹配
+        const metadataLower = JSON.stringify(chunk.metadata).toLowerCase();
+        if (metadataLower.includes(term)) {
+          matchScore += 1;
+        }
+
+        if (exactMatches > 0 || metadataLower.includes(term)) {
+          matchedTerms++;
+        }
+      }
+
+      // 只返回有匹配的结果
+      if (matchScore > 0) {
+        // 标准化分数（0-1）
+        const normalizedScore = Math.min(matchScore / (queryTerms.length * 3), 1);
+        results.push({
+          chunk,
+          score: normalizedScore,
+          relevance: this.getRelevanceLevel(normalizedScore),
+        });
+      }
+    }
+
+    // 按分数排序
+    return results.sort((a, b) => b.score - a.score);
   }
 
   /**

@@ -1,15 +1,15 @@
 import { IsString, IsOptional, IsEnum, IsNumber } from 'class-validator';
-import { KnowledgeNodeType } from '../../../../shared/types/knowledge-tree.types';
+import { KnowledgeNodeType } from '@shared/types/knowledge-tree.types';
 
 /**
  * 创建节点 DTO
  */
 export class CreateNodeDto {
   @IsString()
-  name: string;
+  name!: string;
 
   @IsEnum(KnowledgeNodeType)
-  type: KnowledgeNodeType;
+  type!: KnowledgeNodeType;
 
   @IsOptional()
   @IsNumber()
@@ -31,13 +31,13 @@ export class CreateNodeDto {
  */
 export class CreateEdgeDto {
   @IsString()
-  from: string; // 源节点 ID
+  from!: string; // 源节点 ID
 
   @IsString()
-  to: string; // 目标节点 ID
+  to!: string; // 目标节点 ID
 
   @IsString()
-  type: string; // 关系类型：PREREQUISITE, RELATED, CONTAINS 等
+  type!: string; // 关系类型：PREREQUISITE, RELATED, CONTAINS 等
 
   @IsOptional()
   weight?: number; // 关系权重
@@ -48,10 +48,10 @@ export class CreateEdgeDto {
  */
 export class GetPathDto {
   @IsString()
-  from: string; // 起始节点 ID 或名称
+  from!: string; // 起始节点 ID 或名称
 
   @IsString()
-  to: string; // 目标节点 ID 或名称
+  to!: string; // 目标节点 ID 或名称
 
   @IsOptional()
   @IsString()

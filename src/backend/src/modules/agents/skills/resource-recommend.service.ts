@@ -23,7 +23,7 @@ export class ResourceRecommendService {
   private readonly logger = new Logger(ResourceRecommendService.name);
 
   // 预定义的遗传学学习资源库（可以扩展为数据库）
-  private readonly curatedResources = {
+  private readonly curatedResources: Record<string, ResourceRecommendation[]> = {
     // 视频资源
     '伴性遗传': [
       {
@@ -165,13 +165,13 @@ export class ResourceRecommendService {
     userLevel?: 'beginner' | 'intermediate' | 'advanced',
     preferredTypes?: ResourceType[],
   ): ResourceRecommendation[] {
-    const resources = this.curatedResources[concept as keyof typeof this.curatedResources] || [];
+    const resources = this.curatedResources[concept] || [];
 
     return resources.filter(resource => {
       // 过滤难度等级
       if (userLevel && resource.difficulty && resource.difficulty !== userLevel) {
         // 允许上一个/下一个等级
-        const levels = ['beginner', 'intermediate', 'advanced'];
+        const levels: Array<'beginner' | 'intermediate' | 'advanced'> = ['beginner', 'intermediate', 'advanced'];
         const currentLevelIndex = levels.indexOf(userLevel);
         const resourceLevelIndex = levels.indexOf(resource.difficulty);
         if (Math.abs(currentLevelIndex - resourceLevelIndex) > 1) {
@@ -296,7 +296,22 @@ ${results.map((r, i) => `${i + 1}. 标题: ${r.title}\n   URL: ${r.url}\n   摘�
 - relevanceScore 范围 0-1，表示与概念的相关性
 - 过滤掉明显不相关的结果`;
 
-      const response = await this.llmService.structuredChat<{ resources: ResourceRecommendation[] }>(
+      interface AnalyzedResource {
+        id: string;
+        type: ResourceType;
+        title: string;
+        description: string;
+        url: string;
+        difficulty: 'beginner' | 'intermediate' | 'advanced';
+        tags: string[];
+        relevanceScore: number;
+      }
+
+      interface AnalyzedResourcesResponse {
+        resources: AnalyzedResource[];
+      }
+
+      const response = await this.llmService.structuredChat<AnalyzedResourcesResponse>(
         [{ role: 'user', content: prompt }],
         {},
       );

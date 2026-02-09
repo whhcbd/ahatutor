@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { RAGController } from './rag.controller';
+import { RAGService } from './services/rag.service';
 import { DocumentService } from './services/document.service';
 import { ChunkService } from './services/chunk.service';
 import { EmbeddingService } from './services/embedding.service';
@@ -11,6 +12,7 @@ import { LLMModule } from '../llm/llm.module';
   imports: [LLMModule.register()],
   controllers: [RAGController],
   providers: [
+    RAGService,
     DocumentService,
     ChunkService,
     EmbeddingService,
@@ -18,6 +20,7 @@ import { LLMModule } from '../llm/llm.module';
     RetrievalService,
   ],
   exports: [
+    RAGService,
     DocumentService,
     ChunkService,
     EmbeddingService,
