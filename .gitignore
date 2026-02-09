@@ -1,0 +1,99 @@
+# ==========================================
+# AhaTutor .gitignore
+# ==========================================
+
+# 依赖
+node_modules/
+.pnp
+.pnp.js
+
+# 构建输出
+dist/
+dist-ssr/
+build/
+*.local
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 日志
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 编辑器
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# 测试覆盖率
+coverage/
+*.lcov
+.nyc_output/
+
+# 临时文件
+*.tmp
+*.temp
+.cache/
+.parcel-cache/
+
+# 数据目录（不提交用户数据）
+data/cache/*
+data/neo4j/*
+data/postgres/*
+data/minio/*
+!data/cache/.gitkeep
+!data/neo4j/.gitkeep
+!data/postgres/.gitkeep
+!data/minio/.gitkeep
+
+# 上传的文档（不提交用户上传的文件）
+documents/*
+!documents/.gitkeep
+!documents/README.md
+
+# OS 文件
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Docker
+docker-compose.override.yml
+
+# TypeScript
+*.tsbuildinfo
+
+# 可选的 npm cache 目录
+.npm
+
+# 可选的 eslint cache
+.eslintcache
+
+# Package manager lockfiles（根据项目选择保留哪个）
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# 构建工具
+.vite/
+.turbo/
+
+# 备份文件
+*.bak
+*.backup
