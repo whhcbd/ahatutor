@@ -5,8 +5,22 @@ import { GeneticsEnricherService } from './genetics-enricher.service';
 import { VisualDesignerService } from './visual-designer.service';
 import { NarrativeComposerService } from './narrative-composer.service';
 import { QuizGeneratorService } from './quiz-generator.service';
+import { VisualizationGeneratorService } from './skills/visualization-generator.service';
+import { GeneticsVisualizationService } from './skills/genetics-visualization.service';
+import { InteractiveControlService } from './skills/interactive-control.service';
+import { VectorRetrievalService } from '../rag/services/vector-retrieval.service';
+import { ContextRetrievalService } from '../rag/services/context-retrieval.service';
+import { StreamingAnswerService } from '../rag/services/streaming-answer.service';
 import { SixAgentInput, SixAgentOutput } from '@shared/types/agent.types';
 import { Difficulty } from '@shared/types/genetics.types';
+import {
+  VisualizationGenerateInput,
+  GeneticsVisualizationInput,
+  InteractiveControlInput,
+  VectorRetrievalInput,
+  ContextRetrievalInput,
+  StreamingAnswerInput,
+} from '@shared/types/skill.types';
 
 /**
  * Agent 流水线服务
@@ -23,6 +37,12 @@ export class AgentPipelineService {
     private readonly visualDesigner: VisualDesignerService,
     private readonly narrativeComposer: NarrativeComposerService,
     private readonly quizGenerator: QuizGeneratorService,
+    private readonly visualizationGenerator: VisualizationGeneratorService,
+    private readonly geneticsVisualization: GeneticsVisualizationService,
+    private readonly interactiveControl: InteractiveControlService,
+    private readonly vectorRetrieval: VectorRetrievalService,
+    private readonly contextRetrieval: ContextRetrievalService,
+    private readonly streamingAnswer: StreamingAnswerService,
   ) {}
 
   /**
@@ -174,5 +194,67 @@ export class AgentPipelineService {
     });
 
     return questions;
+  }
+
+  // ==================== 可视化 Skills 集成 ====================
+
+  /**
+   * 生成可视化配置
+   */
+  async generateVisualization(input: VisualizationGenerateInput) {
+    this.logger.log(`Generating visualization for: ${input.concept}`);
+    return await this.visualizationGenerator.generate(input);
+  }
+
+  /**
+   * 生成遗传学专用可视化
+   */
+  async generateGeneticsVisualization(input: GeneticsVisualizationInput) {
+    this.logger.log(`Generating genetics visualization for: ${input.concept}`);
+    return await this.geneticsVisualization.generate(input);
+  }
+
+  /**
+   * 控制可视化交互
+   */
+  async controlVisualization(input: InteractiveControlInput) {
+    this.logger.log(`Controlling visualization: ${input.visualizationId}`);
+    return await this.interactiveControl.control(input);
+  }
+
+  /**
+   * 批量生成可视化（用于学习路径）
+   */
+  async generateVisualizationBatch(
+    inputs: VisualizationGenerateInput[],
+  ) {
+    this.logger.log(`Generating batch visualization for ${inputs.length} concepts`);
+    return await this.visualizationGenerator.generateBatch(inputs);
+  }
+
+  // ==================== RAG Skills 集成 ====================
+
+  /**
+   * 向量检索
+   */
+  async retrieveWithContext(input: VectorRetrievalInput) {
+    this.logger.log(`Retrieving context for: ${input.query}`);
+    return await this.vectorRetrieval.retrieve(input);
+  }
+
+  /**
+   * 上下文检索（多轮对话）
+   */
+  async retrieveWithConversation(input: ContextRetrievalInput) {
+    this.logger.log(`Retrieving conversation context`);
+    return await this.contextRetrieval.retrieve(input);
+  }
+
+  /**
+   * 流式答案生成
+   */
+  async generateStreamingAnswer(input: StreamingAnswerInput) {
+    this.logger.log(`Generating streaming answer for: ${input.query}`);
+    return await this.streamingAnswer.generate(input);
   }
 }

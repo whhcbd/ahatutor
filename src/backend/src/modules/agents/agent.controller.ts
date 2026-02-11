@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEnum, IsOptional, IsNumber } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsNumber, IsArray, IsBoolean } from 'class-validator';
 import { AgentPipelineService } from './agent-pipeline.service';
 import { ConceptAnalyzerService } from './concept-analyzer.service';
 import { PrerequisiteExplorerService } from './prerequisite-explorer.service';
@@ -10,6 +10,9 @@ import { NarrativeComposerService } from './narrative-composer.service';
 import { QuizGeneratorService } from './quiz-generator.service';
 import { WebSearchService } from './skills/web-search.service';
 import { ResourceRecommendService } from './skills/resource-recommend.service';
+import { VisualizationGeneratorService } from './skills/visualization-generator.service';
+import { GeneticsVisualizationService } from './skills/genetics-visualization.service';
+import { InteractiveControlService } from './skills/interactive-control.service';
 import { SixAgentInput } from '@shared/types/agent.types';
 import { Difficulty, QuestionType } from '@shared/types/genetics.types';
 import { ResourceType } from '@shared/types/skill.types';
@@ -192,6 +195,157 @@ class AskQuestionDto {
   conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>;
 }
 
+class VisualizationGenerateDto {
+  @ApiProperty({ description: '目标概念' })
+  @IsString()
+  concept!: string;
+
+  @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
+  @IsOptional()
+  @IsEnum(['beginner', 'intermediate', 'advanced'] as const)
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+
+  @ApiProperty({ description: '关注领域', required: false, type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  focusAreas?: string[];
+
+  @ApiProperty({ description: '首选可视化类型', required: false, type: [String] })
+  @IsOptional()
+  @IsArray()
+  preferredTypes?: string[];
+
+  @ApiProperty({ description: '是否交互', required: false })
+  @IsOptional()
+  @IsBoolean()
+  interactive?: boolean;
+
+  @ApiProperty({ description: '是否动画', required: false })
+  @IsOptional()
+  @IsBoolean()
+  animation?: boolean;
+}
+
+class GeneticsVisualizationDto {
+  @ApiProperty({ description: '目标概念' })
+  @IsString()
+  concept!: string;
+
+  @ApiProperty({ description: '可视化类型' })
+  @IsString()
+  visualizationType!: string;
+
+  @ApiProperty({ description: '参数', required: false })
+  @IsOptional()
+  parameters?: Record<string, unknown>;
+
+  @ApiProperty({ description: '场景', required: false })
+  @IsOptional()
+  scenario?: {
+    parentalCross?: {
+      male: { genotype: string; phenotype: string };
+      female: { genotype: string; phenotype: string };
+    };
+    targetTrait?: string;
+    inheritancePattern?: string;
+  };
+}
+
+class InteractiveControlDto {
+  @ApiProperty({ description: '可视化ID' })
+  @IsString()
+  visualizationId!: string;
+
+  @ApiProperty({ description: '控制类型', enum: ['play', 'pause', 'step_forward', 'step_backward', 'reset', 'update_parameter'] })
+  @IsEnum(['play', 'pause', 'step_forward', 'step_backward', 'reset', 'update_parameter'] as const)
+  controlType!: 'play' | 'pause' | 'step_forward' | 'step_backward' | 'reset' | 'update_parameter';
+
+  @ApiProperty({ description: '参数更新', required: false })
+  @IsOptional()
+  parameterUpdates?: Record<string, number | string | boolean>;
+
+  @ApiProperty({ description: '当前步骤', required: false })
+  @IsOptional()
+  @IsNumber()
+  currentStep?: number;
+}
+
+class VectorRetrievalDto {
+  @ApiProperty({ description: '查询内容' })
+  @IsString()
+  query!: string;
+
+  @ApiProperty({ description: '返回数量', required: false })
+  @IsOptional()
+  @IsNumber()
+  topK?: number;
+
+  @ApiProperty({ description: '过滤条件', required: false })
+  @IsOptional()
+  filters?: {
+    subject?: string;
+    topics?: string[];
+    difficulty?: string;
+    documentId?: string;
+  };
+
+  @ApiProperty({ description: '是否重排', required: false })
+  @IsOptional()
+  @IsBoolean()
+  rerank?: boolean;
+}
+
+class ContextRetrievalDto {
+  @ApiProperty({ description: '当前查询' })
+  @IsString()
+  currentQuery!: string;
+
+  @ApiProperty({ description: '对话历史', required: false })
+  @IsOptional()
+  conversationHistory?: Array<{ role: string; content: string }>;
+
+  @ApiProperty({ description: '返回数量', required: false })
+  @IsOptional()
+  @IsNumber()
+  topK?: number;
+
+  @ApiProperty({ description: '上下文窗口', required: false })
+  @IsOptional()
+  @IsNumber()
+  contextWindow?: number;
+}
+
+class StreamingAnswerDto {
+  @ApiProperty({ description: '查询内容' })
+  @IsString()
+  query!: string;
+
+  @ApiProperty({ description: '检索上下文', required: false })
+  @IsOptional()
+  context?: Array<{
+    chunkId: string;
+    documentId: string;
+    content: string;
+    score: number;
+    metadata?: unknown;
+  }>;
+
+  @ApiProperty({ description: '对话历史', required: false })
+  @IsOptional()
+  conversationHistory?: Array<{ role: string; content: string }>;
+
+  @ApiProperty({ description: '模式', enum: ['answer', 'explanation', 'step_by_step'], required: false })
+  @IsOptional()
+  @IsEnum(['answer', 'explanation', 'step_by_step'] as const)
+  mode?: 'answer' | 'explanation' | 'step_by_step';
+
+  @ApiProperty({ description: '风格', enum: ['concise', 'detailed', 'tutorial'], required: false })
+  @IsOptional()
+  @IsEnum(['concise', 'detailed', 'tutorial'] as const)
+  style?: 'concise' | 'detailed' | 'tutorial';
+}
+
 @ApiTags('Agent')
 @Controller('agent')
 export class AgentController {
@@ -205,6 +359,9 @@ export class AgentController {
     private readonly quizGenerator: QuizGeneratorService,
     private readonly webSearchService: WebSearchService,
     private readonly resourceRecommendService: ResourceRecommendService,
+    private readonly visualizationGenerator: VisualizationGeneratorService,
+    private readonly geneticsVisualization: GeneticsVisualizationService,
+    private readonly interactiveControl: InteractiveControlService,
   ) {}
 
   @Post('pipeline')
@@ -315,7 +472,6 @@ export class AgentController {
   @Post('visualize')
   @ApiOperation({ summary: '设计可视化方案' })
   async designVisualization(@Body() dto: VisualDesignDto) {
-    // 获取基础分析
     const conceptAnalysis = await this.conceptAnalyzer.analyze(dto.concept);
 
     let enrichment, tree;
@@ -513,6 +669,73 @@ export class AgentController {
       difficulty: difficultyMap[difficulty],
       count,
       userLevel,
+    });
+  }
+
+  // ==================== 可视化 Skills Routes ====================
+
+  @Post('skills/visualization/generate')
+  @ApiOperation({ summary: '生成可视化配置' })
+  async generateVisualization(@Body() dto: VisualizationGenerateDto) {
+    return await this.visualizationGenerator.generate({
+      concept: dto.concept,
+      context: {
+        difficulty: dto.difficulty,
+        focusAreas: dto.focusAreas,
+      },
+      preferences: {
+        preferredTypes: dto.preferredTypes as any,
+        interactive: dto.interactive,
+        animation: dto.animation,
+      },
+    });
+  }
+
+  @Post('skills/visualization/genetics')
+  @ApiOperation({ summary: '生成遗传学专用可视化' })
+  async generateGeneticsVisualization(@Body() dto: GeneticsVisualizationDto) {
+    return await this.geneticsVisualization.generate(dto as any);
+  }
+
+  @Post('skills/visualization/control')
+  @ApiOperation({ summary: '控制可视化交互' })
+  async controlVisualization(@Body() dto: InteractiveControlDto) {
+    return await this.interactiveControl.control(dto as any);
+  }
+
+  // ==================== RAG Skills Routes ====================
+
+  @Post('skills/rag/retrieve')
+  @ApiOperation({ summary: '向量检索' })
+  async vectorRetrieve(@Body() dto: VectorRetrievalDto) {
+    return await this.pipelineService.retrieveWithContext({
+      query: dto.query,
+      topK: dto.topK,
+      filters: dto.filters,
+      rerank: dto.rerank,
+    });
+  }
+
+  @Post('skills/rag/context')
+  @ApiOperation({ summary: '上下文检索（多轮对话）' })
+  async contextRetrieve(@Body() dto: ContextRetrievalDto) {
+    return await this.pipelineService.retrieveWithConversation({
+      currentQuery: dto.currentQuery,
+      conversationHistory: dto.conversationHistory || [],
+      topK: dto.topK,
+      contextWindow: dto.contextWindow,
+    });
+  }
+
+  @Post('skills/rag/stream')
+  @ApiOperation({ summary: '流式答案生成' })
+  async streamingAnswer(@Body() dto: StreamingAnswerDto) {
+    return await this.pipelineService.generateStreamingAnswer({
+      query: dto.query,
+      context: (dto.context || []) as any,
+      conversationHistory: dto.conversationHistory,
+      mode: dto.mode,
+      style: dto.style,
     });
   }
 }

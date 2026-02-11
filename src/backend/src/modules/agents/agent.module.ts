@@ -10,13 +10,17 @@ import { AgentController } from './agent.controller';
 import { LLMModule } from '../llm/llm.module';
 import { WebSearchService } from './skills/web-search.service';
 import { ResourceRecommendService } from './skills/resource-recommend.service';
+import { VisualizationGeneratorService } from './skills/visualization-generator.service';
+import { GeneticsVisualizationService } from './skills/genetics-visualization.service';
+import { InteractiveControlService } from './skills/interactive-control.service';
+import { RAGModule } from '../rag/rag.module';
 
 @Module({})
 export class AgentModule {
   static register(): DynamicModule {
     return {
       module: AgentModule,
-      imports: [LLMModule.register()],
+      imports: [LLMModule.register(), RAGModule],
       controllers: [AgentController],
       providers: [
         AgentPipelineService,
@@ -28,6 +32,9 @@ export class AgentModule {
         QuizGeneratorService,
         WebSearchService,
         ResourceRecommendService,
+        VisualizationGeneratorService,
+        GeneticsVisualizationService,
+        InteractiveControlService,
       ],
       exports: [
         AgentPipelineService,
@@ -39,6 +46,9 @@ export class AgentModule {
         QuizGeneratorService,
         WebSearchService,
         ResourceRecommendService,
+        VisualizationGeneratorService,
+        GeneticsVisualizationService,
+        InteractiveControlService,
       ],
       global: true,
     };
