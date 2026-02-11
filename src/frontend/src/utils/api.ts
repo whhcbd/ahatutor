@@ -56,17 +56,22 @@ export const llmApi = {
    * 聊天对话
    */
   async chat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResponse> {
-    const { data } = await apiClient.post<ChatResponse>('/llm/chat', {
-      messages,
-      ...options,
-    });
-    return data;
+    try {
+      const { data } = await apiClient.post<ChatResponse>('/llm/chat', {
+        messages,
+        ...options,
+      });
+      return data;
+    } catch (error) {
+      console.error('Error in chat API:', error);
+      throw error;
+    }
   },
 
   /**
    * 流式聊天
    */
-  async *chatStream(messages: ChatMessage[], options?: ChatOptions): AsyncGenerator<string> {
+  async *chatStream(messages: ChatMessage[], options?: ChatOptions, timeoutMs: number = 60000): AsyncGenerator<string> {
     const response = await fetch(`${apiClient.defaults.baseURL}/llm/stream`, {
       method: 'POST',
       headers: {
@@ -75,32 +80,56 @@ export const llmApi = {
       body: JSON.stringify({ messages, ...options }),
     });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const reader = response.body?.getReader();
     if (!reader) throw new Error('No reader available');
 
     const decoder = new TextDecoder();
     let buffer = '';
+    let chunksReceived = 0;
+    const maxChunks = 10000; // 防止恶意或错误的流导致无限循环
+    const startTime = Date.now();
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
+    try {
+      while (true) {
+        // 超时检查
+        if (Date.now() - startTime > timeoutMs) {
+          console.warn('Stream timeout reached, closing connection');
+          break;
+        }
 
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop() || '';
+        const { done, value } = await reader.read();
+        if (done) break;
 
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          const data = line.slice(6);
-          if (data === '[DONE]') return;
-          try {
-            const parsed = JSON.parse(data);
-            if (parsed.content) yield parsed.content;
-          } catch (e) {
-            // 忽略解析错误
+        chunksReceived++;
+        if (chunksReceived > maxChunks) {
+          console.warn('Max chunks limit reached, closing connection');
+          break;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data === '[DONE]') return;
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.content) yield parsed.content;
+            } catch (e) {
+              // 忽略解析错误
+            }
           }
         }
       }
+    } finally {
+      // 确保读取器被正确关闭
+      reader.cancel().catch(console.error);
     }
   },
 
@@ -108,11 +137,16 @@ export const llmApi = {
    * 获取嵌入向量
    */
   async embed(text: string, provider?: string): Promise<number[]> {
-    const { data } = await apiClient.post<{ embedding: number[] }>('/llm/embed', {
-      text,
-      provider,
-    });
-    return data.embedding;
+    try {
+      const { data } = await apiClient.post<{ embedding: number[] }>('/llm/embed', {
+        text,
+        provider,
+      });
+      return data.embedding;
+    } catch (error) {
+      console.error('Error in embed API:', error);
+      throw error;
+    }
   },
 };
 

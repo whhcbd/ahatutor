@@ -11,6 +11,7 @@ import type {
   Option,
   QuestionType,
 } from '@shared/types/genetics.types';
+import type { VisualizationSuggestion } from '@shared/types/agent.types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
@@ -60,21 +61,6 @@ export interface GeneticsEnrichment {
     elements: string[];
     colors?: Record<string, string>;
   };
-}
-
-export interface VisualizationSuggestion {
-  type: 'knowledge_graph' | 'animation' | 'chart' | 'diagram';
-  elements: string[];
-  colors?: Record<string, string>;
-  layout?: 'force' | 'hierarchical' | 'circular' | 'grid';
-  interactions?: string[];
-  annotations?: string[];
-  animationConfig?: {
-    duration: number;
-    easing?: string;
-    autoplay?: boolean;
-  };
-  template?: any;
 }
 
 export interface NarrativeComposition {
@@ -249,6 +235,32 @@ class AgentApiClient {
     visualization: VisualizationSuggestion;
   }> {
     return this.request(`/agent/visualize/code?concept=${encodeURIComponent(concept)}`);
+  }
+
+  async askVisualizationQuestion(params: {
+    concept: string;
+    question: string;
+    userLevel?: UserLevel;
+    conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>;
+  }): Promise<{
+    textAnswer: string;
+    visualization?: VisualizationSuggestion;
+    followUpQuestions?: string[];
+    relatedConcepts?: string[];
+  }> {
+    return this.request('/agent/visualize/ask', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  }
+
+  async getHardcodedConcepts(): Promise<Array<{
+    concept: string;
+    title: string;
+    type: string;
+    description: string;
+  }>> {
+    return this.request('/agent/visualize/concepts');
   }
 
   // ==================== Narrative Composer ====================

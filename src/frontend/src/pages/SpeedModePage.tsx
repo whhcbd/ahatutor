@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Play, RotateCw, Lightbulb, CheckCircle, XCircle, Zap, Loader2 } from 'lucide-react';
 import { quizApi, QuizQuestion, Difficulty } from '@/utils/api';
+import { GENETICS_TOPICS } from '@/data/genetics-topics';
 
 // 速通模式状态
 enum SpeedModeState {
@@ -11,20 +12,6 @@ enum SpeedModeState {
   SELF_ASSESS = 'self_assess',
   EXPLAINING = 'explaining',
 }
-
-// 遗传学知识点列表（用于轮询）
-const GENETICS_TOPICS = [
-  '孟德尔第一定律',
-  '孟德尔第二定律',
-  '伴性遗传',
-  '连锁互换',
-  '哈代-温伯格定律',
-  '基因型与表型',
-  '减数分裂',
-  'DNA复制',
-  '转录与翻译',
-  '基因突变',
-];
 
 export default function SpeedModePage() {
   const [sessionState, setSessionState] = useState<SpeedModeState>(SpeedModeState.IDLE);
@@ -218,15 +205,18 @@ export default function SpeedModePage() {
           {sessionState === SpeedModeState.EXPLAINING && currentQuestion.explanation && (
             <div className="border-t border-gray-200 pt-6">
               <h3 className="font-semibold mb-4">题目解析</h3>
-              <div className="p-4 bg-gray-50 rounded-lg space-y-4">
-                {[1, 2, 3, 4, 5].map((level) => (
-                  <div key={level} className="border-l-2 border-blue-200 pl-3">
-                    <div className="text-sm font-medium text-blue-600 mb-1">解析等级 {level}</div>
-                    <div className="whitespace-pre-line text-gray-700 text-sm">
-                      {currentQuestion.explanation[`level${level}` as keyof typeof currentQuestion.explanation]}
-                    </div>
-                  </div>
-                ))}
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="text-gray-700 text-sm leading-relaxed space-y-3">
+                  {[1, 2, 3, 4, 5].map((level) => {
+                    const levelContent = currentQuestion.explanation[`level${level}` as keyof typeof currentQuestion.explanation];
+                    if (!levelContent) return null;
+                    return (
+                      <p key={level} className="whitespace-pre-line">
+                        {levelContent}
+                      </p>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* 自评区域（可选） */}

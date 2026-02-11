@@ -173,6 +173,25 @@ class ResourceRecommendDto {
   count?: number;
 }
 
+class AskQuestionDto {
+  @ApiProperty({ description: '当前概念' })
+  @IsString()
+  concept!: string;
+
+  @ApiProperty({ description: '用户问题' })
+  @IsString()
+  question!: string;
+
+  @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
+  @IsOptional()
+  @IsEnum(['beginner', 'intermediate', 'advanced'] as const)
+  userLevel?: 'beginner' | 'intermediate' | 'advanced';
+
+  @ApiProperty({ description: '对话历史', required: false, type: [Object] })
+  @IsOptional()
+  conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>;
+}
+
 @ApiTags('Agent')
 @Controller('agent')
 export class AgentController {
@@ -322,7 +341,7 @@ export class AgentController {
   }
 
   @Get('visualize/code')
-  @ApiOperation({ summary: '生成可视化代码' })
+  @ApiOperation({ summary: '生成可视化配置' })
   async generateVisualizationCode(@Query('concept') concept: string) {
     const conceptAnalysis = await this.conceptAnalyzer.analyze(concept);
     const enrichment = await this.geneticsEnricher.enrichConcept(concept);
@@ -335,12 +354,14 @@ export class AgentController {
       tree
     );
 
-    const code = await this.visualDesigner.generateVisualizationCode(visualization, {
-      nodes: tree ? this.visualDesigner.generateGraphData(tree).nodes : [],
-      edges: tree ? this.visualDesigner.generateGraphData(tree).links : [],
-    });
+    const d3Config = await this.visualDesigner.generateD3Config(visualization);
+    const graphData = tree ? this.visualDesigner.generateGraphData(tree) : { nodes: [], links: [] };
 
-    return { code, visualization };
+    return {
+      visualization,
+      d3Config,
+      graphData,
+    };
   }
 
   // ==================== NarrativeComposer Routes ====================
@@ -436,6 +457,25 @@ export class AgentController {
       language: dto.language || 'zh',
       count: dto.count || 5,
     });
+  }
+
+  // ==================== Question & Answer Routes ====================
+
+  @Post('visualize/ask')
+  @ApiOperation({ summary: '基于可视化回答用户问题' })
+  async askVisualizationQuestion(@Body() dto: AskQuestionDto) {
+    return await this.visualDesigner.answerQuestion(
+      dto.concept,
+      dto.question,
+      dto.userLevel || 'intermediate',
+      dto.conversationHistory || []
+    );
+  }
+
+  @Get('visualize/concepts')
+  @ApiOperation({ summary: '获取所有可用的硬编码概念列表' })
+  async getHardcodedConcepts() {
+    return await this.visualDesigner.getHardcodedConcepts();
   }
 
   // ==================== Pipeline Shortcuts ====================

@@ -12,8 +12,19 @@ async function bootstrap() {
   // 启用 CORS
   const frontendPort = process.env.FRONTEND_PORT || '5173';
   app.enableCors({
-    origin: [`http://localhost:${frontendPort}`, `http://127.0.0.1:${frontendPort}`],
+    origin: [
+      `http://localhost:${frontendPort}`,
+      `http://127.0.0.1:${frontendPort}`,
+      `http://localhost:5173`,
+      `http://127.0.0.1:5173`,
+      `http://localhost:5174`,
+      `http://localhost:5175`,
+      `http://localhost:5176`,
+      `http://localhost:5177`,
+    ],
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
   });
 
   // 全局验证管道

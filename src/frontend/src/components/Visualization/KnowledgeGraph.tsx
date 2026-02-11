@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import * as d3 from 'd3';
 
 interface GraphNode {
@@ -40,7 +40,13 @@ export function KnowledgeGraph({
   height = 600,
 }: KnowledgeGraphProps) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const onNodeClickRef = useRef(onNodeClick);
   const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
+
+  // 保持 onNodeClick 引用最新
+  useEffect(() => {
+    onNodeClickRef.current = onNodeClick;
+  }, [onNodeClick]);
 
   useEffect(() => {
     if (!data.nodes.length || !svgRef.current) return;
@@ -133,7 +139,7 @@ export function KnowledgeGraph({
           .attr('r', 15 + d.mastery / 10);
       })
       .on('click', (event, d) => {
-        onNodeClick?.(d);
+        onNodeClickRef.current?.(d);
       });
 
     // 节点标签
@@ -177,9 +183,13 @@ export function KnowledgeGraph({
     }
 
     return () => {
+      // 停止模拟
       simulation.stop();
+
+      // 移除所有事件监听器和DOM元素
+      d3.select(svgRef.current).selectAll('*').remove();
     };
-  }, [data, width, height, onNodeClick]);
+  }, [data, width, height]);
 
   // 获取节点颜色
   function getNodeColor(node: GraphNode): string {

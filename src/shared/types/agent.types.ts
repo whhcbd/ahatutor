@@ -84,8 +84,121 @@ export interface GeneticsExample {
   description: string;
 }
 
+// Punnett 方格数据
+export interface PunnettSquareData {
+  maleGametes: string[];      // 雄配子 ['X', 'Y']
+  femaleGametes: string[];     // 雌配子 ['X', 'X']
+  offspring: Array<{           // 后代基因型和表型
+    genotype: string;
+    phenotype: string;
+    probability: number;       // 0-1
+    sex?: 'male' | 'female';
+  }>;
+  parentalCross: {
+    male: { genotype: string; phenotype: string };
+    female: { genotype: string; phenotype: string };
+  };
+  parentalConfig?: {           // 用于连锁遗传
+    male: { genotype: string; phenotype: string; arrangement?: string };
+    female: { genotype: string; phenotype: string; arrangement?: string };
+  };
+  description?: string;        // 杂交方式说明
+  recombinationRate?: number;  // 重组率（用于连锁遗传）
+}
+
+// 遗传路径数据（用于伴性遗传等）
+export interface InheritancePathData {
+  generations: Array<{
+    generation: number;        // 第几代
+    individuals: Array<{
+      id: string;
+      sex: 'male' | 'female';
+      genotype: string;
+      phenotype: string;
+      affected: boolean;        // 是否患病
+      carrier?: boolean;        // 是否携带者（女性）
+      parents?: string[];       // 父母ID
+    }>;
+  }>;
+  inheritance: {
+    pattern: string;           // 遗传模式描述
+    chromosome: string;        // 相关染色体（如 'X'）
+    gene: string;              // 基因名称
+  };
+  explanation: string;         // 解释说明
+}
+
+// 系谱图数据
+export interface PedigreeChartData {
+  individuals: Array<{
+    id: string;
+    sex: 'male' | 'female';
+    affected: boolean;
+    carrier?: boolean;
+    generation: number;
+    position: number;          // 在该代中的位置
+    parents?: {
+      father?: string;
+      mother?: string;
+    };
+    spouse?: string;           // 配偶ID
+  }>;
+  legend: {
+    condition: string;         // 疾病/性状名称
+    inheritancePattern: string; // 遗传方式
+  };
+}
+
+// 概率分布数据
+export interface ProbabilityDistributionData {
+  categories: string[];        // 类别名称 ['显性纯合', '杂合', '隐性']
+  values: number[];            // 概率值 [0.25, 0.5, 0.25]
+  colors?: string[];           // 颜色
+  total?: string;              // 总计说明
+  formula?: string;            // 相关公式
+  parameters?: Record<string, number>;  // 参数（如 p, q, p², 2pq, q²）
+  phenotypeMapping?: Record<string, string>;  // 表型映射（基因型 -> 表型）
+  phenotypeRatio?: string;     // 表型比例
+}
+
+// 减数分裂动画数据
+export interface MeiosisAnimationData {
+  stages: Array<{
+    name: string;              // 阶段名称
+    description: string;       // 描述
+    chromosomeCount: number;   // 染色体数量变化
+    keyEvent: string;          // 关键事件
+  }>;
+  duration: number;            // 动画总时长(ms)
+  highlights: string[];        // 重点标注
+}
+
+// 染色体行为可视化数据
+export interface ChromosomeBehaviorData {
+  chromosomes: Array<{
+    id: string;
+    name: string;              // 如 'X染色体', 'Y染色体', '21号染色体'
+    length: number;            // 相对长度
+    color: string;
+    genes: Array<{
+      name: string;
+      position: number;        // 相对位置 0-1
+      dominant: boolean;
+    }>;
+  }>;
+  behavior: {
+    type: string;              // 行为类型 'segregation', 'recombination', 'assortment'
+    description: string;
+    stage: string;             // 发生阶段
+  };
+}
+
 export interface VisualizationSuggestion {
-  type: 'knowledge_graph' | 'animation' | 'chart' | 'diagram';
+  type: 'knowledge_graph' | 'animation' | 'chart' | 'diagram' | 'punnett_square' | 'inheritance_path' | 'pedigree_chart' | 'probability_distribution' | 'meiosis_animation' | 'chromosome_behavior';
+  title: string;               // 可视化标题
+  description: string;         // 这个可视化要说明什么问题
+
+  // 原有的元数据（保留）
   elements: string[];
   colors?: Record<string, string>;
   layout?: 'force' | 'hierarchical' | 'circular' | 'grid';
@@ -95,7 +208,35 @@ export interface VisualizationSuggestion {
     duration: number;
     easing: string;
     autoplay: boolean;
+    steps?: Array<{
+      phase: string;
+      description: string;
+      duration: number;
+    }>;
   };
+
+  // 新增：语义化可视化数据（根据type选择对应的数据）
+  // 支持更多扩展数据类型（用于新添加的可视化概念）
+  data?: (
+    | PunnettSquareData
+    | InheritancePathData
+    | PedigreeChartData
+    | ProbabilityDistributionData
+    | MeiosisAnimationData
+    | ChromosomeBehaviorData
+    | Record<string, unknown>  // 允许其他类型的数据
+  );
+
+  // 理解提示（帮助用户从可视化中学习）
+  insights?: UnderstandingInsight[];
+}
+
+// 理解提示（用于强化学习效果）
+export interface UnderstandingInsight {
+  keyPoint: string;            // 关键知识点
+  visualConnection: string;    // 如何通过可视化理解这个点
+  commonMistake: string;       // 常见错误理解
+  checkQuestion: string;       // 自检问题
 }
 
 // 叙事作曲结果
@@ -138,4 +279,12 @@ export interface SixAgentOutput {
   visualDesign: VisualizationSuggestion;
   narrativeComposition: NarrativeComposition;
   quiz?: QuizQuestion;
+}
+
+// 可视化问答响应
+export interface VisualizationAnswerResponse {
+  textAnswer: string;           // 文字回答
+  visualization?: VisualizationSuggestion; // 可视化（如适用）
+  followUpQuestions?: string[]; // 后续建议问题
+  relatedConcepts?: string[];   // 相关概念
 }

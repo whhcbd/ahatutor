@@ -1,0 +1,31 @@
+import { toast as toastFn, useToastStore } from '@/components/ui/Toast';
+import type { ToastType } from '@/components/ui/Toast';
+
+export function useToast() {
+  const { addToast, removeToast, clearToasts, toasts } = useToastStore();
+
+  const toast = {
+    success: (message: string, title?: string, duration?: number) => {
+      addToast({ type: 'success', message, title, duration });
+    },
+    error: (message: string, title?: string, duration?: number) => {
+      addToast({ type: 'error', message, title, duration });
+    },
+    info: (message: string, title?: string, duration?: number) => {
+      addToast({ type: 'info', message, title, duration });
+    },
+    warning: (message: string, title?: string, duration?: number) => {
+      addToast({ type: 'warning', message, title, duration });
+    },
+  };
+
+  return {
+    toast,
+    removeToast,
+    clearToasts,
+    toasts,
+  };
+}
+
+// 重新导出便捷函数
+export { toastFn as toast };

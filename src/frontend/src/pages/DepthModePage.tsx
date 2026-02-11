@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Network, Sparkles, Search, BookOpen } from 'lucide-react';
 import { KnowledgeGraph } from '../components/Visualization';
 import type { GraphNode, GraphEdge } from '../components/Visualization/KnowledgeGraph';
@@ -17,11 +17,11 @@ export default function DepthModePage() {
   const [learningPath, setLearningPath] = useState<string[]>([]);
 
   // 从知识库获取图谱数据
-  const fetchGraphData = async (rootNode?: string) => {
+  const fetchGraphData = useCallback(async (rootNode?: string, query?: string) => {
     try {
       const params = new URLSearchParams();
       if (rootNode) params.append('root', rootNode);
-      if (searchQuery) params.append('domain', searchQuery);
+      if (query) params.append('domain', query);
 
       const response = await fetch(`${API_BASE}/api/graph/visualize?${params}`);
       if (!response.ok) throw new Error('Failed to fetch graph data');
@@ -31,7 +31,7 @@ export default function DepthModePage() {
     } catch (error) {
       console.error('Error fetching graph data:', error);
     }
-  };
+  }, []);
 
   // 搜索概念并构建知识树
   const handleSearch = async () => {
@@ -65,7 +65,7 @@ export default function DepthModePage() {
 
       if (buildResponse.ok) {
         // 获取更新后的图谱数据
-        await fetchGraphData();
+        await fetchGraphData(undefined, searchQuery);
 
         // 获取学习路径
         const pathResponse = await fetch(`${API_BASE}/graph/path`, {
@@ -93,7 +93,7 @@ export default function DepthModePage() {
   // 初始加载图谱数据
   useEffect(() => {
     fetchGraphData();
-  }, []);
+  }, [fetchGraphData]);
 
   // 处理节点点击
   const handleNodeClick = (node: GraphNode) => {

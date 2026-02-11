@@ -1,19 +1,35 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMService } from '../llm/llm.service';
-import { VisualizationSuggestion, ConceptAnalysis, GeneticsEnrichment, PrerequisiteNode } from '@shared/types/agent.types';
+import {
+  VisualizationSuggestion,
+  ConceptAnalysis,
+  GeneticsEnrichment,
+  PrerequisiteNode,
+  PunnettSquareData,
+  InheritancePathData,
+  ProbabilityDistributionData,
+  UnderstandingInsight,
+  VisualizationAnswerResponse,
+} from '@shared/types/agent.types';
+import {
+  getHardcodedVisualization,
+  getHardcodedConceptList,
+} from './data/hardcoded-visualizations.data';
 
 /**
  * Agent 4: VisualDesigner
  * "如何展示这个概念？"
  *
- * 职责：设计最佳的可视化方案
- * - 确定可视化类型（知识图谱/动画/图表）
- * - 设计颜色方案
- * - 定义交互逻辑
- * - 生成渲染配置
+ * 职责：设计最佳的可视化方案，并生成真正的语义化可视化数据
+ * - 确定可视化类型（Punnett方格/遗传路径/概率分布/知识图谱等）
+ * - 生成具体的可视化数据结构
+ * - 设计颜色方案和交互逻辑
+ * - 生成理解提示（帮助用户从可视化中学习）
  */
 
 interface VisualizationDesignResponse {
+  title: string;
+  description: string;
   elements: string[];
   colors?: Record<string, string>;
   layout?: 'force' | 'hierarchical' | 'circular' | 'grid';
@@ -26,136 +42,86 @@ interface VisualizationDesignResponse {
   };
 }
 
+// LLM 生成可视化数据的响应结构
+interface PunnettSquareResponse {
+  maleGametes: string[];
+  femaleGametes: string[];
+  parentalCross: {
+    male: { genotype: string; phenotype: string };
+    female: { genotype: string; phenotype: string };
+  };
+  offspring: Array<{
+    genotype: string;
+    phenotype: string;
+    probability: number;
+    sex?: 'male' | 'female';
+  }>;
+  description?: string;
+}
+
+interface InheritancePathResponse {
+  generations: Array<{
+    generation: number;
+    individuals: Array<{
+      id: string;
+      sex: 'male' | 'female';
+      genotype: string;
+      phenotype: string;
+      affected: boolean;
+      carrier?: boolean;
+      parents?: string[];
+    }>;
+  }>;
+  inheritance: {
+    pattern: string;
+    chromosome: string;
+    gene: string;
+  };
+  explanation: string;
+}
+
+interface ProbabilityDistributionResponse {
+  categories: string[];
+  values: number[];
+  colors?: string[];
+  total?: string;
+  formula?: string;
+}
+
+interface UnderstandingInsightResponse {
+  keyPoint: string;
+  visualConnection: string;
+  commonMistake: string;
+  checkQuestion: string;
+}
+
 @Injectable()
 export class VisualDesignerService {
   private readonly logger = new Logger(VisualDesignerService.name);
 
-  // 遗传学可视化模板库
-  private readonly visualizationTemplates = {
-    // 知识图谱相关
-    knowledge_graph: {
-      default: {
-        type: 'knowledge_graph' as const,
-        layout: 'force',
-        nodeSize: 20,
-        linkDistance: 100,
-        colors: {
-          foundation: '#4CAF50',    // 基础概念 - 绿色
-          intermediate: '#2196F3',  // 中级概念 - 蓝色
-          advanced: '#9C27B0',      // 高级概念 - 紫色
-          target: '#F44336',        // 目标概念 - 红色
-        },
-      },
-      hierarchical: {
-        type: 'knowledge_graph' as const,
-        layout: 'hierarchical',
-        direction: 'TB',            // Top to Bottom
-        nodeSize: 25,
-        levelSpacing: 80,
-        colors: {
-          byLevel: true,
-        },
-      },
-    },
-
-    // Punnett 方格
-    punnett_square: {
-      type: 'chart' as const,
-      chartType: 'table',
-      cellSize: 60,
-      highlightDominant: '#4CAF50',
-      highlightRecessive: '#FF9800',
-      highlightHeterozygous: '#2196F3',
-    },
-
-    // 染色体动画
-    chromosome_animation: {
-      type: 'animation' as const,
-      animationType: 'meiosis',
-      duration: 5000,               // 5秒
-      keyframes: [
-        { time: 0, action: 'interphase' },
-        { time: 0.2, action: 'prophase' },
-        { time: 0.4, action: 'metaphase' },
-        { time: 0.6, action: 'anaphase' },
-        { time: 0.8, action: 'telophase' },
-      ],
-      colors: {
-        chromosomeA: '#E91E63',
-        chromosomeB: '#3F51B5',
-        centromere: '#FFC107',
-      },
-    },
-
-    // 遗传系谱图
-    pedigree_chart: {
-      type: 'diagram' as const,
-      symbol: 'standard',
-      male: {
-        shape: 'square',
-        color: '#64B5F6',
-        affected: '#1976D2',
-      },
-      female: {
-        shape: 'circle',
-        color: '#F06292',
-        affected: '#C2185B',
-      },
-      carrier: {
-        pattern: 'striped',
-      },
-    },
-
-    // 概率分布图
-    probability_distribution: {
-      type: 'chart' as const,
-      chartType: 'bar',
-      colors: {
-        dominant: '#66BB6A',
-        heterozygous: '#42A5F5',
-        recessive: '#FFA726',
-      },
-    },
-
-    // DNA 结构
-    dna_structure: {
-      type: 'animation' as const,
-      animationType: 'rotation',
-      duration: 10000,
-      colors: {
-        adenine: '#E53935',
-        thymine: '#1E88E5',
-        guanine: '#43A047',
-        cytosine: '#FB8C00',
-        backbone: '#37474F',
-      },
-    },
-  };
-
-  // 可视化类型关键词映射
-  private readonly visualizationKeywords = {
-    knowledge_graph: [
-      '关系', '联系', '依赖', '前置', '基础',
-      'relation', 'connection', 'dependency', 'prerequisite'
-    ],
-    animation: [
-      '过程', '分裂', '复制', '转录', '翻译',
-      'process', 'division', 'replication', 'transcription', 'translation'
-    ],
-    chart: [
-      '比例', '概率', '分布', '统计', '频率',
-      'ratio', 'probability', 'distribution', 'statistics', 'frequency'
-    ],
-    diagram: [
-      '结构', '系谱', '家谱', '流程', '路径',
-      'structure', 'pedigree', 'flow', 'path'
-    ],
+  // 遗传学概念到可视化类型的映射
+  private readonly conceptToVizType: Record<string, {
+    type: VisualizationSuggestion['type'];
+    priority: number;
+  }> = {
+    '伴性遗传': { type: 'inheritance_path', priority: 10 },
+    '性连锁遗传': { type: 'inheritance_path', priority: 10 },
+    'x连锁遗传': { type: 'inheritance_path', priority: 10 },
+    'y连锁遗传': { type: 'inheritance_path', priority: 10 },
+    '孟德尔第一定律': { type: 'punnett_square', priority: 10 },
+    '分离定律': { type: 'punnett_square', priority: 10 },
+    '孟德尔第二定律': { type: 'punnett_square', priority: 10 },
+    '自由组合定律': { type: 'punnett_square', priority: 10 },
+    '杂交': { type: 'punnett_square', priority: 9 },
+    '基因型': { type: 'punnett_square', priority: 7 },
+    '概率': { type: 'probability_distribution', priority: 8 },
+    '分布': { type: 'probability_distribution', priority: 8 },
   };
 
   constructor(private readonly llmService: LLMService) {}
 
   /**
-   * 设计可视化方案
+   * 设计可视化方案（主入口）
    */
   async designVisualization(
     concept: string,
@@ -165,80 +131,160 @@ export class VisualDesignerService {
   ): Promise<VisualizationSuggestion> {
     this.logger.log(`Designing visualization for: ${concept}`);
 
-    // 1. 基于关键词快速判断可视化类型
-    const quickType = this.detectVisualizationType(concept, conceptAnalysis);
+    // 优先检查是否有硬编码的数据
+    const hardcodedViz = getHardcodedVisualization(concept);
+    if (hardcodedViz) {
+      this.logger.log(`Using hardcoded visualization for: ${concept}`);
 
-    // 2. 使用 LLM 细化设计方案
-    const refined = await this.refineVisualizationDesign(
+      // 生成理解提示（即使是硬编码数据也生成提示）
+      const insights = await this.generateUnderstandingInsights(
+        concept,
+        hardcodedViz.type,
+        hardcodedViz.data,
+        prerequisiteTree,
+      );
+
+      return {
+        ...hardcodedViz,
+        insights,
+      };
+    }
+
+    // 没有硬编码数据，使用AI生成
+    // 1. 确定可视化类型
+    const vizType = this.determineVisualizationType(concept, conceptAnalysis);
+
+    // 2. 生成可视化数据和元数据
+    const result = await this.generateVisualizationData(
       concept,
-      quickType,
+      vizType,
       conceptAnalysis,
       geneticsEnrichment,
+    );
+
+    // 3. 生成理解提示
+    const insights = await this.generateUnderstandingInsights(
+      concept,
+      vizType,
+      result.data,
       prerequisiteTree,
     );
 
-    // 3. 应用预定义模板
-    const withTemplate = this.applyTemplate(concept, refined);
-
-    this.logger.log(`Visualization designed: ${withTemplate.type}`);
-    return withTemplate;
+    return {
+      ...result,
+      insights,
+    };
   }
 
   /**
-   * 基于关键词快速检测可视化类型
+   * 确定可视化类型
    */
-  private detectVisualizationType(
+  private determineVisualizationType(
     concept: string,
     analysis: ConceptAnalysis,
-  ): 'knowledge_graph' | 'animation' | 'chart' | 'diagram' {
-    const searchText = `${concept} ${analysis.keyTerms.join(' ')}`.toLowerCase();
+  ): VisualizationSuggestion['type'] {
+    const conceptLower = concept.toLowerCase();
 
-    for (const [type, keywords] of Object.entries(this.visualizationKeywords)) {
-      for (const keyword of keywords) {
-        if (searchText.includes(keyword.toLowerCase())) {
-          return type as 'knowledge_graph' | 'animation' | 'chart' | 'diagram';
-        }
+    // 1. 检查精确匹配
+    for (const [key, value] of Object.entries(this.conceptToVizType)) {
+      if (conceptLower.includes(key.toLowerCase())) {
+        return value.type;
       }
     }
 
-    // 默认返回知识图谱
+    // 2. 检查关键术语
+    const keyTermsText = analysis.keyTerms.join(' ').toLowerCase();
+
+    if (keyTermsText.includes('伴性') || keyTermsText.includes('性连锁') || keyTermsText.includes('x染色体')) {
+      return 'inheritance_path';
+    }
+    if (keyTermsText.includes('杂交') || keyTermsText.includes('配子') || keyTermsText.includes('基因型')) {
+      return 'punnett_square';
+    }
+    if (keyTermsText.includes('概率') || keyTermsText.includes('比例') || keyTermsText.includes('分布')) {
+      return 'probability_distribution';
+    }
+
+    // 3. 默认返回知识图谱
     return 'knowledge_graph';
   }
 
   /**
-   * 使用 LLM 细化可视化设计
+   * 生成可视化数据和元数据
    */
-  private async refineVisualizationDesign(
+  private async generateVisualizationData(
     concept: string,
-    detectedType: 'knowledge_graph' | 'animation' | 'chart' | 'diagram',
-    conceptAnalysis: ConceptAnalysis,
-    geneticsEnrichment?: GeneticsEnrichment,
-    prerequisiteTree?: PrerequisiteNode,
-  ): Promise<Omit<VisualizationSuggestion, 'type'>> {
-    const prompt = `你是一位数据可视化专家。请为以下遗传学概念设计最佳的可视化方案。
+    vizType: VisualizationSuggestion['type'],
+    analysis: ConceptAnalysis,
+    enrichment?: GeneticsEnrichment,
+  ): Promise<Omit<VisualizationSuggestion, 'insights'>> {
+    const baseDesign = await this.generateBaseDesign(concept, vizType, analysis, enrichment);
+
+    let data: VisualizationSuggestion['data'] = undefined;
+
+    switch (vizType) {
+      case 'punnett_square':
+        data = await this.generatePunnettSquareData(concept, enrichment);
+        break;
+      case 'inheritance_path':
+        data = await this.generateInheritancePathData(concept, enrichment);
+        break;
+      case 'probability_distribution':
+        data = await this.generateProbabilityDistributionData(concept, enrichment);
+        break;
+      default:
+        // knowledge_graph 等类型由前端处理
+        break;
+    }
+
+    return {
+      type: vizType,
+      title: baseDesign.title,
+      description: baseDesign.description,
+      elements: baseDesign.elements,
+      colors: baseDesign.colors,
+      layout: baseDesign.layout,
+      interactions: baseDesign.interactions,
+      annotations: baseDesign.annotations,
+      animationConfig: baseDesign.animationConfig,
+      data,
+    };
+  }
+
+  /**
+   * 生成基础设计元数据
+   */
+  private async generateBaseDesign(
+    concept: string,
+    vizType: VisualizationSuggestion['type'],
+    analysis: ConceptAnalysis,
+    enrichment?: GeneticsEnrichment,
+  ): Promise<Omit<VisualizationDesignResponse, 'elements'> & { elements: string[] }> {
+    const prompt = `你是遗传学可视化设计专家。请为以下概念设计可视化方案。
 
 概念: ${concept}
-领域: ${conceptAnalysis.domain}
-复杂度: ${conceptAnalysis.complexity}
-可视化潜力: ${conceptAnalysis.visualizationPotential}
-建议的可视化: ${conceptAnalysis.suggestedVisualizations.join(', ')}
+可视化类型: ${vizType}
+复杂度: ${analysis.complexity}
+关键术语: ${analysis.keyTerms.join(', ')}
 
-${geneticsEnrichment ? `
-遗传学原理: ${geneticsEnrichment.principles.join(', ')}
-相关公式: ${geneticsEnrichment.formulas.map(f => f.key).join(', ')}
+${enrichment ? `
+遗传学原理: ${enrichment.principles.join(', ')}
+相关公式: ${enrichment.formulas.map(f => f.key).join(', ')}
 ` : ''}
 
-${prerequisiteTree ? `
-前置知识层级: ${this.getTreeDepth(prerequisiteTree)} 层
-` : ''}
-
-初步判断类型: ${detectedType}
-
-请返回 JSON 格式的可视化设计方案：`;
+请返回 JSON 格式的可视化设计方案。注意：title 和 description 应该帮助用户理解这个可视化要说明什么问题。`;
 
     const schema = {
       type: 'object',
       properties: {
+        title: {
+          type: 'string',
+          description: '可视化标题，应该清楚说明这个图表要展示的内容'
+        },
+        description: {
+          type: 'string',
+          description: '详细描述这个可视化要帮助用户理解什么问题，如何通过图表理解答案'
+        },
         elements: {
           type: 'array',
           items: { type: 'string' },
@@ -246,12 +292,12 @@ ${prerequisiteTree ? `
         },
         colors: {
           type: 'object',
-          description: '颜色方案映射'
+          description: '颜色方案映射（元素名 -> 颜色值）'
         },
         layout: {
           type: 'string',
           enum: ['force', 'hierarchical', 'circular', 'grid'],
-          description: '布局方式'
+          description: '布局方式（适用于知识图谱）'
         },
         interactions: {
           type: 'array',
@@ -266,7 +312,7 @@ ${prerequisiteTree ? `
         },
         animationConfig: {
           type: 'object',
-          description: '动画配置（如适用）',
+          description: '动画配置',
           properties: {
             duration: { type: 'number' },
             easing: { type: 'string' },
@@ -274,7 +320,7 @@ ${prerequisiteTree ? `
           }
         }
       },
-      required: ['elements']
+      required: ['title', 'description', 'elements']
     };
 
     try {
@@ -285,6 +331,8 @@ ${prerequisiteTree ? `
       );
 
       return {
+        title: response.title,
+        description: response.description,
         elements: response.elements ?? [],
         colors: response.colors,
         layout: response.layout,
@@ -293,187 +341,424 @@ ${prerequisiteTree ? `
         animationConfig: response.animationConfig,
       };
     } catch (error) {
-      this.logger.error('Failed to refine visualization design:', error);
-      // 返回基础设计
+      this.logger.error('Failed to generate base design:', error);
+      // 返回默认设计
       return {
-        elements: [concept, ...conceptAnalysis.keyTerms.slice(0, 3)],
-        colors: {},
+        title: `${concept} 可视化`,
+        description: `通过可视化帮助理解${concept}的核心概念`,
+        elements: [concept, ...analysis.keyTerms.slice(0, 3)],
+        colors: this.getDefaultColors(vizType),
       };
     }
   }
 
   /**
-   * 应用预定义模板
+   * 生成 Punnett 方格数据
    */
-  private applyTemplate(
+  private async generatePunnettSquareData(
     concept: string,
-    design: Omit<VisualizationSuggestion, 'type'>,
-  ): VisualizationSuggestion {
-    // 检查是否匹配特定遗传学概念的模板
-    const specialCases = [
-      { keywords: ['punnett', '方格', '杂交'], template: this.visualizationTemplates.punnett_square },
-      { keywords: ['减数', '分裂', 'meiosis'], template: this.visualizationTemplates.chromosome_animation },
-      { keywords: ['系谱', '家谱', 'pedigree'], template: this.visualizationTemplates.pedigree_chart },
-      { keywords: ['概率', '比例', '分布'], template: this.visualizationTemplates.probability_distribution },
-      { keywords: ['dna', '结构', '双螺旋'], template: this.visualizationTemplates.dna_structure },
-    ];
+    enrichment?: GeneticsEnrichment,
+  ): Promise<PunnettSquareData> {
+    const enrichmentInfo = enrichment
+      ? `\n相关原理：${enrichment.principles.join(', ')}\n相关例子：${enrichment.examples.map(e => e.name).join(', ')}`
+      : '';
 
-    const conceptLower = concept.toLowerCase();
+    const prompt = `你是遗传学专家。请为"${concept}"生成一个 Punnett 方格（杂交棋盘）的数据。${enrichmentInfo}
 
-    for (const { keywords, template } of specialCases) {
-      if (keywords.some(k => conceptLower.includes(k))) {
-        this.logger.debug(`Applying special template: ${template.type}`);
-        const templateColors = 'colors' in template ? template.colors : undefined;
-        const templateLayout = 'layout' in template ? template.layout : undefined;
-        const templateAnimConfig = 'animationConfig' in template ? template.animationConfig : undefined;
-        return {
-          type: template.type as VisualizationSuggestion['type'],
-          elements: design.elements,
-          colors: { ...(templateColors || {}), ...(design.colors || {}) },
-          layout: design.layout || templateLayout,
-          interactions: design.interactions,
-          annotations: design.annotations,
-          animationConfig: design.animationConfig || templateAnimConfig,
-          template,  // 保存完整模板供渲染使用
-        } as VisualizationSuggestion;
-      }
-    }
+要求：
+1. 选择一个经典且具有代表性的杂交组合
+2. 明确双亲的基因型和表型
+3. 计算所有可能的配子组合
+4. 给出每个后代的基因型、表型和概率
+5. 如涉及伴性遗传，标注性别
+6. 添加简要说明
 
-    // 默认使用知识图谱模板
-    const defaultTemplate = design.layout === 'hierarchical'
-      ? this.visualizationTemplates.knowledge_graph.hierarchical
-      : this.visualizationTemplates.knowledge_graph.default;
+返回 JSON 格式的 Punnett 方格数据。`;
 
-    return {
-      type: 'knowledge_graph',
-      elements: design.elements,
-      colors: { ...(defaultTemplate.colors as Record<string, string>), ...(design.colors || {}) },
-      layout: (design.layout || defaultTemplate.layout) as 'force' | 'hierarchical' | 'circular' | 'grid',
-      interactions: design.interactions || ['click', 'hover', 'zoom'],
-      annotations: design.annotations,
+    const schema = {
+      type: 'object',
+      properties: {
+        maleGametes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '雄配子列表，如 ["X", "Y"] 或 ["A", "a"]'
+        },
+        femaleGametes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '雌配子列表'
+        },
+        parentalCross: {
+          type: 'object',
+          properties: {
+            male: {
+              type: 'object',
+              properties: {
+                genotype: { type: 'string', description: '基因型，如 XY 或 XaY' },
+                phenotype: { type: 'string', description: '表型描述' }
+              },
+              required: ['genotype', 'phenotype']
+            },
+            female: {
+              type: 'object',
+              properties: {
+                genotype: { type: 'string', description: '基因型，如 XX 或 XAXa' },
+                phenotype: { type: 'string', description: '表型描述' }
+              },
+              required: ['genotype', 'phenotype']
+            }
+          },
+          required: ['male', 'female']
+        },
+        offspring: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              genotype: { type: 'string' },
+              phenotype: { type: 'string' },
+              probability: { type: 'number' },
+              sex: { type: 'string', enum: ['male', 'female'] }
+            },
+            required: ['genotype', 'phenotype', 'probability']
+          },
+          description: '所有可能的后代组合'
+        },
+        description: {
+          type: 'string',
+          description: '杂交方式简要说明'
+        }
+      },
+      required: ['maleGametes', 'femaleGametes', 'parentalCross', 'offspring']
     };
+
+    try {
+      const response = await this.llmService.structuredChat<PunnettSquareResponse>(
+        [{ role: 'user', content: prompt }],
+        schema,
+        { temperature: 0.2 }
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error('Failed to generate Punnett square data:', error);
+      // 返回示例数据
+      return {
+        maleGametes: ['X', 'Y'],
+        femaleGametes: ['X^A', 'X^a'],
+        parentalCross: {
+          male: { genotype: 'XY', phenotype: '正常男性' },
+          female: { genotype: 'X^AX^a', phenotype: '携带者女性' }
+        },
+        offspring: [
+          { genotype: 'X^AX', phenotype: '正常女性', probability: 0.25, sex: 'female' },
+          { genotype: 'X^aX', phenotype: '携带者女性', probability: 0.25, sex: 'female' },
+          { genotype: 'X^AY', phenotype: '正常男性', probability: 0.25, sex: 'male' },
+          { genotype: 'X^aY', phenotype: '患病男性', probability: 0.25, sex: 'male' },
+        ],
+        description: 'X连锁隐性遗传：携带者女性与正常男性婚配'
+      };
+    }
+  }
+
+  /**
+   * 生成遗传路径数据（用于伴性遗传等）
+   */
+  private async generateInheritancePathData(
+    concept: string,
+    enrichment?: GeneticsEnrichment,
+  ): Promise<InheritancePathData> {
+    const enrichmentInfo = enrichment
+      ? `\n相关原理：${enrichment.principles.join(', ')}\n常见误区：${enrichment.misconceptions.join(', ')}`
+      : '';
+
+    const prompt = `你是遗传学专家。请为"${concept}"设计一个家族遗传路径的可视化数据。${enrichmentInfo}
+
+要求：
+1. 设计一个3-4代的家族系谱
+2. 包含不同性别的个体
+3. 清楚标注每个个体的基因型、表型、是否患病、是否携带者
+4. 展示基因是如何在代际间传递的
+5. 给出清晰的遗传模式解释
+
+返回 JSON 格式的遗传路径数据。`;
+
+    const schema = {
+      type: 'object',
+      properties: {
+        generations: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              generation: { type: 'number' },
+              individuals: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string' },
+                    sex: { type: 'string', enum: ['male', 'female'] },
+                    genotype: { type: 'string' },
+                    phenotype: { type: 'string' },
+                    affected: { type: 'boolean' },
+                    carrier: { type: 'boolean' },
+                    parents: { type: 'array', items: { type: 'string' } }
+                  },
+                  required: ['id', 'sex', 'genotype', 'phenotype', 'affected']
+                }
+              }
+            },
+            required: ['generation', 'individuals']
+          }
+        },
+        inheritance: {
+          type: 'object',
+          properties: {
+            pattern: { type: 'string', description: '遗传模式，如"X连锁隐性遗传"' },
+            chromosome: { type: 'string', description: '相关染色体' },
+            gene: { type: 'string', description: '基因名称' }
+          },
+          required: ['pattern', 'chromosome', 'gene']
+        },
+        explanation: {
+          type: 'string',
+          description: '遗传路径的详细解释说明'
+        }
+      },
+      required: ['generations', 'inheritance', 'explanation']
+    };
+
+    try {
+      const response = await this.llmService.structuredChat<InheritancePathResponse>(
+        [{ role: 'user', content: prompt }],
+        schema,
+        { temperature: 0.2 }
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error('Failed to generate inheritance path data:', error);
+      // 返回示例数据（色盲X连锁隐性遗传）
+      return {
+        generations: [
+          {
+            generation: 1,
+            individuals: [
+              { id: 'I-1', sex: 'male', genotype: 'X^aY', phenotype: '色盲', affected: true },
+              { id: 'I-2', sex: 'female', genotype: 'X^AX^A', phenotype: '正常', affected: false },
+            ]
+          },
+          {
+            generation: 2,
+            individuals: [
+              { id: 'II-1', sex: 'female', genotype: 'X^AX^a', phenotype: '携带者', affected: false, carrier: true, parents: ['I-1', 'I-2'] },
+              { id: 'II-2', sex: 'male', genotype: 'X^AY', phenotype: '正常', affected: false, parents: ['I-1', 'I-2'] },
+              { id: 'II-3', sex: 'female', genotype: 'X^AX^A', phenotype: '正常', affected: false },
+              { id: 'II-4', sex: 'male', genotype: 'X^AY', phenotype: '正常', affected: false },
+            ]
+          },
+          {
+            generation: 3,
+            individuals: [
+              { id: 'III-1', sex: 'male', genotype: 'X^AY', phenotype: '正常', affected: false, parents: ['II-1', 'II-2'] },
+              { id: 'III-2', sex: 'female', genotype: 'X^AX^a', phenotype: '携带者', affected: false, carrier: true, parents: ['II-1', 'II-2'] },
+              { id: 'III-3', sex: 'male', genotype: 'X^aY', phenotype: '色盲', affected: true, parents: ['II-1', 'II-2'] },
+              { id: 'III-4', sex: 'female', genotype: 'X^AX^A', phenotype: '正常', affected: false, parents: ['II-3', 'II-4'] },
+            ]
+          }
+        ],
+        inheritance: {
+          pattern: 'X连锁隐性遗传',
+          chromosome: 'X染色体',
+          gene: '色盲基因'
+        },
+        explanation: '色盲是X连锁隐性遗传病。男性只有一条X染色体，只要携带隐性基因就会患病；女性有两条X染色体，需要两条都携带隐性基因才会患病。因此男性发病率高于女性。女性携带者可以将基因传递给儿子（50%患病）和女儿（50%携带者）。'
+      };
+    }
+  }
+
+  /**
+   * 生成概率分布数据
+   */
+  private async generateProbabilityDistributionData(
+    concept: string,
+    enrichment?: GeneticsEnrichment,
+  ): Promise<ProbabilityDistributionData> {
+    const enrichmentInfo = enrichment
+      ? `\n相关公式：${enrichment.formulas.map(f => `${f.key}: ${f.latex}`).join('\n')}`
+      : '';
+
+    const prompt = `你是遗传学专家。请为"${concept}"生成一个概率分布的可视化数据。${enrichmentInfo}
+
+要求：
+1. 根据概念确定要展示的概率分布类型
+2. 给出清晰的分类（如基因型类别、表型类别）
+3. 计算各分类的概率值（总和应为1）
+4. 如有相关公式，一并提供
+5. 说明这些概率的实际意义
+
+返回 JSON 格式的概率分布数据。`;
+
+    const schema = {
+      type: 'object',
+      properties: {
+        categories: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '类别名称'
+        },
+        values: {
+          type: 'array',
+          items: { type: 'number' },
+          description: '对应概率值（0-1之间）'
+        },
+        colors: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '各类别颜色（可选）'
+        },
+        total: {
+          type: 'string',
+          description: '总计说明'
+        },
+        formula: {
+          type: 'string',
+          description: '相关公式（如有）'
+        }
+      },
+      required: ['categories', 'values']
+    };
+
+    try {
+      const response = await this.llmService.structuredChat<ProbabilityDistributionResponse>(
+        [{ role: 'user', content: prompt }],
+        schema,
+        { temperature: 0.2 }
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error('Failed to generate probability distribution data:', error);
+      // 返回示例数据
+      return {
+        categories: ['显性纯合 (AA)', '杂合 (Aa)', '隐性纯合 (aa)'],
+        values: [0.25, 0.5, 0.25],
+        colors: ['#4CAF50', '#2196F3', '#FF9800'],
+        total: '总和 = 1 (100%)',
+        formula: '双杂合子自交：Aa × Aa → 1AA:2Aa:1aa'
+      };
+    }
+  }
+
+  /**
+   * 生成理解提示
+   */
+  private async generateUnderstandingInsights(
+    concept: string,
+    vizType: VisualizationSuggestion['type'],
+    data: VisualizationSuggestion['data'],
+    prerequisiteTree?: PrerequisiteNode,
+  ): Promise<UnderstandingInsight[]> {
+    const prerequisiteInfo = prerequisiteTree
+      ? `\n前置知识：${this.formatPrerequisiteTree(prerequisiteTree)}`
+      : '';
+
+    const prompt = `你是教育学专家。请为"${concept}"的可视化（类型：${vizType}）生成学习提示。
+
+${data ? `
+参考数据：${JSON.stringify(data).substring(0, 500)}...
+` : ''}${prerequisiteInfo}
+
+请生成2-3个理解提示，每个提示包含：
+1. keyPoint: 关键知识点
+2. visualConnection: 如何通过可视化理解这个点
+3. commonMistake: 学生常见的错误理解
+4. checkQuestion: 帮助学生自检的问题
+
+返回 JSON 数组格式。`;
+
+    const schema = {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          keyPoint: { type: 'string' },
+          visualConnection: { type: 'string' },
+          commonMistake: { type: 'string' },
+          checkQuestion: { type: 'string' }
+        },
+        required: ['keyPoint', 'visualConnection', 'commonMistake', 'checkQuestion']
+      },
+      minItems: 2,
+      maxItems: 4
+    };
+
+    try {
+      const response = await this.llmService.structuredChat<UnderstandingInsightResponse[]>(
+        [{ role: 'user', content: prompt }],
+        schema,
+        { temperature: 0.3 }
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error('Failed to generate understanding insights:', error);
+      return [];
+    }
+  }
+
+  /**
+   * 获取默认颜色方案
+   */
+  private getDefaultColors(vizType: VisualizationSuggestion['type']): Record<string, string> {
+    const colorSchemes: Record<string, Record<string, string>> = {
+      punnett_square: {
+        dominant: '#4CAF50',
+        recessive: '#FF9800',
+        heterozygous: '#2196F3',
+        male: '#64B5F6',
+        female: '#F06292',
+      },
+      inheritance_path: {
+        affected: '#F44336',
+        carrier: '#FFB74D',
+        normal: '#4CAF50',
+        male: '#64B5F6',
+        female: '#F06292',
+      },
+      probability_distribution: {
+        high: '#4CAF50',
+        medium: '#2196F3',
+        low: '#FF9800',
+      },
+      knowledge_graph: {
+        foundation: '#4CAF50',
+        intermediate: '#2196F3',
+        advanced: '#9C27B0',
+        target: '#F44336',
+      },
+    };
+
+    return colorSchemes[vizType] || {};
   }
 
   /**
    * 生成 D3.js 渲染配置
    */
   async generateD3Config(visualization: VisualizationSuggestion): Promise<Record<string, unknown>> {
-    const baseConfig = {
+    return {
       type: visualization.type,
-      elements: visualization.elements,
+      title: visualization.title,
+      description: visualization.description,
       colors: visualization.colors,
-      layout: visualization.layout,
+      data: visualization.data,
       interactions: visualization.interactions,
     };
-
-    // 根据类型添加特定配置
-    switch (visualization.type) {
-      case 'knowledge_graph':
-        return {
-          ...baseConfig,
-          simulation: {
-            forceCharge: -300,
-            forceLink: { distance: visualization.layout === 'hierarchical' ? 80 : 100 },
-            forceCenter: { strength: 0.1 },
-          },
-          node: {
-            radius: 20,
-            strokeWidth: 2,
-          },
-          link: {
-            strokeWidth: 1.5,
-            opacity: 0.6,
-          },
-        };
-
-      case 'animation':
-        return {
-          ...baseConfig,
-          animation: visualization.animationConfig || {
-            duration: 5000,
-            easing: 'easeInOut',
-            autoplay: true,
-            loop: false,
-          },
-        };
-
-      case 'chart':
-        return {
-          ...baseConfig,
-          chart: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { position: 'top' },
-              tooltip: { enabled: true },
-            },
-          },
-        };
-
-      case 'diagram':
-        return {
-          ...baseConfig,
-          renderer: 'svg',
-          scalable: true,
-          exportable: true,
-        };
-
-      default:
-        return baseConfig;
-    }
   }
 
   /**
-   * 生成可视化代码模板
-   */
-  async generateVisualizationCode(
-    visualization: VisualizationSuggestion,
-    data?: Record<string, unknown>,
-  ): Promise<string> {
-    const codePrompt = `请为以下可视化配置生成 D3.js 渲染代码：
-
-可视化类型: ${visualization.type}
-元素: ${JSON.stringify(visualization.elements)}
-颜色: ${JSON.stringify(visualization.colors)}
-布局: ${visualization.layout}
-交互: ${JSON.stringify(visualization.interactions)}
-
-${data ? `数据: ${JSON.stringify(data)}` : ''}
-
-要求：
-1. 生成完整的 TypeScript 代码
-2. 使用 D3.js v7
-3. 包含必要的类型定义
-4. 添加详细的注释
-5. 代码应该可以直接在 React 组件中使用
-
-请只返回代码，不要任何解释文字。`;
-
-    try {
-      const response = await this.llmService.chat(
-        [{ role: 'user', content: codePrompt }],
-        { temperature: 0.2 }
-      );
-
-      return response.content;
-    } catch (error) {
-      this.logger.error('Failed to generate visualization code:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * 获取知识树深度
-   */
-  private getTreeDepth(node: PrerequisiteNode): number {
-    if (!node.prerequisites || node.prerequisites.length === 0) {
-      return 1;
-    }
-    return 1 + Math.max(...node.prerequisites.map(p => this.getTreeDepth(p)));
-  }
-
-  /**
-   * 为知识图谱生成节点和边数据
+   * 生成知识图谱数据
    */
   generateGraphData(prerequisiteTree: PrerequisiteNode): {
     nodes: Array<{ id: string; label: string; level: number; isFoundation: boolean }>;
@@ -500,5 +785,231 @@ ${data ? `数据: ${JSON.stringify(data)}` : ''}
     traverse(prerequisiteTree);
 
     return { nodes, links };
+  }
+
+  /**
+   * 格式化前置知识树为字符串
+   */
+  private formatPrerequisiteTree(tree: PrerequisiteNode, indent = 0): string {
+    const prefix = '  '.repeat(indent);
+    let result = `${prefix}${tree.concept}`;
+    if (tree.isFoundation) {
+      result += ' (基础)';
+    }
+    if (tree.prerequisites && tree.prerequisites.length > 0) {
+      tree.prerequisites.forEach(child => {
+        result += '\n' + this.formatPrerequisiteTree(child, indent + 1);
+      });
+    }
+    return result;
+  }
+
+  /**
+   * 基于可视化回答用户问题
+   * @param concept 当前学习的概念
+   * @param question 用户的问题
+   * @param userLevel 用户水平
+   * @param conversationHistory 对话历史
+   * @returns 可视化问答响应
+   */
+  async answerQuestion(
+    concept: string,
+    question: string,
+    userLevel: 'beginner' | 'intermediate' | 'advanced' = 'intermediate',
+    conversationHistory: Array<{ role: 'user' | 'assistant'; content: string }> = []
+  ): Promise<VisualizationAnswerResponse> {
+    this.logger.log(`Answering question for concept: ${concept}, question: ${question}`);
+
+    // 首先检查是否有硬编码的可视化数据
+    const hardcodedViz = getHardcodedVisualization(concept);
+    const contextInfo = hardcodedViz
+      ? `\n\n当前可视化信息：\n标题：${hardcodedViz.title}\n描述：${hardcodedViz.description}\n元素：${hardcodedViz.elements.join('、')}`
+      : '';
+
+    // 构建对话历史
+    const historyContext = conversationHistory.length > 0
+      ? `\n\n对话历史：\n${conversationHistory.map(h => `${h.role}: ${h.content}`).join('\n')}`
+      : '';
+
+    // 调用LLM生成回答
+    const prompt = `你是遗传学教育专家。用户正在学习"${concept}"概念，并提出了以下问题。
+
+${contextInfo}${historyContext}
+
+用户问题：${question}
+
+请提供：
+1. 清晰、简洁的文字回答（根据用户水平${userLevel}调整深度）
+2. 如果问题可以通过可视化更好地回答，建议合适的可视化类型
+3. 2-3个后续建议问题，帮助用户深入理解
+
+返回JSON格式。`;
+
+    const schema = {
+      type: 'object',
+      properties: {
+        textAnswer: {
+          type: 'string',
+          description: '对用户问题的文字回答，应该清晰、准确、适合${userLevel}水平的学生理解'
+        },
+        needVisualization: {
+          type: 'boolean',
+          description: '是否需要额外的可视化来更好地回答这个问题'
+        },
+        suggestedVisualizationType: {
+          type: 'string',
+          enum: ['punnett_square', 'inheritance_path', 'probability_distribution', 'none'],
+          description: '建议的可视化类型'
+        },
+        followUpQuestions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '2-3个后续建议问题，帮助用户深入理解',
+          minItems: 2,
+          maxItems: 3
+        },
+        relatedConcepts: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '相关的概念，帮助用户扩展知识面',
+          minItems: 1,
+          maxItems: 3
+        }
+      },
+      required: ['textAnswer', 'needVisualization', 'followUpQuestions']
+    };
+
+    try {
+      const response = await this.llmService.structuredChat<{
+        textAnswer: string;
+        needVisualization: boolean;
+        suggestedVisualizationType?: 'punnett_square' | 'inheritance_path' | 'probability_distribution' | 'none';
+        followUpQuestions: string[];
+        relatedConcepts?: string[];
+      }>(
+        [{ role: 'user', content: prompt }],
+        schema,
+        { temperature: 0.4 }
+      );
+
+      // 如果需要可视化且指定了类型，尝试生成相应的可视化数据
+      let visualization: VisualizationSuggestion | undefined;
+
+      if (response.needVisualization && response.suggestedVisualizationType && response.suggestedVisualizationType !== 'none') {
+        // 尝试基于问题生成新的可视化数据
+        visualization = await this.generateQuestionBasedVisualization(
+          concept,
+          question,
+          response.suggestedVisualizationType,
+          userLevel
+        );
+      }
+
+      return {
+        textAnswer: response.textAnswer,
+        visualization,
+        followUpQuestions: response.followUpQuestions,
+        relatedConcepts: response.relatedConcepts
+      };
+    } catch (error) {
+      this.logger.error('Failed to answer question:', error);
+
+      // 降级：返回简单的文字回答
+      return {
+        textAnswer: `很抱歉，我在处理您的问题时遇到了一些困难。请尝试重新表述您的问题，或者查看"${concept}"的基本可视化内容来理解相关概念。`,
+        followUpQuestions: [
+          `什么是${concept}的核心原理？`,
+          `${concept}有哪些实际应用例子？`,
+          `${concept}与其他遗传学概念有什么联系？`
+        ]
+      };
+    }
+  }
+
+  /**
+   * 基于问题生成可视化数据
+   * @param concept 概念
+   * @param question 用户问题
+   * @param vizType 可视化类型
+   * @param userLevel 用户水平
+   * @returns 可视化建议
+   */
+  private async generateQuestionBasedVisualization(
+    concept: string,
+    question: string,
+    vizType: 'punnett_square' | 'inheritance_path' | 'probability_distribution',
+    _userLevel: 'beginner' | 'intermediate' | 'advanced'
+  ): Promise<VisualizationSuggestion> {
+    // 根据可视化类型使用相应的生成方法
+    try {
+      switch (vizType) {
+        case 'punnett_square':
+          const punnettData = await this.generatePunnettSquareData(concept);
+          return {
+            type: 'punnett_square',
+            title: `针对您的问题：${question.substring(0, 20)}...`,
+            description: `这个Punnett方格帮助您理解"${concept}"中与您的问题相关的遗传规律`,
+            elements: ['配子', '基因型', '表型', '概率'],
+            colors: this.getDefaultColors('punnett_square'),
+            data: punnettData,
+            interactions: ['hover', 'click']
+          };
+
+        case 'inheritance_path':
+          const inheritanceData = await this.generateInheritancePathData(concept);
+          return {
+            type: 'inheritance_path',
+            title: `针对您的问题：${question.substring(0, 20)}...`,
+            description: `这个遗传路径图展示"${concept}"在家族中的传递方式`,
+            elements: ['世代', '基因型', '表型', '携带者'],
+            colors: this.getDefaultColors('inheritance_path'),
+            layout: 'hierarchical',
+            interactions: ['hover', 'click'],
+            data: inheritanceData
+          };
+
+        case 'probability_distribution':
+          const probData = await this.generateProbabilityDistributionData(concept);
+          return {
+            type: 'probability_distribution',
+            title: `针对您的问题：${question.substring(0, 20)}...`,
+            description: `这个概率分布展示"${concept}"中各种结果的可能性`,
+            elements: ['类别', '概率', '分布'],
+            colors: this.getDefaultColors('probability_distribution'),
+            layout: 'circular',
+            interactions: ['hover', 'click'],
+            data: probData
+          };
+
+        default:
+          throw new Error(`Unsupported visualization type: ${vizType}`);
+      }
+    } catch (error) {
+      this.logger.error('Failed to generate question-based visualization:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 获取所有可用的硬编码概念列表
+   * @returns 概念列表及其基本信息
+   */
+  async getHardcodedConcepts(): Promise<Array<{
+    concept: string;
+    title: string;
+    type: string;
+    description: string;
+  }>> {
+    const concepts = getHardcodedConceptList();
+
+    return concepts.map(concept => {
+      const viz = getHardcodedVisualization(concept);
+      return {
+        concept,
+        title: viz?.title || concept,
+        type: viz?.type || 'unknown',
+        description: viz?.description || ''
+      };
+    });
   }
 }
