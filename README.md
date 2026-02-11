@@ -3,7 +3,7 @@
 > 基于 AI 的遗传学学习平台，实现"自然语言输入 + AI理解 + 实时可视化 + 交互探索"，打造真正的"顿悟时刻"(Aha Moment)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB)](https://react.dev/)
 [![NestJS](https://img.shields.io/badge/NestJS-10-E0234E)](https://nestjs.com/)
 
@@ -119,8 +119,8 @@ AI 出题 → 用户回答 → AI 判断 → 分级解析 → 继续下一题
 
 - **庞氏方格** - 交互式杂交实验模拟
 - **遗传路径** - 多代遗传追踪可视化
-- **减数分裂动画** - 分步演示减数分裂过程
-- **染色体行为** - 染色体在减数分裂中的动态展示
+- **减数分裂动画** - 分步演示减数分裂过程 (✅ 已实现)
+- **染色体行为** - 染色体在减数分裂中的动态展示 (✅ 已实现)
 
 ### 4. 错题管理
 
@@ -185,13 +185,14 @@ AI 出题 → 用户回答 → AI 判断 → 分级解析 → 继续下一题
 
 ## 技术栈
 
-| 层级       | 技术                                                                                |
-| ---------- | ----------------------------------------------------------------------------------- |
-| **前端**   | React 18, TypeScript 5.5, Vite 5, TailwindCSS, D3.js, ECharts, Framer Motion, KaTeX |
-| **后端**   | NestJS 10, TypeScript 5.5                                                           |
-| **AI**     | OpenAI (GPT-4), Claude, DeepSeek, GLM (智谱 AI)                                     |
-| **数据库** | Neo4j (知识图谱), Pinecone/Weaviate (向量检索), Redis (缓存), PostgreSQL (关系数据) |
-| **存储**   | MinIO (对象存储)                                                                    |
+| 层级         | 技术                                                                                |
+| ------------ | ----------------------------------------------------------------------------------- |
+| **前端**     | React 18, TypeScript 5.9, Vite 5, TailwindCSS, D3.js, ECharts, Framer Motion, KaTeX |
+| **后端**     | NestJS 10, TypeScript 5.9                                                           |
+| **AI**       | OpenAI (GPT-4), Claude, DeepSeek, GLM (智谱 AI)                                     |
+| **数据库**   | Neo4j (知识图谱), Pinecone/Weaviate (向量检索), Redis (缓存), PostgreSQL (关系数据) |
+| **存储**     | MinIO (对象存储)                                                                    |
+| **代码质量** | ESLint, Prettier, TypeScript Strict Mode                                            |
 
 ---
 
@@ -201,11 +202,20 @@ AI 出题 → 用户回答 → AI 判断 → 分级解析 → 继续下一题
 ahatutor/
 ├── src/
 │   ├── frontend/                    # React 前端
+│   │   ├── .eslintrc.json          # ESLint 配置
+│   │   ├── vite.config.ts          # Vite 配置
 │   │   └── src/
 │   │       ├── api/                 # API 客户端
 │   │       ├── components/          # 组件
 │   │       │   ├── Layout/          # 布局
-│   │       │   └── Visualization/   # 可视化组件
+│   │       │   ├── Visualization/   # 可视化组件
+│   │       │   │   ├── KnowledgeGraph.tsx
+│   │       │   │   ├── VisualDesignerView.tsx
+│   │       │   │   └── NarrativeComposerView.tsx
+│   │       │   └── ui/              # UI 组件
+│   │       │       ├── Button.tsx, Card.tsx, Modal.tsx
+│   │       │       ├── Toast.tsx, toast.store.ts, toast.utils.ts
+│   │       │       └── index.ts    # 统一导出
 │   │       ├── data/                # 数据文件
 │   │       │   └── genetics-topics.ts  # 89个遗传学知识点
 │   │       ├── pages/               # 页面
@@ -217,6 +227,7 @@ ahatutor/
 │   │       └── utils/               # 工具函数
 │   │
 │   ├── backend/                     # NestJS 后端
+│   │   ├── .eslintrc.json          # ESLint 配置
 │   │   └── src/
 │   │       ├── modules/
 │   │       │   ├── agents/          # 六 Agent 流水线
@@ -240,10 +251,13 @@ ahatutor/
 │   │
 │   └── shared/                      # 前后端共享
 │       ├── types/                   # 类型定义
-│       │   ├── agent.types.ts
-│       │   ├── genetics.types.ts
-│       │   └── skill.types.ts
+│       │   ├── agent.types.ts      # Agent 相关类型
+│       │   ├── skill.types.ts      # Skill 相关类型
+│       │   ├── genetics.types.ts   # 遗传学类型
+│       │   ├── knowledge-tree.types.ts  # 知识树类型
+│       │   └── rag.types.ts        # RAG 类型
 │       └── constants/
+│           └── index.ts             # 常量导出
 │
 ├── prompts/                         # AI 提示词模板
 ├── data/                            # 数据存储
@@ -368,13 +382,47 @@ pnpm dev:backend      # 仅后端
 
 # 构建
 pnpm build
+pnpm build:frontend   # 仅前端
+pnpm build:backend    # 仅后端
+pnpm build:shared     # 仅共享类型
 
 # 代码检查
-pnpm lint
+pnpm lint             # 检查所有
+pnpm lint:frontend    # 仅前端
+pnpm lint:backend     # 仅后端
+
+# 类型检查
+pnpm typecheck        # 检查所有
+pnpm typecheck:frontend   # 仅前端
+pnpm typecheck:backend    # 仅后端
 
 # 测试
 pnpm test
 ```
+
+---
+
+## 代码质量
+
+项目已配置完整的代码质量检查工具：
+
+### ESLint
+
+- 前端配置: `src/frontend/.eslintrc.json` - React + TypeScript 规则
+- 后端配置: `src/backend/.eslintrc.json` - NestJS + TypeScript 规则
+- 检查命令: `pnpm lint`
+
+### TypeScript
+
+- 严格模式启用
+- 共享类型定义: `src/shared/types/`
+- 类型检查命令: `pnpm typecheck`
+
+### 代码规范
+
+- 组件统一导出: `src/frontend/src/components/ui/index.ts`
+- 类型统一导出: `src/shared/index.ts`
+- 移除重复代码和未使用的导入
 
 ---
 
@@ -386,34 +434,38 @@ pnpm test
 - [x] 前端基础 (React + Vite + TailwindCSS)
 - [x] 后端基础 (NestJS + TypeScript)
 - [x] LLM 多管道架构 (OpenAI/Claude/DeepSeek/GLM)
-- [x] 六 Agent 流水线 (4/6 完成)
+- [x] 六 Agent 流水线 (6/6 完成)
   - [x] Agent 1: ConceptAnalyzer - 概念分析
   - [x] Agent 2: PrerequisiteExplorer - 前置知识探索
   - [x] Agent 3: GeneticsEnricher - 遗传学知识丰富
-  - [ ] Agent 4: VisualDesigner - 可视化设计
-  - [ ] Agent 5: NarrativeComposer - 叙事作曲
+  - [x] Agent 4: VisualDesigner - 可视化设计
+  - [x] Agent 5: NarrativeComposer - 叙事作曲
   - [x] Agent 6: QuizGenerator - 题目生成
 - [x] 遗传学知识库 (8个领域, 89个知识点)
 - [x] Prompt 模板库 (7个模板)
 - [x] 共享类型定义
 - [x] 技能服务框架
 
-### Phase 2: 优化 (已完成 90%)
+### Phase 2: 优化 (已完成 98%)
 
 - [x] 前端页面完善 (速通模式UI + 交互逻辑)
 - [x] 性能优化 (代码分割、懒加载、React Query缓存)
 - [x] 错误处理优化 (ErrorBoundary, Toast通知系统)
 - [x] UI 组件库 (Button, Card, Modal, Loading等)
 - [x] TypeScript 类型检查修复
+- [x] ESLint 配置和代码质量优化
+- [x] Toast 组件模块化重构
+- [x] 减数分裂动画组件 (分步展示9个阶段)
+- [x] 染色体行为组件 (展示分离/重组/自由组合)
 
-### Phase 3: 高级功能 (进行中 60%)
+### Phase 3: 高级功能 (进行中 65%)
 
 - [x] RAG 服务架构 (文档上传、解析、向量化、检索)
 - [x] 向量检索服务 (支持 Pinecone/Weaviate)
 - [x] 上下文检索服务 (多轮对话支持)
 - [x] 流式答案生成服务
 - [x] 可视化生成服务 (自动推荐可视化类型)
-- [x] 遗传学可视化服务 (庞氏方格、遗传路径等)
+- [x] 遗传学可视化服务 (庞氏方格、遗传路径、减数分裂动画、染色体行为)
 - [x] 交互控制服务 (播放/暂停/步骤控制)
 - [ ] 知识图谱服务 (Neo4j集成、路径查找、D3可视化)
 - [ ] 错题管理 (OCR识别、举一反三、错题本)

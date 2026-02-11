@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { agentApi } from '../../api/agent';
-import type { VisualizationSuggestion } from '@shared/types/agent.types';
+import type { VisualizationSuggestion, PunnettSquareData, InheritancePathData, ProbabilityDistributionData, MeiosisAnimationData, ChromosomeBehaviorData } from '@shared/types/agent.types';
 import { KnowledgeGraph } from './KnowledgeGraph';
 import { PunnettSquare } from './PunnettSquare';
 import { InheritancePath } from './InheritancePath';
 import { ProbabilityDistribution } from './ProbabilityDistribution';
+import { MeiosisAnimation } from './MeiosisAnimation';
+import { ChromosomeBehavior } from './ChromosomeBehavior';
 import { UnderstandingInsights } from './UnderstandingInsights';
 
 interface VisualDesignerViewProps {
@@ -28,7 +30,7 @@ interface VisualDesignerViewProps {
  */
 export function VisualDesignerView({
   concept,
-  userLevel,
+  userLevel: _userLevel,
   useHardcoded = true,
   onNodeClick,
 }: VisualDesignerViewProps) {
@@ -49,11 +51,7 @@ export function VisualDesignerView({
     };
   } | null>(null);
 
-  useEffect(() => {
-    loadVisualization();
-  }, [concept, userLevel, useHardcoded]);
-
-  const loadVisualization = async () => {
+  const loadVisualization = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -94,7 +92,11 @@ export function VisualDesignerView({
     } finally {
       setLoading(false);
     }
-  };
+  }, [concept, useHardcoded]);
+
+  useEffect(() => {
+    loadVisualization();
+  }, [loadVisualization]);
 
   if (loading) {
     return (
@@ -242,25 +244,33 @@ function renderVisualization(
 
     case 'punnett_square':
       if (visualization.data && 'offspring' in visualization.data) {
-        return <PunnettSquare data={visualization.data} colors={visualization.colors} />;
+        return <PunnettSquare data={visualization.data as PunnettSquareData} colors={visualization.colors} />;
       }
       return <PunnettSquarePlaceholder />;
 
     case 'inheritance_path':
       if (visualization.data && 'generations' in visualization.data) {
-        return <InheritancePath data={visualization.data} colors={visualization.colors} />;
+        return <InheritancePath data={visualization.data as InheritancePathData} colors={visualization.colors} />;
       }
       return <InheritancePathPlaceholder />;
 
     case 'probability_distribution':
       if (visualization.data && 'categories' in visualization.data) {
-        return <ProbabilityDistribution data={visualization.data} colors={visualization.colors} />;
+        return <ProbabilityDistribution data={visualization.data as ProbabilityDistributionData} colors={visualization.colors} />;
       }
       return <ProbabilityDistributionPlaceholder />;
 
     case 'meiosis_animation':
+      if (visualization.data && 'stages' in visualization.data) {
+        return <MeiosisAnimation data={visualization.data as MeiosisAnimationData} colors={visualization.colors} />;
+      }
+      return <MeiosisAnimationPlaceholder />;
+
     case 'chromosome_behavior':
-      return renderChromosomeAnimation(visualization);
+      if (visualization.data && 'chromosomes' in visualization.data) {
+        return <ChromosomeBehavior data={visualization.data as ChromosomeBehaviorData} colors={visualization.colors} />;
+      }
+      return <ChromosomeBehaviorPlaceholder />;
 
     case 'pedigree_chart':
       return renderPedigreeChart(visualization);
@@ -314,28 +324,29 @@ function ProbabilityDistributionPlaceholder() {
   );
 }
 
-// ==================== Legacy Render Functions ====================
-
-function renderChromosomeAnimation(visualization: VisualizationSuggestion) {
+function MeiosisAnimationPlaceholder() {
   return (
-    <div className="h-96 flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50">
+    <div className="flex items-center justify-center h-96 text-gray-500">
       <div className="text-center">
-        <div className="animate-pulse mb-4">
-          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-4xl">🧬</span>
-          </div>
-        </div>
-        <p className="text-gray-700 font-medium">染色体行为可视化</p>
-        <p className="text-sm text-gray-500 mt-2">展示染色体的动态变化过程</p>
-        {visualization.animationConfig?.autoplay && (
-          <span className="inline-block mt-2 px-2 py-1 bg-green-100 text-green-700 rounded text-sm">
-            自动播放
-          </span>
-        )}
+        <div className="text-4xl mb-4">🔄</div>
+        <p>减数分裂动画数据加载中...</p>
       </div>
     </div>
   );
 }
+
+function ChromosomeBehaviorPlaceholder() {
+  return (
+    <div className="flex items-center justify-center h-96 text-gray-500">
+      <div className="text-center">
+        <div className="text-4xl mb-4">🧬</div>
+        <p>染色体行为数据加载中...</p>
+      </div>
+    </div>
+  );
+}
+
+// ==================== Legacy Render Functions ====================
 
 function renderPedigreeChart(_visualization: VisualizationSuggestion) {
   return (
