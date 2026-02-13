@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode } from 'react';
 import { useVirtualList, useDynamicVirtualList } from '@/hooks/useVirtualList';
 
 interface VirtualListProps<T> {
@@ -152,7 +152,6 @@ export function VirtualGrid<T>({
     totalHeight,
     offsetY,
     handleScroll,
-    visibleRange,
   } = useVirtualList(
     Array.from({ length: rows }, (_, i) => i),
     itemHeight + gap,

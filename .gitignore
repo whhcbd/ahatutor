@@ -79,6 +79,11 @@ docker-compose.override.yml
 # TypeScript
 *.tsbuildinfo
 
+# TypeScript 编译产物 (shared types 目录)
+src/shared/types/*.d.ts
+src/shared/types/*.js
+src/shared/types/*.js.map
+
 # 可选的 npm cache 目录
 .npm
 

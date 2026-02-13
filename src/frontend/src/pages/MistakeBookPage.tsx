@@ -1,6 +1,6 @@
 import { Camera, Upload, BookX, Sparkles, Trash2, Image as ImageIcon } from 'lucide-react';
 import { useState, useRef } from 'react';
-import { Button, Card, Badge, Modal, EmptyState, LoadingSpinner } from '@/components/ui';
+import { Button, Card, Badge, Modal, EmptyState } from '@/components/ui';
 import { useToast } from '@/hooks/useToast';
 
 // API 基础 URL

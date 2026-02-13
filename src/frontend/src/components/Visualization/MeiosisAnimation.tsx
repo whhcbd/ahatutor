@@ -33,7 +33,12 @@ export function MeiosisAnimation({
   autoplay = false,
   onStageChange,
 }: MeiosisAnimationProps) {
-  const { stages, duration, highlights } = data;
+  const { stages, duration, highlights } = data || {};
+
+  if (!data || !stages || stages.length === 0) {
+    return <div className="text-center text-gray-500 p-8">减数分裂数据加载中...</div>;
+  }
+
   const [currentStage, setCurrentStage] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoplay);
   const showExplanation = true;

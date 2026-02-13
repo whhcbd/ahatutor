@@ -24,11 +24,6 @@ function PageLoader() {
   );
 }
 
-// 带有 Suspense 的路由包装器
-function LazyRoute({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={<PageLoader />}>{children}</Suspense>;
-}
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -43,51 +38,19 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <ToastContainer />
           <Layout>
             <Suspense fallback={<PageLoader />}>
               <Routes>
-                <Route path="/" element={
-                  <LazyRoute>
-                    <HomePage />
-                  </LazyRoute>
-                } />
-                <Route path="/speed" element={
-                  <LazyRoute>
-                    <SpeedModePage />
-                  </LazyRoute>
-                } />
-                <Route path="/depth" element={
-                  <LazyRoute>
-                    <DepthModePage />
-                  </LazyRoute>
-                } />
-                <Route path="/visualize" element={
-                  <LazyRoute>
-                    <VisualizePage />
-                  </LazyRoute>
-                } />
-                <Route path="/narrative" element={
-                  <LazyRoute>
-                    <NarrativePage />
-                  </LazyRoute>
-                } />
-                <Route path="/mistakes" element={
-                  <LazyRoute>
-                    <MistakeBookPage />
-                  </LazyRoute>
-                } />
-                <Route path="/report" element={
-                  <LazyRoute>
-                    <ReportPage />
-                  </LazyRoute>
-                } />
-                <Route path="*" element={
-                  <LazyRoute>
-                    <ErrorPage />
-                  </LazyRoute>
-                } />
+                <Route path="/" element={<HomePage />} />
+                <Route path="/speed" element={<SpeedModePage />} />
+                <Route path="/depth" element={<DepthModePage />} />
+                <Route path="/visualize" element={<VisualizePage />} />
+                <Route path="/narrative" element={<NarrativePage />} />
+                <Route path="/mistakes" element={<MistakeBookPage />} />
+                <Route path="/report" element={<ReportPage />} />
+                <Route path="*" element={<ErrorPage />} />
               </Routes>
             </Suspense>
           </Layout>

@@ -13,6 +13,7 @@ import { ResourceRecommendService } from './skills/resource-recommend.service';
 import { VisualizationGeneratorService } from './skills/visualization-generator.service';
 import { GeneticsVisualizationService } from './skills/genetics-visualization.service';
 import { InteractiveControlService } from './skills/interactive-control.service';
+import { AnswerEvaluatorService } from './skills/answer-evaluator.service';
 import { RAGModule } from '../rag/rag.module';
 
 @Module({})
@@ -35,6 +36,7 @@ export class AgentModule {
         VisualizationGeneratorService,
         GeneticsVisualizationService,
         InteractiveControlService,
+        AnswerEvaluatorService,
       ],
       exports: [
         AgentPipelineService,
@@ -49,6 +51,7 @@ export class AgentModule {
         VisualizationGeneratorService,
         GeneticsVisualizationService,
         InteractiveControlService,
+        AnswerEvaluatorService,
       ],
       global: true,
     };

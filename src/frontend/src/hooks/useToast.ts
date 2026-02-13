@@ -1,5 +1,4 @@
-import { toast as toastFn, useToastStore } from '@/components/ui/Toast';
-import type { ToastType } from '@/components/ui/Toast';
+import { useToastStore } from '@/components/ui/toast.store';
 
 export function useToast() {
   const { addToast, removeToast, clearToasts, toasts } = useToastStore();

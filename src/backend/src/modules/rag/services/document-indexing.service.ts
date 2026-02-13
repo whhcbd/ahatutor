@@ -6,7 +6,6 @@ import {
   DocumentIndexingOutput,
   DocumentChunk,
   DocumentMetadata,
-  DocumentType,
   SkillExecutionResult,
   SkillType,
 } from '@shared/types/skill.types';
@@ -42,13 +41,13 @@ export class DocumentIndexingService {
       this.logger.log(`Indexing document: ${input.documentId || input.filePath}`);
 
       let content: string;
-      let metadata: Partial<DocumentMetadata>;
+      let metadata: Partial<DocumentMetadata> = {};
 
       if (input.content) {
         content = input.content;
-        metadata = input.metadata;
+        metadata = input.metadata || {};
       } else if (input.filePath) {
-        const parsed = await this.parseDocument(input.filePath, input.metadata);
+        const parsed = await this.parseDocument(input.filePath, input.metadata || {});
         content = parsed.content;
         metadata = parsed.metadata;
       } else {
@@ -166,7 +165,7 @@ export class DocumentIndexingService {
         content: data.text,
         metadata: {
           ...metadata,
-          type: DocumentType.PDF,
+          type: 'pdf',
           size: data.text.length,
         },
       };
@@ -191,7 +190,7 @@ export class DocumentIndexingService {
         content: result.value,
         metadata: {
           ...metadata,
-          type: DocumentType.DOCX,
+          type: 'word',
           size: result.value.length,
         },
       };
@@ -216,7 +215,7 @@ export class DocumentIndexingService {
         content,
         metadata: {
           ...metadata,
-          type: DocumentType.MD,
+          type: 'markdown',
           size: content.length,
         },
       };
@@ -241,7 +240,7 @@ export class DocumentIndexingService {
         content,
         metadata: {
           ...metadata,
-          type: DocumentType.TXT,
+          type: 'text',
           size: content.length,
         },
       };

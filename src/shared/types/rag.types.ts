@@ -29,8 +29,27 @@ export interface DocumentChunk {
     chapter?: string;
     section?: string;
     tags?: string[];
+    documentId?: string;
+    topics?: string[];
+    chunkIndex?: number;
+    difficulty?: string;
   };
   embedding?: number[];
+}
+
+// 文档元数据
+export interface DocumentMetadata {
+  id?: string;
+  type?: string;
+  title?: string;
+  author?: string;
+  source?: string;
+  topics?: string[];
+  pageNumber?: number;
+  chapter?: string;
+  section?: string;
+  difficulty?: string;
+  size?: number;
 }
 
 // 文档
@@ -43,11 +62,7 @@ export interface Document {
   uploadedAt: Date;
   processedAt?: Date;
   chunks: DocumentChunk[];
-  metadata: {
-    source?: string;
-    author?: string;
-    title?: string;
-  };
+  metadata: DocumentMetadata;
 }
 
 // 查询选项

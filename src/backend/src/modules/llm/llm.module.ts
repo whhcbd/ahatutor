@@ -5,6 +5,7 @@ import { OpenAIProvider } from './providers/openai.provider';
 import { ClaudeProvider } from './providers/claude.provider';
 import { DeepSeekProvider } from './providers/deepseek.provider';
 import { GLMProvider } from './providers/glm.provider';
+import { MockProvider } from './providers/mock.provider';
 
 @Module({})
 export class LLMModule {
@@ -18,6 +19,7 @@ export class LLMModule {
         ClaudeProvider,
         DeepSeekProvider,
         GLMProvider,
+        MockProvider,
       ],
       exports: [LLMService],
       global: true,

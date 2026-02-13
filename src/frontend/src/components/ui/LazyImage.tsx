@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { Skeleton } from './Loading';
 
-interface LazyImageProps {
+export interface LazyImageProps {
   src: string;
   alt: string;
   className?: string;

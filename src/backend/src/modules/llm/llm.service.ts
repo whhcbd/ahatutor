@@ -3,6 +3,7 @@ import { OpenAIProvider } from './providers/openai.provider';
 import { ClaudeProvider } from './providers/claude.provider';
 import { DeepSeekProvider } from './providers/deepseek.provider';
 import { GLMProvider } from './providers/glm.provider';
+import { MockProvider } from './providers/mock.provider';
 
 export interface ChatMessageTextPart {
   type: 'text';
@@ -45,13 +46,14 @@ export interface LLMResponse {
 @Injectable()
 export class LLMService {
   private readonly logger = new Logger(LLMService.name);
-  private readonly defaultProvider = process.env.DEFAULT_LLM_PROVIDER || 'openai';
+  private readonly defaultProvider = process.env.DEFAULT_LLM_PROVIDER || 'mock';
 
   constructor(
     private readonly openaiProvider: OpenAIProvider,
     private readonly claudeProvider: ClaudeProvider,
     private readonly deepseekProvider: DeepSeekProvider,
     private readonly glmProvider: GLMProvider,
+    private readonly mockProvider: MockProvider,
   ) {}
 
   /**
@@ -75,8 +77,10 @@ export class LLMService {
           return await this.deepseekProvider.chat(messages, options);
         case 'glm':
           return await this.glmProvider.chat(messages, options);
+        case 'mock':
+          return await this.mockProvider.chat(messages, options);
         default:
-          throw new Error(`Unknown LLM provider: ${provider}`);
+          return await this.mockProvider.chat(messages, options);
       }
     } catch (error) {
       this.logger.error(`LLM request failed for provider ${provider}:`, error);
@@ -109,8 +113,12 @@ export class LLMService {
         case 'glm':
           yield* this.glmProvider.chatStream(messages, options);
           return;
+        case 'mock':
+          yield* this.mockProvider.chatStream(messages, options);
+          return;
         default:
-          throw new Error(`Unknown LLM provider: ${provider}`);
+          yield* this.mockProvider.chatStream(messages, options);
+          return;
       }
     } catch (error) {
       this.logger.error(`LLM stream request failed for provider ${provider}:`, error);
@@ -131,16 +139,15 @@ export class LLMService {
         case 'openai':
           return await this.openaiProvider.embed(text);
         case 'claude':
-          // Claude 不提供嵌入 API，回退到 OpenAI
           return await this.openaiProvider.embed(text);
         case 'deepseek':
-          // DeepSeek 不提供嵌入 API，回退到 OpenAI
           return await this.openaiProvider.embed(text);
         case 'glm':
-          // GLM 提供嵌入 API
           return await this.glmProvider.embed(text);
+        case 'mock':
+          return await this.mockProvider.embed(text);
         default:
-          return await this.openaiProvider.embed(text);
+          return await this.mockProvider.embed(text);
       }
     } catch (error) {
       this.logger.error(`Embedding request failed for provider ${embedProvider}:`, error);

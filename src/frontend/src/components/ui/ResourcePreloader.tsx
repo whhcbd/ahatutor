@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 /**
  * 资源预加载组件
  * 在后台预加载关键资源，提升用户体验
  */
 interface ResourcePreloaderProps {
-  images?: string[]; // 要预加载的图片列表
-  scripts?: string[]; // 要预加载的脚本列表
-  styles?: string[]; // 要预加载的样式表列表
-  fonts?: string[]; // 要预加载的字体列表
+  images?: string[];
+  scripts?: string[];
+  styles?: string[];
+  fonts?: string[];
   onProgress?: (loaded: number, total: number) => void;
   onComplete?: () => void;
 }
@@ -21,8 +21,6 @@ export function ResourcePreloader({
   onProgress,
   onComplete,
 }: ResourcePreloaderProps) {
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const totalResources = images.length + scripts.length + styles.length + fonts.length;
     let loadedResources = 0;
@@ -32,20 +30,17 @@ export function ResourcePreloader({
       onProgress?.(loadedResources, totalResources);
 
       if (loadedResources === totalResources) {
-        setLoading(false);
         onComplete?.();
       }
     };
 
-    // 预加载图片
     images.forEach(src => {
       const img = new Image();
       img.onload = updateProgress;
-      img.onerror = updateProgress; // 即使失败也算完成
+      img.onerror = updateProgress;
       img.src = src;
     });
 
-    // 预加载脚本
     scripts.forEach(src => {
       const link = document.createElement('link');
       link.rel = 'preload';
@@ -56,7 +51,6 @@ export function ResourcePreloader({
       document.head.appendChild(link);
     });
 
-    // 预加载样式表
     styles.forEach(href => {
       const link = document.createElement('link');
       link.rel = 'preload';
@@ -67,7 +61,6 @@ export function ResourcePreloader({
       document.head.appendChild(link);
     });
 
-    // 预加载字体
     fonts.forEach(href => {
       const link = document.createElement('link');
       link.rel = 'preload';
@@ -80,7 +73,6 @@ export function ResourcePreloader({
     });
 
     if (totalResources === 0) {
-      setLoading(false);
       onComplete?.();
     }
   }, [images, scripts, styles, fonts, onProgress, onComplete]);

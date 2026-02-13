@@ -1,6 +1,8 @@
 // Toast
-export { ToastContainer, toast, useToastStore } from './Toast';
-export type { Toast, ToastType } from './Toast';
+export { ToastContainer } from './Toast';
+export { useToastStore } from './toast.store';
+export type { Toast, ToastType, ToastStore } from './toast.types';
+export { toast } from './toast.utils';
 
 // Modal
 export { Modal, ModalHeader, ModalBody, ModalFooter } from './Modal';

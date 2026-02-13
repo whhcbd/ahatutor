@@ -221,7 +221,7 @@ ${historyText}
     const topicSet = new Set<string>();
 
     for (const result of results) {
-      for (const topic of result.metadata.topics) {
+      for (const topic of result.metadata.topics || []) {
         topicSet.add(topic);
       }
     }

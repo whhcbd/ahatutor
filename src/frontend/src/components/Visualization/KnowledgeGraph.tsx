@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 
-interface GraphNode {
+export interface GraphNode {
   id: string;
   name: string;
   type: string;
@@ -14,7 +14,7 @@ interface GraphNode {
   fy?: number | null;
 }
 
-interface GraphEdge {
+export interface GraphEdge {
   source: string | GraphNode;
   target: string | GraphNode;
   weight: number;
@@ -69,7 +69,7 @@ export function KnowledgeGraph({
 
     // 创建力导向模拟
     const simulation = d3
-      .forceSimulation<GraphNode>(data.nodes as d3.SimulationNodeDatum[])
+      .forceSimulation(data.nodes as d3.SimulationNodeDatum[])
       .force('link', d3.forceLink(data.edges as any)
         .id((d: any) => d.id)
         .distance((d: any) => 100 - (d.weight || 1) * 20)
@@ -124,22 +124,22 @@ export function KnowledgeGraph({
       .attr('stroke', (d) => getNodeStroke(d))
       .attr('stroke-width', 2)
       .style('cursor', 'pointer')
-      .on('mouseover', function(event, d) {
+      .on('mouseover', function(_event, d) {
         setHoveredNode(d);
         d3.select(this)
           .transition()
           .duration(200)
           .attr('r', 25 + d.mastery / 10);
       })
-      .on('mouseout', function(event, d) {
+      .on('mouseout', function(_event, d) {
         setHoveredNode(null);
         d3.select(this)
           .transition()
           .duration(200)
           .attr('r', 15 + d.mastery / 10);
       })
-      .on('click', (event, d) => {
-        onNodeClickRef.current?.(d);
+      .on('click', (_event, d) => {
+        setHoveredNode(d);
       });
 
     // 节点标签
@@ -182,12 +182,15 @@ export function KnowledgeGraph({
       d.fy = null;
     }
 
+    const svgElement = svgRef.current;
     return () => {
       // 停止模拟
       simulation.stop();
 
       // 移除所有事件监听器和DOM元素
-      d3.select(svgRef.current).selectAll('*').remove();
+      if (svgElement) {
+        d3.select(svgElement).selectAll('*').remove();
+      }
     };
   }, [data, width, height]);
 

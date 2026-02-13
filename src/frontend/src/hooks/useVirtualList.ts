@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
+import { useMemo, useRef, useState, useCallback } from 'react';
 
 /**
  * 虚拟列表 Hook - 优化长列表渲染性能
@@ -82,14 +82,12 @@ export function useDynamicVirtualList<T>(
     let accumulatedHeight = 0;
     let startIndex = 0;
     let endIndex = items.length - 1;
-    let currentOffset = 0;
 
     // 找到起始索引
     for (let i = 0; i < items.length; i++) {
       const height = itemHeights[i] || defaultItemHeight;
       if (accumulatedHeight + height >= scrollTop - overscan * defaultItemHeight) {
         startIndex = Math.max(0, i - overscan);
-        currentOffset = accumulatedHeight - (startIndex === 0 ? 0 : 0);
         break;
       }
       accumulatedHeight += height;

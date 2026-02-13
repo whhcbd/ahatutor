@@ -10,7 +10,11 @@ interface ProbabilityDistributionProps {
  * 展示遗传学中的概率分布（如基因型比例、表型比例等）
  */
 export function ProbabilityDistribution({ data, colors }: ProbabilityDistributionProps) {
-  const { categories, values, colors: dataColors, total, formula } = data;
+  const { categories, values, colors: dataColors, total, formula } = data || {};
+
+  if (!data || !categories || !values) {
+    return <div className="text-center text-gray-500 p-8">概率分布数据加载中...</div>;
+  }
 
   // 默认颜色方案
   const defaultColors = [

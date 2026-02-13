@@ -35,7 +35,12 @@ export function ChromosomeBehavior({
   behaviorType: initialBehaviorType,
   onBehaviorChange,
 }: ChromosomeBehaviorProps) {
-  const { chromosomes, behavior } = data;
+  const { chromosomes, behavior } = data || {};
+
+  if (!data || !chromosomes || !behavior) {
+    return <div className="text-center text-gray-500 p-8">染色体行为数据加载中...</div>;
+  }
+
   const [activeBehavior, setActiveBehavior] = useState<BehaviorType>(
     initialBehaviorType || (behavior.type as BehaviorType) || 'segregation'
   );

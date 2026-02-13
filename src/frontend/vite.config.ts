@@ -100,7 +100,7 @@ export default defineConfig({
   },
   // 预加载配置
   experimental: {
-    renderBuiltUrl(filename, { hostId, hostType, type }) {
+    renderBuiltUrl(filename, { type }) {
       // 为关键资源添加 preload
       if (type === 'js' && filename.includes('main')) {
         return { runtime: `__VITE_PRELOAD__(${JSON.stringify(filename)})` };

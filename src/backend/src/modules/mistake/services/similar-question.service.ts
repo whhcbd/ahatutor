@@ -199,7 +199,7 @@ ${mistake.options ? `选项：${mistake.options.join('\\n')}` : ''}
     // 为每个知识点生成复习题
     const reviewQuestions = [];
 
-    for (const [_topic, topicMistakes] of topicGroups) {
+    for (const topicMistakes of topicGroups.values()) {
       const similar = await this.generate(topicMistakes[0], { count: 2 });
       reviewQuestions.push(...similar.similarQuestions);
     }

@@ -70,7 +70,7 @@ export class PerformanceMonitor {
    */
   report(): void {
     console.group('Performance Report');
-    for (const [name, measures] of this.measures) {
+    for (const [name] of this.measures) {
       const stats = this.getStats(name);
       console.log(`${name}:`, stats);
     }
@@ -123,7 +123,7 @@ export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
+  let timeout: ReturnType<typeof setTimeout> | null = null;
 
   return function executedFunction(...args: Parameters<T>) {
     const later = () => {
@@ -168,7 +168,7 @@ export function requestIdleCallback(
   }
 
   // 降级方案：使用 setTimeout
-  return window.setTimeout(() => {
+  return setTimeout(() => {
     callback({
       didTimeout: false,
       timeRemaining: () => 0,
@@ -183,7 +183,7 @@ export function cancelIdleCallback(id: number): void {
   if (typeof window !== 'undefined' && 'cancelIdleCallback' in window) {
     (window as any).cancelIdleCallback(id);
   } else {
-    window.clearTimeout(id);
+    clearTimeout(id);
   }
 }
 
@@ -231,7 +231,7 @@ export class WorkerManager {
    * 清理所有 Workers
    */
   terminateAll(): void {
-    for (const [key, worker] of this.workers) {
+    for (const [, worker] of this.workers) {
       worker.terminate();
     }
     this.workers.clear();

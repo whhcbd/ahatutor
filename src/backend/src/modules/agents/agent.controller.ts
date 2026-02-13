@@ -13,8 +13,9 @@ import { ResourceRecommendService } from './skills/resource-recommend.service';
 import { VisualizationGeneratorService } from './skills/visualization-generator.service';
 import { GeneticsVisualizationService } from './skills/genetics-visualization.service';
 import { InteractiveControlService } from './skills/interactive-control.service';
+import { AnswerEvaluatorService } from './skills/answer-evaluator.service';
 import { SixAgentInput } from '@shared/types/agent.types';
-import { Difficulty, QuestionType } from '@shared/types/genetics.types';
+import { Difficulty, QuestionType, QuizQuestion } from '@shared/types/genetics.types';
 import { ResourceType } from '@shared/types/skill.types';
 
 class PipelineDto implements SixAgentInput {
@@ -46,6 +47,23 @@ class ExploreDto {
   @IsOptional()
   @IsNumber()
   maxDepth?: number;
+}
+
+class AnalyzeDto {
+  @ApiProperty({ description: '目标概念' })
+  @IsString()
+  concept!: string;
+
+  @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
+  @IsOptional()
+  @IsEnum(['beginner', 'intermediate', 'advanced'] as const)
+  userLevel?: 'beginner' | 'intermediate' | 'advanced';
+}
+
+class EnrichDto {
+  @ApiProperty({ description: '目标概念' })
+  @IsString()
+  concept!: string;
 }
 
 class GenerateQuizDto {
@@ -80,6 +98,56 @@ class EvaluateAnswerDto {
   @ApiProperty({ description: '用户答案' })
   @IsString()
   userAnswer!: string;
+}
+
+class EvaluateAnswerV2Dto {
+  @ApiProperty({ description: '完整题目对象' })
+  question!: QuizQuestion;
+
+  @ApiProperty({ description: '用户答案' })
+  @IsString()
+  userAnswer!: string;
+
+  @ApiProperty({ description: '解析等级', required: false })
+  @IsOptional()
+  @IsNumber()
+  explanationLevel?: number;
+}
+
+class SelfAssessmentDto {
+  @ApiProperty({ description: '完整题目对象' })
+  question!: QuizQuestion;
+
+  @ApiProperty({ description: '用户答案' })
+  @IsString()
+  userAnswer!: string;
+
+  @ApiProperty({ description: '错误类型', enum: ['low_level', 'high_level'] })
+  @IsEnum(['low_level', 'high_level'] as const)
+  errorType!: 'low_level' | 'high_level';
+
+  @ApiProperty({ description: '用户备注', required: false })
+  @IsOptional()
+  @IsString()
+  userNote?: string;
+}
+
+class GetExplanationDto {
+  @ApiProperty({ description: '完整题目对象' })
+  question!: QuizQuestion;
+
+  @ApiProperty({ description: '用户答案' })
+  @IsString()
+  userAnswer!: string;
+
+  @ApiProperty({ description: '解析等级' })
+  @IsNumber()
+  level!: number;
+
+  @ApiProperty({ description: '前一等级', required: false })
+  @IsOptional()
+  @IsNumber()
+  previousLevel?: number;
 }
 
 class SimilarQuestionDto {
@@ -362,6 +430,7 @@ export class AgentController {
     private readonly visualizationGenerator: VisualizationGeneratorService,
     private readonly geneticsVisualization: GeneticsVisualizationService,
     private readonly interactiveControl: InteractiveControlService,
+    private readonly answerEvaluator: AnswerEvaluatorService,
   ) {}
 
   @Post('pipeline')
@@ -372,11 +441,8 @@ export class AgentController {
 
   @Post('analyze')
   @ApiOperation({ summary: '分析概念' })
-  async analyze(
-    @Body('concept') concept: string,
-    @Body('userLevel') userLevel?: 'beginner' | 'intermediate' | 'advanced',
-  ) {
-    return await this.conceptAnalyzer.analyze(concept, userLevel);
+  async analyze(@Body() dto: AnalyzeDto) {
+    return await this.conceptAnalyzer.analyze(dto.concept, dto.userLevel);
   }
 
   @Post('explore')
@@ -395,8 +461,8 @@ export class AgentController {
 
   @Post('enrich')
   @ApiOperation({ summary: '丰富遗传学知识' })
-  async enrich(@Body('concept') concept: string) {
-    return await this.geneticsEnricher.enrichConcept(concept);
+  async enrich(@Body() dto: EnrichDto) {
+    return await this.geneticsEnricher.enrichConcept(dto.concept);
   }
 
   @Post('quiz/generate')
@@ -418,7 +484,7 @@ export class AgentController {
   }
 
   @Post('quiz/evaluate')
-  @ApiOperation({ summary: '评估答案' })
+  @ApiOperation({ summary: '评估答案（旧版，保持兼容）' })
   async evaluateAnswer(@Body() dto: EvaluateAnswerDto) {
     return await this.quizGenerator.evaluateAnswer({
       question: {
@@ -438,6 +504,38 @@ export class AgentController {
         tags: [],
       },
       userAnswer: dto.userAnswer,
+    });
+  }
+
+  @Post('quiz/evaluate/v2')
+  @ApiOperation({ summary: '评估答案（新版，支持分等级解析）' })
+  async evaluateAnswerV2(@Body() dto: EvaluateAnswerV2Dto) {
+    return await this.answerEvaluator.evaluateAnswer({
+      question: dto.question,
+      userAnswer: dto.userAnswer,
+      explanationLevel: dto.explanationLevel || 1,
+    });
+  }
+
+  @Post('quiz/self-assess')
+  @ApiOperation({ summary: '用户自评处理' })
+  async processSelfAssessment(@Body() dto: SelfAssessmentDto) {
+    return await this.answerEvaluator.processSelfAssessment({
+      question: dto.question,
+      userAnswer: dto.userAnswer,
+      errorType: dto.errorType,
+      userNote: dto.userNote,
+    });
+  }
+
+  @Post('quiz/explanation')
+  @ApiOperation({ summary: '获取分等级解析' })
+  async getExplanation(@Body() dto: GetExplanationDto) {
+    return await this.answerEvaluator.getExplanation({
+      question: dto.question,
+      userAnswer: dto.userAnswer,
+      level: dto.level,
+      previousLevel: dto.previousLevel,
     });
   }
 

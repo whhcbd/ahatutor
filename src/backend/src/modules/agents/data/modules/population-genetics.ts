@@ -180,5 +180,252 @@ export const POPULATION_GENETICS: Record<string, Omit<VisualizationSuggestion, '
       '瓶颈后的群体对环境变化适应能力降低',
       '瓶颈效应可用于研究人类迁徙历史'
     ]
+  },
+
+  '奠基者效应': {
+    type: 'inheritance_path',
+    title: '奠基者效应可视化',
+    description: '展示奠基者效应的机制：少数个体建立新群体时，其基因库可能无法代表源群体的全部遗传多样性。',
+    elements: ['源群体', '奠基者', '新群体', '基因频率差异', '遗传多样性降低'],
+    layout: 'hierarchical',
+    interactions: ['hover', 'click'],
+    colors: {
+      sourcePopulation: '#4CAF50',
+      founders: '#FF9800',
+      newPopulation: '#2196F3',
+      lost: '#F44336',
+    },
+    data: {
+      stages: [
+        {
+          stage: '源群体',
+          population: 10000,
+          diversity: '高（10个等位基因）',
+          alleles: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10'],
+          frequencies: '各约10%'
+        },
+        {
+          stage: '奠基者迁移',
+          founders: '10个个体',
+          carriedAlleles: ['A1', 'A2', 'A3'],
+          description: '少数个体迁移到新环境'
+        },
+        {
+          stage: '新群体建立',
+          population: 10000,
+          diversity: '低（3个等位基因）',
+          alleles: ['A1', 'A2', 'A3'],
+          frequencies: 'A1-50%, A2-30%, A3-20%',
+          description: 'A4-A10等位基因永久丢失'
+        }
+      ],
+      examples: [
+        {
+          population: '阿米什人（美国宾州）',
+          founders: '约200名德国移民',
+          effect: '某些遗传病频率异常高（如埃勒斯-当洛综合征）',
+          alleleFrequencies: '与源群体显著不同'
+        },
+        {
+          population: '皮特凯恩岛居民',
+          founders: '邦蒂号哗变者（约20人）',
+          effect: 'Y染色体多样性极低',
+          genePool: '仅来自少数奠基者'
+        },
+        {
+          population: '芬兰人群',
+          founders: '少数祖先群体',
+          effect: '某些遗传病仅见于芬兰人',
+          diseases: ['芬兰型先天性肾病', '芬兰型淀粉样变性']
+        }
+      ],
+      consequences: [
+        '遗传多样性降低',
+        '基因频率与源群体不同',
+        '某些遗传病频率异常高',
+        '对疾病易感性可能不同'
+      ]
+    },
+    annotations: [
+      '奠基者效应是遗传漂变的一种形式',
+      '新群体的基因库由奠基者的基因随机决定',
+      '奠基者效应可解释某些隔离人群的遗传特征',
+      '人类迁徙史中奠基者效应很常见'
+    ]
+  },
+
+  '基因流': {
+    type: 'inheritance_path',
+    title: '基因流机制可视化',
+    description: '展示基因流（基因迁移）的过程：基因在不同群体间通过个体迁移或配子传播，影响群体的遗传组成。',
+    elements: ['基因流', '个体迁移', '配子传播', '群体间杂交', '基因频率改变', '遗传同质化'],
+    layout: 'hierarchical',
+    interactions: ['hover', 'click'],
+    colors: {
+      population1: '#4CAF50',
+      population2: '#2196F3',
+      migrant: '#FF9800',
+      hybrid: '#9C27B0',
+      geneFlow: '#FFC107',
+    },
+    data: {
+      mechanisms: [
+        {
+          type: '个体迁移',
+          description: '成年个体从一个群体迁移到另一个群体',
+          example: '鸟类迁徙时在不同群体间繁殖',
+          effect: '迁移者的基因进入新群体'
+        },
+        {
+          type: '配子传播',
+          description: '花粉、精子等配子在不同群体间传播',
+          example: '风媒植物的花粉长距离传播',
+          effect: '不同群体的基因通过配子混合'
+        },
+        {
+          type: '群体间杂交',
+          description: '不同群体个体交配产生后代',
+          example: '相邻群体的动物交配',
+          effect: '基因在群体间交流'
+        }
+      ],
+      effects: [
+        {
+          name: '遗传同质化',
+          description: '基因流使不同群体的基因频率趋于一致',
+          result: '减少群体间的遗传差异'
+        },
+        {
+          name: '引入新变异',
+          description: '外源基因进入群体',
+          result: '增加遗传多样性'
+        },
+        {
+          name: '对抗自然选择和遗传漂变',
+          description: '基因流可以抵消局部适应和遗传漂变',
+          result: '维持群体间相似性'
+        }
+      ],
+      examples: [
+        {
+          scenario: '农作物育种',
+          description: '将野生品种的抗病基因导入栽培品种',
+          benefit: '提高抗病性',
+          method: '杂交育种'
+        },
+        {
+          scenario: '狼的群体',
+          description: '不同狼群间个体迁移',
+          effect: '维持遗传多样性',
+          importance: '防止近亲繁殖'
+        },
+        {
+          scenario: '海洋生物',
+          description: '洋流携带幼虫到不同海域',
+          effect: '基因在远距离群体间流动',
+          result: '广阔地理范围内的遗传连接'
+        }
+      ],
+      factors: [
+        '群体间距离：距离越近，基因流越强',
+        '迁移能力：物种的迁移能力影响基因流强度',
+        '地理屏障：山脉、河流等阻碍基因流',
+        '行为因素：社会结构、繁殖策略等影响个体迁移'
+      ]
+    },
+    annotations: [
+      '基因流是群体遗传学的重要进化力量',
+      '基因流可以引入新的遗传变异',
+      '高基因流导致群体间遗传相似',
+      '基因流是人类进化的重要机制'
+    ]
+  },
+
+  '突变': {
+    type: 'diagram',
+    title: '基因突变类型与机制可视化',
+    description: '展示基因突变的各种类型及其分子机制：点突变、插入、缺失、重复等，以及突变对蛋白质功能的影响。',
+    elements: ['点突变', '插入', '缺失', '重复', '颠换', '转换', '移码突变'],
+    layout: 'hierarchical',
+    interactions: ['hover', 'click'],
+    colors: {
+      normal: '#4CAF50',
+      pointMutation: '#FF9800',
+      insertion: '#2196F3',
+      deletion: '#F44336',
+      duplication: '#9C27B0',
+      substitution: '#FFC107',
+    },
+    data: {
+      pointMutations: [
+        {
+          name: '转换',
+          description: '嘌呤之间或嘧啶之间的替换',
+          examples: ['A→G', 'G→A', 'C→T', 'T→C'],
+          frequency: '转换比颠换更常见（约2:1）',
+          effect: '通常影响较小'
+        },
+        {
+          name: '颠换',
+          description: '嘌呤与嘧啶之间的替换',
+          examples: ['A→C', 'A→T', 'G→C', 'G→T'],
+          frequency: '较不常见',
+          effect: '通常影响较大'
+        }
+      ],
+      effectsOnProtein: [
+        {
+          type: '同义突变',
+          description: '密码子改变但编码相同氨基酸',
+          example: 'GAA→GAG（都编码谷氨酸）',
+          effect: '无影响（通常）'
+        },
+        {
+          type: '错义突变',
+          description: '密码子改变导致氨基酸改变',
+          example: 'GAA→GCA（谷氨酸→丙氨酸）',
+          effect: '蛋白质功能可能受影响'
+        },
+        {
+          type: '无义突变',
+          description: '密码子变成终止密码子',
+          example: 'UAC→UAA（酪氨酸→终止）',
+          effect: '蛋白质提前终止，功能严重受损'
+        }
+      ],
+      indelMutations: [
+        {
+          type: '插入',
+          description: '插入一个或多个碱基',
+          frameshift: '插入数不是3的倍数导致移码',
+          example: 'CAG → CAAG（插入A）',
+          consequence: '可能改变整个下游氨基酸序列'
+        },
+        {
+          type: '缺失',
+          description: '缺失一个或多个碱基',
+          frameshift: '缺失数不是3的倍数导致移码',
+          example: 'CAG → CG（缺失A）',
+          consequence: '可能改变整个下游氨基酸序列'
+        },
+        {
+          type: '重复',
+          description: '一段序列重复一次或多次',
+          example: 'CAG → CAGCAG（重复）',
+          diseases: '亨廷顿舞蹈症（CAG重复扩张）'
+        }
+      ],
+      mutationRates: {
+        perBasePerGeneration: '约10^-8（每个碱基每代）',
+        perGenePerGeneration: '约10^-5（每个基因每代）',
+        factors: ['DNA聚合酶错误', '自发损伤', '化学物质', '辐射']
+      }
+    },
+    annotations: [
+      '突变是进化的原材料',
+      '大多数突变是中性或有害的，有益突变罕见',
+      '突变率相对较低，但代代累积可产生大量变异',
+      'DNA修复系统可以纠正大多数突变'
+    ]
   }
 };

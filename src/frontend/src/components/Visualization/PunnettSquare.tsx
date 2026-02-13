@@ -16,7 +16,15 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
     offspring,
     parentalCross,
     description,
-  } = data;
+  } = data || {};
+
+  if (!data) {
+    return <div className="text-center text-gray-500 p-8">数据加载中...</div>;
+  }
+
+  if (!maleGametes || !femaleGametes || !offspring) {
+    return <div className="text-center text-gray-500 p-8">Punnett 方格数据不完整</div>;
+  }
 
   // 默认颜色方案
   const defaultColors = {
@@ -76,24 +84,26 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
       </div>
 
       {/* 双亲信息 */}
-      <div className="grid grid-cols-2 gap-4">
-        <div
-          className="p-4 rounded-lg text-center"
-          style={{ backgroundColor: `${defaultColors.male}20` }}
-        >
-          <div className="text-sm text-gray-600 mb-1">父本</div>
-          <div className="font-mono font-bold text-lg">{parentalCross.male.genotype}</div>
-          <div className="text-sm text-gray-700">{parentalCross.male.phenotype}</div>
+      {parentalCross && (
+        <div className="grid grid-cols-2 gap-4">
+          <div
+            className="p-4 rounded-lg text-center"
+            style={{ backgroundColor: `${defaultColors.male}20` }}
+          >
+            <div className="text-sm text-gray-600 mb-1">父本</div>
+            <div className="font-mono font-bold text-lg">{parentalCross.male?.genotype || '未知'}</div>
+            <div className="text-sm text-gray-700">{parentalCross.male?.phenotype || '未知'}</div>
+          </div>
+          <div
+            className="p-4 rounded-lg text-center"
+            style={{ backgroundColor: `${defaultColors.female}20` }}
+          >
+            <div className="text-sm text-gray-600 mb-1">母本</div>
+            <div className="font-mono font-bold text-lg">{parentalCross.female?.genotype || '未知'}</div>
+            <div className="text-sm text-gray-700">{parentalCross.female?.phenotype || '未知'}</div>
+          </div>
         </div>
-        <div
-          className="p-4 rounded-lg text-center"
-          style={{ backgroundColor: `${defaultColors.female}20` }}
-        >
-          <div className="text-sm text-gray-600 mb-1">母本</div>
-          <div className="font-mono font-bold text-lg">{parentalCross.female.genotype}</div>
-          <div className="text-sm text-gray-700">{parentalCross.female.phenotype}</div>
-        </div>
-      </div>
+      )}
 
       {/* Punnett 方格 */}
       <div className="flex justify-center">

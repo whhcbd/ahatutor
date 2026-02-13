@@ -2,6 +2,11 @@
  * Agent Skills 相关类型定义
  */
 
+import type { UnderstandingInsight } from './agent.types';
+import type { DocumentChunk, DocumentMetadata } from './rag.types';
+
+export { UnderstandingInsight } from './agent.types';
+
 // Skill 类型枚举
 export enum SkillType {
   WEB_SEARCH = "web_search", // 联网搜索
@@ -81,14 +86,6 @@ export interface VisualizationConfig {
   insights?: UnderstandingInsight[];
 }
 
-// 理解提示（帮助用户从可视化中学习）
-export interface UnderstandingInsight {
-  keyPoint: string;
-  visualConnection: string;
-  commonMistake: string;
-  checkQuestion: string;
-}
-
 // 遗传学可视化专用输入
 export interface GeneticsVisualizationInput {
   concept: string;
@@ -149,57 +146,18 @@ export interface InteractiveControlOutput {
   };
 }
 
-// ==================== RAG 相关类型 ====================
-
-// 文档类型
-export enum DocumentType {
-  PDF = "pdf",
-  DOCX = "docx",
-  MD = "md",
-  TXT = "txt",
-  HTML = "html",
-}
-
-// 文档元数据
-export interface DocumentMetadata {
-  id: string;
-  title: string;
-  type: DocumentType;
-  source: string;
-  author?: string;
-  subject: string;
-  chapter?: string;
-  section?: string;
-  topics: string[];
-  difficulty?: "beginner" | "intermediate" | "advanced";
-  uploadedAt: Date;
-  size: number;
-}
-
-// 文档块（用于向量存储）
-export interface DocumentChunk {
-  id: string;
-  documentId: string;
-  content: string;
-  metadata: {
-    documentId: string;
-    chunkIndex: number;
-    topics: string[];
-    section?: string;
-    chapter?: string;
-    difficulty?: string;
-  };
-  embedding?: number[];
-}
+// ==================== RAG 相关类型（从 rag.types 导入）====================
+export { DocumentType, DocumentMetadata } from './rag.types';
+export type { DocumentChunk } from './rag.types';
 
 // 文档索引输入
 export interface DocumentIndexingInput {
-  documentId?: string;
-  filePath?: string;
+  fileName?: string;
+  fileType?: string;
   content?: string;
-  metadata: Partial<DocumentMetadata>;
-  chunkSize?: number;
-  chunkOverlap?: number;
+  filePath?: string;
+  documentId?: string;
+  metadata?: DocumentMetadata;
 }
 
 // 文档索引输出

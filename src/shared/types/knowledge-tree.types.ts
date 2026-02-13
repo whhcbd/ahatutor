@@ -65,9 +65,6 @@ export interface LearningPath {
   completedNodes: string[];
 }
 
-// 艾宾浩斯复习间隔（天）
-export const EBBINGHAUS_INTERVALS = [1, 2, 4, 7, 15, 30, 60, 120];
-
 // 复习计划
 export interface ReviewPlan {
   userId: string;

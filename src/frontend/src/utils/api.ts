@@ -243,8 +243,77 @@ export const quizApi = {
   },
 };
 
+/**
+ * 深度学习模式 API 服务
+ */
+export const deepApi = {
+  /**
+   * 探索前置知识树
+   */
+  async explorePrerequisites(concept: string, maxDepth: number = 3) {
+    const { data } = await apiClient.post('/agent/explore', {
+      concept,
+      maxDepth,
+    });
+    return data;
+  },
+
+  /**
+   * 生成学习路径
+   */
+  async generateLearningPath(concept: string, userLevel?: 'beginner' | 'intermediate' | 'advanced') {
+    const params: any = { concept };
+    if (userLevel) params.userLevel = userLevel;
+    const { data } = await apiClient.get('/agent/learning-path', { params });
+    return data;
+  },
+
+  /**
+   * 获取概念分析
+   */
+  async analyzeConcept(concept: string, userLevel?: 'beginner' | 'intermediate' | 'advanced') {
+    const { data } = await apiClient.post('/agent/analyze', null, {
+      params: { concept, userLevel },
+    });
+    return data;
+  },
+
+  /**
+   * 丰富遗传学知识
+   */
+  async enrichConcept(concept: string) {
+    const { data } = await apiClient.post('/agent/enrich', null, {
+      params: { concept },
+    });
+    return data;
+  },
+
+  /**
+   * 创建学习叙事
+   */
+  async composeNarrative(concept: string, userLevel?: 'beginner' | 'intermediate' | 'advanced') {
+    const { data } = await apiClient.post('/agent/narrative', {
+      concept,
+      userLevel,
+    });
+    return data;
+  },
+
+  /**
+   * 生成互动式学习流程
+   */
+  async generateInteractiveFlow(concept: string, userLevel?: 'beginner' | 'intermediate' | 'advanced') {
+    const { data } = await apiClient.post('/agent/narrative/interactive', {
+      concept,
+      userLevel,
+    });
+    return data;
+  },
+};
+
 export default {
   llm: llmApi,
   agent: agentApi,
   quiz: quizApi,
+  deep: deepApi,
 };

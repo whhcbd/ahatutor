@@ -2,7 +2,7 @@ import { forwardRef, InputHTMLAttributes } from 'react';
 
 export type InputSize = 'sm' | 'md' | 'lg';
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   error?: string;
   helperText?: string;
@@ -19,7 +19,7 @@ const sizeClasses: Record<InputSize, string> = {
   lg: 'px-5 py-3 text-base',
 };
 
-function cn(...classes: (string | boolean | undefined | null)[]): string {
+function cn(...classes: (string | boolean | undefined | null | number)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 

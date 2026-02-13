@@ -129,6 +129,68 @@ class BingProvider implements SearchProvider {
 }
 
 /**
+ * SerpAPI 搜索提供商（支持 Google、Bing 等多种搜索引擎）
+ * 文档: https://serpapi.com/search-api
+ */
+class SerpApiProvider implements SearchProvider {
+  private readonly apiKey: string;
+  private readonly engine: string;
+  private readonly baseUrl = 'https://serpapi.com/search';
+  private readonly logger = new Logger(SerpApiProvider.name);
+
+  constructor(apiKey: string, engine: string = 'google') {
+    this.apiKey = apiKey;
+    this.engine = engine;
+  }
+
+  async search(query: string, options: WebSearchInput): Promise<SearchResult[]> {
+    if (!this.apiKey) {
+      throw new Error('SerpAPI key is not configured');
+    }
+
+    try {
+      const url = new URL(this.baseUrl);
+      url.searchParams.append('api_key', this.apiKey);
+      url.searchParams.append('engine', this.engine);
+      url.searchParams.append('q', query);
+      url.searchParams.append('num', String(options.numResults || 5));
+
+      if (options.language) {
+        const langMap: Record<string, string> = {
+          zh: 'lang_zh-CN',
+          en: 'lang_en',
+          ja: 'lang_ja',
+        };
+        url.searchParams.append('hl', langMap[options.language] || options.language);
+      }
+
+      if (options.safeSearch) {
+        url.searchParams.append('safe', 'active');
+      }
+
+      const response = await fetch(url.toString());
+
+      if (!response.ok) {
+        throw new Error(`SerpAPI error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      return (data.organic_results || []).map((result: any) => ({
+        title: result.title,
+        url: result.link,
+        snippet: result.snippet,
+        source: new URL(result.link).hostname,
+        relevanceScore: 0.8,
+      }));
+    } catch (error) {
+      this.logger.error('SerpAPI search failed:', error);
+      throw error;
+    }
+  }
+}
+
+/**
  * 模拟搜索提供商（用于开发测试）
  */
 class MockSearchProvider implements SearchProvider {
@@ -137,7 +199,6 @@ class MockSearchProvider implements SearchProvider {
   async search(query: string, _options: WebSearchInput): Promise<SearchResult[]> {
     this.logger.log(`Mock search for: ${query}`);
 
-    // 返回模拟结果
     return [
       {
         title: `关于"${query}"的遗传学研究进展`,
@@ -178,18 +239,24 @@ export class WebSearchService {
   private provider: SearchProvider;
 
   constructor(private readonly configService: ConfigService) {
-    // 根据配置选择搜索提供商
     const providerType = this.configService.get<string>('WEB_SEARCH_PROVIDER', 'mock');
-    const apiKey = this.configService.get<string>('WEB_SEARCH_API_KEY');
 
     switch (providerType) {
       case 'tavily':
-        this.provider = new TavilyProvider(apiKey || '');
+        const tavilyKey = this.configService.get<string>('TAVILY_API_KEY');
+        this.provider = new TavilyProvider(tavilyKey || '');
         this.logger.log('Using Tavily search provider');
         break;
       case 'bing':
-        this.provider = new BingProvider(apiKey || '');
+        const bingKey = this.configService.get<string>('BING_API_KEY');
+        this.provider = new BingProvider(bingKey || '');
         this.logger.log('Using Bing search provider');
+        break;
+      case 'serpapi':
+        const serpKey = this.configService.get<string>('SERPAPI_API_KEY');
+        const serpEngine = this.configService.get<string>('SERPAPI_ENGINE', 'google');
+        this.provider = new SerpApiProvider(serpKey || '', serpEngine);
+        this.logger.log(`Using SerpAPI search provider with ${serpEngine} engine`);
         break;
       case 'mock':
       default:

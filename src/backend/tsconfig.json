@@ -12,6 +12,11 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Types */
+    "types": ["node", "@types/jest", "@types/multer", "@types/passport-jwt", "@types/express"],
 
     /* Strict Type-Checking Options */
     "strict": true,

@@ -821,5 +821,197 @@ export const MOLECULAR_GENETICS: Record<string, Omit<VisualizationSuggestion, 'i
       '细胞分化是基因差异表达的结果',
       '癌症常与基因调控异常相关'
     ]
+  },
+
+  '表观遗传记忆': {
+    type: 'diagram',
+    title: '表观遗传记忆机制可视化',
+    description: '展示表观遗传信息如何在细胞分裂中传递：DNA甲基化、组蛋白修饰等表观遗传标记的维持机制。',
+    elements: ['DNA甲基化', '组蛋白修饰', '染色质状态', '细胞分裂', '表观遗传继承', '表观遗传重编程'],
+    layout: 'hierarchical',
+    interactions: ['hover', 'click'],
+    colors: {
+      methylation: '#F44336',
+      histone: '#9C27B0',
+      chromatinActive: '#4CAF50',
+      chromatinInactive: '#FF9800',
+      inheritance: '#2196F3',
+      reprogramming: '#7B1FA2',
+    },
+    data: {
+      mechanisms: [
+        {
+          name: 'DNA甲基化',
+          description: 'CpG二核苷酸的胞嘧啶5\'位甲基化',
+          pattern: 'CG二核苷酸在基因组中成簇出现（CpG岛）',
+          maintenance: 'DNMT1识别半甲基化DNA，在新链上添加甲基基团'
+        },
+        {
+          name: '组蛋白修饰',
+          description: '组蛋白尾部的可逆共价修饰',
+          types: ['乙酰化（激活）', '甲基化（激活或抑制）', '磷酸化（激活）', '泛素化（激活或抑制）'],
+          maintenance: '修饰识别蛋白招募维持复合物'
+        },
+        {
+          name: '染色质重塑',
+          description: 'ATP依赖的染色质结构改变',
+          effect: '控制染色质开放程度（常染色质/异染色质）',
+          maintenance: '重塑复合物通过组蛋白修饰定位'
+        }
+      ],
+      inheritance: {
+        description: '表观遗传标记通过细胞分裂传递',
+        process: [
+          'DNA复制时产生半甲基化DNA',
+          'DNMT1识别半甲基化位点并甲基化新链',
+          '组蛋白修饰随核小体分配',
+          '修饰读取蛋白识别旧标记并重建修饰'
+        ],
+        stability: '大部分表观遗传标记在多次分裂中保持稳定'
+      },
+      reprogramming: [
+        {
+          type: '全基因组重编程',
+          context: '受精卵、原始生殖细胞',
+          extent: '大部分表观遗传标记被擦除'
+        },
+        {
+          type: '部分重编程',
+          context: '体细胞重编程（iPS细胞）',
+          extent: '部分标记保留，诱导多能性'
+        },
+        {
+          type: '环境诱导重编程',
+          context: '营养、压力、毒素暴露',
+          extent: '特定基因座表观遗传状态改变'
+        }
+      ],
+      examples: [
+        {
+          name: '基因组印记',
+          description: '亲本来源特异性的表观遗传标记',
+          inheritance: '印记在配子形成时建立，在发育中维持'
+        },
+        {
+          name: 'X染色体失活',
+          description: '雌性哺乳动物的一条X染色体失活',
+          maintenance: 'Xist RNA介导的异染色质化在分裂中维持'
+        }
+      ]
+    },
+    annotations: [
+      '表观遗传记忆允许细胞"记住"其身份',
+      '表观遗传异常可导致发育缺陷和疾病',
+      '环境因素可通过表观遗传影响基因表达',
+      '表观遗传治疗是癌症研究的新方向'
+    ]
+  },
+
+  '基因表达调控': {
+    type: 'diagram',
+    title: '基因表达调控机制可视化',
+    description: '展示基因表达调控的具体机制：从信号转导到转录因子结合的完整调控路径。',
+    elements: ['信号分子', '受体', '信号转导', '转录因子', '靶基因', 'mRNA', '蛋白质', '反馈调节'],
+    layout: 'hierarchical',
+    interactions: ['hover', 'click'],
+    colors: {
+      signal: '#FF9800',
+      receptor: '#F44336',
+      pathway: '#9C27B0',
+      transcriptionFactor: '#2196F3',
+      targetGene: '#4CAF50',
+      mrna: '#00BCD4',
+      protein: '#7B1FA2',
+      feedback: '#FF5722',
+    },
+    data: {
+      signalTransduction: [
+        {
+          type: '激素调控',
+          example: '类固醇激素受体',
+          pathway: '激素穿过膜→结合胞内受体→受体-DNA复合物→调控转录',
+          responseTime: '慢（小时）'
+        },
+        {
+          type: '生长因子调控',
+          example: 'EGF、TGF-β',
+          pathway: '结合膜受体→磷酸化级联→转录因子激活→基因表达',
+          responseTime: '中（分钟-小时）'
+        },
+        {
+          type: '细胞因子调控',
+          example: '干扰素、白细胞介素',
+          pathway: 'JAK-STAT通路→转录因子二聚化→核转位→基因激活',
+          responseTime: '快（分钟）'
+        }
+      ],
+      regulationTypes: [
+        {
+          name: '正调控',
+          description: '激活基因表达',
+          mechanism: '转录因子结合增强子→招募共激活因子→染色质开放→转录激活',
+          example: '热休克蛋白基因（HSF）'
+        },
+        {
+          name: '负调控',
+          description: '抑制基因表达',
+          mechanism: '阻遏蛋白结合沉默子→招募共抑制因子→染色质紧缩→转录抑制',
+          example: '乳糖操纵子（lacI阻遏蛋白）'
+        },
+        {
+          name: '反馈调控',
+          description: '产物调节自身表达',
+          positive: '产物激活自身表达（自激活）',
+          negative: '产物抑制自身表达（负反馈，维持稳态）'
+        }
+      ],
+      regulatoryElements: [
+        {
+          name: '顺式作用元件',
+          description: 'DNA上的调控序列',
+          examples: [
+            { name: '启动子', location: '转录起始位点附近', function: '结合RNA聚合酶和通用转录因子' },
+            { name: '增强子', location: '可远距离（几十kb）', function: '增强转录活性，组织特异性' },
+            { name: '沉默子', location: '基因附近或远端', function: '抑制转录活性' },
+            { name: '绝缘子', location: '基因之间', function: '阻断增强子对远端基因的影响' },
+            { name: '应答元件', location: '启动子附近', function: '结合特定转录因子，响应特定信号' }
+          ]
+        },
+        {
+          name: '反式作用因子',
+          description: '蛋白质调控因子',
+          examples: [
+            { name: '通用转录因子', function: '结合启动子，组装预起始复合物' },
+            { name: '特异性转录因子', function: '结合增强子或沉默子，调控特异性基因' },
+            { name: '共激活因子', function: '与转录因子协同，激活转录' },
+            { name: '共抑制因子', function: '与转录因子协同，抑制转录' },
+            { name: '中介体复合物', function: '连接转录因子和RNA聚合酶' }
+          ]
+        }
+      ],
+      examples: [
+        {
+          gene: 'β-珠蛋白基因',
+          regulation: '位点控制区（LCR）远程调控红细胞特异性表达',
+          defect: '突变导致地中海贫血'
+        },
+        {
+          gene: 'c-Myc原癌基因',
+          regulation: '生长因子信号通过MAPK通路激活c-Myc',
+          defect: '过度激活导致癌症'
+        },
+        {
+          gene: 'p53抑癌基因',
+          regulation: 'DNA损伤激活p53→细胞周期阻滞或凋亡',
+          defect: '突变导致基因组不稳定性'
+        }
+      ]
+    },
+    annotations: [
+      '基因表达调控是细胞响应环境变化的核心机制',
+      '复杂的调控网络确保基因在正确的时间、正确的地点表达',
+      '调控异常是许多疾病的分子基础',
+      '理解调控机制有助于开发靶向治疗药物'
+    ]
   }
 };

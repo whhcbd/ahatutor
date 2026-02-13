@@ -107,7 +107,6 @@ export class RetrievalService {
     for (const chunk of allChunks) {
       const contentLower = chunk.content.toLowerCase();
       let matchScore = 0;
-      let matchedTerms = 0;
 
       for (const term of queryTerms) {
         // 精确匹配（完整词）
@@ -124,10 +123,6 @@ export class RetrievalService {
         const metadataLower = JSON.stringify(chunk.metadata).toLowerCase();
         if (metadataLower.includes(term)) {
           matchScore += 1;
-        }
-
-        if (exactMatches > 0 || metadataLower.includes(term)) {
-          matchedTerms++;
         }
       }
 

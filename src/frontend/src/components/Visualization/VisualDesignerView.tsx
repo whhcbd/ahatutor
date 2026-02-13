@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { agentApi } from '../../api/agent';
 import type { VisualizationSuggestion, PunnettSquareData, InheritancePathData, ProbabilityDistributionData, MeiosisAnimationData, ChromosomeBehaviorData } from '@shared/types/agent.types';
 import { KnowledgeGraph } from './KnowledgeGraph';
@@ -7,14 +7,50 @@ import { InheritancePath } from './InheritancePath';
 import { ProbabilityDistribution } from './ProbabilityDistribution';
 import { MeiosisAnimation } from './MeiosisAnimation';
 import { ChromosomeBehavior } from './ChromosomeBehavior';
+import { CRISPRVisualization } from './CRISPRVisualization';
+import { GeneStructureVisualization } from './GeneStructureVisualization';
+import { CentralDogmaVisualization } from './CentralDogmaVisualization';
+import { AlleleVisualization } from './AlleleVisualization';
+import { HomozygousHeterozygousVisualization } from './HomozygousHeterozygousVisualization';
+import { XLinkedInheritance } from './XLinkedInheritance';
+import { TestCrossVisualization } from './TestCrossVisualization';
+import { TranscriptionVisualization } from './TranscriptionVisualization';
+import { TranslationVisualization } from './TranslationVisualization';
+import { ChromosomeVisualization } from './ChromosomeVisualization';
+import { MitosisVisualization } from './MitosisVisualization';
+import { DNAReplicationVisualization } from './DNAReplicationVisualization';
+import { ReplicationForkVisualization } from './ReplicationForkVisualization';
+import { LeadingStrandVisualization } from './LeadingStrandVisualization';
+import { LaggingStrandVisualization } from './LaggingStrandVisualization';
+import { DNAPolymeraseVisualization } from './DNAPolymeraseVisualization';
+import { PromoterVisualization } from './PromoterVisualization';
+import { SplicingVisualization } from './SplicingVisualization';
+import { RibosomeVisualization } from './RibosomeVisualization';
+import { LacOperonVisualization } from './LacOperonVisualization';
+import { DNARepairVisualization } from './DNARepairVisualization';
+import { GeneRegulationVisualization } from './GeneRegulationVisualization';
 import { UnderstandingInsights } from './UnderstandingInsights';
 
 interface VisualDesignerViewProps {
   concept: string;
   userLevel?: 'beginner' | 'intermediate' | 'advanced';
-  useHardcoded?: boolean; // 是否优先使用硬编码数据
+  useHardcoded?: boolean;
   onNodeClick?: (node: any) => void;
 }
+
+const visualizationCache = new Map<string, {
+  visualization: VisualizationSuggestion;
+  d3Config: Record<string, unknown>;
+  graphData?: {
+    nodes: Array<{
+      id: string;
+      label: string;
+      level: number;
+      isFoundation: boolean;
+    }>;
+    links: Array<{ source: string; target: string }>;
+  };
+}>();
 
 /**
  * VisualDesigner 可视化展示组件
@@ -51,25 +87,34 @@ export function VisualDesignerView({
     };
   } | null>(null);
 
+  const cacheKey = useMemo(() => `${concept}-${useHardcoded}`, [concept, useHardcoded]);
+
   const loadVisualization = useCallback(async () => {
+    const cached = visualizationCache.get(cacheKey);
+    if (cached) {
+      setData(cached);
+      setLoading(false);
+      setUsingHardcoded(useHardcoded);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     // 如果启用硬编码优先，先尝试获取硬编码概念列表
     if (useHardcoded) {
-      setUsingHardcoded(true); // 提前设置为true，显示正确的加载提示
+      setUsingHardcoded(true);
       try {
         const hardcodedConcepts = await agentApi.getHardcodedConcepts();
         const conceptNames = hardcodedConcepts.map(c => c.concept);
 
         if (conceptNames.includes(concept)) {
-          // 有硬编码数据，直接使用
           const result = await agentApi.designVisualization(concept, {
             includeEnrichment: false,
             includePrerequisites: false,
           });
 
-          // 后端会返回硬编码的数据
+          visualizationCache.set(cacheKey, result);
           setData(result);
           setLoading(false);
           return;
@@ -79,20 +124,20 @@ export function VisualDesignerView({
       }
     }
 
-    // 降级到AI生成
     setUsingHardcoded(false);
     try {
       const result = await agentApi.designVisualization(concept, {
         includeEnrichment: true,
         includePrerequisites: true,
       });
+      visualizationCache.set(cacheKey, result);
       setData(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load visualization');
     } finally {
       setLoading(false);
     }
-  }, [concept, useHardcoded]);
+  }, [concept, useHardcoded, cacheKey]);
 
   useEffect(() => {
     loadVisualization();
@@ -130,7 +175,11 @@ export function VisualDesignerView({
     );
   }
 
-  const { visualization, d3Config, graphData } = data;
+  const { visualization, d3Config, graphData } = data || {};
+
+  if (!visualization) {
+    return <div className="text-center text-gray-500 p-8">可视化数据加载中...</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -220,6 +269,10 @@ function renderVisualization(
   },
   onNodeClick?: (node: any) => void
 ) {
+  if (visualization.type === 'diagram' && visualization.data && 'components' in visualization.data) {
+    return <CRISPRVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
   switch (visualization.type) {
     case 'knowledge_graph':
       if (graphData) {
@@ -243,31 +296,37 @@ function renderVisualization(
       return <div className="h-96 flex items-center justify-center text-gray-500">暂无图谱数据</div>;
 
     case 'punnett_square':
-      if (visualization.data && 'offspring' in visualization.data) {
+      if (visualization.title === '测交原理可视化') {
+        return <TestCrossVisualization data={visualization.data as any} colors={visualization.colors} />;
+      }
+      if (visualization.data) {
         return <PunnettSquare data={visualization.data as PunnettSquareData} colors={visualization.colors} />;
       }
       return <PunnettSquarePlaceholder />;
 
     case 'inheritance_path':
-      if (visualization.data && 'generations' in visualization.data) {
+      if (visualization.title === 'X连锁遗传（性染色体遗传）可视化') {
+        return <XLinkedInheritance data={visualization.data as any} colors={visualization.colors} />;
+      }
+      if (visualization.data) {
         return <InheritancePath data={visualization.data as InheritancePathData} colors={visualization.colors} />;
       }
       return <InheritancePathPlaceholder />;
 
     case 'probability_distribution':
-      if (visualization.data && 'categories' in visualization.data) {
+      if (visualization.data) {
         return <ProbabilityDistribution data={visualization.data as ProbabilityDistributionData} colors={visualization.colors} />;
       }
       return <ProbabilityDistributionPlaceholder />;
 
     case 'meiosis_animation':
-      if (visualization.data && 'stages' in visualization.data) {
+      if (visualization.data) {
         return <MeiosisAnimation data={visualization.data as MeiosisAnimationData} colors={visualization.colors} />;
       }
       return <MeiosisAnimationPlaceholder />;
 
     case 'chromosome_behavior':
-      if (visualization.data && 'chromosomes' in visualization.data) {
+      if (visualization.data) {
         return <ChromosomeBehavior data={visualization.data as ChromosomeBehaviorData} colors={visualization.colors} />;
       }
       return <ChromosomeBehaviorPlaceholder />;
@@ -404,6 +463,82 @@ function renderChart(visualization: VisualizationSuggestion, _config: Record<str
 }
 
 function renderDiagram(visualization: VisualizationSuggestion, _config: Record<string, unknown>) {
+  if (visualization.title === '转录过程可视化') {
+    return <TranscriptionVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '翻译过程可视化') {
+    return <TranslationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '染色体结构可视化') {
+    return <ChromosomeVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '有丝分裂过程可视化') {
+    return <MitosisVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === 'DNA复制过程可视化') {
+    return <DNAReplicationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '复制叉结构可视化') {
+    return <ReplicationForkVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '前导链合成可视化') {
+    return <LeadingStrandVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '后随链合成可视化') {
+    return <LaggingStrandVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === 'DNA聚合酶结构与功能可视化') {
+    return <DNAPolymeraseVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '启动子结构可视化') {
+    return <PromoterVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === 'mRNA剪接过程可视化') {
+    return <SplicingVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '核糖体结构与功能可视化') {
+    return <RibosomeVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '乳糖操纵子调控机制可视化') {
+    return <LacOperonVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === 'DNA修复机制可视化') {
+    return <DNARepairVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '真核生物基因调控可视化') {
+    return <GeneRegulationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '等位基因概念可视化') {
+    return <AlleleVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '纯合子与杂合子可视化') {
+    return <HomozygousHeterozygousVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '中心法则可视化' || visualization.title === '中心法则：转录与翻译可视化') {
+    return <CentralDogmaVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '基因结构可视化' && visualization.data && 'structure' in visualization.data) {
+    return <GeneStructureVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
   return (
     <div className="h-96 flex items-center justify-center bg-gray-50">
       <div className="text-center">

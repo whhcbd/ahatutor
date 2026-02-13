@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { agentApi, NarrativeComposition } from '../../api/agent';
 
@@ -27,11 +27,7 @@ export function NarrativeComposerView({
     treeText: string;
   } | null>(null);
 
-  useEffect(() => {
-    loadNarrative();
-  }, [concept, userLevel]);
-
-  const loadNarrative = async () => {
+  const loadNarrative = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -42,7 +38,11 @@ export function NarrativeComposerView({
     } finally {
       setLoading(false);
     }
-  };
+  }, [concept, userLevel]);
+
+  useEffect(() => {
+    loadNarrative();
+  }, [loadNarrative]);
 
   if (loading) {
     return (
@@ -71,17 +71,21 @@ export function NarrativeComposerView({
     );
   }
 
-  const { narrative, treeText } = data;
+  const { narrative, treeText } = data || {};
+
+  if (!narrative) {
+    return <div className="text-center text-gray-500 p-8">叙事数据加载中...</div>;
+  }
 
   return (
     <div className="space-y-6">
       {/* 难度递进模式标签 */}
       <div className="flex items-center gap-2">
         <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
-          {getProgressionLabel(narrative.difficultyProgression)}
+          {getProgressionLabel(narrative.difficultyProgression || 'sequential')}
         </span>
         <span className="text-sm text-gray-500">
-          共 {narrative.learningPath.length} 个学习步骤
+          共 {narrative.learningPath?.length || 0} 个学习步骤
         </span>
       </div>
 
@@ -215,16 +219,7 @@ export function InteractiveFlowView({
   const [currentStep, setCurrentStep] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
 
-  useEffect(() => {
-    loadFlow();
-  }, [concept, userLevel]);
-
-  // Reset details view when step changes
-  useEffect(() => {
-    setShowDetails(false);
-  }, [currentStep]);
-
-  const loadFlow = async () => {
+  const loadFlow = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -235,7 +230,16 @@ export function InteractiveFlowView({
     } finally {
       setLoading(false);
     }
-  };
+  }, [concept, userLevel]);
+
+  useEffect(() => {
+    loadFlow();
+  }, [loadFlow]);
+
+  // Reset details view when step changes
+  useEffect(() => {
+    setShowDetails(false);
+  }, [currentStep]);
 
   if (loading) {
     return (
@@ -264,8 +268,13 @@ export function InteractiveFlowView({
     );
   }
 
-  const { flow } = data;
-  const currentFlowItem = flow[currentStep];
+  const { flow } = data || {};
+
+  if (!flow || flow.length === 0) {
+    return <div className="text-center text-gray-500 p-8">流程数据加载中...</div>;
+  }
+
+  const currentFlowItem = flow[currentStep] || flow[0];
 
   return (
     <div className="space-y-6">
@@ -275,7 +284,7 @@ export function InteractiveFlowView({
           <span className="text-sm font-medium text-gray-700">
             步骤 {currentStep + 1} / {flow.length}
           </span>
-          <span className="text-sm text-gray-500">{getStepTypeLabel(currentFlowItem.type)}</span>
+          <span className="text-sm text-gray-500">{getStepTypeLabel(currentFlowItem?.type || 'concept')}</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div

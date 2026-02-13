@@ -8,11 +8,8 @@ import { GraphModule } from './modules/knowledge-graph/graph.module';
 import { MistakeModule } from './modules/mistake/mistake.module';
 import { ReportModule } from './modules/report/report.module';
 import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
-
-// 模块占位 - 这些模块将在后续实现
-// import { AuthModule } from './modules/auth/auth.module';
-// import { QuizModule } from './modules/services/quiz.module';
-// import { CacheModule } from './modules/cache/cache.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { ProgressModule } from './modules/progress/progress.module';
 
 @Module({
   imports: [
@@ -24,8 +21,8 @@ import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.mod
 
     // 限流模块
     ThrottlerModule.forRoot([{
-      ttl: 60000, // 60 秒
-      limit: 100, // 最多 100 次请求
+      ttl: 60000,
+      limit: 100,
     }]),
 
     // AI 服务模块
@@ -37,10 +34,9 @@ import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.mod
     MistakeModule,
     ReportModule,
 
-    // 功能模块（待实现）
-    // AuthModule,
-    // QuizModule,
-    // CacheModule,
+    // 用户和进度模块
+    AuthModule,
+    ProgressModule,
   ],
   controllers: [],
   providers: [],

@@ -39,8 +39,8 @@ export class GraphBuilderService {
       createdAt: new Date().toISOString(),
     });
 
-    let nodesCreated = 1;
-    let edgesCreated = 0;
+    const nodesCreated = 1;
+    const edgesCreated = 0;
 
     // 递归创建节点和关系
     await this.buildTreeRecursive(tree, rootId, 1, domain);

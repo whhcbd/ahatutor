@@ -10,7 +10,9 @@ interface InheritancePathProps {
  * 展示基因在家族代际间的传递路径（用于伴性遗传等）
  */
 export function InheritancePath({ data, colors }: InheritancePathProps) {
-  const { generations, inheritance, explanation } = data;
+  const generations = data?.generations || [];
+  const inheritance = data?.inheritance;
+  const explanation = data?.explanation;
 
   // 默认颜色方案
   const defaultColors = {
@@ -122,13 +124,15 @@ export function InheritancePath({ data, colors }: InheritancePathProps) {
       {/* 标题 */}
       <div className="text-center">
         <h3 className="text-xl font-bold text-gray-800 mb-2">家族遗传路径</h3>
-        <div className="flex justify-center gap-4 text-sm text-gray-600">
-          <span>{inheritance.pattern}</span>
-          <span>•</span>
-          <span>{inheritance.chromosome}</span>
-          <span>•</span>
-          <span>{inheritance.gene}</span>
-        </div>
+        {inheritance && (
+          <div className="flex justify-center gap-4 text-sm text-gray-600">
+            <span>{inheritance.pattern || '未知'}</span>
+            <span>•</span>
+            <span>{inheritance.chromosome || '未知'}</span>
+            <span>•</span>
+            <span>{inheritance.gene || '未知'}</span>
+          </div>
+        )}
       </div>
 
       {/* 遗传路径图 */}
@@ -194,7 +198,7 @@ export function InheritancePath({ data, colors }: InheritancePathProps) {
       {/* 遗传解释 */}
       <div className="bg-blue-50 rounded-lg p-4">
         <h4 className="font-semibold text-sm text-blue-800 mb-2">遗传解释</h4>
-        <p className="text-sm text-blue-700 leading-relaxed">{explanation}</p>
+        <p className="text-sm text-blue-700 leading-relaxed">{explanation || '暂无解释'}</p>
       </div>
 
       {/* 关键观察点 */}
@@ -213,7 +217,7 @@ export function InheritancePath({ data, colors }: InheritancePathProps) {
             <span className="text-yellow-600">→</span>
             <span>携带者女性（橙色标记）可将基因传递给后代</span>
           </li>
-          {inheritance.pattern.includes('X连锁') && (
+          {inheritance?.pattern?.includes('X连锁') && (
             <li className="flex items-start gap-2">
               <span className="text-yellow-600">→</span>
               <span>
