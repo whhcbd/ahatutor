@@ -1,6 +1,6 @@
-import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEnum, IsOptional, IsNumber, IsArray, IsBoolean } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsNumber, IsArray, IsBoolean, IsObject } from 'class-validator';
 import { AgentPipelineService } from './agent-pipeline.service';
 import { ConceptAnalyzerService } from './concept-analyzer.service';
 import { PrerequisiteExplorerService } from './prerequisite-explorer.service';
@@ -15,8 +15,48 @@ import { GeneticsVisualizationService } from './skills/genetics-visualization.se
 import { InteractiveControlService } from './skills/interactive-control.service';
 import { AnswerEvaluatorService } from './skills/answer-evaluator.service';
 import { SixAgentInput } from '@shared/types/agent.types';
-import { Difficulty, QuestionType, QuizQuestion } from '@shared/types/genetics.types';
+import { Difficulty, QuestionType, QuizQuestion, Option, QuizExplanation } from '@shared/types/genetics.types';
 import { ResourceType } from '@shared/types/skill.types';
+
+class QuizQuestionDto {
+  @ApiProperty({ description: '题目ID' })
+  @IsString()
+  id!: string;
+
+  @ApiProperty({ description: '题目类型' })
+  @IsString()
+  type!: string;
+
+  @ApiProperty({ description: '题目难度' })
+  @IsString()
+  difficulty!: string;
+
+  @ApiProperty({ description: '知识点' })
+  @IsString()
+  topic!: string;
+
+  @ApiProperty({ description: '题目内容' })
+  @IsString()
+  content!: string;
+
+  @ApiProperty({ description: '选择题选项', required: false })
+  @IsOptional()
+  @IsArray()
+  options?: Option[];
+
+  @ApiProperty({ description: '正确答案' })
+  @IsString()
+  correctAnswer!: string;
+
+  @ApiProperty({ description: '分级解析' })
+  @IsObject()
+  explanation!: QuizExplanation;
+
+  @ApiProperty({ description: '标签' })
+  @IsArray()
+  @IsString({ each: true })
+  tags!: string[];
+}
 
 class PipelineDto implements SixAgentInput {
   @ApiProperty({ description: '目标概念' })
@@ -102,7 +142,8 @@ class EvaluateAnswerDto {
 
 class EvaluateAnswerV2Dto {
   @ApiProperty({ description: '完整题目对象' })
-  question!: QuizQuestion;
+  @IsObject()
+  question!: QuizQuestionDto;
 
   @ApiProperty({ description: '用户答案' })
   @IsString()
@@ -417,6 +458,8 @@ class StreamingAnswerDto {
 @ApiTags('Agent')
 @Controller('agent')
 export class AgentController {
+  private readonly logger = new Logger(AgentController.name);
+
   constructor(
     private readonly pipelineService: AgentPipelineService,
     private readonly conceptAnalyzer: ConceptAnalyzerService,
@@ -510,8 +553,17 @@ export class AgentController {
   @Post('quiz/evaluate/v2')
   @ApiOperation({ summary: '评估答案（新版，支持分等级解析）' })
   async evaluateAnswerV2(@Body() dto: EvaluateAnswerV2Dto) {
+    this.logger.log(`Received evaluate request - Question ID: ${dto.question.id}, Type: ${dto.question.type}, Difficulty: ${dto.question.difficulty}`);
+    this.logger.log(`Question object: ${JSON.stringify(dto.question)}`);
+    
+    const quizQuestion: QuizQuestion = {
+      ...dto.question,
+      type: dto.question.type as QuestionType,
+      difficulty: dto.question.difficulty as Difficulty,
+    };
+    
     return await this.answerEvaluator.evaluateAnswer({
-      question: dto.question,
+      question: quizQuestion,
       userAnswer: dto.userAnswer,
       explanationLevel: dto.explanationLevel || 1,
     });

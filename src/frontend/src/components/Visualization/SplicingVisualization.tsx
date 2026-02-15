@@ -96,10 +96,10 @@ const SplicingVisualization: React.FC = () => {
                 DNA转录产生前体mRNA (pre-mRNA)
               </text>
 
-              <rect x="50" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6} stroke={primaryColor} strokeWidth="2" rx="5" />
+              <rect x="50" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
               <text x="110" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">外显子 1</text>
 
-              <rect x="180" y="80" width="150" height="40" fill={intronColor} fillOpacity="0.6} stroke={intronColor} strokeWidth="2" rx="5" />
+              <rect x="180" y="80" width="150" height="40" fill={intronColor} fillOpacity="0.6" stroke={intronColor} strokeWidth="2" rx="5" />
               <text x="255" y="105" textAnchor="middle" fontSize="12" fill="white">内含子 1</text>
 
               <rect x="340" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
@@ -108,7 +108,7 @@ const SplicingVisualization: React.FC = () => {
               <rect x="470" y="80" width="150" height="40" fill={intronColor} fillOpacity="0.6" stroke={intronColor} strokeWidth="2" rx="5" />
               <text x="545" y="105" textAnchor="middle" fontSize="12" fill="white">内含子 2</text>
 
-              <rect x="630" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6} stroke={primaryColor} strokeWidth="2" rx="5" />
+              <rect x="630" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
               <text x="690" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">外显子 3</text>
 
               <line x1="50" y1="100" x2="750" y2="100" stroke={textColor} strokeWidth="2" />
@@ -118,11 +118,11 @@ const SplicingVisualization: React.FC = () => {
 
               <path d="M 50 100 L 50 180 L 750 180 L 750 100" stroke={textColor} strokeWidth="1" fill="none" strokeDasharray="5,3" />
 
-              <rect x="50" y="180" width="120" height="40" fill={primaryColor} fillOpacity="0.6} stroke={primaryColor} strokeWidth="2" rx="5" />
-              <rect x="180" y="180" width="150" height="40" fill={intronColor} fillOpacity="0.6} stroke={intronColor} strokeWidth="2" rx="5" />
-              <rect x="340" y="180" width="120" height="40" fill={primaryColor} fillOpacity="0.6} stroke={primaryColor} strokeWidth="2" rx="5" />
-              <rect x="470" y="180" width="150" height="40" fill={intronColor} fillOpacity="0.6} stroke={intronColor} strokeWidth="2" rx="5" />
-              <rect x="630" y="180" width="120" height="40" fill={primaryColor} fillOpacity="0.6} stroke={primaryColor} strokeWidth="2" rx="5" />
+              <rect x="50" y="180" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
+              <rect x="180" y="180" width="150" height="40" fill={intronColor} fillOpacity="0.6" stroke={intronColor} strokeWidth="2" rx="5" />
+              <rect x="340" y="180" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
+              <rect x="470" y="180" width="150" height="40" fill={intronColor} fillOpacity="0.6" stroke={intronColor} strokeWidth="2" rx="5" />
+              <rect x="630" y="180" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
 
               <text x="175" y="90" textAnchor="middle" fontSize="10" fill={dangerColor}>GU</text>
               <text x="465" y="90" textAnchor="middle" fontSize="10" fill={dangerColor}>GU</text>
@@ -137,19 +137,19 @@ const SplicingVisualization: React.FC = () => {
                 剪接体组装与识别
               </text>
 
-              <rect x="50" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6} stroke={primaryColor} strokeWidth="2" rx="5" />
+              <rect x="50" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
               <text x="110" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">外显子 1</text>
 
-              <rect x="180" y="80" width="150" height="40" fill={intronColor} fillOpacity="0.6} stroke={intronColor} strokeWidth="2" rx="5" />
+              <rect x="180" y="80" width="150" height="40" fill={intronColor} fillOpacity="0.6" stroke={intronColor} strokeWidth="2" rx="5" />
               <text x="255" y="105" textAnchor="middle" fontSize="12" fill="white">内含子 1</text>
 
-              <rect x="340" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6} stroke={primaryColor} strokeWidth="2" rx="5" />
+              <rect x="340" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
               <text x="400" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">外显子 2</text>
 
-              <rect x="470" y="80" width="150" height="40" fill={intronColor} fillOpacity="0.6} stroke={intronColor} strokeWidth="2" rx="5" />
+              <rect x="470" y="80" width="150" height="40" fill={intronColor} fillOpacity="0.6" stroke={intronColor} strokeWidth="2" rx="5" />
               <text x="545" y="105" textAnchor="middle" fontSize="12" fill="white">内含子 2</text>
 
-              <rect x="630" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6} stroke={primaryColor} strokeWidth="2" rx="5" />
+              <rect x="630" y="80" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
               <text x="690" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">外显子 3</text>
 
               <circle cx="175" cy="60" r="25" fill={warningColor} fillOpacity="0.8" stroke={warningColor} strokeWidth="2" />
@@ -174,7 +174,7 @@ const SplicingVisualization: React.FC = () => {
               <text x="465" y="150" textAnchor="middle" fontSize="10" fill={dangerColor}>5' 剪接位点 (GU)</text>
               <text x="615" y="150" textAnchor="middle" fontSize="10" fill={dangerColor}>3' 剪接位点 (AG)</text>
 
-              <rect x="150" y="180" width="600" height="80" fill={primaryColor} fillOpacity="0.1} stroke={primaryColor} strokeWidth="2" rx="10" />
+              <rect x="150" y="180" width="600" height="80" fill={primaryColor} fillOpacity="0.1" stroke={primaryColor} strokeWidth="2" rx="10" />
               <text x="450" y="205" textAnchor="middle" fontSize="12" fontWeight="bold" fill={primaryColor}>剪接体组装</text>
               <text x="450" y="225" textAnchor="middle" fontSize="11" fill={textColor}>U1识别5'剪接位点(GU)</text>
               <text x="450" y="245" textAnchor="middle" fontSize="11" fill={textColor}>U2识别分支点(A)</text>
@@ -187,13 +187,13 @@ const SplicingVisualization: React.FC = () => {
                 内含子套索形成与外显子连接
               </text>
 
-              <rect x="50" y="100" width="120" height="40" fill={primaryColor} fillOpacity="0.6} stroke={primaryColor} strokeWidth="2" rx="5" />
+              <rect x="50" y="100" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
               <text x="110" y="125" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">外显子 1</text>
 
               <path d="M 170 120 Q 255 60 340 120" fill="none" stroke={dangerColor} strokeWidth="3" />
-              <path d="M 170 120 Q 200 80 255 80 Q 310 80 340 120" fill={dangerColor} fillOpacity="0.2} stroke={dangerColor} strokeWidth="2" />
+              <path d="M 170 120 Q 200 80 255 80 Q 310 80 340 120" fill={dangerColor} fillOpacity="0.2" stroke={dangerColor} strokeWidth="2" />
 
-              <circle cx="255" cy="80" r="15" fill={warningColor} fillOpacity="0.9} stroke={warningColor} strokeWidth="2" />
+              <circle cx="255" cy="80" r="15" fill={warningColor} fillOpacity="0.9" stroke={warningColor} strokeWidth="2" />
               <text x="255" y="85" textAnchor="middle" fontSize="10" fill="white">A</text>
 
               <text x="255" y="50" textAnchor="middle" fontSize="11" fill={dangerColor}>套索结构</text>
@@ -217,7 +217,7 @@ const SplicingVisualization: React.FC = () => {
 
               <text x="255" y="170" textAnchor="middle" fontSize="11" fill={accentColor}>外显子 1 与外显子 2 连接</text>
 
-              <rect x="150" y="190" width="600" height="100" fill={dangerColor} fillOpacity="0.1} stroke={dangerColor} strokeWidth="2" rx="10" />
+              <rect x="150" y="190" width="600" height="100" fill={dangerColor} fillOpacity="0.1" stroke={dangerColor} strokeWidth="2" rx="10" />
               <text x="450" y="215" textAnchor="middle" fontSize="12" fontWeight="bold" fill={dangerColor}>套索形成机制</text>
               <text x="450" y="240" textAnchor="middle" fontSize="11" fill={textColor}>内含子5'端磷酸基团与分支点腺嘌呤(A)的2'-OH结合</text>
               <text x="450" y="260" textAnchor="middle" fontSize="11" fill={textColor}>形成2'-5'磷酸二酯键，形成套索结构</text>
@@ -248,9 +248,9 @@ const SplicingVisualization: React.FC = () => {
               <rect x="590" y="100" width="120" height="40" fill={primaryColor} fillOpacity="0.6" stroke={primaryColor} strokeWidth="2" rx="5" />
               <text x="650" y="125" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">外显子 5</text>
 
-              <circle cx="320" cy="120" r="10" fill={accentColor} fillOpacity="0.8} stroke={accentColor} strokeWidth="2" />
-              <circle cx="455" cy="120" r="10" fill={accentColor} fillOpacity="0.8} stroke={accentColor} strokeWidth="2" />
-              <circle cx="585" cy="120" r="10" fill={accentColor} fillOpacity="0.8} stroke={accentColor} strokeWidth="2" />
+              <circle cx="320" cy="120" r="10" fill={accentColor} fillOpacity="0.8" stroke={accentColor} strokeWidth="2" />
+              <circle cx="455" cy="120" r="10" fill={accentColor} fillOpacity="0.8" stroke={accentColor} strokeWidth="2" />
+              <circle cx="585" cy="120" r="10" fill={accentColor} fillOpacity="0.8" stroke={accentColor} strokeWidth="2" />
 
               <text x="50" y="170" fontSize="14" fill={textColor}>5' 帽子</text>
               <circle cx="30" cy="120" r="15" fill={warningColor} fillOpacity="0.8" stroke={warningColor} strokeWidth="2" />
@@ -283,4 +283,4 @@ const SplicingVisualization: React.FC = () => {
   );
 };
 
-export default SplicingVisualization;
+export { SplicingVisualization };

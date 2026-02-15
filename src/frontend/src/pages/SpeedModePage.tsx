@@ -1,7 +1,11 @@
-import { useState } from 'react';
-import { Play, RotateCw, CheckCircle, XCircle, Zap, Loader2, ChevronUp, ChevronDown, MessageCircle, BookOpen, Target } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Play, RotateCw, CheckCircle, XCircle, Zap, Loader2, BookOpen, Target, Bot, Eye } from 'lucide-react';
 import { quizApi, QuizQuestion, AnswerEvaluationResult, ExplanationResult } from '@/utils/api-quiz';
+import { agentApi } from '@/api/agent';
 import { GENETICS_TOPICS } from '@/data/genetics-topics';
+import { QuestionPanel } from '@/components/Visualization/QuestionPanel';
+import { EditableVisualization } from '@/components/Visualization/EditableVisualization';
+import type { VisualizationSuggestion } from '@shared/types/agent.types';
 
 enum QuizState {
   CONFIG = 'config',
@@ -43,9 +47,12 @@ export default function SpeedModePage() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Map<string, QuizAnswer>>(new Map());
   const [evaluation, setEvaluation] = useState<AnswerEvaluationResult | null>(null);
-  const [explanationLevel, setExplanationLevel] = useState(1);
-  const [explanation, setExplanation] = useState<ExplanationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [aiExplanation, setAiExplanation] = useState<string | null>(null);
+  const [aiVisualization, setAiVisualization] = useState<VisualizationSuggestion | null>(null);
+  const [personalizedVisualizations, setPersonalizedVisualizations] = useState<Record<string, VisualizationSuggestion>>({});
+  const [isGeneratingAiExplanation, setIsGeneratingAiExplanation] = useState(false);
+  const [showAiPanel, setShowAiPanel] = useState(true);
 
   const currentQuestion = questions[currentQuestionIndex];
   const answeredCount = answers.size;
@@ -70,11 +77,17 @@ export default function SpeedModePage() {
         userLevel: 'intermediate',
       });
 
+      if (!generatedQuestions || generatedQuestions.length === 0) {
+        setError('生成题目失败，未能生成任何题目。请重试。');
+        setQuizState(QuizState.CONFIG);
+        return;
+      }
+
       setQuestions(generatedQuestions as QuizQuestion[]);
       setQuizState(QuizState.ANSWERING);
     } catch (err) {
       console.error('Failed to generate questions:', err);
-      setError('生成题目失败，请检查 API 配置');
+      setError('生成题目失败，请检查 API 配置或重试');
       setQuizState(QuizState.CONFIG);
     } finally {
       setIsLoading(false);
@@ -85,6 +98,11 @@ export default function SpeedModePage() {
     if (!currentQuestion || !selectedAnswer) return;
 
     setQuizState(QuizState.EVALUATING);
+
+    console.log('Submitting answer:', {
+      question: currentQuestion,
+      userAnswer: selectedAnswer,
+    });
 
     try {
       const result = await quizApi.evaluateV2({
@@ -108,11 +126,16 @@ export default function SpeedModePage() {
       setQuizState(QuizState.EXPLAINING);
     } catch (err) {
       console.error('Failed to evaluate answer:', err);
-      const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+      const correctAnswerText = Array.isArray(currentQuestion.correctAnswer) 
+        ? currentQuestion.correctAnswer.join(', ') 
+        : currentQuestion.correctAnswer;
+      const isCorrect = Array.isArray(currentQuestion.correctAnswer)
+        ? currentQuestion.correctAnswer.includes(selectedAnswer)
+        : selectedAnswer === currentQuestion.correctAnswer;
       setEvaluation({
         isCorrect,
         confidence: 1.0,
-        reason: isCorrect ? '答案正确' : `答案错误，正确答案是 ${currentQuestion.correctAnswer}`,
+        reason: isCorrect ? '答案正确' : `答案错误，正确答案是 ${correctAnswerText}`,
         needsSelfAssessment: false,
       });
       setAnswers((prev) => {
@@ -128,31 +151,73 @@ export default function SpeedModePage() {
     }
   };
 
-  const changeExplanationLevel = async (newLevel: number) => {
-    if (!currentQuestion || !selectedAnswer) return;
+  const generateAiExplanation = useCallback(async () => {
+    if (!currentQuestion) return;
+
+    setIsGeneratingAiExplanation(true);
+    setAiExplanation(null);
+    setAiVisualization(null);
 
     try {
-      const result = await quizApi.getExplanation({
-        question: currentQuestion,
-        userAnswer: selectedAnswer,
-        level: newLevel,
-        previousLevel: explanationLevel,
+      const questionText = `${currentQuestion.content}\n\n选项：\n${currentQuestion.options?.map(o => `${o.label}. ${o.content}`).join('\n')}\n\n用户答案：${selectedAnswer}\n\n正确答案：${currentQuestion.correctAnswer}`;
+
+      const response = await agentApi.askVisualizationQuestion({
+        concept: currentQuestion.topic,
+        question: `请详细解释这道题的答案：\n\n${questionText}`,
+        userLevel: difficulty === 'easy' ? 'beginner' : difficulty === 'hard' ? 'advanced' : 'intermediate',
+        conversationHistory: [],
       });
 
-      setExplanation(result);
-      setExplanationLevel(newLevel);
+      console.log('AI response:', response);
+      console.log('Has visualization:', !!response.visualization);
+      console.log('Has personalized:', !!personalizedVisualizations[currentQuestion.id]);
+
+      setAiExplanation(response.textAnswer);
+      if (currentQuestion && personalizedVisualizations[currentQuestion.id]) {
+        setAiVisualization(personalizedVisualizations[currentQuestion.id]);
+      } else {
+        setAiVisualization(response.visualization || null);
+      }
+      setShowAiPanel(true);
     } catch (err) {
-      console.error('Failed to get explanation:', err);
+      console.error('Failed to generate AI explanation:', err);
+      setAiExplanation('生成AI解析失败，请稍后重试。');
+    } finally {
+      setIsGeneratingAiExplanation(false);
     }
-  };
+  }, [currentQuestion, selectedAnswer, difficulty, personalizedVisualizations]);
+
+  useEffect(() => {
+    console.log('useEffect triggered:', { quizState, currentQuestion, aiExplanation, isGeneratingAiExplanation });
+    if (quizState === QuizState.EXPLAINING && currentQuestion && !aiExplanation && !isGeneratingAiExplanation) {
+      console.log('Generating AI explanation...');
+      generateAiExplanation();
+    }
+  }, [quizState, currentQuestionIndex, currentQuestion, selectedAnswer, difficulty, personalizedVisualizations, generateAiExplanation, aiExplanation, isGeneratingAiExplanation]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('personalizedVisualizations');
+    if (saved) {
+      try {
+        setPersonalizedVisualizations(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to load personalized visualizations:', e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('personalizedVisualizations', JSON.stringify(personalizedVisualizations));
+  }, [personalizedVisualizations]);
 
   const nextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
       setSelectedAnswer(null);
       setEvaluation(null);
-      setExplanation(null);
-      setExplanationLevel(1);
+      setAiExplanation(null);
+      setAiVisualization(null);
+      setShowAiPanel(false);
       setQuizState(QuizState.ANSWERING);
     } else {
       setQuizState(QuizState.SUMMARY);
@@ -160,6 +225,8 @@ export default function SpeedModePage() {
   };
 
   const skipQuestion = () => {
+    if (!currentQuestion) return;
+    
     setAnswers((prev) => {
       const newMap = new Map(prev);
       newMap.set(currentQuestion.id, {
@@ -176,8 +243,6 @@ export default function SpeedModePage() {
     setCurrentQuestionIndex(index);
     setSelectedAnswer(null);
     setEvaluation(null);
-    setExplanation(null);
-    setExplanationLevel(1);
     setQuizState(QuizState.ANSWERING);
   };
 
@@ -256,7 +321,7 @@ export default function SpeedModePage() {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="font-bold text-lg mb-4">题目数量</h3>
               <div className="grid grid-cols-4 gap-2">
-                {[5, 10, 20, 50].map((count) => (
+                {[1, 5, 10, 20].map((count) => (
                   <button
                     key={count}
                     onClick={() => setQuestionCount(count)}
@@ -360,31 +425,56 @@ export default function SpeedModePage() {
           <div className="bg-white rounded-xl shadow-sm p-8">
             <div className="flex items-center space-x-2 mb-4">
               <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-medium">
-                {currentQuestion.topic}
+                {currentQuestion?.topic || ''}
               </span>
               <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
-                {currentQuestion.difficulty === 'easy' ? '简单' : currentQuestion.difficulty === 'medium' ? '中等' : '困难'}
+                {currentQuestion?.difficulty === 'easy' ? '简单' : currentQuestion?.difficulty === 'medium' ? '中等' : '困难'}
               </span>
             </div>
 
-            <h2 className="text-xl font-semibold mb-6">{currentQuestion.content}</h2>
+            <h2 className="text-xl font-semibold mb-6">{currentQuestion?.content || ''}</h2>
 
-            {quizState === QuizState.ANSWERING && (
+            {(quizState === QuizState.ANSWERING || quizState === QuizState.EVALUATING || quizState === QuizState.EXPLAINING) && currentQuestion?.options && (
               <div className="space-y-3 mb-6">
-                {currentQuestion.options?.map((option) => (
-                  <button
-                    key={option.id}
-                    onClick={() => setSelectedAnswer(option.id)}
-                    className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                      selectedAnswer === option.id
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <span className="font-medium">{option.label}. </span>
-                    {option.content}
-                  </button>
-                ))}
+                {currentQuestion.options.map((option) => {
+                  const isCorrect = Array.isArray(currentQuestion.correctAnswer)
+                    ? currentQuestion.correctAnswer.includes(option.id)
+                    : option.id === currentQuestion.correctAnswer;
+                  const isSelected = selectedAnswer === option.id;
+                  const showResult = quizState === QuizState.EVALUATING || quizState === QuizState.EXPLAINING;
+                  const isAnswering = quizState === QuizState.ANSWERING;
+
+                  const OptionComponent = isAnswering ? 'button' : 'div';
+
+                  return (
+                    <OptionComponent
+                      key={option.id}
+                      onClick={isAnswering ? () => setSelectedAnswer(option.id) : undefined}
+                      className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                        !showResult && isSelected
+                          ? 'border-blue-500 bg-blue-50'
+                          : showResult && isCorrect
+                          ? 'border-green-500 bg-green-50'
+                          : showResult && isSelected && !isCorrect
+                          ? 'border-red-500 bg-red-50'
+                          : 'border-gray-200'
+                      } ${isAnswering ? 'hover:border-gray-300 cursor-pointer' : ''}`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="font-medium">{option.label}. </span>
+                          {option.content}
+                        </div>
+                        {showResult && isCorrect && (
+                          <CheckCircle className="w-5 h-5 text-green-600" />
+                        )}
+                        {showResult && isSelected && !isCorrect && (
+                          <XCircle className="w-5 h-5 text-red-600" />
+                        )}
+                      </div>
+                    </OptionComponent>
+                  );
+                })}
               </div>
             )}
 
@@ -406,67 +496,69 @@ export default function SpeedModePage() {
                 <div className="text-sm text-gray-600">{evaluation.reason}</div>
                 {!evaluation.isCorrect && (
                   <div className="text-sm text-gray-600 mt-1">
-                    正确答案：{currentQuestion.options?.find((o) => o.id === currentQuestion.correctAnswer)?.content}
+                    正确答案：{currentQuestion?.options?.filter((o) => 
+                      Array.isArray(currentQuestion?.correctAnswer)
+                        ? currentQuestion?.correctAnswer.includes(o.id)
+                        : o.id === currentQuestion?.correctAnswer
+                    ).map(o => o.content).join(', ')}
                   </div>
                 )}
               </div>
             )}
 
             {quizState === QuizState.EXPLAINING && (
-              <div className="border-t border-gray-200 pt-6">
+              <div className="border-t border-gray-200 pt-6 mt-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold">题目解析</h3>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => changeExplanationLevel(Math.max(1, explanationLevel - 1))}
-                      disabled={explanationLevel <= 1}
-                      className="p-1 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="简化解析"
-                    >
-                      <ChevronUp className="w-4 h-4" />
-                    </button>
-                    <span className="text-sm font-medium px-2 py-1 bg-blue-100 text-blue-600 rounded">
-                      等级 {explanationLevel}
-                    </span>
-                    <button
-                      onClick={() => changeExplanationLevel(Math.min(5, explanationLevel + 1))}
-                      disabled={explanationLevel >= 5}
-                      className="p-1 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="详细解析"
-                    >
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
+                  <div className="flex items-center gap-2">
+                    <Bot className="w-5 h-5 text-purple-600" />
+                    <h3 className="font-semibold text-purple-700">AI 智能解析</h3>
                   </div>
+                  <button
+                    onClick={() => setShowAiPanel(!showAiPanel)}
+                    className="text-sm text-blue-600 hover:text-blue-700"
+                  >
+                    {showAiPanel ? '收起' : '展开'}
+                  </button>
                 </div>
 
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  {explanation ? (
-                    <div className="text-gray-700 text-sm leading-relaxed">
-                      <p className="whitespace-pre-line">{explanation.explanation}</p>
-                    </div>
-                  ) : (
-                    <div className="text-gray-700 text-sm leading-relaxed space-y-3">
-                      {[1, 2, 3, 4, 5].map((level) => {
-                        const levelContent = evaluation?.explanation?.[`level${level}` as keyof typeof evaluation.explanation];
-                        if (!levelContent) return null;
-                        return (
-                          <p key={level} className={level === explanationLevel ? '' : 'hidden'}>
-                            {levelContent}
-                          </p>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+                {showAiPanel && (
+                  <div className="space-y-4">
+                    {isGeneratingAiExplanation ? (
+                      <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-lg">
+                        <Loader2 className="w-5 h-5 text-purple-600 animate-spin" />
+                        <span className="text-sm text-purple-700">AI 正在生成详细解析...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg">
+                          <div className="text-base text-gray-700 leading-relaxed whitespace-pre-line">
+                            {aiExplanation}
+                          </div>
+                        </div>
 
-                {explanation?.followUpQuestions && explanation.followUpQuestions.length > 0 && (
-                  <div className="mt-4">
-                    <button
-                      className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-700"
-                    >
-                      <MessageCircle className="w-4 h-4" />
-                      <span>相关问题</span>
-                    </button>
+                        {aiVisualization && currentQuestion && (
+                          <div className="mt-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Eye className="w-4 h-4 text-blue-600" />
+                              <span className="text-xs font-medium text-blue-600">相关可视化</span>
+                            </div>
+                            <EditableVisualization
+                              visualization={aiVisualization}
+                              onSave={(editedViz) => {
+                                if (currentQuestion) {
+                                  setPersonalizedVisualizations(prev => ({
+                                    ...prev,
+                                    [currentQuestion.id]: editedViz
+                                  }));
+                                  setAiVisualization(editedViz);
+                                }
+                              }}
+                              isEditable={true}
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 )}
               </div>

@@ -1,25 +1,48 @@
 import apiClient from './api-client';
 
+export interface Option {
+  id: string;
+  label: string;
+  content: string;
+  isCorrect?: boolean;
+}
+
+export interface QuizExplanation {
+  level1: string;
+  level2: string;
+  level3: string;
+  level4: string;
+  level5: string;
+}
+
+export enum QuestionType {
+  MULTIPLE_CHOICE = 'multiple_choice',
+  FILL_BLANK = 'fill_blank',
+  SHORT_ANSWER = 'short_answer',
+  ESSAY = 'essay',
+  CALCULATION = 'calculation',
+}
+
+export enum Difficulty {
+  EASY = 'easy',
+  MEDIUM = 'medium',
+  HARD = 'hard',
+}
+
 export interface QuizQuestion {
   id: string;
-  type: 'multiple_choice' | 'fill_blank' | 'short_answer';
-  difficulty: 'easy' | 'medium' | 'hard';
+  type: QuestionType;
+  difficulty: Difficulty;
   topic: string;
   content: string;
-  options?: Array<{
-    id: string;
-    label: string;
-    content: string;
-  }>;
-  correctAnswer: string;
-  explanation: {
-    level1: string;
-    level2: string;
-    level3: string;
-    level4: string;
-    level5: string;
-  };
+  options?: Option[];
+  correctAnswer: string | string[];
+  explanation: QuizExplanation;
   tags: string[];
+  metadata?: {
+    source?: string;
+    estimatedTime?: number;
+  };
 }
 
 export interface AnswerEvaluationResult {

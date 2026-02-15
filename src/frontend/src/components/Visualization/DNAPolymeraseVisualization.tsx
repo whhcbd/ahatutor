@@ -1,223 +1,267 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { VisualizationData } from '../types';
 
-interface TabContent {
-  title: string;
-  description: string;
+interface DNAPolymeraseData extends VisualizationData {
+  types?: string[];
+  activities?: string[];
+  direction?: string;
+  description?: string;
 }
 
-const DNAPolymeraseVisualization: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'structure' | 'elongation' | 'proofreading'>('structure');
+export function DNAPolymeraseVisualization({ data, colors = {} }: { data?: DNAPolymeraseData; colors?: Record<string, string> }) {
+  const [activeTab, setActiveTab] = useState<'structure' | 'process' | 'types'>('structure');
 
-  const tabContents: Record<string, TabContent> = {
-    structure: {
-      title: 'DNA聚合酶结构',
-      description: 'DNA聚合酶是DNA复制的关键酶，具有聚合酶活性和3'→5'外切酶活性，负责DNA合成和校对。'
-    },
-    elongation: {
-      title: '延伸过程',
-      description: 'DNA聚合酶沿模板链移动，按碱基配对规则（A-T, G-C）合成新DNA链，合成方向为5'→3'。'
-    },
-    proofreading: {
-      title: '校对机制',
-      description: 'DNA聚合酶具有3'→5'外切酶活性，当检测到错配碱基时，会切除并重新合成，保证复制准确性。'
-    }
-  };
+  const primaryColor = colors.primary || '#3B82F6';
+  const secondaryColor = colors.secondary || '#10B981';
+  const accentColor = colors.accent || '#F59E0B';
+  const dangerColor = colors.danger || '#EF4444';
+  const warningColor = colors.warning || '#F97316';
+  const backgroundColor = colors.background || '#F3F4F6';
+  const textColor = colors.text || '#1F2937';
 
-  const primaryColor = '#3B82F6';
-  const accentColor = '#10B981';
-  const dangerColor = '#EF4444';
-  const warningColor = '#F59E0B';
-  const textColor = '#1F2937';
-  const lightColor = '#E5E7EB';
+  const polymeraseTypes = data?.types || ['DNA聚合酶I', 'DNA聚合酶II', 'DNA聚合酶III'];
+  const enzymeActivities = data?.activities || ["5'->3'聚合酶活性", "3'->5'外切酶活性", "5'->3'外切酶活性"];
+  const direction = data?.direction || "5'->3'方向合成";
+  const description = data?.description || 'DNA聚合酶是DNA复制过程中的关键酶,负责以DNA为模板合成新的DNA链';
 
   return (
-    <div className="w-full p-6 bg-white rounded-lg shadow-md">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2" style={{ color: textColor }}>DNA聚合酶 (DNA Polymerase) 结构与功能</h2>
-        <p className="text-gray-600">{tabContents[activeTab].description}</p>
+    <div className="w-full p-6 bg-white rounded-lg shadow-lg" style={{ backgroundColor }}>
+      <h2 className="text-2xl font-bold mb-4 text-center" style={{ color: textColor }}>DNA聚合酶</h2>
+      
+      <div className="mb-6 text-center">
+        <p className="text-sm" style={{ color: textColor }}>{description}</p>
       </div>
 
-      <div className="flex gap-4 mb-6 flex-wrap">
+      <div className="flex gap-2 mb-6">
         <button
           onClick={() => setActiveTab('structure')}
-          className={`px-6 py-2 rounded-lg font-medium transition-all ${
-            activeTab === 'structure'
-              ? 'bg-blue-500 text-white shadow-lg'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            activeTab === 'structure' ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
           }`}
+          style={activeTab === 'structure' ? { backgroundColor: primaryColor } : {}}
         >
           酶结构
         </button>
         <button
-          onClick={() => setActiveTab('elongation')}
-          className={`px-6 py-2 rounded-lg font-medium transition-all ${
-            activeTab === 'elongation'
-              ? 'bg-purple-500 text-white shadow-lg'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          onClick={() => setActiveTab('process')}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            activeTab === 'process' ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
           }`}
+          style={activeTab === 'process' ? { backgroundColor: primaryColor } : {}}
         >
           延伸过程
         </button>
         <button
-          onClick={() => setActiveTab('proofreading')}
-          className={`px-6 py-2 rounded-lg font-medium transition-all ${
-            activeTab === 'proofreading'
-              ? 'bg-green-500 text-white shadow-lg'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          onClick={() => setActiveTab('types')}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            activeTab === 'types' ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
           }`}
+          style={activeTab === 'types' ? { backgroundColor: primaryColor } : {}}
         >
-          校对机制
+          聚合酶类型
         </button>
       </div>
 
-      <div className="relative">
-        <svg width="100%" height="320" viewBox="0 0 900 320">
-          {activeTab === 'structure' && (
-            <>
-              <text x="450" y="30" textAnchor="middle" fontSize="18" fontWeight="bold" fill={textColor}>
+      <div className="border rounded-lg p-6 bg-gray-50">
+        {activeTab === 'structure' && (
+          <div>
+            <svg viewBox="0 0 800 400" className="w-full h-auto mb-4">
+              <rect x="50" y="50" width="700" height="300" fill="white" stroke="#E5E7EB" strokeWidth="2" rx="8" />
+
+              <text x="400" y="80" textAnchor="middle" fontSize="16" fontWeight="bold" fill={textColor}>
                 DNA聚合酶结构
               </text>
 
-              <circle cx="450" cy="120" r="80" fill={primaryColor} fillOpacity="0.2} stroke={primaryColor} strokeWidth="3" />
-              <text x="450" y="115" textAnchor="middle" fontSize="14" fontWeight="bold" fill={primaryColor}>DNA聚合酶</text>
-              <text x="450" y="135" textAnchor="middle" fontSize="12" fill={primaryColor}>全酶</text>
+              <g transform="translate(200, 110)">
+                <circle cx="250" cy="120" r="80" fill={primaryColor} fillOpacity="0.2" stroke={primaryColor} strokeWidth="3" />
+                
+                <text x="250" y="60" textAnchor="middle" fontSize="12" fontWeight="bold" fill={primaryColor}>DNA聚合酶</text>
+                
+                <circle cx="200" cy="100" r="25" fill={accentColor} fillOpacity="0.8" stroke={accentColor} strokeWidth="2" />
+                <text x="200" y="105" textAnchor="middle" fontSize="8" fill="white">拇指区</text>
+                
+                <circle cx="300" cy="100" r="25" fill={accentColor} fillOpacity="0.8" stroke={accentColor} strokeWidth="2" />
+                <text x="300" y="105" textAnchor="middle" fontSize="8" fill="white">手指区</text>
+                
+                <rect x="210" y="160" width="80" height="50" fill={dangerColor} fillOpacity="0.4" stroke={dangerColor} strokeWidth="2" rx="5" />
+                <text x="250" y="190" textAnchor="middle" fontSize="8" fill="white">手掌区</text>
+                
+                <text x="150" y="225" fontSize="10" fill={textColor}>• 拇指区: 结合DNA</text>
+                <text x="150" y="245" fontSize="10" fill={textColor}>• 手指区: 结合dNTP</text>
+                <text x="150" y="265" fontSize="10" fill={textColor}>• 手掌区: 催化活性中心</text>
+              </g>
+            </svg>
 
-              <circle cx="400" cy="100" r="25" fill={accentColor} fillOpacity="0.8} stroke={accentColor} strokeWidth="2" />
-              <text x="400" y="105" textAnchor="middle" fontSize="10" fill="white">α</text>
+            <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+              <h3 className="font-bold mb-2" style={{ color: primaryColor }}>酶结构</h3>
+              <ul className="text-sm space-y-1" style={{ color: textColor }}>
+                <li>• DNA聚合酶具有类似手掌的结构,包含拇指、手指和手掌三个区域</li>
+                <li>• 拇指区负责结合DNA模板和新合成的DNA链</li>
+                <li>• 手指区负责结合脱氧核糖核苷酸(dNTP)</li>
+                <li>• 手掌区包含催化活性中心,负责磷酸二酯键的形成</li>
+              </ul>
+            </div>
+          </div>
+        )}
 
-              <circle cx="500" cy="100" r="25" fill={accentColor} fillOpacity="0.8} stroke={accentColor} strokeWidth="2" />
-              <text x="500" y="105" textAnchor="middle" fontSize="10" fill="white">ε</text>
+        {activeTab === 'process' && (
+          <div>
+            <svg viewBox="0 0 800 400" className="w-full h-auto mb-4">
+              <rect x="50" y="50" width="700" height="300" fill="white" stroke="#E5E7EB" strokeWidth="2" rx="8" />
 
-              <circle cx="450" cy="60" r="20" fill={warningColor} fillOpacity="0.8" stroke={warningColor} strokeWidth="2" />
-              <text x="450" y="65" textAnchor="middle" fontSize="9" fill="white">θ</text>
-
-              <rect x="410" y="160" width="80" height="50" fill={dangerColor} fillOpacity="0.4} stroke={dangerColor} strokeWidth="2" rx="5" />
-              <text x="450" y="185" textAnchor="middle" fontSize="10" fill={dangerColor}>活性中心</text>
-              <text x="450" y="200" textAnchor="middle" fontSize="9" fill={dangerColor}>Mg2+</text>
-
-              <text x="450" y="260" textAnchor="middle" fontSize="14" fontWeight="bold" fill={textColor}>大肠杆菌DNA聚合酶III</text>
-
-              <rect x="150" y="230" width="600" height="60" fill={primaryColor} fillOpacity="0.1} stroke={primaryColor} strokeWidth="2" rx="10" />
-              <text x="450" y="250" textAnchor="middle" fontSize="11" fontWeight="bold" fill={primaryColor}>亚基组成</text>
-              <text x="250" y="280" textAnchor="middle" fontSize="10" fill={textColor}>α：聚合酶活性</text>
-              <text x="450" y="280" textAnchor="middle" fontSize="10" fill={textColor}>ε：3'→5'外切酶(校对)</text>
-              <text x="650" y="280" textAnchor="middle" fontSize="10" fill={textColor}>θ：稳定性</text>
-
-              <line x1="400" y1="125" x2="450" y2="150" stroke={textColor} strokeWidth="2" />
-              <line x1="500" y1="125" x2="450" y2="150" stroke={textColor} strokeWidth="2" />
-            </>
-          )}
-
-          {activeTab === 'elongation' && (
-            <>
-              <text x="450" y="30" textAnchor="middle" fontSize="18" fontWeight="bold" fill={textColor}>
-                DNA延伸过程
+              <text x="400" y="80" textAnchor="middle" fontSize="16" fontWeight="bold" fill={textColor}>
+                DNA链延伸过程
               </text>
 
-              <path d="M 100 150 L 800 150" stroke={textColor} strokeWidth="4" />
-              <path d="M 100 200 L 800 200" stroke={textColor} strokeWidth="4" />
+              <g transform="translate(80, 110)">
+                <g transform="translate(0, 0)">
+                  <text x="150" y="0" textAnchor="middle" fontSize="12" fontWeight="bold" fill={textColor}>1. 结合</text>
+                  
+                  <rect x="50" y="20" width="200" height="60" fill={primaryColor} fillOpacity="0.1" stroke={primaryColor} strokeWidth="2" rx="10" />
+                  
+                  <line x1="70" y1="50" x2="160" y2="50" stroke={secondaryColor} strokeWidth="4" />
+                  <line x1="70" y1="50" x2="160" y2="50" stroke={textColor} strokeWidth="4" strokeDasharray="5,5" />
+                  
+                  <circle cx="180" cy="50" r="20" fill={accentColor} fillOpacity="0.4" stroke={accentColor} strokeWidth="2" />
+                  <text x="180" y="54" textAnchor="middle" fontSize="7" fill={accentColor}>酶</text>
+                  
+                  <text x="70" y="105" fontSize="8" fill={textColor}>• 酶结合到DNA</text>
+                </g>
 
-              <text x="50" y="155" fontSize="12" fill={textColor}>5'</text>
-              <text x="820" y="155" fontSize="12" fill={textColor}>3'</text>
-              <text x="50" y="205" fontSize="12" fill={textColor}>3'</text>
-              <text x="820" y="205" fontSize="12" fill={textColor}>5'</text>
+                <g transform="translate(230, 0)">
+                  <text x="150" y="0" textAnchor="middle" fontSize="12" fontWeight="bold" fill={textColor}>2. dNTP进入</text>
+                  
+                  <rect x="50" y="20" width="200" height="60" fill={primaryColor} fillOpacity="0.1" stroke={primaryColor} strokeWidth="2" rx="10" />
+                  
+                  <line x1="70" y1="50" x2="160" y2="50" stroke={secondaryColor} strokeWidth="4" />
+                  <line x1="70" y1="50" x2="160" y2="50" stroke={textColor} strokeWidth="4" strokeDasharray="5,5" />
+                  
+                  <circle cx="180" cy="50" r="20" fill={accentColor} fillOpacity="0.4" stroke={accentColor} strokeWidth="2" />
+                  <text x="180" y="54" textAnchor="middle" fontSize="7" fill={accentColor}>酶</text>
+                  
+                  <rect x="160" y="30" width="40" height="20" fill={dangerColor} fillOpacity="0.4" stroke={dangerColor} strokeWidth="2" rx="3" />
+                  <text x="180" y="43" textAnchor="middle" fontSize="6" fill="white">dNTP</text>
+                  
+                  <path d="M 150 40 L 155 40 L 155 45" fill={accentColor} fillOpacity="0.4" stroke={accentColor} strokeWidth="2" />
+                  
+                  <text x="70" y="105" fontSize="8" fill={textColor}>• dNTP进入活性中心</text>
+                </g>
 
-              <circle cx="300" cy="175" r="60" fill={primaryColor} fillOpacity="0.2} stroke={primaryColor} strokeWidth="3" />
-              <text x="300" y="170" textAnchor="middle" fontSize="12" fontWeight="bold" fill={primaryColor}>DNA聚合酶</text>
-              <text x="300" y="190" textAnchor="middle" fontSize="10" fill={primaryColor}>III全酶</text>
+                <g transform="translate(460, 0)">
+                  <text x="150" y="0" textAnchor="middle" fontSize="12" fontWeight="bold" fill={textColor}>3. 延伸</text>
+                  
+                  <rect x="50" y="20" width="200" height="60" fill={primaryColor} fillOpacity="0.1" stroke={primaryColor} strokeWidth="2" rx="10" />
+                  
+                  <line x1="70" y1="50" x2="190" y2="50" stroke={secondaryColor} strokeWidth="4" />
+                  <line x1="70" y1="50" x2="190" y2="50" stroke={textColor} strokeWidth="4" strokeDasharray="5,5" />
+                  
+                  <circle cx="210" cy="50" r="20" fill={accentColor} fillOpacity="0.4" stroke={accentColor} strokeWidth="2" />
+                  <text x="210" y="54" textAnchor="middle" fontSize="7" fill={accentColor}>酶</text>
+                  
+                  <rect x="100" y="240" width="700" height="60" fill={primaryColor} fillOpacity="0.1" stroke={primaryColor} strokeWidth="2" rx="10" />
+                  <text x="450" y="275" textAnchor="middle" fontSize="14" fill={primaryColor}>{direction}</text>
+                </g>
+              </g>
+            </svg>
 
-              <circle cx="300" cy="175" r="10" fill={dangerColor} />
+            <div className="mt-4 p-4 bg-green-50 rounded-lg">
+              <h3 className="font-bold mb-2" style={{ color: secondaryColor }}>延伸过程</h3>
+              <ul className="text-sm space-y-1" style={{ color: textColor }}>
+                <li>• {direction},每个dNTP的添加使DNA链延长一个核苷酸</li>
+                <li>• dNTP必须与模板碱基互补配对才能被酶接受</li>
+                <li>• 磷酸二酯键形成释放焦磷酸(PPi)</li>
+                <li>• 镁离子(Mg2+)作为辅助因子参与催化反应</li>
+              </ul>
+            </div>
+          </div>
+        )}
 
-              <line x1="250" y1="175" x2="220" y2="175" stroke={accentColor} strokeWidth="4" />
-              <line x1="350" y1="175" x2="380" y2="175" stroke={accentColor} strokeWidth="4" />
+        {activeTab === 'types' && (
+          <div>
+            <svg viewBox="0 0 800 400" className="w-full h-auto mb-4">
+              <rect x="50" y="50" width="700" height="300" fill="white" stroke="#E5E7EB" strokeWidth="2" rx="8" />
 
-              <rect x="380" y="165" width="60" height="20" fill={accentColor} fillOpacity="0.4} stroke={accentColor} strokeWidth="2" rx="3" />
-              <text x="410" y="180" textAnchor="middle" fontSize="10" fill="white">新链</text>
-
-              <path d="M 450 160 L 480 175 L 450 190" fill={accentColor} fillOpacity="0.4} stroke={accentColor} strokeWidth="2" />
-              <text x="460" y="180" textAnchor="middle" fontSize="9" fill={accentColor}>NTP</text>
-
-              <rect x="500" y="140" width="100" height="70" fill={warningColor} fillOpacity="0.2" stroke={warningColor} strokeWidth="2" rx="5" />
-              <text x="550" y="165" textAnchor="middle" fontSize="11" fill={warningColor}>碱基配对</text>
-              <text x="550" y="185" textAnchor="middle" fontSize="10" fill={warningColor}>A-T, G-C</text>
-              <text x="550" y="200" textAnchor="middle" fontSize="10" fill={warningColor}>氢键</text>
-
-              <text x="450" y="280" textAnchor="middle" fontSize="14" fontWeight="bold" fill={textColor}>延伸机制</text>
-
-              <rect x="150" y="240" width="600" height="50" fill={primaryColor} fillOpacity="0.1" stroke={primaryColor} strokeWidth="2" rx="10" />
-              <text x="450" y="260" textAnchor="middle" fontSize="11" fill={textColor}>1. NTP进入活性中心，与模板碱基配对</text>
-              <text x="450" y="280" textAnchor="middle" fontSize="11" fill={textColor}>2. 形成磷酸二酯键，聚合酶向前移动</text>
-
-              <path d="M 380 140 L 380 120" stroke={accentColor} strokeWidth="2" strokeDasharray="5,3" />
-              <text x="380" y="110" textAnchor="middle" fontSize="10" fill={accentColor}>5'→3'方向</text>
-            </>
-          )}
-
-          {activeTab === 'proofreading' && (
-            <>
-              <text x="450" y="30" textAnchor="middle" fontSize="18" fontWeight="bold" fill={textColor}>
-                校对机制
+              <text x="400" y="80" textAnchor="middle" fontSize="16" fontWeight="bold" fill={textColor}>
+                DNA聚合酶类型
               </text>
 
-              <path d="M 100 150 L 800 150" stroke={textColor} strokeWidth="4" />
-              <path d="M 100 200 L 800 200" stroke={textColor} strokeWidth="4" />
+              <g transform="translate(80, 110)">
+                <g transform="translate(20, 20)">
+                  <rect x="0" y="0" width="180" height="200" fill={primaryColor} fillOpacity="0.05" stroke={primaryColor} strokeWidth="2" rx="4" />
+                  <text x="90" y="25" textAnchor="middle" fontSize="12" fontWeight="bold" fill={primaryColor}>DNA聚合酶I</text>
+                  
+                  <text x="10" y="55" fontSize="9" fill={textColor}>• 修复酶</text>
+                  <text x="10" y="75" fontSize="9" fill={textColor}>• 5'-&gt;3'聚合</text>
+                  <text x="10" y="95" fontSize="9" fill={textColor}>• 3'-&gt;5'外切</text>
+                  <text x="10" y="115" fontSize="9" fill={textColor}>• 5'-&gt;3'外切</text>
+                  <text x="10" y="135" fontSize="9" fill={textColor}>• 切除RNA引物</text>
+                  <text x="10" y="155" fontSize="9" fill={textColor}>• 填补缺口</text>
+                  
+                  <rect x="10" y="170" width="160" height="20" fill={primaryColor} fillOpacity="0.2" rx="3" />
+                  <text x="90" y="184" textAnchor="middle" fontSize="8" fill={primaryColor}>DNA修复与引物切除</text>
+                </g>
 
-              <circle cx="300" cy="175" r="60" fill={primaryColor} fillOpacity="0.2} stroke={primaryColor} strokeWidth="3" />
-              <text x="300" y="170" textAnchor="middle" fontSize="12" fontWeight="bold" fill={primaryColor}>DNA聚合酶</text>
-              <text x="300" y="190" textAnchor="middle" fontSize="10" fill={primaryColor}>III全酶</text>
+                <g transform="translate(220, 20)">
+                  <rect x="0" y="0" width="180" height="200" fill={secondaryColor} fillOpacity="0.1" stroke={secondaryColor} strokeWidth="2" rx="4" />
+                  <text x="90" y="25" textAnchor="middle" fontSize="12" fontWeight="bold" fill={secondaryColor}>DNA聚合酶II</text>
+                  
+                  <text x="10" y="55" fontSize="9" fill={textColor}>• SOS修复</text>
+                  <text x="10" y="75" fontSize="9" fill={textColor}>• 5'-&gt;3'聚合</text>
+                  <text x="10" y="95" fontSize="9" fill={textColor}>• 3'-&gt;5'外切</text>
+                  <text x="10" y="115" fontSize="9" fill={textColor}>• 缺乏校对能力</text>
+                  <text x="10" y="135" fontSize="9" fill={textColor}>• 错误率较高</text>
+                  <text x="10" y="155" fontSize="9" fill={textColor}>• 应急修复</text>
+                  
+                  <rect x="10" y="170" width="160" height="20" fill={secondaryColor} fillOpacity="0.2" rx="3" />
+                  <text x="90" y="184" textAnchor="middle" fontSize="8" fill={secondaryColor}>SOS应急修复</text>
+                </g>
 
-              <circle cx="380" cy="175" r="12" fill={dangerColor} />
-              <text x="380" y="180" textAnchor="middle" fontSize="10" fill="white">!</text>
+                <g transform="translate(420, 20)">
+                  <rect x="0" y="0" width="180" height="200" fill={accentColor} fillOpacity="0.1" stroke={accentColor} strokeWidth="2" rx="4" />
+                  <text x="90" y="25" textAnchor="middle" fontSize="12" fontWeight="bold" fill={accentColor}>DNA聚合酶III</text>
+                  
+                  <text x="10" y="55" fontSize="9" fill={textColor}>• 主要复制酶</text>
+                  <text x="10" y="75" fontSize="9" fill={textColor}>• 5'-&gt;3'聚合</text>
+                  <text x="10" y="95" fontSize="9" fill={textColor}>• 3'-&gt;5'外切</text>
+                  <text x="10" y="115" fontSize="9" fill={textColor}>• 高速合成</text>
+                  <text x="10" y="135" fontSize="9" fill={textColor}>• 高保真性</text>
+                  <text x="10" y="155" fontSize="9" fill={textColor}>• 复制核心</text>
+                  
+                  <rect x="10" y="170" width="160" height="20" fill={accentColor} fillOpacity="0.2" rx="3" />
+                  <text x="90" y="184" textAnchor="middle" fontSize="8" fill={accentColor}>DNA复制的主要酶</text>
+                </g>
+              </g>
+            </svg>
 
-              <path d="M 395 175 L 450 175" stroke={dangerColor} strokeWidth="3" strokeDasharray="5,3" />
-              <rect x="450" y="160" width="80" height="30" fill={dangerColor} fillOpacity="0.4" stroke={dangerColor} strokeWidth="2" rx="5" />
-              <text x="490" y="180" textAnchor="middle" fontSize="10" fill="white">错配碱基</text>
-
-              <path d="M 490 160 L 490 130" stroke={dangerColor} strokeWidth="2" />
-              <path d="M 490 130 L 520 130" stroke={dangerColor} strokeWidth="2" markerEnd="url(#arrow)" />
-
-              <rect x="520" y="110" width="120" height="40" fill={warningColor} fillOpacity="0.3} stroke={warningColor} strokeWidth="2" rx="5" />
-              <text x="580" y="130" textAnchor="middle" fontSize="10" fill={warningColor}>3'→5'外切酶</text>
-              <text x="580" y="145" textAnchor="middle" fontSize="9" fill={warningColor}>切除错配</text>
-
-              <path d="M 580 110 L 580 90" stroke={accentColor} strokeWidth="2" />
-              <circle cx="580" cy="75" r="20" fill={accentColor} fillOpacity="0.6" stroke={accentColor} strokeWidth="2" />
-              <text x="580" y="80" textAnchor="middle" fontSize="9" fill="white">重新合成</text>
-
-              <text x="450" y="280" textAnchor="middle" fontSize="14" fontWeight="bold" fill={textColor}>校对过程</text>
-
-              <rect x="100" y="240" width="700" height="60" fill={accentColor} fillOpacity="0.1" stroke={accentColor} strokeWidth="2" rx="10" />
-              <text x="450" y="260" textAnchor="middle" fontSize="11" fontWeight="bold" fill={accentColor}>步骤</text>
-              <text x="200" y="280" textAnchor="middle" fontSize="10" fill={textColor}>1. 检测错配碱基</text>
-              <text x="400" y="280" textAnchor="middle" fontSize="10" fill={textColor}>2. 3'→5'外切酶切除</text>
-              <text x="600" y="280" textAnchor="middle" fontSize="10" fill={textColor}>3. 重新合成正确碱基</text>
-
-              <defs>
-                <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                  <polygon points="0 0, 10 3.5, 0 7" fill={dangerColor} />
-                </marker>
-              </defs>
-            </>
-          )}
-        </svg>
+            <div className="mt-4 p-4 bg-yellow-50 rounded-lg">
+              <h3 className="font-bold mb-2" style={{ color: accentColor }}>聚合酶类型</h3>
+              <ul className="text-sm space-y-1" style={{ color: textColor }}>
+                <li>• DNA聚合酶I: 主要参与DNA修复和RNA引物切除</li>
+                <li>• DNA聚合酶II: 参与SOS应急修复,错误率较高</li>
+                <li>• DNA聚合酶III: 是DNA复制的主要酶,具有高速和高保真性</li>
+                <li>• 不同聚合酶具有不同的酶活性和功能特点</li>
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h4 className="font-bold text-blue-800 mb-2">聚合酶活性</h4>
-          <p className="text-sm text-blue-700">按5'→3'方向合成DNA，催化磷酸二酯键形成</p>
-        </div>
-        <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-          <h4 className="font-bold text-green-800 mb-2">外切酶活性</h4>
-          <p className="text-sm text-green-700">3'→5'外切酶切除错配碱基，保证复制准确性</p>
-        </div>
-        <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-          <h4 className="font-bold text-red-800 mb-2">校对机制</h4>
-          <p className="text-sm text-red-700">实时检测错配，切除并重新合成正确碱基</p>
+      <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-3 gap-4 text-sm">
+          <div>
+            <span className="font-medium" style={{ color: primaryColor }}>酶类型:</span>
+            <span className="ml-2" style={{ color: textColor }}>{polymeraseTypes.join(', ')}</span>
+          </div>
+          <div>
+            <span className="font-medium" style={{ color: primaryColor }}>酶活性:</span>
+            <span className="ml-2" style={{ color: textColor }}>{enzymeActivities.join(', ')}</span>
+          </div>
+          <div>
+            <span className="font-medium" style={{ color: primaryColor }}>合成方向:</span>
+            <span className="ml-2" style={{ color: textColor }}>{direction}</span>
+          </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default DNAPolymeraseVisualization;
+}

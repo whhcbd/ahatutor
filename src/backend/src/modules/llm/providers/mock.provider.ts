@@ -81,27 +81,197 @@ export class MockProvider {
     const contentLower = content.toLowerCase();
 
     if (contentLower.includes('生成题目') || contentLower.includes('quiz')) {
+      const questionBank = [
+        {
+          topic: '孟德尔第一定律',
+          difficulty: 'easy',
+          content: '下列哪项是孟德尔第一定律的核心内容？',
+          options: [
+            { id: 'A', label: 'A', content: '显性和隐性性状同时表达' },
+            { id: 'B', label: 'B', content: '配子形成时成对的遗传因子彼此分离' },
+            { id: 'C', label: 'C', content: '不同性状的遗传相互独立' },
+            { id: 'D', label: 'D', content: '基因位于染色体上' },
+          ],
+          correctAnswer: 'B',
+          explanation: {
+            level1: '孟德尔第一定律（分离定律）指出：在生物体形成配子时，成对的遗传因子彼此分离',
+            level2: '这意味着等位基因在减数分裂过程中分离到不同的配子中',
+            level3: '例如基因型为 Aa 的个体，产生的配子只有 A 或 a，比例为 1:1',
+            level4: '这是遗传学最基础的定律，解释了性状如何在代际间传递',
+            level5: '理解分离定律对于掌握遗传学后续的复杂现象至关重要'
+          },
+          tags: ['孟德尔定律', '分离定律']
+        },
+        {
+          topic: '孟德尔第二定律',
+          difficulty: 'medium',
+          content: '孟德尔第二定律（自由组合定律）主要描述的是什么？',
+          options: [
+            { id: 'A', label: 'A', content: '同一对等位基因的分离' },
+            { id: 'B', label: 'B', content: '不同对等位基因在配子形成时的自由组合' },
+            { id: 'C', label: 'C', content: '显性性状对隐性性状的掩盖' },
+            { id: 'D', label: 'D', content: '基因突变的随机性' },
+          ],
+          correctAnswer: 'B',
+          explanation: {
+            level1: '孟德尔第二定律指出：控制不同性状的遗传因子在配子形成时自由组合',
+            level2: '这意味着不同对等位基因的分离是相互独立的',
+            level3: '例如双杂合子 AaBb 可以产生 AB、Ab、aB、ab 四种配子，比例为 1:1:1:1',
+            level4: '这个定律适用于位于不同染色体上的基因',
+            level5: '自由组合定律为生物多样性的遗传基础提供了理论解释'
+          },
+          tags: ['孟德尔定律', '自由组合定律']
+        },
+        {
+          topic: '基因型与表现型',
+          difficulty: 'easy',
+          content: '基因型为 Aa 的个体，其表现型取决于什么？',
+          options: [
+            { id: 'A', label: 'A', content: '只取决于基因型' },
+            { id: 'B', label: 'B', content: '只取决于环境因素' },
+            { id: 'C', label: 'C', content: '取决于基因型和环境的共同作用' },
+            { id: 'D', label: 'D', content: '取决于随机变异' },
+          ],
+          correctAnswer: 'C',
+          explanation: {
+            level1: '表现型是基因型和环境共同作用的结果',
+            level2: '基因型提供了遗传基础，但环境会影响基因的表达',
+            level3: '例如：同样是高茎豌豆，不同生长条件下的高度可能不同',
+            level4: '这解释了为什么同卵双胞胎在某些性状上会有差异',
+            level5: '理解基因型与表现型的关系对于研究遗传学和表观遗传学都很重要'
+          },
+          tags: ['基因型', '表现型']
+        },
+        {
+          topic: '测交',
+          difficulty: 'medium',
+          content: '测交的主要目的是什么？',
+          options: [
+            { id: 'A', label: 'A', content: '获得纯合子后代' },
+            { id: 'B', label: 'B', content: '检验未知个体的基因型' },
+            { id: 'C', label: 'C', content: '增加遗传变异' },
+            { id: 'D', label: 'D', content: '提高产量' },
+          ],
+          correctAnswer: 'B',
+          explanation: {
+            level1: '测交是将待测个体与隐性纯合子杂交，以检验其基因型',
+            level2: '通过观察后代表型比例，可以推断待测个体的基因型',
+            level3: '例如：Aa × aa → 1Aa:1aa，而 AA × aa → 全部 Aa',
+            level4: '这是遗传学实验中常用的方法，用于确定基因的显隐性关系',
+            level5: '测交原理在现代遗传学研究中仍有广泛应用'
+          },
+          tags: ['测交', '遗传实验']
+        },
+        {
+          topic: '伴性遗传',
+          difficulty: 'hard',
+          content: '红绿色盲是一种伴X隐性遗传病，若父亲正常、母亲携带者，他们生出色盲儿子的概率是多少？',
+          options: [
+            { id: 'A', label: 'A', content: '0%' },
+            { id: 'B', label: 'B', content: '25%' },
+            { id: 'C', label: 'C', content: '50%' },
+            { id: 'D', label: 'D', content: '75%' },
+          ],
+          correctAnswer: 'B',
+          explanation: {
+            level1: '父亲正常：X^B Y；母亲携带者：X^B X^b。生出儿子：X^B Y（正常）或 X^b Y（色盲），各占50%',
+            level2: '但题目问的是"色盲儿子"，需要同时满足两个条件：儿子(50%)且色盲(50%)，所以是 25%',
+            level3: '伴性遗传的基因位于性染色体上，遗传方式与性别相关',
+            level4: '理解伴性遗传对于分析家族遗传病模式很重要',
+            level5: '伴X隐性遗传病在男性中发病率远高于女性，因为男性只有一条X染色体'
+          },
+          tags: ['伴性遗传', 'X染色体']
+        }
+      ];
+
+      let selectedQuestion = questionBank[0];
+      if (contentLower.includes('孟德尔第一') || contentLower.includes('分离')) {
+        selectedQuestion = questionBank[0];
+      } else if (contentLower.includes('孟德尔第二') || contentLower.includes('自由组合')) {
+        selectedQuestion = questionBank[1];
+      } else if (contentLower.includes('基因型') || contentLower.includes('表现型')) {
+        selectedQuestion = questionBank[2];
+      } else if (contentLower.includes('测交')) {
+        selectedQuestion = questionBank[3];
+      } else if (contentLower.includes('伴性') || contentLower.includes('色盲')) {
+        selectedQuestion = questionBank[4];
+      } else {
+        const randomIndex = Math.floor(Math.random() * questionBank.length);
+        selectedQuestion = questionBank[randomIndex];
+      }
+
       return JSON.stringify({
         id: uuidv4(),
         type: 'multiple_choice',
-        difficulty: 'medium',
-        topic: '遗传学',
-        content: '下列哪项是孟德尔第一定律的正确表述？',
-        options: [
-          { id: 'A', label: 'A', content: '性状分离是独立进行的' },
-          { id: 'B', label: 'B', content: '显性性状和隐性性状的分离比是 3:1' },
-          { id: 'C', label: 'C', content: '配子形成时成对的遗传因子彼此分离' },
-          { id: 'D', label: 'D', content: '所有选项都正确' },
-        ],
-        correctAnswer: 'D',
-        explanation: {
-          level1: '孟德尔第一定律，即分离定律，指出生物体在形成配子时，成对的遗传因子彼此分离，分别进入不同的配子中',
-          level2: '这意味着一对等位基因在减数分裂时分离到不同的配子中，独立传递给后代',
-          level3: '例如：对于基因型 Aa 的个体，产生配子时 A 和 a 分离，配子类型为 A 或 a',
-          level4: '这是遗传学的基础定律之一，解释了性状如何在代际间传递',
-          level5: '分离定律是理解遗传现象的关键，为后续的基因互作和连锁定律打下基础',
+        difficulty: selectedQuestion.difficulty,
+        topic: selectedQuestion.topic,
+        content: selectedQuestion.content,
+        options: selectedQuestion.options,
+        correctAnswer: selectedQuestion.correctAnswer,
+        explanation: selectedQuestion.explanation,
+        tags: selectedQuestion.tags
+      });
+    }
+
+    if (contentLower.includes('解释这道题的答案') || contentLower.includes('解释') || contentLower.includes('explain')) {
+      return JSON.stringify({
+        textAnswer: '孟德尔第一定律，也称为分离定律，是遗传学的基本定律之一。它指出在生物体的细胞中，控制同一性状的遗传因子成对存在，且不相融合。在形成配子（生殖细胞）时，成对的遗传因子彼此分离，分别进入不同的配子中，随配子遗传给后代。\n\n这个定律的核心要点是：\n1. 遗传因子成对存在\n2. 在配子形成时分离\n3. 独立传递给后代\n\n理解这个定律的关键在于认识到，虽然我们在个体中看到的可能是显性性状，但隐性基因并没有消失，它只是被显性基因掩盖了，在形成配子时会再次显现出来。',
+        visualization: {
+          type: 'punnett_square',
+          title: '孟德尔分离定律杂交棋盘',
+          description: '展示 Aa × Aa 杂交的配子分离和后代基因型分布',
+          elements: ['亲本配子', '杂交棋盘', '后代基因型', '表型比例'],
+          colors: {
+            '显性纯合': '#4CAF50',
+            '杂合子': '#FFC107',
+            '隐性纯合': '#F44336',
+            '配子': '#2196F3'
+          },
+          layout: 'grid',
+          interactions: ['hover', 'click'],
+          annotations: [
+            '配子形成时，A 和 a 分离',
+            '后代比例为 1AA:2Aa:1aa',
+            '表型比例为 3:1（显性:隐性）'
+          ],
+          data: {
+            maleGametes: ['A', 'a'],
+            femaleGametes: ['A', 'a'],
+            parentalCross: {
+              male: { genotype: 'Aa', phenotype: '杂合子（高茎）' },
+              female: { genotype: 'Aa', phenotype: '杂合子（高茎）' }
+            },
+            offspring: [
+              { genotype: 'AA', phenotype: '显性纯合（高茎）', probability: 0.25 },
+              { genotype: 'Aa', phenotype: '杂合子（高茎）', probability: 0.5 },
+              { genotype: 'aa', phenotype: '隐性纯合（矮茎）', probability: 0.25 },
+            ],
+            description: '单因子杂交：Aa × Aa → 1AA:2Aa:1aa，表型比为3:1'
+          }
         },
-        tags: ['孟德尔定律', '遗传学基础'],
+        followUpQuestions: [
+          '孟德尔第二定律是什么？',
+          '为什么有时性状分离比不是 3:1？',
+          '这个定律在实际育种中如何应用？'
+        ],
+        relatedConcepts: ['孟德尔第二定律', '基因型', '表现型']
+      });
+    }
+
+    if (contentLower.includes('生成') && contentLower.includes('punnett') || contentLower.includes('杂交棋盘')) {
+      return JSON.stringify({
+        maleGametes: ['A', 'a'],
+        femaleGametes: ['A', 'a'],
+        parentalCross: {
+          male: { genotype: 'Aa', phenotype: '杂合子（高茎）' },
+          female: { genotype: 'Aa', phenotype: '杂合子（高茎）' }
+        },
+        offspring: [
+          { genotype: 'AA', phenotype: '显性纯合（高茎）', probability: 0.25 },
+          { genotype: 'Aa', phenotype: '杂合子（高茎）', probability: 0.5 },
+          { genotype: 'aa', phenotype: '隐性纯合（矮茎）', probability: 0.25 },
+        ],
+        description: '单因子杂交：Aa × Aa → 1AA:2Aa:1aa，表型比为3:1'
       });
     }
 

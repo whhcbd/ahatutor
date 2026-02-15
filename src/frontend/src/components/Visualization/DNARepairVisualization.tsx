@@ -100,7 +100,7 @@ export function DNARepairVisualization({ data, colors = {} }: { data?: DNARepair
                 <text x="10" y="135" fontSize="9" fill={textColor}>• 填补正常碱基</text>
                 <text x="10" y="155" fontSize="9" fill={textColor}>• DNA聚合酶参与</text>
                 
-                <rect x="10" y="170" width="160" height="20" fill={secondaryColor} fillOpacity="0.2} rx="3" />
+                <rect x="10" y="170" width="160" height="20" fill={secondaryColor} fillOpacity="0.2" rx="3" />
                 <text x="90" y="184" textAnchor="middle" fontSize="8" fill={secondaryColor}>糖基化酶、外切酶</text>
               </g>
 
@@ -115,7 +115,7 @@ export function DNARepairVisualization({ data, colors = {} }: { data?: DNARepair
                 <text x="10" y="135" fontSize="9" fill={textColor}>• 使用姐妹染色单体</text>
                 <text x="10" y="155" fontSize="9" fill={textColor}>• RecA/RAD51蛋白</text>
                 
-                <rect x="10" y="170" width="160" height="20" fill={accentColor} fillOpacity="0.2} rx="3" />
+                <rect x="10" y="170" width="160" height="20" fill={accentColor} fillOpacity="0.2" rx="3" />
                 <text x="90" y="184" textAnchor="middle" fontSize="8" fill={accentColor}>RecA、RAD51、Ku70/80</text>
               </g>
             </g>
@@ -149,13 +149,13 @@ export function DNARepairVisualization({ data, colors = {} }: { data?: DNARepair
                 
                 <g transform="translate(20, 35)">
                   <line x1="0" y1="20" x2="110" y2="20" stroke="#6B7280" strokeWidth="2" />
-                  <rect x="40" y="5" width="30" height="20" fill={dangerColor} fillOpacity="0.4} stroke={dangerColor} strokeWidth="1" />
+                  <rect x="40" y="5" width="30" height="20" fill={dangerColor} fillOpacity="0.4" stroke={dangerColor} strokeWidth="1" />
                   <text x="55" y="18" textAnchor="middle" fontSize="7" fill={dangerColor}>损伤</text>
-                  <ellipse cx="55" cy="0" rx="20" ry="10" fill={accentColor} fillOpacity="0.4} stroke={accentColor} strokeWidth="1" />
+                  <ellipse cx="55" cy="0" rx="20" ry="10" fill={accentColor} fillOpacity="0.4" stroke={accentColor} strokeWidth="1" />
                   <text x="55" y="3" textAnchor="middle" fontSize="6" fill={accentColor}>识别</text>
                 </g>
                 <text x="10" y="85" fontSize="8" fill={textColor}>• XPC-HR23B识别</text>
-                <text x="10" y="100" fontSize="8} fill={textColor}>• TFIIH复合物结合</text>
+                <text x="10" y="100" fontSize="8" fill={textColor}>• TFIIH复合物结合</text>
               </g>
 
               <g transform="translate(190, 20)">
@@ -175,7 +175,7 @@ export function DNARepairVisualization({ data, colors = {} }: { data?: DNARepair
               </g>
 
               <g transform="translate(360, 20)">
-                <rect x="0" y="0" width="150" height="130" fill={primaryColor} fillOpacity="0.05} stroke={primaryColor} strokeWidth="1" rx="4" />
+                <rect x="0" y="0" width="150" height="130" fill={primaryColor} fillOpacity="0.05" stroke={primaryColor} strokeWidth="1" rx="4" />
                 <text x="75" y="20" textAnchor="middle" fontSize="10" fontWeight="bold" fill={primaryColor}>3. 合成连接</text>
                 
                 <g transform="translate(20, 35)">
@@ -186,11 +186,11 @@ export function DNARepairVisualization({ data, colors = {} }: { data?: DNARepair
                   <text x="55" y="3" textAnchor="middle" fontSize="6" fill={primaryColor}>聚合</text>
                 </g>
                 <text x="10" y="85" fontSize="8" fill={textColor}>• DNA聚合酶合成</text>
-                <text x="10" y="100" fontSize="8} fill={textColor}>• DNA连接酶封闭</text>
+                <text x="10" y="100" fontSize="8" fill={textColor}>• DNA连接酶封闭</text>
               </g>
 
               <g transform="translate(530, 20)">
-                <rect x="0" y="0" width="150" height="130" fill={secondaryColor} fillOpacity="0.1} stroke={secondaryColor} strokeWidth="1" rx="4" />
+                <rect x="0" y="0" width="150" height="130" fill={secondaryColor} fillOpacity="0.1" stroke={secondaryColor} strokeWidth="1" rx="4" />
                 <text x="75" y="20" textAnchor="middle" fontSize="10" fontWeight="bold" fill={secondaryColor}>修复完成</text>
                 
                 <g transform="translate(20, 35)">
@@ -198,7 +198,7 @@ export function DNARepairVisualization({ data, colors = {} }: { data?: DNARepair
                   <text x="55" y="0" textAnchor="middle" fontSize="8" fill={secondaryColor}>✓ 恢复完整</text>
                 </g>
                 <text x="10" y="85" fontSize="8" fill={textColor}>• DNA恢复完整</text>
-                <text x="10" y="100" fontSize="8} fill={textColor}>• 基因组稳定</text>
+                <text x="10" y="100" fontSize="8" fill={textColor}>• 基因组稳定</text>
               </g>
             </g>
           </svg>
@@ -231,15 +231,15 @@ export function DNARepairVisualization({ data, colors = {} }: { data?: DNARepair
                 <text x="100" y="20" textAnchor="middle" fontSize="11" fontWeight="bold" fill={dangerColor}>紫外线损伤</text>
                 
                 <text x="10" y="50" fontSize="9" fill={textColor}>• 嘧啶二聚体形成</text>
-                <text x="10" y="70" fontSize="9} fill={textColor}>• 阻碍DNA复制转录</text>
-                <text x="10" y="95" fontSize="9} fill={textColor}>• 修复: NER</text>
-                <text x="10" y="115" fontSize="9} fill={textColor}>• 光复活(直接)</text>
-                <text x="10" y="135" fontSize="9} fill={textColor}>• 核苷酸切除(通用)</text>
-                <text x="10" y="160" fontSize="9} fill={textColor}>• 缺陷: 着色性干皮病</text>
+                <text x="10" y="70" fontSize="9" fill={textColor}>• 阻碍DNA复制转录</text>
+                <text x="10" y="95" fontSize="9" fill={textColor}>• 修复: NER</text>
+                <text x="10" y="115" fontSize="9" fill={textColor}>• 光复活(直接)</text>
+                <text x="10" y="135" fontSize="9" fill={textColor}>• 核苷酸切除(通用)</text>
+                <text x="10" y="160" fontSize="9" fill={textColor}>• 缺陷: 着色性干皮病</text>
               </g>
 
               <g transform="translate(240, 20)">
-                <rect x="0" y="0" width="200" height="200" fill={accentColor} fillOpacity="0.1} stroke={accentColor} strokeWidth="1" rx="4" />
+                <rect x="0" y="0" width="200" height="200" fill={accentColor} fillOpacity="0.1" stroke={accentColor} strokeWidth="1" rx="4" />
                 <text x="100" y="20" textAnchor="middle" fontSize="11" fontWeight="bold" fill={accentColor}>碱基损伤</text>
                 
                 <text x="10" y="50" fontSize="9" fill={textColor}>• 脱氨、烷基化</text>
@@ -251,7 +251,7 @@ export function DNARepairVisualization({ data, colors = {} }: { data?: DNARepair
               </g>
 
               <g transform="translate(460, 20)">
-                <rect x="0" y="0" width="200" height="200" fill={primaryColor} fillOpacity="0.05} stroke={primaryColor} strokeWidth="1" rx="4" />
+                <rect x="0" y="0" width="200" height="200" fill={primaryColor} fillOpacity="0.05" stroke={primaryColor} strokeWidth="1" rx="4" />
                 <text x="100" y="20" textAnchor="middle" fontSize="11" fontWeight="bold" fill={primaryColor}>双链断裂</text>
                 
                 <text x="10" y="50" fontSize="9" fill={textColor}>• 电离辐射</text>

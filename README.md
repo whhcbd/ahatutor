@@ -121,6 +121,11 @@ AI 出题 → 用户回答 → AI 判断 → 分级解析 → 继续下一题
 - **遗传路径** - 多代遗传追踪可视化
 - **减数分裂动画** - 分步演示减数分裂过程 (✅ 已实现)
 - **染色体行为** - 染色体在减数分裂中的动态展示 (✅ 已实现)
+- **DNA复制相关** - DNA复制、复制叉、前导链、后随链可视化 (✅ 已实现)
+- **转录翻译** - 转录、翻译、核糖体可视化 (✅ 已实现)
+- **基因调控** - 启动子、剪接、乳糖操纵子可视化 (✅ 已实现)
+- **DNA修复** - DNA修复机制可视化 (✅ 已实现)
+- **分子生物学** - CRISPR、基因结构、中心法则等可视化 (✅ 已实现)
 
 ### 4. 错题管理
 
@@ -206,12 +211,40 @@ ahatutor/
 │   │   ├── vite.config.ts          # Vite 配置
 │   │   └── src/
 │   │       ├── api/                 # API 客户端
-│   │       ├── components/          # 组件
-│   │       │   ├── Layout/          # 布局
-│   │       │   ├── Visualization/   # 可视化组件
-│   │       │   │   ├── KnowledgeGraph.tsx
-│   │       │   │   ├── VisualDesignerView.tsx
-│   │       │   │   └── NarrativeComposerView.tsx
+│   │       │   ├── components/          # 组件
+│   │       │   │   ├── Layout/          # 布局
+│   │       │   │   ├── Visualization/   # 可视化组件 (25+个组件)
+│   │       │   │   │   ├── KnowledgeGraph.tsx
+│   │       │   │   │   ├── PunnettSquare.tsx
+│   │       │   │   │   ├── InheritancePath.tsx
+│   │       │   │   │   ├── ProbabilityDistribution.tsx
+│   │       │   │   │   ├── MeiosisAnimation.tsx
+│   │       │   │   │   ├── ChromosomeBehavior.tsx
+│   │       │   │   │   ├── CRISPRVisualization.tsx
+│   │       │   │   │   ├── GeneStructureVisualization.tsx
+│   │       │   │   │   ├── CentralDogmaVisualization.tsx
+│   │       │   │   │   ├── AlleleVisualization.tsx
+│   │       │   │   │   ├── HomozygousHeterozygousVisualization.tsx
+│   │       │   │   │   ├── XLinkedInheritance.tsx
+│   │       │   │   │   ├── TestCrossVisualization.tsx
+│   │       │   │   │   ├── TranscriptionVisualization.tsx
+│   │       │   │   │   ├── TranslationVisualization.tsx
+│   │       │   │   │   ├── ChromosomeVisualization.tsx
+│   │       │   │   │   ├── MitosisVisualization.tsx
+│   │       │   │   │   ├── DNAReplicationVisualization.tsx
+│   │       │   │   │   ├── ReplicationForkVisualization.tsx
+│   │       │   │   │   ├── LeadingStrandVisualization.tsx
+│   │       │   │   │   ├── LaggingStrandVisualization.tsx
+│   │       │   │   │   ├── DNAPolymeraseVisualization.tsx
+│   │       │   │   │   ├── PromoterVisualization.tsx
+│   │       │   │   │   ├── SplicingVisualization.tsx
+│   │       │   │   │   ├── RibosomeVisualization.tsx
+│   │       │   │   │   ├── LacOperonVisualization.tsx
+│   │       │   │   │   ├── DNARepairVisualization.tsx
+│   │       │   │   │   ├── GeneRegulationVisualization.tsx
+│   │       │   │   │   ├── UnderstandingInsights.tsx
+│   │       │   │   │   ├── VisualDesignerView.tsx
+│   │       │   │   │   └── NarrativeComposerView.tsx
 │   │       │   └── ui/              # UI 组件
 │   │       │       ├── Button.tsx, Card.tsx, Modal.tsx
 │   │       │       ├── Toast.tsx, toast.store.ts, toast.utils.ts
@@ -466,6 +499,7 @@ pnpm test
 - [x] 流式答案生成服务
 - [x] 可视化生成服务 (自动推荐可视化类型)
 - [x] 遗传学可视化服务 (庞氏方格、遗传路径、减数分裂动画、染色体行为)
+- [x] 25+ 可视化组件 (DNA复制、转录翻译、基因调控、DNA修复、分子生物学等)
 - [x] 交互控制服务 (播放/暂停/步骤控制)
 - [ ] 知识图谱服务 (Neo4j集成、路径查找、D3可视化)
 - [ ] 错题管理 (OCR识别、举一反三、错题本)

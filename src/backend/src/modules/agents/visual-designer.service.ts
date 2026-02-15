@@ -892,17 +892,33 @@ ${contextInfo}${historyContext}
         { temperature: 0.4 }
       );
 
-      // 如果需要可视化且指定了类型，尝试生成相应的可视化数据
+      // 如果需要可视化，优先使用硬编码的可视化数据
       let visualization: VisualizationSuggestion | undefined;
 
-      if (response.needVisualization && response.suggestedVisualizationType && response.suggestedVisualizationType !== 'none') {
-        // 尝试基于问题生成新的可视化数据
-        visualization = await this.generateQuestionBasedVisualization(
-          concept,
-          question,
-          response.suggestedVisualizationType,
-          userLevel
-        );
+      if (response.needVisualization) {
+        // 首先检查是否有硬编码的可视化数据
+        const hardcodedViz = getHardcodedVisualization(concept);
+        
+        if (hardcodedViz) {
+          // 使用硬编码的可视化数据
+          this.logger.log(`Using hardcoded visualization for concept: ${concept}`);
+          visualization = {
+            ...hardcodedViz,
+            insights: undefined
+          } as VisualizationSuggestion;
+        } else if (response.suggestedVisualizationType && response.suggestedVisualizationType !== 'none') {
+          // 如果没有硬编码数据，尝试基于问题生成新的可视化数据
+          try {
+            visualization = await this.generateQuestionBasedVisualization(
+              concept,
+              question,
+              response.suggestedVisualizationType,
+              userLevel
+            );
+          } catch (vizError) {
+            this.logger.warn('Failed to generate question-based visualization, continuing without visualization:', vizError);
+          }
+        }
       }
 
       return {

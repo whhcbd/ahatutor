@@ -29,6 +29,17 @@ import { RibosomeVisualization } from './RibosomeVisualization';
 import { LacOperonVisualization } from './LacOperonVisualization';
 import { DNARepairVisualization } from './DNARepairVisualization';
 import { GeneRegulationVisualization } from './GeneRegulationVisualization';
+import { EpigeneticMemoryVisualization } from './EpigeneticMemoryVisualization';
+import { ChromosomalAberrationVisualization } from './ChromosomalAberrationVisualization';
+import { TrisomyVisualization } from './TrisomyVisualization';
+import { DNAMethylationVisualization } from './DNAMethylationVisualization';
+import { HistoneModificationVisualization } from './HistoneModificationVisualization';
+import { RNAInterferenceVisualization } from './RNAInterferenceVisualization';
+import { ChromatinRemodelingVisualization } from './ChromatinRemodelingVisualization';
+import { GeneEngineeringVisualization } from './GeneEngineeringVisualization';
+import { GeneCloningVisualization } from './GeneCloningVisualization';
+import { VectorSystemVisualization } from './VectorSystemVisualization';
+import { PCRVisualization } from './PCRVisualization';
 import { UnderstandingInsights } from './UnderstandingInsights';
 
 interface VisualDesignerViewProps {
@@ -255,7 +266,7 @@ export function VisualDesignerView({
 
 // ==================== Helper Functions ====================
 
-function renderVisualization(
+export function renderVisualization(
   visualization: VisualizationSuggestion,
   d3Config: Record<string, unknown>,
   graphData?: {
@@ -499,22 +510,6 @@ function renderDiagram(visualization: VisualizationSuggestion, _config: Record<s
     return <DNAPolymeraseVisualization data={visualization.data as any} colors={visualization.colors} />;
   }
   
-  if (visualization.title === '启动子结构可视化') {
-    return <PromoterVisualization data={visualization.data as any} colors={visualization.colors} />;
-  }
-  
-  if (visualization.title === 'mRNA剪接过程可视化') {
-    return <SplicingVisualization data={visualization.data as any} colors={visualization.colors} />;
-  }
-  
-  if (visualization.title === '核糖体结构与功能可视化') {
-    return <RibosomeVisualization data={visualization.data as any} colors={visualization.colors} />;
-  }
-  
-  if (visualization.title === '乳糖操纵子调控机制可视化') {
-    return <LacOperonVisualization data={visualization.data as any} colors={visualization.colors} />;
-  }
-  
   if (visualization.title === 'DNA修复机制可视化') {
     return <DNARepairVisualization data={visualization.data as any} colors={visualization.colors} />;
   }
@@ -539,14 +534,58 @@ function renderDiagram(visualization: VisualizationSuggestion, _config: Record<s
     return <GeneStructureVisualization data={visualization.data as any} colors={visualization.colors} />;
   }
   
+  if (visualization.title === '表观遗传记忆可视化') {
+    return <EpigeneticMemoryVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '染色体畸变类型可视化') {
+    return <ChromosomalAberrationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '三体综合征可视化') {
+    return <TrisomyVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === 'DNA甲基化可视化') {
+    return <DNAMethylationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '组蛋白修饰可视化') {
+    return <HistoneModificationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === 'RNA干扰可视化') {
+    return <RNAInterferenceVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '染色质重塑可视化') {
+    return <ChromatinRemodelingVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '基因工程可视化') {
+    return <GeneEngineeringVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '基因克隆技术可视化') {
+    return <GeneCloningVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === '基因载体系统可视化') {
+    return <VectorSystemVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
+  if (visualization.title === 'PCR技术可视化') {
+    return <PCRVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+  
   return (
     <div className="h-96 flex items-center justify-center bg-gray-50">
       <div className="text-center">
         <svg width="200" height="200" viewBox="0 0 200 200" className="mx-auto">
           <rect x="50" y="50" width="100" height="100" fill="none" stroke="#3b82f6" strokeWidth="2" />
           <circle cx="100" cy="100" r="30" fill="#3b82f6" fillOpacity="0.2" />
-          <text x="100" y="180" textAnchor="middle" className="text-xs">
-            {visualization.elements[0] || 'Diagram'}
+          <text x="100" y="180" textAnchor="middle" fontSize="12" fill="#666">
+            {visualization.elements?.[0] || 'Diagram'}
           </text>
         </svg>
         <p className="text-gray-500 mt-4">结构图示</p>

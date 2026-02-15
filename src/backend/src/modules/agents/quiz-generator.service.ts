@@ -161,20 +161,40 @@ export class QuizGeneratorService {
       // 循环选择知识点
       const topic = params.topics[i % params.topics.length];
 
-      try {
-        const question = await this.generateQuestion({
-          topic,
-          difficulty: params.difficulty,
-          userLevel: params.userLevel,
-          mistakes: params.mistakes,
-        });
+      let maxRetries = 3;
+      let retryCount = 0;
+      let question: QuizQuestion | null = null;
 
-        questions.push(question);
-      } catch (error) {
-        this.logger.error(`Failed to generate question ${i + 1}:`, error);
+      while (retryCount < maxRetries && !question) {
+        try {
+          question = await this.generateQuestion({
+            topic,
+            difficulty: params.difficulty,
+            userLevel: params.userLevel,
+            mistakes: params.mistakes,
+          });
+
+          questions.push(question);
+        } catch (error) {
+          retryCount++;
+          this.logger.error(`Failed to generate question ${i + 1} (attempt ${retryCount}/${maxRetries}):`, error);
+          
+          if (retryCount < maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+          }
+        }
+      }
+
+      if (!question) {
+        this.logger.warn(`Failed to generate question ${i + 1} after ${maxRetries} attempts`);
       }
     }
 
+    if (questions.length === 0) {
+      throw new Error('Failed to generate any questions. Please try again.');
+    }
+
+    this.logger.log(`Successfully generated ${questions.length}/${params.count} questions`);
     return questions;
   }
 

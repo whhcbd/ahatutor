@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, Loader2, Sparkles } from 'lucide-react';
+import { MessageCircle, Send, Loader2, Sparkles, Eye } from 'lucide-react';
 import { agentApi } from '../../api/agent';
 import type { VisualizationSuggestion } from '@shared/types/agent.types';
+import { renderVisualization } from './VisualDesignerView';
 
 interface QuestionPanelProps {
   concept: string;
@@ -172,6 +173,19 @@ export function QuestionPanel({
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+
+                    {/* 显示可视化 */}
+                    {message.role === 'assistant' && message.visualization && (
+                      <div className="mt-4 pt-4 border-t border-gray-300">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Eye className="w-4 h-4 text-blue-600" />
+                          <span className="text-xs font-medium text-blue-600">相关可视化</span>
+                        </div>
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                          {renderVisualization(message.visualization, {}, undefined, undefined)}
+                        </div>
+                      </div>
+                    )}
 
                     {/* 后续问题建议 */}
                     {message.followUpQuestions && message.followUpQuestions.length > 0 && (
