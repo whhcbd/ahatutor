@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface GeneCloningVisualizationProps {
   data: any;
@@ -9,14 +10,14 @@ export function GeneCloningVisualization({ data, colors }: GeneCloningVisualizat
   const [activeTab, setActiveTab] = useState<'workflow' | 'geneAcquisition' | 'vector' | 'transformation' | 'screening' | 'expression' | 'purification'>('workflow');
 
   const defaultColors = {
-    gene: colors?.gene || '#4CAF50',
-    vector: colors?.vector || '#2196F3',
-    transformation: colors?.transformation || '#FF9800',
-    screening: colors?.screening || '#9C27B0',
-    expression: colors?.expression || '#F44336',
-    purification: colors?.purification || '#7B1FA2',
-    dna: '#2196F3',
-    protein: '#FF9800',
+    gene: colors?.gene || VisualizationColors.dominant,
+    vector: colors?.vector || VisualizationColors.gene,
+    transformation: colors?.transformation || VisualizationColors.hover,
+    screening: colors?.screening || VisualizationColors.nodePrinciple,
+    expression: colors?.expression || VisualizationColors.affected,
+    purification: colors?.purification || VisualizationColors.nodePrinciple,
+    dna: VisualizationColors.gene,
+    protein: VisualizationColors.hover,
   };
 
   const tabs = [

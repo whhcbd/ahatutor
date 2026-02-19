@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface HomozygousHeterozygousVisualizationProps {
   data?: Record<string, unknown>;
@@ -18,13 +19,13 @@ export function HomozygousHeterozygousVisualization({ colors }: HomozygousHetero
   const [hoveredElement, setHoveredElement] = useState<string | null>(null);
 
   const defaultColors = {
-    homozygousDominant: '#4CAF50',
-    homozygousRecessive: '#F44336',
-    heterozygous: '#FF9800',
-    chromosome1: '#9C27B0',
-    chromosome2: '#BA68C8',
-    alleleA: '#4CAF50',
-    allelea: '#F44336',
+    homozygousDominant: VisualizationColors.dominant,
+    homozygousRecessive: VisualizationColors.affected,
+    heterozygous: VisualizationColors.carrier,
+    chromosome1: VisualizationColors.chromosome1,
+    chromosome2: VisualizationColors.chromosome2,
+    alleleA: VisualizationColors.dominant,
+    allelea: VisualizationColors.affected,
   };
 
   const c = colors || defaultColors;

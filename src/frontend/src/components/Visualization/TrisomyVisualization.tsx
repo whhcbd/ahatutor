@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface TrisomyVisualizationProps {
   data: any;
@@ -9,10 +10,10 @@ export function TrisomyVisualization({ data, colors }: TrisomyVisualizationProps
   const [activeTab, setActiveTab] = useState<'down' | 'patau' | 'edwards' | 'klinefelter'>('down');
 
   const defaultColors = {
-    normal: colors?.normal || '#10B981',
-    extra: colors?.extra || '#EF4444',
-    highlight: colors?.highlight || '#F59E0B',
-    marker: colors?.marker || '#8B5CF6',
+    normal: colors?.normal || VisualizationColors.normal,
+    extra: colors?.extra || VisualizationColors.affected,
+    highlight: colors?.highlight || VisualizationColors.hover,
+    marker: colors?.marker || VisualizationColors.nodePrinciple,
   };
 
   const trisomyTypes = [

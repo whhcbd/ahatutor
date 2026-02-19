@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface PCRVisualizationProps {
   data: any;
@@ -9,11 +10,11 @@ export function PCRVisualization({ data, colors }: PCRVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'denaturation' | 'annealing' | 'extension' | 'cycles'>('denaturation');
 
   const defaultColors = {
-    dna: colors?.dna || '#10B981',
-    primer: colors?.primer || '#3B82F6',
-    polymerase: colors?.polymerase || '#F59E0B',
-    newDna: colors?.newDna || '#EF4444',
-    nucleotide: colors?.nucleotide || '#8B5CF6',
+    dna: colors?.dna || VisualizationColors.normal,
+    primer: colors?.primer || VisualizationColors.gene,
+    polymerase: colors?.polymerase || VisualizationColors.hover,
+    newDna: colors?.newDna || VisualizationColors.affected,
+    nucleotide: colors?.nucleotide || VisualizationColors.nodePrinciple,
   };
 
   return (

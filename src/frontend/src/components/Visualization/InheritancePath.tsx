@@ -1,4 +1,5 @@
 import { InheritancePathData } from '@shared/types/agent.types';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface InheritancePathProps {
   data: InheritancePathData;
@@ -16,11 +17,11 @@ export function InheritancePath({ data, colors }: InheritancePathProps) {
 
   // 默认颜色方案
   const defaultColors = {
-    affected: colors?.affected || '#F44336',
-    carrier: colors?.carrier || '#FFB74D',
-    normal: colors?.normal || '#4CAF50',
-    male: colors?.male || '#64B5F6',
-    female: colors?.female || '#F06292',
+    affected: colors?.affected || VisualizationColors.affected,
+    carrier: colors?.carrier || VisualizationColors.carrier,
+    normal: colors?.normal || VisualizationColors.normal,
+    male: colors?.male || VisualizationColors.male,
+    female: colors?.female || VisualizationColors.female,
   };
 
   // 获取个体样式

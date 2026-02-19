@@ -14,14 +14,16 @@ import { VisualizationGeneratorService } from './skills/visualization-generator.
 import { GeneticsVisualizationService } from './skills/genetics-visualization.service';
 import { InteractiveControlService } from './skills/interactive-control.service';
 import { AnswerEvaluatorService } from './skills/answer-evaluator.service';
+import { VisualizationRAGService } from './visualization-rag.service';
 import { RAGModule } from '../rag/rag.module';
+import { GraphModule } from '../knowledge-graph/graph.module';
 
 @Module({})
 export class AgentModule {
   static register(): DynamicModule {
     return {
       module: AgentModule,
-      imports: [LLMModule.register(), RAGModule],
+      imports: [LLMModule.register(), RAGModule, GraphModule],
       controllers: [AgentController],
       providers: [
         AgentPipelineService,
@@ -37,6 +39,7 @@ export class AgentModule {
         GeneticsVisualizationService,
         InteractiveControlService,
         AnswerEvaluatorService,
+        VisualizationRAGService,
       ],
       exports: [
         AgentPipelineService,

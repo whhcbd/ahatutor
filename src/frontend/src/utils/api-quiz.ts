@@ -94,7 +94,7 @@ export const quizApi = {
     userLevel?: 'beginner' | 'intermediate' | 'advanced';
   }): Promise<QuizQuestion[]> {
     const { data } = await apiClient.post<QuizQuestion[]>('/agent/quiz/generate', {
-      topic: params.topics[0],
+      topics: params.topics,
       difficulty: params.difficulty === 'mixed' ? 'medium' : params.difficulty,
       count: params.count,
       userLevel: params.userLevel,

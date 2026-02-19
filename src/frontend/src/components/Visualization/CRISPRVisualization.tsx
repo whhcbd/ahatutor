@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface CRISPRData {
   components?: Array<{ name: string; description: string; function: string }>;
@@ -15,17 +16,17 @@ interface CRISPRVisualizationProps {
 export function CRISPRVisualization({ data, colors }: CRISPRVisualizationProps) {
   const [animationStep, setAnimationStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const defaultColors = {
-    cas9: '#9C27B0',
-    grna: '#2196F3',
-    dna: '#4CAF50',
-    target: '#F44336',
-    cut: '#FF9800',
-    nhej: '#9C27B0',
-    hdr: '#00BCD4',
-    template: '#7B1FA2',
+    cas9: VisualizationColors.gene,
+    grna: VisualizationColors.exon,
+    dna: VisualizationColors.normal,
+    target: VisualizationColors.affected,
+    cut: VisualizationColors.hover,
+    nhej: VisualizationColors.nodePrinciple,
+    hdr: VisualizationColors.masteryHigh,
+    template: VisualizationColors.enhancer,
   };
 
   const displayColors = { ...defaultColors, ...colors };

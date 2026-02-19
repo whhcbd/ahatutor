@@ -158,6 +158,8 @@ export interface DocumentIndexingInput {
   filePath?: string;
   documentId?: string;
   metadata?: DocumentMetadata;
+  saveChunksToFile?: boolean;
+  chunkStrategy?: 'headers' | 'paragraphs' | 'sentences';
 }
 
 // 文档索引输出

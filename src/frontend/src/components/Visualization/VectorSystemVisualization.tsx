@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface VectorSystemVisualizationProps {
   data: any;
@@ -9,16 +10,16 @@ export function VectorSystemVisualization({ data, colors }: VectorSystemVisualiz
   const [activeTab, setActiveTab] = useState<'plasmid' | 'phage' | 'viral' | 'artificial' | 'components' | 'selection'>('plasmid');
 
   const defaultColors = {
-    plasmid: colors?.plasmid || '#4CAF50',
-    phage: colors?.phage || '#FF9800',
-    viral: colors?.viral || '#F44336',
-    artificialChromosome: colors?.artificialChromosome || '#9C27B0',
-    ori: colors?.ori || '#2196F3',
-    resistance: colors?.resistance || '#7B1FA2',
-    mcs: colors?.mcs || '#00BCD4',
-    promoter: colors?.promoter || '#FF5722',
-    dna: '#2196F3',
-    protein: '#FF9800',
+    plasmid: colors?.plasmid || VisualizationColors.dominant,
+    phage: colors?.phage || VisualizationColors.recessive,
+    viral: colors?.viral || VisualizationColors.affected,
+    artificialChromosome: colors?.artificialChromosome || VisualizationColors.nodePrinciple,
+    ori: colors?.ori || VisualizationColors.locus,
+    resistance: colors?.resistance || VisualizationColors.nodePrinciple,
+    mcs: colors?.mcs || VisualizationColors.masteryHigh,
+    promoter: colors?.promoter || VisualizationColors.enhancer,
+    dna: VisualizationColors.gene,
+    protein: VisualizationColors.hover,
   };
 
   const tabs = [

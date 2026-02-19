@@ -14,6 +14,7 @@ import { VisualizationGeneratorService } from './skills/visualization-generator.
 import { GeneticsVisualizationService } from './skills/genetics-visualization.service';
 import { InteractiveControlService } from './skills/interactive-control.service';
 import { AnswerEvaluatorService } from './skills/answer-evaluator.service';
+import { VisualizationRAGService } from './visualization-rag.service';
 import { SixAgentInput } from '@shared/types/agent.types';
 import { Difficulty, QuestionType, QuizQuestion, Option, QuizExplanation } from '@shared/types/genetics.types';
 import { ResourceType } from '@shared/types/skill.types';
@@ -107,9 +108,10 @@ class EnrichDto {
 }
 
 class GenerateQuizDto {
-  @ApiProperty({ description: '知识点' })
-  @IsString()
-  topic!: string;
+  @ApiProperty({ description: '知识点列表' })
+  @IsArray()
+  @IsString({ each: true })
+  topics!: string[];
 
   @ApiProperty({ description: '难度', enum: ['easy', 'medium', 'hard'] })
   @IsEnum(Difficulty)
@@ -474,6 +476,7 @@ export class AgentController {
     private readonly geneticsVisualization: GeneticsVisualizationService,
     private readonly interactiveControl: InteractiveControlService,
     private readonly answerEvaluator: AnswerEvaluatorService,
+    private readonly visualizationRAG: VisualizationRAGService,
   ) {}
 
   @Post('pipeline')
@@ -513,14 +516,14 @@ export class AgentController {
   async generateQuiz(@Body() dto: GenerateQuizDto) {
     if (dto.count && dto.count > 1) {
       return await this.quizGenerator.generateQuestions({
-        topics: [dto.topic],
+        topics: dto.topics,
         difficulty: dto.difficulty,
         count: dto.count,
         userLevel: dto.userLevel,
       });
     }
     return await this.quizGenerator.generateQuestion({
-      topic: dto.topic,
+      topic: dto.topics[0],
       difficulty: dto.difficulty,
       userLevel: dto.userLevel,
     });
@@ -887,5 +890,30 @@ export class AgentController {
       mode: dto.mode,
       style: dto.style,
     });
+  }
+
+  // ==================== Visualization RAG Routes ====================
+
+  @Get('visualization-rag/status')
+  @ApiOperation({ summary: '获取可视化RAG索引状态' })
+  async getVisualizationRAGStatus() {
+    return await this.visualizationRAG.getIndexStatus();
+  }
+
+  @Post('visualization-rag/search')
+  @ApiOperation({ summary: '根据问题检索相关可视化' })
+  async searchVisualization(@Body() body: { question: string; threshold?: number; topK?: number }) {
+    return await this.visualizationRAG.retrieveByQuestion(
+      body.question,
+      body.threshold || 0.7,
+      body.topK || 3
+    );
+  }
+
+  @Post('visualization-rag/reindex')
+  @ApiOperation({ summary: '重新初始化可视化RAG索引' })
+  async reindexVisualizationRAG() {
+    await this.visualizationRAG.reinitializeIndex();
+    return { message: 'Visualization RAG index reinitialized' };
   }
 }

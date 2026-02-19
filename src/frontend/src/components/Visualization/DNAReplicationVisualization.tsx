@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface DNAReplicationVisualizationProps {
   data: any;
@@ -10,11 +11,11 @@ export function DNAReplicationVisualization({ data, colors }: DNAReplicationVisu
   const [currentStep, setCurrentStep] = useState(0);
 
   const defaultColors = {
-    parentalStrand1: colors?.parentalStrand1 || '#3B82F6',
-    parentalStrand2: colors?.parentalStrand2 || '#EF4444',
-    newStrand1: colors?.newStrand1 || '#10B981',
-    newStrand2: colors?.newStrand2 || '#F59E0B',
-    origin: colors?.origin || '#8B5CF6',
+    parentalStrand1: colors?.parentalStrand1 || VisualizationColors.gene,
+    parentalStrand2: colors?.parentalStrand2 || VisualizationColors.affected,
+    newStrand1: colors?.newStrand1 || VisualizationColors.normal,
+    newStrand2: colors?.newStrand2 || VisualizationColors.hover,
+    origin: colors?.origin || VisualizationColors.nodePrinciple,
   };
 
   const steps = data?.steps || [

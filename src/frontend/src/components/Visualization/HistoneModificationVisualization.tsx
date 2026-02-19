@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface HistoneModificationVisualizationProps {
   data: any;
@@ -9,11 +10,11 @@ export function HistoneModificationVisualization({ data, colors }: HistoneModifi
   const [activeTab, setActiveTab] = useState<'acetylation' | 'methylation' | 'phosphorylation' | 'code'>('acetylation');
 
   const defaultColors = {
-    histone: colors?.histone || '#3B82F6',
-    dna: colors?.dna || '#10B981',
-    acetyl: colors?.acetyl || '#F59E0B',
-    methyl: colors?.methyl || '#EF4444',
-    phosphate: colors?.phosphate || '#8B5CF6',
+    histone: colors?.histone || VisualizationColors.gene,
+    dna: colors?.dna || VisualizationColors.normal,
+    acetyl: colors?.acetyl || VisualizationColors.hover,
+    methyl: colors?.methyl || VisualizationColors.affected,
+    phosphate: colors?.phosphate || VisualizationColors.nodePrinciple,
   };
 
   const modificationTypes = [

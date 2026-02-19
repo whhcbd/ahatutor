@@ -7,6 +7,7 @@ import { EmbeddingService } from './services/embedding.service';
 import { VectorStoreService } from './services/vector-store.service';
 import { RetrievalService } from './services/retrieval.service';
 import { DocumentIndexingService } from './services/document-indexing.service';
+import { DocumentSplitterService } from './services/document-splitter.service';
 import { VectorRetrievalService } from './services/vector-retrieval.service';
 import { ContextRetrievalService } from './services/context-retrieval.service';
 import { StreamingAnswerService } from './services/streaming-answer.service';
@@ -24,6 +25,7 @@ import { ConfigModule } from '@nestjs/config';
     VectorStoreService,
     RetrievalService,
     DocumentIndexingService,
+    DocumentSplitterService,
     VectorRetrievalService,
     ContextRetrievalService,
     StreamingAnswerService,
@@ -36,6 +38,7 @@ import { ConfigModule } from '@nestjs/config';
     VectorStoreService,
     RetrievalService,
     DocumentIndexingService,
+    DocumentSplitterService,
     VectorRetrievalService,
     ContextRetrievalService,
     StreamingAnswerService,

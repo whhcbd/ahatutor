@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface ReplicationForkVisualizationProps {
   data: any;
@@ -9,11 +10,11 @@ export function ReplicationForkVisualization({ data, colors }: ReplicationForkVi
   const [activeTab, setActiveTab] = useState<'structure' | 'components' | 'direction'>('structure');
 
   const defaultColors = {
-    templateStrand: colors?.templateStrand || '#3B82F6',
-    newStrand: colors?.newStrand || '#10B981',
-    helicase: colors?.helicase || '#EF4444',
-    polymerase: colors?.polymerase || '#F59E0B',
-    ssb: colors?.ssb || '#8B5CF6',
+    templateStrand: colors?.templateStrand || VisualizationColors.gene,
+    newStrand: colors?.newStrand || VisualizationColors.normal,
+    helicase: colors?.helicase || VisualizationColors.affected,
+    polymerase: colors?.polymerase || VisualizationColors.hover,
+    ssb: colors?.ssb || VisualizationColors.nodePrinciple,
   };
 
   const components = data?.components || [

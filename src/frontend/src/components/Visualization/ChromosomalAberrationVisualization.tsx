@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface ChromosomalAberrationVisualizationProps {
   data: any;
@@ -9,10 +10,10 @@ export function ChromosomalAberrationVisualization({ data, colors }: Chromosomal
   const [activeTab, setActiveTab] = useState<'deletion' | 'duplication' | 'inversion' | 'translocation'>('deletion');
 
   const defaultColors = {
-    normal: colors?.normal || '#10B981',
-    aberration: colors?.aberration || '#EF4444',
-    highlight: colors?.highlight || '#F59E0B',
-    marker: colors?.marker || '#8B5CF6',
+    normal: colors?.normal || VisualizationColors.dominant,
+    aberration: colors?.aberration || VisualizationColors.affected,
+    highlight: colors?.highlight || VisualizationColors.hover,
+    marker: colors?.marker || VisualizationColors.nodePrinciple,
   };
 
   const aberrationTypes = [

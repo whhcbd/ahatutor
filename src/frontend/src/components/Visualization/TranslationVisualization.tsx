@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface TranslationVisualizationProps {
   data: any;
@@ -10,11 +11,11 @@ export function TranslationVisualization({ data, colors }: TranslationVisualizat
   const [currentStep, setCurrentStep] = useState(0);
 
   const defaultColors = {
-    mrna: colors?.mrna || '#8B5CF6',
-    trna: colors?.trna || '#10B981',
-    ribosomeLarge: colors?.ribosomeLarge || '#3B82F6',
-    ribosomeSmall: colors?.ribosomeSmall || '#EF4444',
-    aminoAcid: colors?.aminoAcid || '#F59E0B',
+    mrna: colors?.mrna || VisualizationColors.nodePrinciple,
+    trna: colors?.trna || VisualizationColors.dominant,
+    ribosomeLarge: colors?.ribosomeLarge || VisualizationColors.male,
+    ribosomeSmall: colors?.ribosomeSmall || VisualizationColors.affected,
+    aminoAcid: colors?.aminoAcid || VisualizationColors.hover,
   };
 
   const steps = data?.steps || [

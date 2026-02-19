@@ -30,7 +30,6 @@ export default function DepthModePage() {
   const [step, setStep] = useState<Step>('input');
   const [searchQuery, setSearchQuery] = useState('');
   const [isExploring, setIsExploring] = useState(false);
-  const [userLevel, setUserLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('intermediate');
   const [tree, setTree] = useState<ConceptNode | null>(null);
   const [learningPath, setLearningPath] = useState<LearningPathNode[]>([]);
   const [currentNodeIndex, setCurrentNodeIndex] = useState(0);
@@ -93,9 +92,9 @@ export default function DepthModePage() {
   const loadConceptData = async (concept: string) => {
     try {
       const [conceptAnalysis, enrichment, narrativeData] = await Promise.all([
-        deepApi.analyzeConcept(concept, userLevel),
+        deepApi.analyzeConcept(concept),
         deepApi.enrichConcept(concept),
-        deepApi.composeNarrative(concept, userLevel),
+        deepApi.composeNarrative(concept),
       ]);
 
       setConceptData({
@@ -110,7 +109,7 @@ export default function DepthModePage() {
 
   const loadInteractiveFlow = async (concept: string) => {
     try {
-      const flow = await deepApi.generateInteractiveFlow(concept, userLevel);
+      const flow = await deepApi.generateInteractiveFlow(concept);
       setInteractiveFlow(flow);
     } catch (err) {
       console.error('Error loading interactive flow:', err);
@@ -225,29 +224,6 @@ export default function DepthModePage() {
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   disabled={isExploring}
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  你的水平
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {(['beginner', 'intermediate', 'advanced'] as const).map((level) => (
-                    <button
-                      key={level}
-                      onClick={() => setUserLevel(level)}
-                      className={`py-2 rounded-lg font-medium transition-colors ${
-                        userLevel === level
-                          ? 'bg-purple-600 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {level === 'beginner' && '初学者'}
-                      {level === 'intermediate' && '进阶'}
-                      {level === 'advanced' && '高级'}
-                    </button>
-                  ))}
-                </div>
               </div>
 
               <button

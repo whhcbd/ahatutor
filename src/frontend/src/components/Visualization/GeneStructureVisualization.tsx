@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface GeneStructureData {
   structure: Array<{ name: string; description: string; position: string }>;
@@ -17,14 +18,14 @@ export function GeneStructureVisualization({ data, colors }: GeneStructureVisual
   const [hoveredElement, setHoveredElement] = useState<string | null>(null);
 
   const defaultColors = {
-    promoter: '#2196F3',
-    exon: '#4CAF50',
-    intron: '#FF9800',
-    terminator: '#F44336',
-    utr: '#9C27B0',
-    enhancer: '#7B1FA2',
-    silencer: '#FF5252',
-    insulator: '#607D8B',
+    promoter: VisualizationColors.enhancer,
+    exon: VisualizationColors.exon,
+    intron: VisualizationColors.intron,
+    terminator: VisualizationColors.affected,
+    utr: VisualizationColors.nodePrinciple,
+    enhancer: VisualizationColors.enhancer,
+    silencer: VisualizationColors.affected,
+    insulator: VisualizationColors.masteryMedium,
     background: '#f8fafc',
     text: '#1e293b',
   };

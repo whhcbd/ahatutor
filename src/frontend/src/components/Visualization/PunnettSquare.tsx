@@ -1,4 +1,5 @@
 import { PunnettSquareData } from '@shared/types/agent.types';
+import { VisualizationColors, getPhenotypeColor, getSexColor } from '../../constants/visualization-colors';
 
 interface PunnettSquareProps {
   data: PunnettSquareData;
@@ -26,36 +27,24 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
     return <div className="text-center text-gray-500 p-8">Punnett 方格数据不完整</div>;
   }
 
-  // 默认颜色方案
-  const defaultColors = {
-    dominant: colors?.dominant || '#4CAF50',
-    recessive: colors?.recessive || '#FF9800',
-    heterozygous: colors?.heterozygous || '#2196F3',
-    male: colors?.male || '#64B5F6',
-    female: colors?.female || '#F06292',
+  // 使用标准配色方案
+  const standardColors = {
+    dominant: VisualizationColors.dominant,
+    recessive: VisualizationColors.recessive,
+    heterozygous: VisualizationColors.carrier,
+    male: VisualizationColors.male,
+    female: VisualizationColors.female,
   };
 
-  // 判断表型类型
-  const getPhenotypeType = (phenotype: string): 'dominant' | 'recessive' | 'heterozygous' => {
-    if (phenotype.includes('正常') || phenotype.includes('显性')) {
-      return 'dominant';
-    }
-    if (phenotype.includes('携带') || phenotype.includes('杂合')) {
-      return 'heterozygous';
-    }
-    return 'recessive';
-  };
-
-  // 获取表型颜色
-  const getPhenotypeColor = (phenotype: string, sex?: 'male' | 'female'): string => {
-    const type = getPhenotypeType(phenotype);
+  // 获取表型颜色（使用导入的函数）
+  const getCellPhenotypeColor = (phenotype: string, sex?: 'male' | 'female'): string => {
     if (sex === 'male') {
-      return defaultColors.male;
+      return standardColors.male;
     }
     if (sex === 'female') {
-      return defaultColors.female;
+      return standardColors.female;
     }
-    return defaultColors[type];
+    return getPhenotypeColor(phenotype);
   };
 
   // 计算方格中每个单元格的内容
@@ -88,7 +77,7 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
         <div className="grid grid-cols-2 gap-4">
           <div
             className="p-4 rounded-lg text-center"
-            style={{ backgroundColor: `${defaultColors.male}20` }}
+            style={{ backgroundColor: `${standardColors.male}20` }}
           >
             <div className="text-sm text-gray-600 mb-1">父本</div>
             <div className="font-mono font-bold text-lg">{parentalCross.male?.genotype || '未知'}</div>
@@ -96,7 +85,7 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
           </div>
           <div
             className="p-4 rounded-lg text-center"
-            style={{ backgroundColor: `${defaultColors.female}20` }}
+            style={{ backgroundColor: `${standardColors.female}20` }}
           >
             <div className="text-sm text-gray-600 mb-1">母本</div>
             <div className="font-mono font-bold text-lg">{parentalCross.female?.genotype || '未知'}</div>
@@ -141,7 +130,7 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
                   );
                 }
 
-                const bgColor = getPhenotypeColor(cellData.phenotype, cellData.sex);
+                const bgColor = getCellPhenotypeColor(cellData.phenotype, cellData.sex);
                 // const textColor = bgColor === defaultColors.recessive ? '#fff' : '#000';
 
                 return (
@@ -183,21 +172,21 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
         <div className="flex items-center gap-2">
           <div
             className="w-4 h-4 rounded"
-            style={{ backgroundColor: defaultColors.dominant }}
+            style={{ backgroundColor: standardColors.dominant }}
           />
           <span>显性/正常</span>
         </div>
         <div className="flex items-center gap-2">
           <div
             className="w-4 h-4 rounded"
-            style={{ backgroundColor: defaultColors.heterozygous }}
+            style={{ backgroundColor: standardColors.heterozygous }}
           />
           <span>杂合/携带者</span>
         </div>
         <div className="flex items-center gap-2">
           <div
             className="w-4 h-4 rounded"
-            style={{ backgroundColor: defaultColors.recessive }}
+            style={{ backgroundColor: standardColors.recessive }}
           />
           <span>隐性/患病</span>
         </div>
@@ -212,7 +201,7 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
               <div key={index} className="flex items-center gap-4">
                 <div
                   className="w-3 h-3 rounded flex-shrink-0"
-                  style={{ backgroundColor: getPhenotypeColor(child.phenotype, child.sex) }}
+                  style={{ backgroundColor: getCellPhenotypeColor(child.phenotype, child.sex) }}
                 />
                 <div className="flex-1 grid grid-cols-3 gap-2 text-sm">
                   <span className="font-mono">{child.genotype}</span>
@@ -228,7 +217,7 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
                     className="h-2 rounded-full"
                     style={{
                       width: `${child.probability * 100}%`,
-                      backgroundColor: getPhenotypeColor(child.phenotype, child.sex),
+                      backgroundColor: getCellPhenotypeColor(child.phenotype, child.sex),
                     }}
                   />
                 </div>

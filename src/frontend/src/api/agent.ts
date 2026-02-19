@@ -240,7 +240,6 @@ class AgentApiClient {
   async askVisualizationQuestion(params: {
     concept: string;
     question: string;
-    userLevel?: UserLevel;
     conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>;
   }): Promise<{
     textAnswer: string;
@@ -266,21 +265,19 @@ class AgentApiClient {
   // ==================== Narrative Composer ====================
 
   async composeNarrative(
-    concept: string,
-    userLevel?: UserLevel
+    concept: string
   ): Promise<{
     narrative: NarrativeComposition;
     treeText: string;
   }> {
     return this.request('/agent/narrative', {
       method: 'POST',
-      body: JSON.stringify({ concept, userLevel }),
+      body: JSON.stringify({ concept }),
     });
   }
 
   async generateLearningScript(
-    concept: string,
-    userLevel?: UserLevel
+    concept: string
   ): Promise<{
     narrative: NarrativeComposition;
     script: string;
@@ -289,13 +286,12 @@ class AgentApiClient {
   }> {
     return this.request('/agent/narrative/script', {
       method: 'POST',
-      body: JSON.stringify({ concept, userLevel }),
+      body: JSON.stringify({ concept }),
     });
   }
 
   async generateInteractiveFlow(
-    concept: string,
-    userLevel?: UserLevel
+    concept: string
   ): Promise<{
     narrative: NarrativeComposition;
     flow: Array<{
@@ -308,7 +304,7 @@ class AgentApiClient {
   }> {
     return this.request('/agent/narrative/interactive', {
       method: 'POST',
-      body: JSON.stringify({ concept, userLevel }),
+      body: JSON.stringify({ concept }),
     });
   }
 

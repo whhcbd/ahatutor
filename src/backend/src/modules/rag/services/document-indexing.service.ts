@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LLMService } from '../../llm/llm.service';
+import { DocumentSplitterService } from './document-splitter.service';
 import {
   DocumentIndexingInput,
   DocumentIndexingOutput,
@@ -15,7 +16,7 @@ import {
  *
  * 功能：
  * - 解析文档（PDF、Word、Markdown）
- * - 文本分块
+ * - 文本分块（支持拆分成文件）
  * - 向量化
  * - 存储到向量数据库
  */
@@ -27,6 +28,7 @@ export class DocumentIndexingService {
   constructor(
     private readonly llmService: LLMService,
     private readonly configService: ConfigService,
+    private readonly documentSplitter: DocumentSplitterService,
   ) {}
 
   /**
@@ -56,7 +58,13 @@ export class DocumentIndexingService {
 
       const documentId = input.documentId || metadata.id || this.generateDocumentId();
 
-      const chunks = await this.createChunks(documentId, content, metadata);
+      const chunks = await this.createChunks(
+        documentId,
+        content,
+        metadata,
+        input.saveChunksToFile,
+        input.chunkStrategy,
+      );
       const embeddings = await this.generateEmbeddings(chunks);
 
       void embeddings;
@@ -257,7 +265,30 @@ export class DocumentIndexingService {
     documentId: string,
     content: string,
     metadata: Partial<DocumentMetadata>,
+    saveChunksToFile = false,
+    chunkStrategy: 'headers' | 'paragraphs' | 'sentences' = 'headers',
   ): Promise<DocumentChunk[]> {
+    if (saveChunksToFile) {
+      this.logger.log(`Using DocumentSplitterService with strategy: ${chunkStrategy}`);
+
+      const result = await this.documentSplitter.splitContentWithResult(
+        content,
+        documentId,
+        {
+          chunkSize: this.chunkSize,
+          chunkOverlap: 100,
+          strategy: chunkStrategy,
+          saveToFile: true,
+          outputDir: './data/split-docs',
+          filenamePattern: `{documentId}-chunk-{index}.md`,
+        },
+      );
+
+      this.logger.log(`Created ${result.chunks.length} chunks and ${result.files.length} files`);
+
+      return result.chunks as DocumentChunk[];
+    }
+
     const chunks: DocumentChunk[] = [];
     const sentences = content.split(/[。！？？.!?]/);
     let currentChunk = '';

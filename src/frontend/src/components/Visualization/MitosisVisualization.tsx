@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface MitosisVisualizationProps {
   data: any;
@@ -10,11 +11,11 @@ export function MitosisVisualization({ data, colors }: MitosisVisualizationProps
   const [currentStage, setCurrentStage] = useState(0);
 
   const defaultColors = {
-    prophase: colors?.prophase || '#EF4444',
-    metaphase: colors?.metaphase || '#F59E0B',
-    anaphase: colors?.anaphase || '#10B981',
-    telophase: colors?.telophase || '#3B82F6',
-    cytokinesis: colors?.cytokinesis || '#8B5CF6',
+    prophase: colors?.prophase || VisualizationColors.affected,
+    metaphase: colors?.metaphase || VisualizationColors.hover,
+    anaphase: colors?.anaphase || VisualizationColors.dominant,
+    telophase: colors?.telophase || VisualizationColors.male,
+    cytokinesis: colors?.cytokinesis || VisualizationColors.nodePrinciple,
   };
 
   const stages = data?.stages || [

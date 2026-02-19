@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface ChromosomeVisualizationProps {
   data: any;
@@ -11,11 +12,11 @@ export function ChromosomeVisualization({ data, colors }: ChromosomeVisualizatio
   const [hoveredElement, setHoveredElement] = useState<string | null>(null);
 
   const defaultColors = {
-    chromatid1: colors?.chromatid1 || '#3B82F6',
-    chromatid2: colors?.chromatid2 || '#EF4444',
-    centromere: colors?.centromere || '#F59E0B',
-    telomere: colors?.telomere || '#10B981',
-    sisterChromatids: colors?.sisterChromatids || '#8B5CF6',
+    chromatid1: colors?.chromatid1 || VisualizationColors.gene,
+    chromatid2: colors?.chromatid2 || VisualizationColors.affected,
+    centromere: colors?.centromere || VisualizationColors.hover,
+    telomere: colors?.telomere || VisualizationColors.dominant,
+    sisterChromatids: colors?.sisterChromatids || VisualizationColors.nodePrinciple,
   };
 
   const getElementDetails = (elementId: string) => {

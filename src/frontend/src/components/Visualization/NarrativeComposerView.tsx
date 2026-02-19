@@ -4,21 +4,19 @@ import { agentApi, NarrativeComposition } from '../../api/agent';
 
 interface NarrativeComposerViewProps {
   concept: string;
-  userLevel?: 'beginner' | 'intermediate' | 'advanced';
 }
 
 /**
  * NarrativeComposer 学习叙事展示组件
  *
- * 展示:
- * - 学习路径
- * - 讲解顺序
+ * 功能：
+ * - 学习叙事生成和展示
+ * - 知识点关联图
  * - 连接故事
  * - 难度递进模式
  */
 export function NarrativeComposerView({
   concept,
-  userLevel,
 }: NarrativeComposerViewProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,14 +29,14 @@ export function NarrativeComposerView({
     setLoading(true);
     setError(null);
     try {
-      const result = await agentApi.composeNarrative(concept, userLevel);
+      const result = await agentApi.composeNarrative(concept);
       setData(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load narrative');
     } finally {
       setLoading(false);
     }
-  }, [concept, userLevel]);
+  }, [concept]);
 
   useEffect(() => {
     loadNarrative();
@@ -194,7 +192,6 @@ export function NarrativeComposerView({
 
 interface InteractiveFlowViewProps {
   concept: string;
-  userLevel?: 'beginner' | 'intermediate' | 'advanced';
 }
 
 /**
@@ -202,7 +199,6 @@ interface InteractiveFlowViewProps {
  */
 export function InteractiveFlowView({
   concept,
-  userLevel,
 }: InteractiveFlowViewProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -223,14 +219,14 @@ export function InteractiveFlowView({
     setLoading(true);
     setError(null);
     try {
-      const result = await agentApi.generateInteractiveFlow(concept, userLevel);
+      const result = await agentApi.generateInteractiveFlow(concept);
       setData(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load flow');
     } finally {
       setLoading(false);
     }
-  }, [concept, userLevel]);
+  }, [concept]);
 
   useEffect(() => {
     loadFlow();

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface AlleleVisualizationProps {
   data?: Record<string, unknown>;
@@ -17,13 +18,13 @@ export function AlleleVisualization({ colors }: AlleleVisualizationProps) {
   const [hoveredElement, setHoveredElement] = useState<string | null>(null);
 
   const defaultColors = {
-    chromosome1: '#9C27B0',
-    chromosome2: '#BA68C8',
-    alleleA: '#4CAF50',
-    allelea: '#F44336',
-    locus: '#FF9800',
-    gene: '#2196F3',
-    highlight: '#FFC107',
+    chromosome1: VisualizationColors.chromosome1,
+    chromosome2: VisualizationColors.chromosome2,
+    alleleA: VisualizationColors.dominant,
+    allelea: VisualizationColors.affected,
+    locus: VisualizationColors.locus,
+    gene: VisualizationColors.gene,
+    highlight: VisualizationColors.hover,
   };
 
   const c = colors || defaultColors;

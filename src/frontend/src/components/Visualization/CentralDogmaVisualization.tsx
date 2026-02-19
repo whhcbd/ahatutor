@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface CentralDogmaVisualizationProps {
   data?: Record<string, unknown>;
@@ -25,9 +26,9 @@ export function CentralDogmaVisualization({ colors }: CentralDogmaVisualizationP
   const [hoveredElement, setHoveredElement] = useState<string | null>(null);
 
   const defaultColors = {
-    dna: '#4CAF50',
-    rna: '#2196F3',
-    protein: '#F44336',
+    dna: VisualizationColors.normal,
+    rna: VisualizationColors.gene,
+    protein: VisualizationColors.affected,
     nucleus: '#E8F5E9',
     cytoplasm: '#FFF3E0',
     arrow: '#FF9800',

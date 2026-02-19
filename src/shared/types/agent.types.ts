@@ -285,6 +285,8 @@ export interface SixAgentOutput {
 export interface VisualizationAnswerResponse {
   textAnswer: string;           // 文字回答
   visualization?: VisualizationSuggestion; // 可视化（如适用）
+  examples?: Array<{ title: string; description: string }>; // 举例
   followUpQuestions?: string[]; // 后续建议问题
   relatedConcepts?: string[];   // 相关概念
+  learningPath?: Array<{ id: string; name: string; level: number }>; // 学习路径
 }

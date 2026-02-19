@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface GeneEngineeringVisualizationProps {
   data: any;
@@ -9,11 +10,11 @@ export function GeneEngineeringVisualization({ data, colors }: GeneEngineeringVi
   const [activeTab, setActiveTab] = useState<'cloning' | 'vector' | 'expression' | 'applications'>('cloning');
 
   const defaultColors = {
-    dna: colors?.dna || '#10B981',
-    insert: colors?.insert || '#3B82F6',
-    vector: colors?.vector || '#F59E0B',
-    enzyme: colors?.enzyme || '#EF4444',
-    promoter: colors?.promoter || '#8B5CF6',
+    dna: colors?.dna || VisualizationColors.normal,
+    insert: colors?.insert || VisualizationColors.gene,
+    vector: colors?.vector || VisualizationColors.hover,
+    enzyme: colors?.enzyme || VisualizationColors.affected,
+    promoter: colors?.promoter || VisualizationColors.enhancer,
   };
 
   return (

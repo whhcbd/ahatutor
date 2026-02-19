@@ -271,9 +271,9 @@ export const deepApi = {
   /**
    * 获取概念分析
    */
-  async analyzeConcept(concept: string, userLevel?: 'beginner' | 'intermediate' | 'advanced') {
+  async analyzeConcept(concept: string) {
     const { data } = await apiClient.post('/agent/analyze', null, {
-      params: { concept, userLevel },
+      params: { concept },
     });
     return data;
   },
@@ -291,10 +291,9 @@ export const deepApi = {
   /**
    * 创建学习叙事
    */
-  async composeNarrative(concept: string, userLevel?: 'beginner' | 'intermediate' | 'advanced') {
+  async composeNarrative(concept: string) {
     const { data } = await apiClient.post('/agent/narrative', {
       concept,
-      userLevel,
     });
     return data;
   },
@@ -302,10 +301,9 @@ export const deepApi = {
   /**
    * 生成互动式学习流程
    */
-  async generateInteractiveFlow(concept: string, userLevel?: 'beginner' | 'intermediate' | 'advanced') {
+  async generateInteractiveFlow(concept: string) {
     const { data } = await apiClient.post('/agent/narrative/interactive', {
       concept,
-      userLevel,
     });
     return data;
   },

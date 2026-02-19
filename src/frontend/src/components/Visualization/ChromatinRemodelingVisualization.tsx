@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface ChromatinRemodelingVisualizationProps {
   data: any;
@@ -9,11 +10,11 @@ export function ChromatinRemodelingVisualization({ data, colors }: ChromatinRemo
   const [activeTab, setActiveTab] = useState<'swi-snf' | 'iswi' | 'chd' | 'ino80'>('swi-snf');
 
   const defaultColors = {
-    histone: colors?.histone || '#3B82F6',
-    dna: colors?.dna || '#10B981',
-    complex: colors?.complex || '#F59E0B',
-    atp: colors?.atp || '#EF4444',
-    nucleosome: colors?.nucleosome || '#8B5CF6',
+    histone: colors?.histone || VisualizationColors.gene,
+    dna: colors?.dna || VisualizationColors.dominant,
+    complex: colors?.complex || VisualizationColors.hover,
+    atp: colors?.atp || VisualizationColors.affected,
+    nucleosome: colors?.nucleosome || VisualizationColors.nodePrinciple,
   };
 
   const remodelingComplexes = [

@@ -44,7 +44,6 @@ import { UnderstandingInsights } from './UnderstandingInsights';
 
 interface VisualDesignerViewProps {
   concept: string;
-  userLevel?: 'beginner' | 'intermediate' | 'advanced';
   useHardcoded?: boolean;
   onNodeClick?: (node: any) => void;
 }
@@ -77,7 +76,6 @@ const visualizationCache = new Map<string, {
  */
 export function VisualDesignerView({
   concept,
-  userLevel: _userLevel,
   useHardcoded = true,
   onNodeClick,
 }: VisualDesignerViewProps) {

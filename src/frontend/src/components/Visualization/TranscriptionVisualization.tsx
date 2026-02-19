@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface TranscriptionVisualizationProps {
   data: any;
@@ -10,11 +11,11 @@ export function TranscriptionVisualization({ data, colors }: TranscriptionVisual
   const [currentStage, setCurrentStage] = useState(0);
 
   const defaultColors = {
-    dnaStrand1: colors?.dnaStrand1 || '#3B82F6',
-    dnaStrand2: colors?.dnaStrand2 || '#EF4444',
-    rnaStrand: colors?.rnaStrand || '#8B5CF6',
-    polymerase: colors?.polymerase || '#10B981',
-    promoter: colors?.promoter || '#F59E0B',
+    dnaStrand1: colors?.dnaStrand1 || VisualizationColors.gene,
+    dnaStrand2: colors?.dnaStrand2 || VisualizationColors.male,
+    rnaStrand: colors?.rnaStrand || VisualizationColors.nodePrinciple,
+    polymerase: colors?.polymerase || VisualizationColors.hover,
+    promoter: colors?.promoter || VisualizationColors.enhancer,
   };
 
   const stages = data?.stages || [

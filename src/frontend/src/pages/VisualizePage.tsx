@@ -108,7 +108,6 @@ const TOPICS_BY_COMPLEXITY = {
 
 export default function VisualizePage() {
   const [selectedConcept, setSelectedConcept] = useState('孟德尔第一定律');
-  const [userLevel, setUserLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('intermediate');
   const [useHardcoded, setUseHardcoded] = useState(true);
   const [hardcodedConcepts, setHardcodedConcepts] = useState<Array<{
     concept: string;
@@ -146,13 +145,6 @@ export default function VisualizePage() {
   const filteredTopics = selectedCategory === 'all'
     ? GENETICS_TOPICS
     : TOPIC_CATEGORIES.find(c => c.name === selectedCategory)?.topics || [];
-
-  // 根据用户水平过滤（可选功能）
-  const levelFilteredTopics = userLevel === 'beginner'
-    ? filteredTopics.filter(t => TOPICS_BY_COMPLEXITY.basic.includes(t) || TOPICS_BY_COMPLEXITY.intermediate.includes(t))
-    : userLevel === 'intermediate'
-      ? filteredTopics
-      : filteredTopics;
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -251,7 +243,7 @@ export default function VisualizePage() {
               onChange={(e) => setSelectedConcept(e.target.value)}
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {levelFilteredTopics.map((topic) => (
+              {filteredTopics.map((topic) => (
                 <option key={topic} value={topic}>
                   {topic}
                   {useHardcoded && hardcodedConceptNames.includes(topic) && ' ⚡'}
@@ -260,29 +252,6 @@ export default function VisualizePage() {
             </select>
           </div>
 
-          {/* 难度选择 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">你的水平</label>
-            <div className="flex gap-2">
-              {[
-                { value: 'beginner', label: '初学者' },
-                { value: 'intermediate', label: '进阶' },
-                { value: 'advanced', label: '高级' },
-              ].map((level) => (
-                <button
-                  key={level.value}
-                  onClick={() => setUserLevel(level.value as any)}
-                  className={`flex-1 py-2 px-3 rounded-lg transition-colors text-sm ${
-                    userLevel === level.value
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {level.label}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -317,9 +286,8 @@ export default function VisualizePage() {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl shadow-sm p-8">
             <VisualizeView
-              key={`${selectedConcept}-${userLevel}-${useHardcoded}`}
+              key={`${selectedConcept}-${useHardcoded}`}
               concept={selectedConcept}
-              userLevel={userLevel}
               useHardcoded={useHardcoded}
             />
           </div>
@@ -329,7 +297,6 @@ export default function VisualizePage() {
         <div className="lg:col-span-1">
           <QuestionPanel
             concept={selectedConcept}
-            userLevel={userLevel}
             className="sticky top-4"
           />
         </div>
@@ -341,15 +308,13 @@ export default function VisualizePage() {
 // 内部组件，处理 key 变化时的重新加载
 interface VisualizeViewProps {
   concept: string;
-  userLevel: 'beginner' | 'intermediate' | 'advanced';
   useHardcoded: boolean;
 }
 
-function VisualizeView({ concept, userLevel, useHardcoded }: VisualizeViewProps) {
+function VisualizeView({ concept, useHardcoded }: VisualizeViewProps) {
   return (
     <VisualDesignerView
       concept={concept}
-      userLevel={userLevel}
       useHardcoded={useHardcoded}
       onNodeClick={(node) => console.log('点击节点:', node)}
     />

@@ -28,6 +28,7 @@ export interface DocumentChunk {
     pageNumber?: number;
     chapter?: string;
     section?: string;
+    subsection?: string;
     tags?: string[];
     documentId?: string;
     topics?: string[];

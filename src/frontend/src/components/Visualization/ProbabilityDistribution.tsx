@@ -1,4 +1,5 @@
 import { ProbabilityDistributionData } from '@shared/types/agent.types';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface ProbabilityDistributionProps {
   data: ProbabilityDistributionData;
@@ -18,12 +19,12 @@ export function ProbabilityDistribution({ data, colors }: ProbabilityDistributio
 
   // 默认颜色方案
   const defaultColors = [
-    colors?.high || '#4CAF50',
-    colors?.medium || '#2196F3',
-    colors?.low || '#FF9800',
-    '#9C27B0',
-    '#F44336',
-    '#00BCD4',
+    colors?.high || VisualizationColors.masteryHigh,
+    colors?.medium || VisualizationColors.masteryMedium,
+    colors?.low || VisualizationColors.masteryLow,
+    VisualizationColors.nodePrinciple,
+    VisualizationColors.affected,
+    VisualizationColors.gene,
   ];
 
   // 使用数据中的颜色或默认颜色

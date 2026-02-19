@@ -6,7 +6,6 @@ import { renderVisualization } from './VisualDesignerView';
 
 interface QuestionPanelProps {
   concept: string;
-  userLevel?: 'beginner' | 'intermediate' | 'advanced';
   onNewVisualization?: (visualization: VisualizationSuggestion) => void;
   className?: string;
 }
@@ -26,7 +25,6 @@ interface Message {
  */
 export function QuestionPanel({
   concept,
-  userLevel = 'intermediate',
   onNewVisualization,
   className = '',
 }: QuestionPanelProps) {
@@ -64,7 +62,6 @@ export function QuestionPanel({
       const response = await agentApi.askVisualizationQuestion({
         concept,
         question: userMessage.content,
-        userLevel,
         conversationHistory,
       });
 
@@ -275,12 +272,10 @@ export function QuestionPanel({
  */
 export function QuickAskInput({
   concept,
-  userLevel = 'intermediate',
   onAnswer,
   className = '',
 }: {
   concept: string;
-  userLevel?: 'beginner' | 'intermediate' | 'advanced';
   onAnswer: (answer: {
     text: string;
     visualization?: VisualizationSuggestion;
@@ -301,7 +296,6 @@ export function QuickAskInput({
       const response = await agentApi.askVisualizationQuestion({
         concept,
         question,
-        userLevel,
       });
 
       onAnswer({

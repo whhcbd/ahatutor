@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface DNAMethylationVisualizationProps {
   data: any;
@@ -9,11 +10,11 @@ export function DNAMethylationVisualization({ data, colors }: DNAMethylationVisu
   const [activeTab, setActiveTab] = useState<'mechanism' | 'effects' | 'inheritance'>('mechanism');
 
   const defaultColors = {
-    unmethylated: colors?.unmethylated || '#10B981',
-    methylated: colors?.methylated || '#EF4444',
-    methyl: colors?.methyl || '#F59E0B',
-    dna: colors?.dna || '#3B82F6',
-    enzyme: colors?.enzyme || '#8B5CF6',
+    unmethylated: colors?.unmethylated || VisualizationColors.dominant,
+    methylated: colors?.methylated || VisualizationColors.affected,
+    methyl: colors?.methyl || VisualizationColors.hover,
+    dna: colors?.dna || VisualizationColors.gene,
+    enzyme: colors?.enzyme || VisualizationColors.nodePrinciple,
   };
 
   return (

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import { VisualizationColors, getMasteryColor } from '../../constants/visualization-colors';
+import { ConceptDetailPanel } from './ConceptDetailPanel';
 
 export interface GraphNode {
   id: string;
@@ -18,6 +20,8 @@ export interface GraphEdge {
   source: string | GraphNode;
   target: string | GraphNode;
   weight: number;
+  bidirectional?: boolean;
+  relationType?: 'prerequisite' | 'related' | 'derived' | 'example';
 }
 
 interface KnowledgeGraphProps {
@@ -26,6 +30,7 @@ interface KnowledgeGraphProps {
     edges: GraphEdge[];
   };
   onNodeClick?: (node: GraphNode) => void;
+  onJumpToVisualization?: (concept: string) => void;
   width?: number;
   height?: number;
 }
@@ -36,12 +41,31 @@ interface KnowledgeGraphProps {
 export function KnowledgeGraph({
   data,
   onNodeClick,
+  onJumpToVisualization,
   width = 800,
   height = 600,
 }: KnowledgeGraphProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const onNodeClickRef = useRef(onNodeClick);
   const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
+  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
+
+  // 获取相关概念
+  const getRelatedConcepts = (node: GraphNode): string[] => {
+    const relatedEdges = data.edges.filter(
+      (edge) => 
+        (typeof edge.source === 'string' ? edge.source : edge.source.id) === node.id ||
+        (typeof edge.target === 'string' ? edge.target : edge.target.id) === node.id
+    );
+    const relatedIds = relatedEdges.flatMap(edge => [
+      typeof edge.source === 'string' ? edge.source : edge.source.id,
+      typeof edge.target === 'string' ? edge.target : edge.target.id
+    ]);
+    return data.nodes
+      .filter(n => relatedIds.includes(n.id) && n.id !== node.id)
+      .map(n => n.name)
+      .slice(0, 5);
+  };
 
   // 保持 onNodeClick 引用最新
   useEffect(() => {
@@ -79,8 +103,10 @@ export function KnowledgeGraph({
       .force('collision', d3.forceCollide().radius(30));
 
     // 创建箭头标记
-    svg.append('defs')
-      .append('marker')
+    const defs = svg.append('defs');
+    
+    // 正向箭头
+    defs.append('marker')
       .attr('id', 'arrowhead')
       .attr('viewBox', '-0 -5 10 10')
       .attr('refX', 20)
@@ -92,16 +118,46 @@ export function KnowledgeGraph({
       .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
       .attr('fill', '#999');
 
+    // 反向箭头（用于双向关系）
+    defs.append('marker')
+      .attr('id', 'arrowhead-reverse')
+      .attr('viewBox', '-10 -5 10 10')
+      .attr('refX', -10)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', 8)
+      .attr('markerHeight', 8)
+      .append('path')
+      .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+      .attr('fill', '#999');
+
+    // 关系类型颜色
+    const getEdgeColor = (edge: GraphEdge): string => {
+      switch (edge.relationType) {
+        case 'prerequisite':
+          return '#FF5722';
+        case 'related':
+          return '#4CAF50';
+        case 'derived':
+          return '#2196F3';
+        case 'example':
+          return '#FF9800';
+        default:
+          return '#999';
+      }
+    };
+
     // 绘制连线
     const link = g
       .append('g')
       .selectAll('line')
       .data(data.edges)
       .join('line')
-      .attr('stroke', '#999')
+      .attr('stroke', (d) => getEdgeColor(d as GraphEdge))
       .attr('stroke-opacity', 0.6)
       .attr('stroke-width', (d) => Math.sqrt(d.weight || 1) * 2)
-      .attr('marker-end', 'url(#arrowhead)');
+      .attr('marker-end', 'url(#arrowhead)')
+      .attr('marker-start', (d) => (d.bidirectional ? 'url(#arrowhead-reverse)' : ''));
 
     // 绘制节点
     const node = g
@@ -139,7 +195,9 @@ export function KnowledgeGraph({
           .attr('r', 15 + d.mastery / 10);
       })
       .on('click', (_event, d) => {
+        setSelectedNode(d);
         setHoveredNode(d);
+        onNodeClick?.(d);
       });
 
     // 节点标签
@@ -192,27 +250,24 @@ export function KnowledgeGraph({
         d3.select(svgElement).selectAll('*').remove();
       }
     };
-  }, [data, width, height]);
+  }, [data, width, height, selectedNode]);
 
   // 获取节点颜色
   function getNodeColor(node: GraphNode): string {
-    if (node.mastery >= 80) return '#4ade80'; // green
-    if (node.mastery >= 50) return '#fbbf24'; // yellow
-    if (node.mastery >= 20) return '#fb923c'; // orange
-    return '#f87171'; // red
+    return getMasteryColor(node.mastery);
   }
 
   // 获取节点边框颜色
   function getNodeStroke(node: GraphNode): string {
     switch (node.type) {
       case 'CONCEPT':
-        return '#3b82f6'; // blue
+        return VisualizationColors.nodeConcept;
       case 'PRINCIPLE':
-        return '#8b5cf6'; // purple
+        return VisualizationColors.nodePrinciple;
       case 'FORMULA':
-        return '#ec4899'; // pink
+        return VisualizationColors.nodeFormula;
       default:
-        return '#6b7280'; // gray
+        return VisualizationColors.nodeDefault;
     }
   }
 
@@ -224,16 +279,12 @@ export function KnowledgeGraph({
         height={height}
         style={{ border: '1px solid #e5e7eb', borderRadius: '8px', background: '#f9fafb' }}
       />
-      {hoveredNode && (
-        <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg border border-gray-200 max-w-xs">
-          <h3 className="font-semibold text-lg">{hoveredNode.name}</h3>
-          <div className="mt-2 space-y-1 text-sm text-gray-600">
-            <p>类型: {hoveredNode.type}</p>
-            <p>等级: {hoveredNode.level}</p>
-            <p>掌握度: {hoveredNode.mastery}%</p>
-          </div>
-        </div>
-      )}
+      <ConceptDetailPanel
+        node={selectedNode}
+        onClose={() => setSelectedNode(null)}
+        onJumpToVisualization={onJumpToVisualization}
+        relatedConcepts={selectedNode ? getRelatedConcepts(selectedNode) : []}
+      />
       <div className="absolute bottom-4 left-4 bg-white p-3 rounded-lg shadow border border-gray-200 text-xs">
         <div className="font-semibold mb-2">图例</div>
         <div className="space-y-1">

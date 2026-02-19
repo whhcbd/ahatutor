@@ -112,7 +112,6 @@ type ViewMode = 'narrative' | 'interactive';
 
 export default function NarrativePage() {
   const [selectedConcept, setSelectedConcept] = useState('伴性遗传');
-  const [userLevel, setUserLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('intermediate');
   const [viewMode, setViewMode] = useState<ViewMode>('narrative');
   const [showAllTopics, setShowAllTopics] = useState(false);
 
@@ -209,30 +208,6 @@ export default function NarrativePage() {
             )}
           </div>
 
-          {/* 难度选择 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">你的水平</label>
-            <div className="flex gap-2">
-              {[
-                { value: 'beginner', label: '初学者' },
-                { value: 'intermediate', label: '进阶' },
-                { value: 'advanced', label: '高级' },
-              ].map((level) => (
-                <button
-                  key={level.value}
-                  onClick={() => setUserLevel(level.value as any)}
-                  className={`flex-1 py-2 px-3 rounded-lg text-sm transition-colors ${
-                    userLevel === level.value
-                      ? 'bg-purple-500 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {level.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* 视图模式 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">展示模式</label>
@@ -282,15 +257,13 @@ export default function NarrativePage() {
       <div className="bg-white rounded-xl shadow-sm p-8">
         {viewMode === 'narrative' ? (
           <NarrativeView
-            key={`${selectedConcept}-${userLevel}-narrative`}
+            key={`${selectedConcept}-narrative`}
             concept={selectedConcept}
-            userLevel={userLevel}
           />
         ) : (
           <InteractiveView
-            key={`${selectedConcept}-${userLevel}-interactive`}
+            key={`${selectedConcept}-interactive`}
             concept={selectedConcept}
-            userLevel={userLevel}
           />
         )}
       </div>
@@ -299,11 +272,11 @@ export default function NarrativePage() {
 }
 
 // 学习叙事视图
-function NarrativeView({ concept, userLevel }: { concept: string; userLevel: 'beginner' | 'intermediate' | 'advanced' }) {
-  return <NarrativeComposerView concept={concept} userLevel={userLevel} />;
+function NarrativeView({ concept }: { concept: string }) {
+  return <NarrativeComposerView concept={concept} />;
 }
 
 // 互动流程视图
-function InteractiveView({ concept, userLevel }: { concept: string; userLevel: 'beginner' | 'intermediate' | 'advanced' }) {
-  return <InteractiveFlowView concept={concept} userLevel={userLevel} />;
+function InteractiveView({ concept }: { concept: string }) {
+  return <InteractiveFlowView concept={concept} />;
 }

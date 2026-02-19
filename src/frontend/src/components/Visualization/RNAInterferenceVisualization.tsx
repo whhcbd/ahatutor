@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface RNAInterferenceVisualizationProps {
   data: any;
@@ -9,11 +10,11 @@ export function RNAInterferenceVisualization({ data, colors }: RNAInterferenceVi
   const [activeTab, setActiveTab] = useState<'mirna' | 'sirna' | 'mechanism' | 'applications'>('mirna');
 
   const defaultColors = {
-    mrna: colors?.mrna || '#10B981',
-    sirna: colors?.sirna || '#EF4444',
-    mirna: colors?.mirna || '#F59E0B',
-    risc: colors?.risc || '#3B82F6',
-    target: colors?.target || '#8B5CF6',
+    mrna: colors?.mrna || VisualizationColors.dominant,
+    sirna: colors?.sirna || VisualizationColors.affected,
+    mirna: colors?.mirna || VisualizationColors.hover,
+    risc: colors?.risc || VisualizationColors.gene,
+    target: colors?.target || VisualizationColors.nodePrinciple,
   };
 
   return (
