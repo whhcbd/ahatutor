@@ -51,6 +51,9 @@ export interface DocumentMetadata {
   section?: string;
   difficulty?: string;
   size?: number;
+  images?: string[];
+  layouts?: string[];
+  parser?: 'mineru' | 'local' | 'mammoth';
 }
 
 // 文档

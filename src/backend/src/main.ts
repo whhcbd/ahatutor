@@ -1,33 +1,35 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // 全局前缀
+  app.set('maxHttpBufferSize', 52428800);
+  app.useBodyParser('json', { limit: '50mb' });
+  app.useBodyParser('urlencoded', { limit: '50mb', extended: true });
+
   app.setGlobalPrefix('api');
 
-  // 启用 CORS
   const frontendPort = process.env.FRONTEND_PORT || '5173';
   app.enableCors({
     origin: [
       `http://localhost:${frontendPort}`,
       `http://127.0.0.1:${frontendPort}`,
-      `http://localhost:5173`,
-      `http://127.0.0.1:5173`,
-      `http://localhost:5174`,
-      `http://localhost:5175`,
-      `http://localhost:5176`,
-      `http://localhost:5177`,
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'http://localhost:5176',
+      'http://localhost:5177',
     ],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization',
   });
 
-  // 全局验证管道
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -39,7 +41,6 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger API 文档
   const config = new DocumentBuilder()
     .setTitle('AhaTutor API')
     .setDescription('遗传学可视化交互解答平台 API')
@@ -56,6 +57,7 @@ async function bootstrap() {
     .addTag('mistake', '错题相关')
     .addTag('report', '学情报告相关')
     .addTag('graph', '知识图谱相关')
+    .addTag('mineru', 'MinerU 文档解析相关')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

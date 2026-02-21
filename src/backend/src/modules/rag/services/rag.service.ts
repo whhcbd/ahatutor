@@ -99,7 +99,7 @@ export class RAGService {
     totalChunks: number;
     totalEmbeddings: number;
   }> {
-    return this.vectorStore.getStats();
+    return await this.vectorStore.getStats();
   }
 
   /**

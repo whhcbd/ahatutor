@@ -1,0 +1,17 @@
+{
+  "name": "genetics-rag",
+  "version": "1.0.0",
+  "description": "遗传学RAG向量知识库",
+  "main": "genetics_rag_service.ts",
+  "scripts": {
+    "rag:build": "tsx build_genetics_rag.ts",
+    "rag:index": "tsx genetics_rag_service.ts index",
+    "rag:search": "tsx genetics_rag_service.ts search",
+    "rag:stats": "tsx genetics_rag_service.ts stats",
+    "rag:delete": "tsx genetics_rag_service.ts delete"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0",
+    "@types/node": "^20.11.0"
+  }
+}

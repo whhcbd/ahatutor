@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LLMService } from '../../llm/llm.service';
 import { DocumentSplitterService } from './document-splitter.service';
+import { MinerUService } from '../../mineru/mineru.service';
 import {
   DocumentIndexingInput,
   DocumentIndexingOutput,
@@ -29,6 +30,7 @@ export class DocumentIndexingService {
     private readonly llmService: LLMService,
     private readonly configService: ConfigService,
     private readonly documentSplitter: DocumentSplitterService,
+    private readonly minerUService: MinerUService,
   ) {}
 
   /**
@@ -163,6 +165,51 @@ export class DocumentIndexingService {
     filePath: string,
     metadata: Partial<DocumentMetadata>,
   ): Promise<{ content: string; metadata: Partial<DocumentMetadata> }> {
+    const useMinerU = this.configService.get<string>('USE_MINERU', 'true') === 'true';
+
+    if (useMinerU) {
+      return await this.parsePDFWithMinerU(filePath, metadata);
+    }
+
+    return await this.parsePDFLocally(filePath, metadata);
+  }
+
+  /**
+   * 使用 MinerU 解析 PDF
+   */
+  private async parsePDFWithMinerU(
+    filePath: string,
+    metadata: Partial<DocumentMetadata>,
+  ): Promise<{ content: string; metadata: Partial<DocumentMetadata> }> {
+    try {
+      this.logger.log(`Parsing PDF with MinerU: ${filePath}`);
+
+      const result = await this.minerUService.parsePDF(filePath);
+
+      return {
+        content: result.markdown,
+        metadata: {
+          ...metadata,
+          type: 'pdf',
+          size: result.metadata.size,
+          images: result.images,
+          layouts: result.layouts,
+          parser: 'mineru',
+        },
+      };
+    } catch (error) {
+      this.logger.warn(`MinerU parsing failed, falling back to local parsing: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return await this.parsePDFLocally(filePath, metadata);
+    }
+  }
+
+  /**
+   * 本地解析 PDF（回退方案）
+   */
+  private async parsePDFLocally(
+    filePath: string,
+    metadata: Partial<DocumentMetadata>,
+  ): Promise<{ content: string; metadata: Partial<DocumentMetadata> }> {
     try {
       const pdfParse = await import('pdf-parse');
       const fs = await import('fs/promises');
@@ -175,6 +222,7 @@ export class DocumentIndexingService {
           ...metadata,
           type: 'pdf',
           size: data.text.length,
+          parser: 'local',
         },
       };
     } catch (error) {

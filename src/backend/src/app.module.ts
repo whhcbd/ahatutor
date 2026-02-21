@@ -10,6 +10,7 @@ import { ReportModule } from './modules/report/report.module';
 import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProgressModule } from './modules/progress/progress.module';
+import { MinerUModule } from './modules/mineru/mineru.module';
 
 @Module({
   imports: [
@@ -37,6 +38,9 @@ import { ProgressModule } from './modules/progress/progress.module';
     // 用户和进度模块
     AuthModule,
     ProgressModule,
+
+    // 文档解析模块
+    MinerUModule,
   ],
   controllers: [],
   providers: [],

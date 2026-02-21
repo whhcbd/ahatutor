@@ -12,10 +12,11 @@ import { VectorRetrievalService } from './services/vector-retrieval.service';
 import { ContextRetrievalService } from './services/context-retrieval.service';
 import { StreamingAnswerService } from './services/streaming-answer.service';
 import { LLMModule } from '../llm/llm.module';
+import { MinerUModule } from '../mineru/mineru.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [LLMModule.register(), ConfigModule],
+  imports: [LLMModule.register(), MinerUModule, ConfigModule],
   controllers: [RAGController],
   providers: [
     RAGService,

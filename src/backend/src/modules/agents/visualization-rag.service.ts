@@ -65,7 +65,10 @@ export class VisualizationRAGService implements OnModuleInit {
   }
 
   private buildSearchKey(concept: string, viz: Omit<VisualizationSuggestion, 'insights'>): string {
-    return `${concept} ${viz.title} ${viz.description} ${viz.elements.join(' ')}`;
+    const elements = viz.elements.join(' ');
+    const description = viz.description;
+    
+    return `${concept} ${viz.title} ${description} ${elements} ${concept}机制 ${concept}过程 ${concept}原理`;
   }
 
   async retrieveByQuestion(

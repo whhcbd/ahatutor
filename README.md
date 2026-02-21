@@ -77,6 +77,13 @@ WEAVIATE_API_KEY=your_weaviate_api_key
 
 # 前端配置
 VITE_API_BASE_URL=http://localhost:3001
+
+# MinerU PDF 解析服务（用于高质量文档解析）
+MINERU_BASE_URL=http://3a092f40.r6.cpolar.cn
+MINERU_API_ENDPOINT=/api/convert_pdf
+MINERU_TIMEOUT=600000
+USE_MINERU=true
+MINERU_OUTPUT_DIR=./data/mineru-output
 ```
 
 **快速启动（无需配置数据库）**：
@@ -230,6 +237,8 @@ AI 出题 → 用户回答 → AI 判断 → 分级解析 → 继续下一题
 ### 3. RAG 检索增强生成
 
 - 文档上传、解析、向量化、检索全流程
+- 集成 MinerU PDF 智能解析服务，支持复杂布局、公式、表格、图像的高质量解析
+- 自动降级机制：MinerU 失败时自动切换到本地解析
 - 支持多种向量数据库（Pinecone、Weaviate）
 - 多轮对话上下文检索
 - 流式答案生成
@@ -411,6 +420,11 @@ ahatutor/
 │   │       │   │   ├── rag.controller.ts
 │   │       │   │   ├── rag.service.ts
 │   │       │   │   └── services/    # RAG 服务 (11个子服务)
+│   │       │   ├── mineru/          # MinerU PDF 解析服务
+│   │       │   │   ├── mineru.controller.ts
+│   │       │   │   ├── mineru.service.ts
+│   │       │   │   ├── mineru.module.ts
+│   │       │   │   └── dto/         # 数据传输对象
 │   │       │   ├── auth/            # 认证模块
 │   │       │   │   ├── auth.controller.ts
 │   │       │   │   ├── auth.module.ts
@@ -549,6 +563,34 @@ POST /quiz/generate
 POST /quiz/evaluate
 { "question": "...", "userAnswer": "A" }
 ```
+
+### MinerU PDF 解析服务
+
+```bash
+# 解析 PDF 文件
+POST /api/mineru/parse
+{
+  "filePath": "/path/to/file.pdf",
+  "timeout": 600000,
+  "outputPath": "/path/to/output",
+  "keepZip": false
+}
+
+# MinerU 服务健康检查
+GET /api/mineru/health
+
+# 获取 MinerU 服务配置
+GET /api/mineru/config
+```
+
+**MinerU 服务特性：**
+
+- 基于 NVIDIA RTX 4090 D 的多模态 AI 模型
+- 支持复杂布局、公式、表格、图像的高质量解析
+- 返回 Markdown 格式内容，保留原始文档结构
+- 自动提取图像和布局信息
+- 支持并发请求（队列模式处理）
+- 自动降级机制：失败时切换到本地 pdf-parse 解析
 
 ---
 

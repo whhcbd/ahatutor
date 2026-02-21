@@ -1,4 +1,11 @@
 packages:
-  - 'src/frontend'
-  - 'src/backend'
-  - 'src/shared'
+  - src/frontend
+  - src/backend
+  - src/shared
+
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - bcrypt
+  - core-js
+  - esbuild
+  - tesseract.js

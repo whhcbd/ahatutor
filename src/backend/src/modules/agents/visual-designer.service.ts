@@ -977,7 +977,7 @@ ${data ? `
     let matchedConcept: string | null = null;
 
     try {
-      const matches = await this.visualizationRAG.retrieveByQuestion(question, 0.6, 3);
+      const matches = await this.visualizationRAG.retrieveByQuestion(question, 0.5, 5);
 
       if (matches.length > 0) {
         const bestMatch = matches[0];
@@ -990,12 +990,14 @@ ${data ? `
     }
 
     let contextInfo = '';
+    let useRagVisualization = false;
     if (selectedVisualization) {
-      contextInfo = `\n\n相关可视化信息：\n知识点：${matchedConcept}\n标题：${selectedVisualization.title}\n描述：${selectedVisualization.description}\n元素：${selectedVisualization.elements.join('、')}`;
+      useRagVisualization = true;
+      contextInfo = `\n\n相关可视化信息：\n知识点：${matchedConcept}\n标题：${selectedVisualization.title}\n描述：${selectedVisualization.description}\n元素：${selectedVisualization.elements.join('、')}\n类型：${selectedVisualization.type}\n\n重要：这是系统为你找到的最相关的可视化，请直接使用它，不需要再建议新的可视化类型！`;
     } else {
       const hardcodedViz = getHardcodedVisualization(concept);
       if (hardcodedViz) {
-        contextInfo = `\n\n当前可视化信息：\n标题：${hardcodedViz.title}\n描述：${hardcodedViz.description}\n元素：${hardcodedViz.elements.join('、')}`;
+        contextInfo = `\n\n当前可视化信息：\n标题：${hardcodedViz.title}\n描述：${hardcodedViz.description}\n元素：${hardcodedViz.elements.join('、')}\n类型：${hardcodedViz.type}`;
       }
     }
 
@@ -1020,6 +1022,17 @@ ${contextInfo}${historyContext}
 3. 1-2个具体的例子，帮助用户理解概念（如果适用）
 4. 2-3个后续建议问题，帮助用户深入理解（如果是非遗传学问题，可以提供遗传学相关的问题建议）
 
+**重要说明：后续建议问题必须是具体的遗传学知识问题，例如"孟德尔分离定律是什么？"、"基因如何影响生物的表型？"、"伴性遗传有什么特点？"等，而不是"你想要了解什么？"、"你想学习更多信息吗？"等元问题。问题应该直接指向具体的遗传学概念或现象。**
+
+**关于可视化的重要说明：
+- 如果"相关可视化信息"部分提供了具体的可视化（包含类型、标题、描述、元素），这表示系统已经为你找到了最相关的可视化，请直接使用它：
+  - 将needVisualization设为true
+  - 将suggestedVisualizationType设为该可视化的类型
+  - 不要建议其他可视化类型
+- 只有当没有找到相关的可视化时，才考虑生成新的可视化
+- 不要因为有一个Punnett方格就总是使用它，要判断它是否真正适合回答用户的问题
+- 如果用户问的是"基因传递"、"DNA复制"、"减数分裂"等机制问题，应该优先使用相关的机制可视化，而不是遗传比例可视化（如Punnett方格）**
+
 返回JSON格式。`;
 
     const schema = {
@@ -1031,12 +1044,12 @@ ${contextInfo}${historyContext}
         },
         needVisualization: {
           type: 'boolean',
-          description: '是否需要额外的可视化来更好地回答这个问题（非遗传学问题设为false）'
+          description: '是否需要可视化来更好地回答这个问题（非遗传学问题设为false）。如果"相关可视化信息"中提供了具体的可视化，请优先使用它，设为true'
         },
         suggestedVisualizationType: {
           type: 'string',
           enum: ['punnett_square', 'inheritance_path', 'probability_distribution', 'none'],
-          description: '建议的可视化类型（非遗传学问题设为none）'
+          description: '建议的可视化类型（非遗传学问题设为none）。如果"相关可视化信息"中提供了可视化，请使用该可视化的类型。不要因为习惯使用Punnett方格就总是返回punnett_square，要判断它是否真的适合回答用户的问题'
         },
         examples: {
           type: 'array',
@@ -1055,7 +1068,7 @@ ${contextInfo}${historyContext}
         followUpQuestions: {
           type: 'array',
           items: { type: 'string' },
-          description: '2-3个后续建议问题。如果是非遗传学问题，可以提供遗传学相关的问题建议帮助用户回归学习主题',
+          description: '2-3个后续建议问题。必须是具体的遗传学知识问题（如"孟德尔分离定律是什么？"、"基因如何影响生物的表型？"、"伴性遗传有什么特点？"），不能是元问题（如"你想要了解什么？"、"你想学习更多信息吗？"）。如果是非遗传学问题，可以提供遗传学相关的问题建议帮助用户回归学习主题',
           minItems: 2,
           maxItems: 3
         },
@@ -1086,14 +1099,14 @@ ${contextInfo}${historyContext}
 
       let visualization: VisualizationSuggestion | undefined;
 
-      if (response.needVisualization) {
-        if (selectedVisualization) {
-          this.logger.log(`Using RAG-matched visualization: ${matchedConcept}`);
-          visualization = {
-            ...selectedVisualization,
-            insights: undefined
-          } as VisualizationSuggestion;
-        } else {
+      if (useRagVisualization && selectedVisualization) {
+        this.logger.log(`Using RAG-matched visualization: ${matchedConcept}`);
+        visualization = {
+          ...selectedVisualization,
+          insights: undefined
+        } as VisualizationSuggestion;
+      } else if (response.needVisualization) {
+        if (!useRagVisualization) {
           const hardcodedViz = getHardcodedVisualization(concept);
           if (hardcodedViz) {
             this.logger.log(`Using hardcoded visualization for concept: ${concept}`);

@@ -20,7 +20,8 @@
     "lint:backend": "cd src/backend && pnpm lint",
     "test": "pnpm test:frontend && pnpm test:backend",
     "test:frontend": "cd src/frontend && pnpm test",
-    "test:backend": "cd src/backend && pnpm test"
+    "test:backend": "cd src/backend && pnpm test",
+    "init:rag": "cd src/backend && npx ts-node scripts/init-rag-knowledge-base.ts"
   },
   "keywords": [
     "genetics",
