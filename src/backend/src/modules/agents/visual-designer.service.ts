@@ -41,6 +41,13 @@ interface VisualizationDesignResponse {
   };
 }
 
+interface PedigreeChartResponse extends PedigreeChartData {
+  keyPoints?: string[];
+  understandingPoints?: string[];
+  commonMistakes?: string[];
+  checkQuestions?: string[];
+}
+
 // LLM 生成可视化数据的响应结构
 interface PunnettSquareResponse {
   maleGametes: string[];
@@ -1005,7 +1012,7 @@ ${JSON.stringify(ragKnowledgePoints || {}, null, 2)}
     concept: string,
     enrichment?: GeneticsEnrichment,
     ragKnowledgePoints?: Record<string, any>,
-  ): Promise<PedigreeChartData> {
+  ): Promise<PedigreeChartResponse> {
     const enrichmentInfo = enrichment
       ? `\n相关原理：${enrichment.principles.join(', ')}\n常见例子：${enrichment.examples.map(e => e.name).join(', ')}`
       : '';

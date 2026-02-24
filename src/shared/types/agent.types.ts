@@ -161,6 +161,76 @@ export interface ProbabilityDistributionData {
   phenotypeRatio?: string;     // 表型比例
 }
 
+// 测交分析数据
+export interface TestCrossData {
+  unknownGenotype: {
+    symbol: string;            // 未知基因型符号
+    genotype: string;          // 基因型（如 ? 或 A?）
+    description: string;       // 个体描述
+  };
+  testParent: {
+    symbol: string;            // 测交亲本符号
+    genotype: string;          // 测交亲本基因型（通常是纯合隐性）
+    phenotype: string;         // 表型
+  };
+  crossResults: Array<{
+    offspringGenotype: string;  // 后代基因型
+    offspringPhenotype: string; // 后代表型
+    count: number;              // 个体数量
+    percentage?: number;       // 百分比
+  }>;
+  conclusion: {
+    deducedGenotype: string;   // 推断出的基因型
+    confidence: string;         // 推断置信度
+    explanation: string;        // 解释说明
+  };
+  title: string;               // 可视化标题
+}
+
+// 三点测交数据
+export interface ThreePointTestCrossData {
+  genes: Array<{
+    name: string;              // 基因名称
+    symbol: string;            // 基因符号
+    alleles: string[];         // 等位基因列表
+  }>;
+  parentalGenotypes: Array<{
+    id: string;                // 亲本ID
+    genotype: string;          // 基因型（如 A+B+C+）
+    type: 'parent' | 'trihybrid'; // 亲本类型
+  }>;
+  offspringData: Array<{
+    genotype: string;          // 后代基因型
+    count: number;             // 个体数量
+    percentage: number;        // 百分比
+    phenotypeDescription?: string; // 表型描述
+  }>;
+  recombinationFrequencies: {
+    region1_2: {
+      distance: number;        // 基因间距离（cM）
+      rf: number;              // 重组率（%）
+    };
+    region2_3: {
+      distance: number;        // 基因间距离（cM）
+      rf: number;              // 重组率（%）
+    };
+    region1_3: {
+      distance: number;        // 基因间距离（cM）
+      rf: number;              // 重组率（%）
+    };
+  };
+  geneOrder: string;           // 推断的基因顺序（如 A-B-C）
+  chromosomeMap: {
+    scale: number;             // 比例尺
+    unit: string;              // 单位（如 cM）
+    positions: Array<{
+      gene: string;            // 基因名称
+      position: number;        // 位置
+    }>;
+  };
+  title: string;               // 可视化标题
+}
+
 // 减数分裂动画数据
 export interface MeiosisAnimationData {
   stages: Array<{
@@ -194,7 +264,7 @@ export interface ChromosomeBehaviorData {
 }
 
 export interface VisualizationSuggestion {
-  type: 'knowledge_graph' | 'animation' | 'chart' | 'diagram' | 'punnett_square' | 'inheritance_path' | 'pedigree_chart' | 'probability_distribution' | 'meiosis_animation' | 'chromosome_behavior';
+  type: 'knowledge_graph' | 'animation' | 'chart' | 'diagram' | 'punnett_square' | 'inheritance_path' | 'pedigree_chart' | 'probability_distribution' | 'meiosis_animation' | 'chromosome_behavior' | 'test_cross' | 'three_point_test_cross';
   title: string;               // 可视化标题
   description: string;         // 这个可视化要说明什么问题
 

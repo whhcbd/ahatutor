@@ -1424,6 +1424,277 @@ export const A2UI_TEMPLATES: A2UITemplate[] = [
         }
       ]
     }
+  },
+
+  // 测交分析图模板
+  {
+    templateId: 'test_cross_v1',
+    visualizationType: 'test_cross',
+    complexity: 'medium',
+    schema: {
+      type: 'object',
+      properties: {
+        unknownGenotype: {
+          type: 'object',
+          properties: {
+            symbol: { type: 'string', description: '未知基因型符号' },
+            genotype: { type: 'string', description: '基因型（如 ? 或 A?）' },
+            description: { type: 'string', description: '个体描述' }
+          },
+          required: ['symbol', 'genotype'],
+          description: '待测个体基因型'
+        },
+        testParent: {
+          type: 'object',
+          properties: {
+            symbol: { type: 'string', description: '测交亲本符号' },
+            genotype: { type: 'string', description: '测交亲本基因型（通常是纯合隐性）' },
+            phenotype: { type: 'string', description: '表型' }
+          },
+          required: ['symbol', 'genotype', 'phenotype'],
+          description: '测交亲本信息'
+        },
+        crossResults: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              offspringGenotype: { type: 'string', description: '后代基因型' },
+              offspringPhenotype: { type: 'string', description: '后代表型' },
+              count: { type: 'number', description: '个体数量' },
+              percentage: { type: 'number', description: '百分比' }
+            },
+            required: ['offspringGenotype', 'offspringPhenotype', 'count']
+          },
+          description: '杂交结果统计'
+        },
+        conclusion: {
+          type: 'object',
+          properties: {
+            deducedGenotype: { type: 'string', description: '推断出的基因型' },
+            confidence: { type: 'string', description: '推断置信度' },
+            explanation: { type: 'string', description: '解释说明' }
+          },
+          required: ['deducedGenotype', 'explanation'],
+          description: '结论分析'
+        },
+        title: {
+          type: 'string',
+          description: '可视化标题'
+        }
+      },
+      required: ['unknownGenotype', 'testParent', 'crossResults', 'conclusion', 'title']
+    },
+    defaultValues: {
+      unknownGenotype: {
+        symbol: '?',
+        genotype: 'A?',
+        description: '待测个体，表现显性性状'
+      },
+      testParent: {
+        symbol: 'aa',
+        genotype: 'aa',
+        phenotype: '隐性纯合'
+      },
+      crossResults: [
+        { offspringGenotype: 'Aa', offspringPhenotype: '显性', count: 48, percentage: 50 },
+        { offspringGenotype: 'aa', offspringPhenotype: '隐性', count: 48, percentage: 50 }
+      ],
+      conclusion: {
+        deducedGenotype: 'Aa',
+        confidence: '高',
+        explanation: '测交后代中显性与隐性比例为1:1，说明待测个体为杂合子(Aa)'
+      },
+      title: '测交分析'
+    },
+    a2uiTemplate: {
+      type: 'card',
+      id: 'viz_test_cross',
+      children: [
+        {
+          type: 'ahatutor-test-cross',
+          id: 'test_cross_component',
+          properties: {
+            unknownGenotype: '${unknownGenotype}',
+            testParent: '${testParent}',
+            crossResults: '${crossResults}',
+            conclusion: '${conclusion}',
+            title: '${title}'
+          }
+        }
+      ]
+    }
+  },
+
+  // 三点测交图模板
+  {
+    templateId: 'three_point_test_cross_v1',
+    visualizationType: 'three_point_test_cross',
+    complexity: 'high',
+    schema: {
+      type: 'object',
+      properties: {
+        genes: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              name: { type: 'string', description: '基因名称' },
+              symbol: { type: 'string', description: '基因符号' },
+              alleles: {
+                type: 'array',
+                items: { type: 'string' },
+                description: '等位基因列表'
+              }
+            },
+            required: ['name', 'symbol', 'alleles']
+          },
+          description: '三个基因的信息'
+        },
+        parentalGenotypes: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', description: '亲本ID' },
+              genotype: { type: 'string', description: '基因型（如 A+B+C+）' },
+              type: { type: 'string', enum: ['parent', 'trihybrid'], description: '亲本类型' }
+            },
+            required: ['id', 'genotype', 'type']
+          },
+          description: '亲本基因型'
+        },
+        offspringData: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              genotype: { type: 'string', description: '后代基因型' },
+              count: { type: 'number', description: '个体数量' },
+              percentage: { type: 'number', description: '百分比' },
+              phenotypeDescription: { type: 'string', description: '表型描述' }
+            },
+            required: ['genotype', 'count', 'percentage']
+          },
+          description: '后代数据'
+        },
+        recombinationFrequencies: {
+          type: 'object',
+          properties: {
+            region1_2: {
+              type: 'object',
+              properties: {
+                distance: { type: 'number', description: '基因间距离（cM）' },
+                rf: { type: 'number', description: '重组率（%）' }
+              },
+              required: ['distance', 'rf']
+            },
+            region2_3: {
+              type: 'object',
+              properties: {
+                distance: { type: 'number', description: '基因间距离（cM）' },
+                rf: { type: 'number', description: '重组率（%）' }
+              },
+              required: ['distance', 'rf']
+            },
+            region1_3: {
+              type: 'object',
+              properties: {
+                distance: { type: 'number', description: '基因间距离（cM）' },
+                rf: { type: 'number', description: '重组率（%）' }
+              },
+              required: ['distance', 'rf']
+            }
+          },
+          description: '重组频率数据'
+        },
+        geneOrder: {
+          type: 'string',
+          description: '推断的基因顺序（如 A-B-C）'
+        },
+        chromosomeMap: {
+          type: 'object',
+          properties: {
+            scale: { type: 'number', description: '比例尺' },
+            unit: { type: 'string', description: '单位（如 cM）' },
+            positions: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  gene: { type: 'string', description: '基因名称' },
+                  position: { type: 'number', description: '位置' }
+                },
+                required: ['gene', 'position']
+              },
+              description: '基因位置'
+            }
+          },
+          description: '染色体图谱'
+        },
+        title: {
+          type: 'string',
+          description: '可视化标题'
+        }
+      },
+      required: ['genes', 'parentalGenotypes', 'offspringData', 'recombinationFrequencies', 'title']
+    },
+    defaultValues: {
+      genes: [
+        { name: '基因A', symbol: 'A', alleles: ['A', 'a'] },
+        { name: '基因B', symbol: 'B', alleles: ['B', 'b'] },
+        { name: '基因C', symbol: 'C', alleles: ['C', 'c'] }
+      ],
+      parentalGenotypes: [
+        { id: 'P1', genotype: 'A+B+C+', type: 'parent' },
+        { id: 'P2', genotype: 'a+b+c-', type: 'parent' }
+      ],
+      offspringData: [
+        { genotype: 'A+B+C+', count: 400, percentage: 40, phenotypeDescription: '三显性' },
+        { genotype: 'a+b+c-', count: 400, percentage: 40, phenotypeDescription: '三隐性' },
+        { genotype: 'A+b+c-', count: 50, percentage: 5, phenotypeDescription: '单显性' },
+        { genotype: 'a+B+C+', count: 50, percentage: 5, phenotypeDescription: '双显性' },
+        { genotype: 'A+B+c-', count: 40, percentage: 4, phenotypeDescription: '双显性' },
+        { genotype: 'a+b+C+', count: 40, percentage: 4, phenotypeDescription: '双显性' },
+        { genotype: 'A+b+C+', count: 10, percentage: 1, phenotypeDescription: '三显性（重组）' },
+        { genotype: 'a+B+c-', count: 10, percentage: 1, phenotypeDescription: '单显性（重组）' }
+      ],
+      recombinationFrequencies: {
+        region1_2: { distance: 5, rf: 5 },
+        region2_3: { distance: 10, rf: 10 },
+        region1_3: { distance: 15, rf: 15 }
+      },
+      geneOrder: 'A - B - C',
+      chromosomeMap: {
+        scale: 100,
+        unit: 'cM',
+        positions: [
+          { gene: 'A', position: 0 },
+          { gene: 'B', position: 5 },
+          { gene: 'C', position: 15 }
+        ]
+      },
+      title: '三点测交分析'
+    },
+    a2uiTemplate: {
+      type: 'card',
+      id: 'viz_three_point_test_cross',
+      children: [
+        {
+          type: 'ahatutor-three-point-test-cross',
+          id: 'three_point_test_cross_component',
+          properties: {
+            genes: '${genes}',
+            parentalGenotypes: '${parentalGenotypes}',
+            offspringData: '${offspringData}',
+            recombinationFrequencies: '${recombinationFrequencies}',
+            geneOrder: '${geneOrder}',
+            chromosomeMap: '${chromosomeMap}',
+            title: '${title}'
+          }
+        }
+      ]
+    }
   }
 ];
 
