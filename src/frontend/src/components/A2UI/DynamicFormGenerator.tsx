@@ -228,6 +228,8 @@ function getVisualizationTypeName(type: VisualizationSuggestion['type']): string
     probability_distribution: '概率分布',
     meiosis_animation: '减数分裂动画',
     chromosome_behavior: '染色体行为',
+    test_cross: '测交分析',
+    three_point_test_cross: '三点测交',
   };
   return names[type] || '可视化';
 }

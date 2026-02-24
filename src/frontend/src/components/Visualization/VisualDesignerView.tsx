@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { agentApi } from '../../api/agent';
-import type { VisualizationSuggestion, PunnettSquareData, InheritancePathData, ProbabilityDistributionData, MeiosisAnimationData, ChromosomeBehaviorData } from '@shared/types/agent.types';
+import type { VisualizationSuggestion, PunnettSquareData, InheritancePathData, ProbabilityDistributionData, MeiosisAnimationData, ChromosomeBehaviorData, TestCrossData, ThreePointTestCrossData } from '@shared/types/agent.types';
 import { KnowledgeGraph } from './KnowledgeGraph';
 import { PunnettSquare } from './PunnettSquare';
 import { InheritancePath } from './InheritancePath';
@@ -42,6 +42,8 @@ import { KaryotypeVisualization, RobertsonTranslocationVisualization } from './K
 import { DNAMethylationVisualization, HistoneModificationVisualization, RNAInterferenceVisualization, ChromatinRemodelingVisualization as EpigeneticChromatinVisualization, NoncodingRNAVisualization, GenomicImprintingVisualization } from './EpigeneticsVisualization';
 import { MutationVisualization } from './MutationVisualization';
 import { PedigreeChart } from './PedigreeChart';
+import { ThreePointTestCross } from './ThreePointTestCross';
+import { TestCross } from './TestCross';
 
 interface VisualDesignerViewProps {
   concept: string;
@@ -351,6 +353,28 @@ export function renderVisualization(
 
     case 'pedigree_chart':
       return renderPedigreeChart(visualization);
+
+    case 'test_cross':
+      if (visualization.data) {
+        return <TestCross data={visualization.data as unknown as TestCrossData} colors={visualization.colors} />;
+      }
+      return <div className="h-96 flex items-center justify-center text-gray-500">
+        <div className="text-center">
+          <div className="text-4xl mb-4">🧪</div>
+          <p>测交数据加载中...</p>
+        </div>
+      </div>;
+
+    case 'three_point_test_cross':
+      if (visualization.data) {
+        return <ThreePointTestCross data={visualization.data as unknown as ThreePointTestCrossData} colors={visualization.colors} />;
+      }
+      return <div className="h-96 flex items-center justify-center text-gray-500">
+        <div className="text-center">
+          <div className="text-4xl mb-4">🧬</div>
+          <p>三点测交数据加载中...</p>
+        </div>
+      </div>;
 
     case 'animation':
       return renderAnimation(visualization, d3Config);

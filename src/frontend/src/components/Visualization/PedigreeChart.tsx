@@ -5,7 +5,7 @@ interface PedigreeChartProps {
   colors?: Record<string, string>;
 }
 
-export function PedigreeChart({ data, colors }: PedigreeChartProps) {
+export function PedigreeChart({ data }: PedigreeChartProps) {
   const individuals = data?.individuals || [];
   const legend = data?.legend || { condition: '', inheritancePattern: '' };
 
@@ -100,9 +100,10 @@ export function PedigreeChart({ data, colors }: PedigreeChartProps) {
     const lines: Array<{ x1: number; y1: number; x2: number; y2: number; type: 'spouse' | 'parent' }> = [];
 
     laidOutIndividuals.forEach(ind => {
-      if (ind.parents?.father) {
-        const father = laidOutIndividuals.find(i => i.id === ind.parents.father);
-        const mother = laidOutIndividuals.find(i => i.id === ind.parents.mother);
+      if (ind.parents?.father && ind.parents?.mother) {
+        const parents = ind.parents;
+        const father = laidOutIndividuals.find(i => i.id === parents.father);
+        const mother = laidOutIndividuals.find(i => i.id === parents.mother);
         if (father && mother) {
           const midX = (father.x + mother.x) / 2;
           const midY = (father.y + mother.y) / 2;

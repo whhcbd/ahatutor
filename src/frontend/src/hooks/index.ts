@@ -1,6 +1,5 @@
 // Toast
 export { useToast } from './useToast';
-export { toast } from './useToast';
 
 // Performance Hooks
 export { useDebounce, useDebouncedCallback } from './useDebounce';
