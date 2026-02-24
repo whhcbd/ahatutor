@@ -1,5 +1,8 @@
 import React from 'react';
 import { VisualizationSuggestion } from '@shared/types/agent.types';
+import { MindMapVisualization } from '../Visualization';
+import { parseA2UIDirectives, validateMindMapData } from '../../utils/a2ui-parser';
+import type { MindMapData } from '../../types/mindmap.types';
 
 export type AnswerMode = 'text' | 'visualization' | 'example' | 'combined';
 
@@ -20,11 +23,29 @@ interface MultimodalAnswerProps {
 
 export function MultimodalAnswer({ content, onVisualizationSelect }: MultimodalAnswerProps) {
   const [activeMode, setActiveMode] = React.useState<AnswerMode>('combined');
+  const [mindMapData, setMindMapData] = React.useState<MindMapData | null>(null);
+
+  React.useEffect(() => {
+    const { directives } = parseA2UIDirectives(content.text);
+    const mindMapDirective = directives.find(d => d.type === 'MINDMAP');
+    
+    if (mindMapDirective) {
+      const validation = validateMindMapData(mindMapDirective.content);
+      if (validation.valid) {
+        setMindMapData(mindMapDirective.content);
+      } else {
+        console.error('Invalid mind map data:', validation.errors);
+      }
+    } else {
+      setMindMapData(null);
+    }
+  }, [content.text]);
 
   const getAnswerMode = (): AnswerMode => {
-    if (content.visualization && content.examples && content.examples.length > 0) {
+    const hasMindMap = mindMapData !== null;
+    if (hasMindMap && content.examples && content.examples.length > 0) {
       return 'combined';
-    } else if (content.visualization) {
+    } else if (hasMindMap) {
       return 'visualization';
     } else if (content.examples && content.examples.length > 0) {
       return 'example';
@@ -34,19 +55,34 @@ export function MultimodalAnswer({ content, onVisualizationSelect }: MultimodalA
 
   const recommendedMode = getAnswerMode();
 
-  const renderTextContent = () => (
-    <div className="prose max-w-none">
-      <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
-        {content.text}
-      </div>
-      {content.explanation && (
-        <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h4 className="font-semibold text-blue-900 mb-2">详细解析</h4>
-          <p className="text-blue-800">{content.explanation}</p>
+  const renderTextContent = () => {
+    const { directives, cleanedText } = parseA2UIDirectives(content.text);
+    const mindMapDirective = directives.find(d => d.type === 'MINDMAP');
+    
+    return (
+      <div className="prose max-w-none">
+        {mindMapDirective && validateMindMapData(mindMapDirective.content).valid && (
+          <div className="my-6">
+            <MindMapVisualization
+              data={mindMapDirective.content}
+              config={{ width: 800, height: 500 }}
+              onNodeClick={(node) => console.log('Node clicked:', node)}
+              onNodeHover={(node) => console.log('Node hovered:', node)}
+            />
+          </div>
+        )}
+        <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+          {cleanedText}
         </div>
-      )}
-    </div>
-  );
+        {content.explanation && (
+          <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h4 className="font-semibold text-blue-900 mb-2">详细解析</h4>
+            <p className="text-blue-800">{content.explanation}</p>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderVisualization = () => {
     if (!content.visualization) return null;

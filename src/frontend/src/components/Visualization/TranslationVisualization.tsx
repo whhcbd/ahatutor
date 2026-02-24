@@ -8,7 +8,7 @@ interface TranslationVisualizationProps {
 
 export function TranslationVisualization({ data, colors }: TranslationVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'process' | 'ribosome' | 'codons'>('process');
-  const [currentStep, setCurrentStep] = useState(0);
+
 
   const defaultColors = {
     mrna: colors?.mrna || VisualizationColors.nodePrinciple,
@@ -17,12 +17,6 @@ export function TranslationVisualization({ data, colors }: TranslationVisualizat
     ribosomeSmall: colors?.ribosomeSmall || VisualizationColors.affected,
     aminoAcid: colors?.aminoAcid || VisualizationColors.hover,
   };
-
-  const steps = data?.steps || [
-    { name: '起始', description: '核糖体识别起始密码子' },
-    { name: '延伸', description: 'tRNA依次进入核糖体' },
-    { name: '终止', description: '核糖体识别终止密码子' },
-  ];
 
   const codonTable = data?.codonTable || [
     { codon: 'AUG', aminoAcid: '甲硫氨酸' },

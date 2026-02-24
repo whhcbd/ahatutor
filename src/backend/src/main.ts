@@ -34,7 +34,7 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       transform: true,
-      forbidNonWhitelisted: true,
+      forbidNonWhitelisted: false,
       transformOptions: {
         enableImplicitConversion: true,
       },
@@ -57,7 +57,6 @@ async function bootstrap() {
     .addTag('mistake', '错题相关')
     .addTag('report', '学情报告相关')
     .addTag('graph', '知识图谱相关')
-    .addTag('mineru', 'MinerU 文档解析相关')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -6,9 +6,7 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": false,
-    "outDir": "./dist",
-    "tsConfigPath": "./tsconfig.json",
-    "webpack": false
+    "outDir": "./dist"
   },
   "exclude": ["scripts/_archive/**/*"]
 }

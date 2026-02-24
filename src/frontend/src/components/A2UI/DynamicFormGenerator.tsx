@@ -47,7 +47,7 @@ export function DynamicFormGenerator({
         return (
           <input
             type="text"
-            value={(values[field.name] as string) || field.defaultValue || ''}
+            value={(values[field.name] as string) || (field.defaultValue === true ? '' : field.defaultValue) || ''}
             onChange={(e) => handleChange(field.name, e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
@@ -72,7 +72,7 @@ export function DynamicFormGenerator({
       case 'textarea':
         return (
           <textarea
-            value={(values[field.name] as string) || field.defaultValue || ''}
+            value={(values[field.name] as string) || (field.defaultValue === true ? '' : field.defaultValue) || ''}
             onChange={(e) => handleChange(field.name, e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
@@ -84,7 +84,7 @@ export function DynamicFormGenerator({
       case 'select':
         return (
           <select
-            value={(values[field.name] as string) || field.defaultValue || ''}
+            value={(values[field.name] as string) || (field.defaultValue === true ? '' : field.defaultValue) || ''}
             onChange={(e) => handleChange(field.name, e.target.value)}
             required={field.required}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -102,12 +102,12 @@ export function DynamicFormGenerator({
           <div className="flex items-center gap-2">
             <input
               type="color"
-              value={(values[field.name] as string) || field.defaultValue || '#000000'}
+              value={(values[field.name] as string) || (field.defaultValue === true ? '#000000' : field.defaultValue) || '#000000'}
               onChange={(e) => handleChange(field.name, e.target.value)}
               className="w-12 h-10 rounded border border-gray-300 cursor-pointer"
             />
             <span className="text-sm text-gray-600">
-              {(values[field.name] as string) || field.defaultValue || '#000000'}
+              {(values[field.name] as string) || (field.defaultValue === true ? '#000000' : field.defaultValue) || '#000000'}
             </span>
           </div>
         );
@@ -154,7 +154,7 @@ export function DynamicFormGenerator({
                   <input
                     type="checkbox"
                     checked={isSelected}
-                    onChange={(e) => {
+                    onChange={() => {
                       const newSelected = isSelected
                         ? selected.filter(v => v !== option.value)
                         : [...selected, option.value];

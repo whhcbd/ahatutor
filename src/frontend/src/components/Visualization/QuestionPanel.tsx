@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, Loader2, Sparkles, Eye } from 'lucide-react';
+import { MessageCircle, Send, Loader2, Sparkles, Eye, BookOpen } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { agentApi } from '../../api/agent';
 import type { VisualizationSuggestion } from '@shared/types/agent.types';
 import { renderVisualization } from './VisualDesignerView';
@@ -16,6 +18,8 @@ interface Message {
   visualization?: VisualizationSuggestion;
   followUpQuestions?: string[];
   relatedConcepts?: string[];
+  citations?: Array<{ chunkId: string; content: string; chapter?: string; section?: string }>;
+  sources?: Array<{ documentId: string; title: string; chapter?: string; section?: string }>;
   timestamp: Date;
 }
 
@@ -71,6 +75,8 @@ export function QuestionPanel({
         visualization: response.visualization,
         followUpQuestions: response.followUpQuestions,
         relatedConcepts: response.relatedConcepts,
+        citations: response.citations,
+        sources: response.sources,
         timestamp: new Date(),
       };
 
@@ -169,7 +175,9 @@ export function QuestionPanel({
                         : 'bg-gray-100 text-gray-800'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    <div className="text-sm">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                    </div>
 
                     {/* 显示可视化 */}
                     {message.role === 'assistant' && message.visualization && (
@@ -212,6 +220,26 @@ export function QuestionPanel({
                             >
                               {c}
                             </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 知识来源 */}
+                    {message.sources && message.sources.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-xs font-medium opacity-70 mb-2 flex items-center gap-1">
+                          <BookOpen className="w-3 h-3" />
+                          知识来源（教材章节）
+                        </p>
+                        <div className="space-y-1">
+                          {message.sources.map((source, i) => (
+                            <div
+                              key={i}
+                              className="text-xs bg-white bg-opacity-30 rounded px-2 py-1"
+                            >
+                              {source.title}
+                            </div>
                           ))}
                         </div>
                       </div>

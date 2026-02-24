@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface AlleleVisualizationProps {
-  data?: Record<string, unknown>;
   colors?: Record<string, string>;
 }
 
@@ -322,7 +321,7 @@ export function AlleleVisualization({ colors }: AlleleVisualizationProps) {
 
             <g transform="translate(200, 20)">
               <text x="0" y="15" fontSize="14" fontWeight="bold" fill="#666">等位基因:</text>
-              {example.alleles.map((allele, i) => (
+              {example.alleles.map((_, i) => (
                 <rect key={i} x={i * 120} y="25" width="110" height="30" rx="5" fill="#E3F2FD" stroke="#2196F3" strokeWidth="1" />
               ))}
               {example.alleles.map((allele, i) => (

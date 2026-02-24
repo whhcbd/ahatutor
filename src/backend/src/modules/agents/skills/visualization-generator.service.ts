@@ -1,14 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMService } from '../../llm/llm.service';
-import {
-  VisualizationGenerateInput,
-  VisualizationGenerateOutput,
-  VisualizationType,
-  VisualizationParameter,
-  UnderstandingInsight,
-  SkillExecutionResult,
-  SkillType,
-} from '@shared/types/skill.types';
+import { VisualizationGenerateInput, VisualizationGenerateOutput, VisualizationType, VisualizationParameter, SkillExecutionResult, SkillType } from '@shared/types/skill.types';
+import { UnderstandingInsight,  } from '@shared/types/agent.types';
 
 /**
  * 可视化生成服务

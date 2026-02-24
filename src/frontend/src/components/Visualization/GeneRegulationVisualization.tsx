@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import type { VisualizationData } from '../types';
 
-interface GeneRegulationData extends VisualizationData {
+interface GeneRegulationData {
   components?: string[];
   mechanisms?: string[];
   function?: string;

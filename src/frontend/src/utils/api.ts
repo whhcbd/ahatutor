@@ -309,9 +309,46 @@ export const deepApi = {
   },
 };
 
+/**
+ * 知识图谱 API 服务
+ */
+export const knowledgeGraphApi = {
+  async getStats() {
+    const { data } = await apiClient.get('/knowledge-graph/stats');
+    return data;
+  },
+
+  async buildGraph() {
+    const { data } = await apiClient.get('/knowledge-graph/build');
+    return data;
+  },
+
+  async queryGraph(params: {
+    rootConcept?: string;
+    depth?: number;
+    categories?: string[];
+    difficulty?: 'beginner' | 'intermediate' | 'advanced' | 'all';
+    includeRelated?: boolean;
+  }) {
+    const { data } = await apiClient.get('/knowledge-graph/query', { params });
+    return data;
+  },
+
+  async getNodeDetail(nodeId: string) {
+    const { data } = await apiClient.get(`/knowledge-graph/node/${nodeId}`);
+    return data;
+  },
+
+  async clearCache() {
+    const { data } = await apiClient.post('/knowledge-graph/cache/clear');
+    return data;
+  },
+};
+
 export default {
   llm: llmApi,
   agent: agentApi,
   quiz: quizApi,
   deep: deepApi,
+  knowledgeGraph: knowledgeGraphApi,
 };

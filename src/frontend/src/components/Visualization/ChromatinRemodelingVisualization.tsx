@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface ChromatinRemodelingVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function ChromatinRemodelingVisualization({ data, colors }: ChromatinRemodelingVisualizationProps) {
+export function ChromatinRemodelingVisualization({ colors }: ChromatinRemodelingVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'swi-snf' | 'iswi' | 'chd' | 'ino80'>('swi-snf');
 
   const defaultColors = {

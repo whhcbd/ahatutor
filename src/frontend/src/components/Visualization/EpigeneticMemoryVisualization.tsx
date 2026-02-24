@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import type { VisualizationData } from '../types';
 
-interface EpigeneticMemoryData extends VisualizationData {
+interface EpigeneticMemoryData {
   mechanisms?: string[];
   examples?: string[];
   function?: string;

@@ -37,12 +37,6 @@ export function AdaptiveFormLayout({ fields, children }: AdaptiveFormLayoutProps
     }
   };
 
-  const getContainerWidth = (): string => {
-    const maxWidth = layoutRules.container.maxWidth;
-    const padding = layoutRules.container.padding;
-    return `calc(100% - ${padding * 2}px)`;
-  };
-
   return (
     <div 
       style={{ 
@@ -117,7 +111,7 @@ function getFieldSpan(field: FormField, complexity: FormComplexity): number {
   }
 }
 
-export function useFormLayout(visualizationType: string) {
+export function useFormLayout() {
   const [complexity, setComplexity] = useState<FormComplexity>('simple');
   const [layoutMode, setLayoutMode] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
 

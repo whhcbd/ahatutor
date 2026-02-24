@@ -1,11 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { GraphNode } from './KnowledgeGraph';
-import { getMasteryColor } from '../../constants/visualization-colors';
 
 interface KnowledgeGraphSearchProps {
   nodes: GraphNode[];
   onSearchResults?: (nodeIds: string[]) => void;
-  onFilterChange?: (filters: FilterOptions) => void;
 }
 
 export interface FilterOptions {
@@ -14,7 +12,7 @@ export interface FilterOptions {
   levels: number[];
 }
 
-export function KnowledgeGraphSearch({ nodes, onSearchResults, onFilterChange }: KnowledgeGraphSearchProps) {
+export function KnowledgeGraphSearch({ nodes, onSearchResults }: KnowledgeGraphSearchProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState<FilterOptions>({
     types: [],

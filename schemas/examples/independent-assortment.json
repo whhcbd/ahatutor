@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "templateId": "independent-assortment-law",
+    "createdAt": "2024-01-15T00:00:00.000Z",
+    "author": "AhaTutor Team",
+    "source": "遗传学教材 第3章 第2节"
+  },
+  "concept": {
+    "name": "孟德尔第二定律（自由组合定律）",
+    "nameEn": "Mendel's Second Law - Law of Independent Assortment",
+    "category": "经典遗传学",
+    "difficulty": "intermediate",
+    "definition": "控制不同性状的遗传因子在配子形成时自由组合，互不干扰。这意味着位于不同染色体上的基因在遗传时是独立的。",
+    "prerequisites": ["孟德尔第一定律", "等位基因", "非等位基因", "同源染色体"],
+    "relatedConcepts": ["连锁", "交换", "基因定位", "多基因遗传"]
+  },
+  "visualizationType": "punnett_square",
+  "elements": [
+    {
+      "id": "male-parent",
+      "type": "cell",
+      "label": "雄性亲本",
+      "description": "基因型为AaBb的双杂合子",
+      "position": { "x": 100, "y": 100 },
+      "color": "#4CAF50",
+      "data": { "genotype": "AaBb", "phenotype": "双显性" }
+    },
+    {
+      "id": "female-parent",
+      "type": "cell",
+      "label": "雌性亲本",
+      "description": "基因型为AaBb的双杂合子",
+      "position": { "x": 400, "y": 100 },
+      "color": "#F06292",
+      "data": { "genotype": "AaBb", "phenotype": "双显性" }
+    },
+    {
+      "id": "gamete-AB",
+      "type": "gamete",
+      "label": "配子AB",
+      "description": "携带显性基因A和B的配子",
+      "position": { "x": 100, "y": 250 },
+      "color": "#2196F3"
+    },
+    {
+      "id": "gamete-Ab",
+      "type": "gamete",
+      "label": "配子Ab",
+      "description": "携带显性基因A和隐性基因b的配子",
+      "position": { "x": 200, "y": 250 },
+      "color": "#9C27B0"
+    },
+    {
+      "id": "gamete-aB",
+      "type": "gamete",
+      "label": "配子aB",
+      "description": "携带隐性基因a和显性基因B的配子",
+      "position": { "x": 300, "y": 250 },
+      "color": "#FF9800"
+    },
+    {
+      "id": "gamete-ab",
+      "type": "gamete",
+      "label": "配子ab",
+      "description": "携带隐性基因a和b的配子",
+      "position": { "x": 400, "y": 250 },
+      "color": "#F44336"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "male-parent",
+      "to": "gamete-AB",
+      "type": "causal",
+      "label": "分离与自由组合",
+      "direction": "directed"
+    },
+    {
+      "from": "male-parent",
+      "to": "gamete-Ab",
+      "type": "causal",
+      "label": "分离与自由组合",
+      "direction": "directed"
+    },
+    {
+      "from": "male-parent",
+      "to": "gamete-aB",
+      "type": "causal",
+      "label": "分离与自由组合",
+      "direction": "directed"
+    },
+    {
+      "from": "male-parent",
+      "to": "gamete-ab",
+      "type": "causal",
+      "label": "分离与自由组合",
+      "direction": "directed"
+    }
+  ],
+  "data": {
+    "punnettSquare": {
+      "maleGametes": ["AB", "Ab", "aB", "ab"],
+      "femaleGametes": ["AB", "Ab", "aB", "ab"],
+      "parentalCross": {
+        "male": {
+          "genotype": "AaBb",
+          "phenotype": "双显性个体"
+        },
+        "female": {
+          "genotype": "AaBb",
+          "phenotype": "双显性个体"
+        }
+      },
+      "offspring": [
+        {
+          "genotype": "AABB",
+          "phenotype": "双显性",
+          "probability": 0.0625
+        },
+        {
+          "genotype": "AABb",
+          "phenotype": "A显性B显性",
+          "probability": 0.125
+        },
+        {
+          "genotype": "AaBB",
+          "phenotype": "A显性B显性",
+          "probability": 0.125
+        },
+        {
+          "genotype": "AaBb",
+          "phenotype": "双显性",
+          "probability": 0.25
+        },
+        {
+          "genotype": "AAbb",
+          "phenotype": "A显性b隐性",
+          "probability": 0.0625
+        },
+        {
+          "genotype": "Aabb",
+          "phenotype": "A显性b隐性",
+          "probability": 0.125
+        },
+        {
+          "genotype": "aaBB",
+          "phenotype": "a隐性B显性",
+          "probability": 0.0625
+        },
+        {
+          "genotype": "aaBb",
+          "phenotype": "a隐性B显性",
+          "probability": 0.125
+        },
+        {
+          "genotype": "aabb",
+          "phenotype": "双隐性",
+          "probability": 0.0625
+        }
+      ],
+      "description": "双因子杂交：AaBb × AaBb，基因型9:3:3:1，表型9:3:3:1（不考虑连锁）"
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "spacing": 30,
+    "align": "center",
+    "padding": 20
+  },
+  "style": {
+    "theme": "educational",
+    "colorScheme": {
+      "primary": "#4CAF50",
+      "secondary": "#2196F3",
+      "accent": "#FF9800",
+      "background": "#FFFFFF",
+      "text": "#333333"
+    }
+  },
+  "animation": {
+    "enabled": true,
+    "type": "sequential",
+    "duration": 6000,
+    "easing": "ease-in-out",
+    "autoplay": false
+  },
+  "interactions": ["click", "hover", "zoom"],
+  "annotations": [
+    {
+      "id": "note1",
+      "target": "male-parent",
+      "text": "配子形成时，A/a分离，B/b分离，并且A/B自由组合",
+      "position": "top",
+      "style": "info"
+    },
+    {
+      "id": "note2",
+      "target": "gamete-AB",
+      "text": "四种配子比例相等，各占25%",
+      "position": "bottom",
+      "style": "success"
+    }
+  ],
+  "educational": {
+    "learningObjectives": [
+      "理解孟德尔自由组合定律的核心内容",
+      "掌握双因子杂交的分析方法",
+      "能够计算双因子杂交的遗传比例"
+    ],
+    "keyPoints": [
+      "控制不同性状的遗传因子独立遗传",
+      "配子形成时自由组合",
+      "适用于位于不同染色体上的基因",
+      "双杂合子自交产生4种配子"
+    ],
+    "commonMistakes": [
+      "认为任何两对基因都自由组合",
+      "忽视连锁现象",
+      "混淆基因型和表型比例"
+    ],
+    "quizQuestions": [
+      {
+        "question": "基因型为AaBb的个体，能产生几种配子？比例是多少？",
+        "options": [
+          "2种，1:1",
+          "4种，1:1:1:1",
+          "8种",
+          "16种"
+        ],
+        "correctAnswer": "4种，1:1:1:1",
+        "explanation": "根据自由组合定律，AaBb个体能产生AB、Ab、aB、ab四种配子，比例为1:1:1:1"
+      },
+      {
+        "question": "AaBb × AaBb杂交，后代中双隐性个体（aabb）的比例是多少？",
+        "options": [
+          "1/16",
+          "1/4",
+          "1/8",
+          "3/16"
+        ],
+        "correctAnswer": "1/16",
+        "explanation": "AaBb × AaBb的Punnett方格显示，基因型比例为9A_B_:3A_bb:3aaB_:1aabb，双隐性aabb占1/16"
+      }
+    ]
+  }
+}

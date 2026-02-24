@@ -1,0 +1,390 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "templateId": "dna-replication-process",
+    "createdAt": "2024-01-15T00:00:00.000Z",
+    "author": "AhaTutor Team",
+    "source": "遗传学教材 第9章 第1节"
+  },
+  "concept": {
+    "name": "DNA复制",
+    "nameEn": "DNA Replication",
+    "category": "分子遗传学",
+    "difficulty": "intermediate",
+    "definition": "以亲代DNA分子为模板，合成子代DNA分子的过程。DNA复制是半保留复制，即每个子代DNA分子中包含一条来自亲代的旧链和一条新合成的链。",
+    "prerequisites": ["DNA结构", "碱基配对", "DNA聚合酶"],
+    "relatedConcepts": ["转录", "翻译", "细胞分裂", "半保留复制"]
+  },
+  "visualizationType": "dna_replication",
+  "elements": [
+    {
+      "id": "original-dna",
+      "type": "chromosome",
+      "label": "亲代DNA分子",
+      "description": "双螺旋结构的DNA分子",
+      "position": { "x": 300, "y": 100 },
+      "color": "#4CAF50",
+      "data": { "strands": 2, "state": "double-helix" }
+    },
+    {
+      "id": "helicase",
+      "type": "node",
+      "label": "解旋酶",
+      "description": "解开DNA双螺旋结构",
+      "position": { "x": 300, "y": 250 },
+      "color": "#FF9800",
+      "data": { "function": "unwinding" }
+    },
+    {
+      "id": "replication-fork-1",
+      "type": "node",
+      "label": "复制叉1",
+      "description": "DNA复制起始点之一",
+      "position": { "x": 200, "y": 350 },
+      "color": "#2196F3"
+    },
+    {
+      "id": "replication-fork-2",
+      "type": "node",
+      "label": "复制叉2",
+      "description": "DNA复制起始点之二",
+      "position": { "x": 400, "y": 350 },
+      "color": "#2196F3"
+    },
+    {
+      "id": "leading-strand-1",
+      "type": "path",
+      "label": "前导链1",
+      "description": "沿5'→3'方向连续合成的新链",
+      "position": { "x": 150, "y": 450 },
+      "color": "#9C27B0"
+    },
+    {
+      "id": "lagging-strand-1",
+      "type": "path",
+      "label": "后随链1",
+      "description": "不连续合成，形成冈崎片段",
+      "position": { "x": 250, "y": 450 },
+      "color": "#E91E63"
+    },
+    {
+      "id": "leading-strand-2",
+      "type": "path",
+      "label": "前导链2",
+      "description": "沿5'→3'方向连续合成的新链",
+      "position": { "x": 350, "y": 450 },
+      "color": "#9C27B0"
+    },
+    {
+      "id": "lagging-strand-2",
+      "type": "path",
+      "label": "后随链2",
+      "description": "不连续合成，形成冈崎片段",
+      "position": { "x": 450, "y": 450 },
+      "color": "#E91E63"
+    },
+    {
+      "id": "dna-polymerase",
+      "type": "node",
+      "label": "DNA聚合酶",
+      "description": "催化DNA链的合成",
+      "position": { "x": 300, "y": 550 },
+      "color": "#00BCD4"
+    },
+    {
+      "id": "daughter-dna-1",
+      "type": "chromosome",
+      "label": "子代DNA分子1",
+      "description": "包含一条亲代链和一条新链",
+      "position": { "x": 200, "y": 650 },
+      "color": "#4CAF50"
+    },
+    {
+      "id": "daughter-dna-2",
+      "type": "chromosome",
+      "label": "子代DNA分子2",
+      "description": "包含一条亲代链和一条新链",
+      "position": { "x": 400, "y": 650 },
+      "color": "#4CAF50"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "original-dna",
+      "to": "helicase",
+      "type": "causal",
+      "label": "解旋",
+      "direction": "directed"
+    },
+    {
+      "from": "helicase",
+      "to": "replication-fork-1",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    },
+    {
+      "from": "helicase",
+      "to": "replication-fork-2",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    },
+    {
+      "from": "replication-fork-1",
+      "to": "leading-strand-1",
+      "type": "causal",
+      "label": "合成",
+      "direction": "directed"
+    },
+    {
+      "from": "replication-fork-1",
+      "to": "lagging-strand-1",
+      "type": "causal",
+      "label": "合成",
+      "direction": "directed"
+    },
+    {
+      "from": "replication-fork-2",
+      "to": "leading-strand-2",
+      "type": "causal",
+      "label": "合成",
+      "direction": "directed"
+    },
+    {
+      "from": "replication-fork-2",
+      "to": "lagging-strand-2",
+      "type": "causal",
+      "label": "合成",
+      "direction": "directed"
+    },
+    {
+      "from": "leading-strand-1",
+      "to": "daughter-dna-1",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    },
+    {
+      "from": "lagging-strand-1",
+      "to": "daughter-dna-1",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    },
+    {
+      "from": "leading-strand-2",
+      "to": "daughter-dna-2",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    },
+    {
+      "from": "lagging-strand-2",
+      "to": "daughter-dna-2",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    }
+  ],
+  "data": {
+    "process": {
+      "steps": [
+        {
+          "step": 1,
+          "name": "解旋",
+          "description": "解旋酶解开DNA双螺旋结构，形成复制叉",
+          "duration": "约30秒",
+          "components": ["解旋酶", "单链结合蛋白"],
+          "products": ["两条单链DNA模板"]
+        },
+        {
+          "step": 2,
+          "name": "引物合成",
+          "description": "引物酶合成RNA引物，为DNA聚合酶提供3'-OH",
+          "duration": "约10秒",
+          "components": ["引物酶"],
+          "products": ["RNA引物"]
+        },
+        {
+          "step": 3,
+          "name": "DNA链延伸",
+          "description": "DNA聚合酶以母链为模板，合成新的DNA链",
+          "duration": "约5分钟",
+          "components": ["DNA聚合酶", "脱氧核苷酸"],
+          "products": ["前导链", "后随链（冈崎片段）"]
+        },
+        {
+          "step": 4,
+          "name": "RNA引物切除与填补",
+          "description": "DNA聚合酶I切除RNA引物并填补缺口",
+          "duration": "约30秒",
+          "components": ["DNA聚合酶I"],
+          "products": ["连续的DNA链"]
+        },
+        {
+          "step": 5,
+          "name": "连接",
+          "description": "DNA连接酶连接DNA片段，形成完整的DNA分子",
+          "duration": "约10秒",
+          "components": ["DNA连接酶"],
+          "products": ["完整的子代DNA分子"]
+        }
+      ],
+      "totalDuration": "约6分钟",
+      "startingMaterials": ["亲代DNA分子", "脱氧核苷酸", "ATP", "Mg²⁺"],
+      "finalProducts": ["2个相同的子代DNA分子"]
+    }
+  },
+  "layout": {
+    "type": "tree",
+    "spacing": 50,
+    "align": "center",
+    "padding": 20
+  },
+  "style": {
+    "theme": "scientific",
+    "colorScheme": {
+      "primary": "#4CAF50",
+      "secondary": "#2196F3",
+      "accent": "#FF9800",
+      "background": "#F5F5F5",
+      "text": "#212121"
+    }
+  },
+  "animation": {
+    "enabled": true,
+    "type": "sequential",
+    "duration": 10000,
+    "easing": "ease-in-out",
+    "autoplay": false,
+    "steps": [
+      {
+        "elementId": "original-dna",
+        "action": "highlight",
+        "delay": 0,
+        "duration": 1500
+      },
+      {
+        "elementId": "helicase",
+        "action": "appear",
+        "delay": 1500,
+        "duration": 500
+      },
+      {
+        "elementId": "replication-fork-1",
+        "action": "appear",
+        "delay": 2500,
+        "duration": 500
+      },
+      {
+        "elementId": "replication-fork-2",
+        "action": "appear",
+        "delay": 3000,
+        "duration": 500
+      },
+      {
+        "elementId": "leading-strand-1",
+        "action": "animate",
+        "delay": 3500,
+        "duration": 1000
+      },
+      {
+        "elementId": "lagging-strand-1",
+        "action": "animate",
+        "delay": 4500,
+        "duration": 1000
+      },
+      {
+        "elementId": "leading-strand-2",
+        "action": "animate",
+        "delay": 5500,
+        "duration": 1000
+      },
+      {
+        "elementId": "lagging-strand-2",
+        "action": "animate",
+        "delay": 6500,
+        "duration": 1000
+      },
+      {
+        "elementId": "daughter-dna-1",
+        "action": "appear",
+        "delay": 8500,
+        "duration": 500
+      },
+      {
+        "elementId": "daughter-dna-2",
+        "action": "appear",
+        "delay": 9000,
+        "duration": 500
+      }
+    ]
+  },
+  "interactions": ["click", "hover", "zoom", "drag"],
+  "annotations": [
+    {
+      "id": "note1",
+      "target": "leading-strand-1",
+      "text": "前导链沿5'→3'方向连续合成",
+      "position": "left",
+      "style": "info"
+    },
+    {
+      "id": "note2",
+      "target": "lagging-strand-1",
+      "text": "后随链不连续合成，形成冈崎片段",
+      "position": "right",
+      "style": "warning"
+    },
+    {
+      "id": "note3",
+      "target": "daughter-dna-1",
+      "text": "半保留复制：每条子代DNA包含一条亲代链和一条新链",
+      "position": "bottom",
+      "style": "success"
+    }
+  ],
+  "educational": {
+    "learningObjectives": [
+      "理解DNA复制的基本过程",
+      "掌握半保留复制的概念",
+      "区分前导链和后随链的合成特点"
+    ],
+    "keyPoints": [
+      "DNA复制是半保留复制",
+      "需要解旋酶、DNA聚合酶等多种酶参与",
+      "前导链连续合成，后随链不连续合成",
+      "遵循碱基互补配对原则"
+    ],
+    "commonMistakes": [
+      "认为DNA复制是全保留复制",
+      "忽视冈崎片段的存在",
+      "混淆前导链和后随链的合成方向"
+    ],
+    "quizQuestions": [
+      {
+        "question": "DNA复制的特点是？",
+        "options": [
+          "全保留复制",
+          "半保留复制",
+          "分散复制",
+          "不保留复制"
+        ],
+        "correctAnswer": "半保留复制",
+        "explanation": "DNA复制是半保留复制，即每个子代DNA分子中包含一条来自亲代的旧链和一条新合成的链"
+      },
+      {
+        "question": "DNA复制过程中，后随链的合成特点是？",
+        "options": [
+          "沿5'→3'方向连续合成",
+          "沿3'→5'方向连续合成",
+          "不连续合成，形成冈崎片段",
+          "不需要RNA引物"
+        ],
+        "correctAnswer": "不连续合成，形成冈崎片段",
+        "explanation": "后随链的合成方向与复制叉移动方向相反，需要不连续合成，先合成冈崎片段，再由DNA连接酶连接"
+      }
+    ]
+  }
+}

@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface DNAMethylationVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function DNAMethylationVisualization({ data, colors }: DNAMethylationVisualizationProps) {
+export function DNAMethylationVisualization({ colors }: DNAMethylationVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'mechanism' | 'effects' | 'inheritance'>('mechanism');
 
   const defaultColors = {

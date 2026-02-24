@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface VectorSystemVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function VectorSystemVisualization({ data, colors }: VectorSystemVisualizationProps) {
+export function VectorSystemVisualization({ colors }: VectorSystemVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'plasmid' | 'phage' | 'viral' | 'artificial' | 'components' | 'selection'>('plasmid');
 
   const defaultColors = {

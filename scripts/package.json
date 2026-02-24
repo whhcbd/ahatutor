@@ -8,10 +8,19 @@
     "rag:index": "tsx genetics_rag_service.ts index",
     "rag:search": "tsx genetics_rag_service.ts search",
     "rag:stats": "tsx genetics_rag_service.ts stats",
-    "rag:delete": "tsx genetics_rag_service.ts delete"
+    "rag:delete": "tsx genetics_rag_service.ts delete",
+    "process:images": "tsx process-images-ocr.ts",
+    "process:exercises": "tsx extract-exercises.ts",
+    "quality:check": "tsx quality-control.ts",
+    "update:rag": "tsx update-rag-database.ts",
+    "process:rag:content": "tsx process-rag-content.ts"
+  },
+  "dependencies": {
+    "axios": "^1.13.5",
+    "crypto": "^1.0.1"
   },
   "devDependencies": {
-    "tsx": "^4.21.0",
-    "@types/node": "^20.11.0"
+    "@types/node": "^20.11.0",
+    "tsx": "^4.21.0"
   }
 }

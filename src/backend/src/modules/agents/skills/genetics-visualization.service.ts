@@ -1,20 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  GeneticsVisualizationInput,
-  GeneticsVisualizationOutput,
-  VisualizationConfig,
-  VisualizationType,
-  UnderstandingInsight,
-  SkillExecutionResult,
-  SkillType,
-} from '@shared/types/skill.types';
-import {
-  PunnettSquareData,
-  InheritancePathData,
-  ProbabilityDistributionData,
-  MeiosisAnimationData,
-  ChromosomeBehaviorData,
-} from '@shared/types/agent.types';
+import { GeneticsVisualizationInput, GeneticsVisualizationOutput, VisualizationConfig, VisualizationType, SkillExecutionResult, SkillType } from '@shared/types/skill.types';
+import { UnderstandingInsight,  } from '@shared/types/agent.types';
+import { PunnettSquareData, InheritancePathData, ProbabilityDistributionData, MeiosisAnimationData, ChromosomeBehaviorData,  } from '@shared/types/agent.types';
 import { HARDCODED_VISUALIZATIONS, isHardcodedConcept } from '../data/hardcoded-visualizations.data';
 
 /**

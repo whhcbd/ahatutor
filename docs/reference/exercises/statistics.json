@@ -1,0 +1,179 @@
+{
+  "total": 262,
+  "byChapter": [
+    {
+      "chapter": 1,
+      "count": 18
+    },
+    {
+      "chapter": 2,
+      "count": 9
+    },
+    {
+      "chapter": 3,
+      "count": 18
+    },
+    {
+      "chapter": 4,
+      "count": 19
+    },
+    {
+      "chapter": 5,
+      "count": 16
+    },
+    {
+      "chapter": 6,
+      "count": 17
+    },
+    {
+      "chapter": 7,
+      "count": 14
+    },
+    {
+      "chapter": 8,
+      "count": 19
+    },
+    {
+      "chapter": 9,
+      "count": 22
+    },
+    {
+      "chapter": 10,
+      "count": 14
+    },
+    {
+      "chapter": 11,
+      "count": 10
+    },
+    {
+      "chapter": 12,
+      "count": 15
+    },
+    {
+      "chapter": 13,
+      "count": 14
+    },
+    {
+      "chapter": 14,
+      "count": 16
+    },
+    {
+      "chapter": 15,
+      "count": 10
+    },
+    {
+      "chapter": 16,
+      "count": 9
+    },
+    {
+      "chapter": 17,
+      "count": 10
+    },
+    {
+      "chapter": 18,
+      "count": 12
+    }
+  ],
+  "byType": [
+    {
+      "type": "multiple",
+      "count": 89
+    },
+    {
+      "type": "calculation",
+      "count": 34
+    },
+    {
+      "type": "essay",
+      "count": 60
+    },
+    {
+      "type": "other",
+      "count": 79
+    }
+  ],
+  "byDifficulty": [
+    {
+      "difficulty": "medium",
+      "count": 83
+    },
+    {
+      "difficulty": "hard",
+      "count": 54
+    },
+    {
+      "difficulty": "easy",
+      "count": 125
+    }
+  ],
+  "tags": [
+    {
+      "tag": "染色体",
+      "count": 49
+    },
+    {
+      "tag": "杂交",
+      "count": 46
+    },
+    {
+      "tag": "突变",
+      "count": 46
+    },
+    {
+      "tag": "基因型",
+      "count": 45
+    },
+    {
+      "tag": "表型",
+      "count": 43
+    },
+    {
+      "tag": "隐性",
+      "count": 32
+    },
+    {
+      "tag": "显性",
+      "count": 25
+    },
+    {
+      "tag": "等位基因",
+      "count": 16
+    },
+    {
+      "tag": "连锁",
+      "count": 16
+    },
+    {
+      "tag": "重组",
+      "count": 12
+    },
+    {
+      "tag": "自交",
+      "count": 8
+    },
+    {
+      "tag": "测交",
+      "count": 5
+    },
+    {
+      "tag": "孟德尔",
+      "count": 5
+    },
+    {
+      "tag": "回交",
+      "count": 3
+    },
+    {
+      "tag": "伴性遗传",
+      "count": 3
+    },
+    {
+      "tag": "交换",
+      "count": 2
+    },
+    {
+      "tag": "非等位基因",
+      "count": 1
+    }
+  ]
+}

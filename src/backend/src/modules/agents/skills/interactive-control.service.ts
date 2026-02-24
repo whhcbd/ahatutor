@@ -1,13 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMService } from '../../llm/llm.service';
-import {
-  InteractiveControlInput,
-  InteractiveControlOutput,
-  VisualizationConfig,
-  SkillExecutionResult,
-  SkillType,
-  VisualizationType,
-} from '@shared/types/skill.types';
+import { InteractiveControlInput, InteractiveControlOutput, VisualizationConfig, SkillExecutionResult, SkillType, VisualizationType } from '@shared/types/skill.types';
+import {  } from '@shared/types/agent.types';
 
 /**
  * 可视化交互控制服务

@@ -1,16 +1,22 @@
 import { PunnettSquareData } from '@shared/types/agent.types';
-import { VisualizationColors, getPhenotypeColor, getSexColor } from '../../constants/visualization-colors';
+import { VisualizationColors, getPhenotypeColor } from '../../constants/visualization-colors';
 
 interface PunnettSquareProps {
   data: PunnettSquareData;
   colors?: Record<string, string>;
+  knowledgePoints?: {
+    keyPoints?: string[];
+    understandingPoints?: string[];
+    commonMistakes?: string[];
+    checkQuestions?: string[];
+  };
 }
 
 /**
  * Punnett 方格可视化组件
  * 展示杂交组合的后代基因型和表型分布
  */
-export function PunnettSquare({ data, colors }: PunnettSquareProps) {
+export function PunnettSquare({ data, knowledgePoints }: PunnettSquareProps) {
   const {
     maleGametes,
     femaleGametes,
@@ -226,6 +232,69 @@ export function PunnettSquare({ data, colors }: PunnettSquareProps) {
           })}
         </div>
       </div>
+
+      {/* 知识点展示 */}
+      {knowledgePoints && (
+        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+          <h4 className="font-semibold text-sm text-gray-700 mb-3">知识点解析</h4>
+
+          {knowledgePoints.keyPoints && knowledgePoints.keyPoints.length > 0 && (
+            <div className="mb-3">
+              <h5 className="font-medium text-sm text-gray-800 mb-2">关键知识点</h5>
+              <ul className="space-y-1">
+                {knowledgePoints.keyPoints.map((point, index) => (
+                  <li key={index} className="text-sm text-gray-700 flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {knowledgePoints.understandingPoints && knowledgePoints.understandingPoints.length > 0 && (
+            <div className="mb-3">
+              <h5 className="font-medium text-sm text-gray-800 mb-2">理解要点</h5>
+              <ul className="space-y-1">
+                {knowledgePoints.understandingPoints.map((point, index) => (
+                  <li key={index} className="text-sm text-gray-700 flex items-start">
+                    <span className="text-green-500 mr-2">✓</span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {knowledgePoints.commonMistakes && knowledgePoints.commonMistakes.length > 0 && (
+            <div className="mb-3">
+              <h5 className="font-medium text-sm text-gray-800 mb-2">常见错误</h5>
+              <ul className="space-y-1">
+                {knowledgePoints.commonMistakes.map((mistake, index) => (
+                  <li key={index} className="text-sm text-red-700 flex items-start">
+                    <span className="text-red-500 mr-2">!</span>
+                    <span>{mistake}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {knowledgePoints.checkQuestions && knowledgePoints.checkQuestions.length > 0 && (
+            <div>
+              <h5 className="font-medium text-sm text-gray-800 mb-2">自检问题</h5>
+              <ul className="space-y-1">
+                {knowledgePoints.checkQuestions.map((question, index) => (
+                  <li key={index} className="text-sm text-gray-700 flex items-start">
+                    <span className="text-purple-500 mr-2">?</span>
+                    <span>{question}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

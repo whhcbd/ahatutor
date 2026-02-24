@@ -1,22 +1,12 @@
 import { useState } from 'react';
-import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface MitosisVisualizationProps {
   data: any;
-  colors?: Record<string, string>;
 }
 
-export function MitosisVisualization({ data, colors }: MitosisVisualizationProps) {
+export function MitosisVisualization({ data }: MitosisVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'stages' | 'comparison' | 'significance'>('stages');
   const [currentStage, setCurrentStage] = useState(0);
-
-  const defaultColors = {
-    prophase: colors?.prophase || VisualizationColors.affected,
-    metaphase: colors?.metaphase || VisualizationColors.hover,
-    anaphase: colors?.anaphase || VisualizationColors.dominant,
-    telophase: colors?.telophase || VisualizationColors.male,
-    cytokinesis: colors?.cytokinesis || VisualizationColors.nodePrinciple,
-  };
 
   const stages = data?.stages || [
     {
@@ -44,11 +34,6 @@ export function MitosisVisualization({ data, colors }: MitosisVisualizationProps
       description: '细胞质分裂，形成两个子细胞',
       keyEvents: ['细胞膜内陷', '形成两个子细胞', '细胞质分裂'],
     },
-  ];
-
-  const comparisonData = data?.comparison || [
-    { phase: '有丝分裂', type: '体细胞分裂', result: '2个相同子细胞' },
-    { phase: '减数分裂', type: '生殖细胞分裂', result: '4个不同配子' },
   ];
 
   const significance = data?.significance || [

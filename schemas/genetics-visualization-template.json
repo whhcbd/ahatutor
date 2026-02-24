@@ -1,0 +1,594 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ahatutor.com/schemas/genetics-visualization-template.json",
+  "title": "生物遗传学概念可视化JSON模板",
+  "description": "用于描述生物遗传学概念的可视化数据结构的通用模板，支持不同类型和复杂度的遗传学概念",
+  "type": "object",
+  "required": ["metadata", "concept", "visualizationType", "elements"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "元数据信息",
+      "required": ["version", "templateId", "createdAt"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "模板版本号",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "templateId": {
+          "type": "string",
+          "description": "模板唯一标识符",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "创建时间"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "最后更新时间"
+        },
+        "author": {
+          "type": "string",
+          "description": "作者"
+        },
+        "source": {
+          "type": "string",
+          "description": "来源（教材章节、论文等）"
+        }
+      }
+    },
+    "concept": {
+      "type": "object",
+      "description": "概念定义信息",
+      "required": ["name", "category", "difficulty"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "概念名称"
+        },
+        "nameEn": {
+          "type": "string",
+          "description": "英文名称"
+        },
+        "category": {
+          "type": "string",
+          "description": "概念分类",
+          "enum": [
+            "经典遗传学",
+            "分子遗传学",
+            "细胞遗传学",
+            "群体遗传学",
+            "数量遗传学",
+            "发育遗传学",
+            "应用遗传学",
+            "特殊遗传现象",
+            "遗传病相关",
+            "基因工程"
+          ]
+        },
+        "difficulty": {
+          "type": "string",
+          "description": "难度级别",
+          "enum": ["basic", "intermediate", "advanced"]
+        },
+        "definition": {
+          "type": "string",
+          "description": "概念定义"
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "前置知识概念列表"
+        },
+        "relatedConcepts": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "相关概念列表"
+        }
+      }
+    },
+    "visualizationType": {
+      "type": "string",
+      "description": "可视化类型",
+      "enum": [
+        "punnett_square",
+        "inheritance_path",
+        "probability_distribution",
+        "knowledge_graph",
+        "meiosis_process",
+        "dna_replication",
+        "gene_expression",
+        "chromosome_structure",
+        "population_genetics",
+        "gene_map",
+        "protein_synthesis",
+        "cell_division"
+      ]
+    },
+    "elements": {
+      "type": "array",
+      "description": "可视化元素列表",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "label"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "元素唯一标识符"
+          },
+          "type": {
+            "type": "string",
+            "description": "元素类型",
+            "enum": [
+              "node",
+              "edge",
+              "cell",
+              "chromosome",
+              "gene",
+              "allele",
+              "gamete",
+              "offspring",
+              "path",
+              "timeline",
+              "chart",
+              "label",
+              "annotation"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "元素标签"
+          },
+          "description": {
+            "type": "string",
+            "description": "元素详细描述"
+          },
+          "position": {
+            "type": "object",
+            "description": "元素位置",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "z": { "type": "number" }
+            }
+          },
+          "size": {
+            "type": "object",
+            "description": "元素尺寸",
+            "properties": {
+              "width": { "type": "number" },
+              "height": { "type": "number" },
+              "radius": { "type": "number" }
+            }
+          },
+          "color": {
+            "type": "string",
+            "description": "元素颜色（HEX格式）",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "opacity": {
+            "type": "number",
+            "description": "透明度（0-1）",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "data": {
+            "type": "object",
+            "description": "元素附加数据"
+          },
+          "connections": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "连接的其他元素ID列表"
+          },
+          "interactions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["click", "hover", "drag", "zoom"]
+                },
+                "action": { "type": "string" },
+                "target": { "type": "string" }
+              }
+            },
+            "description": "交互定义"
+          }
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "description": "元素之间的关系",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "type"],
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "源元素ID"
+          },
+          "to": {
+            "type": "string",
+            "description": "目标元素ID"
+          },
+          "type": {
+            "type": "string",
+            "description": "关系类型",
+            "enum": [
+              "hierarchical",
+              "causal",
+              "temporal",
+              "spatial",
+              "genetic",
+              "dependency"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "关系标签"
+          },
+          "weight": {
+            "type": "number",
+            "description": "关系权重"
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["directed", "undirected", "bidirectional"]
+          }
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "description": "可视化数据（根据不同类型有不同的结构）",
+      "properties": {
+        "punnettSquare": {
+          "$ref": "#/definitions/punnettSquareData"
+        },
+        "inheritancePath": {
+          "$ref": "#/definitions/inheritancePathData"
+        },
+        "probabilityDistribution": {
+          "$ref": "#/definitions/probabilityDistributionData"
+        },
+        "knowledgeGraph": {
+          "$ref": "#/definitions/knowledgeGraphData"
+        },
+        "process": {
+          "$ref": "#/definitions/processData"
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "description": "布局配置",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["force", "hierarchical", "circular", "grid", "radial", "tree"],
+          "description": "布局类型"
+        },
+        "spacing": {
+          "type": "number",
+          "description": "元素间距"
+        },
+        "align": {
+          "type": "string",
+          "enum": ["left", "center", "right", "top", "bottom"]
+        },
+        "padding": {
+          "type": "number",
+          "description": "内边距"
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "description": "样式配置",
+      "properties": {
+        "theme": {
+          "type": "string",
+          "enum": ["light", "dark", "scientific", "educational"]
+        },
+        "colorScheme": {
+          "type": "object",
+          "description": "颜色方案",
+          "properties": {
+            "primary": { "type": "string" },
+            "secondary": { "type": "string" },
+            "accent": { "type": "string" },
+            "background": { "type": "string" },
+            "text": { "type": "string" }
+          }
+        },
+        "font": {
+          "type": "object",
+          "properties": {
+            "family": { "type": "string" },
+            "size": { "type": "number" },
+            "weight": { "type": "string" }
+          }
+        }
+      }
+    },
+    "animation": {
+      "type": "object",
+      "description": "动画配置",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["sequential", "parallel", "interactive"]
+        },
+        "duration": {
+          "type": "number",
+          "description": "动画持续时间（毫秒）"
+        },
+        "easing": {
+          "type": "string",
+          "enum": ["linear", "ease-in", "ease-out", "ease-in-out"]
+        },
+        "autoplay": {
+          "type": "boolean"
+        },
+        "steps": {
+          "type": "array",
+          "description": "动画步骤",
+          "items": {
+            "type": "object",
+            "properties": {
+              "elementId": { "type": "string" },
+              "action": { "type": "string" },
+              "delay": { "type": "number" },
+              "duration": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "interactions": {
+      "type": "array",
+      "description": "支持的交互方式",
+      "items": {
+        "type": "string",
+        "enum": ["click", "hover", "zoom", "drag", "select", "filter", "search"]
+      }
+    },
+    "annotations": {
+      "type": "array",
+      "description": "注释说明",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "target": { "type": "string" },
+          "text": { "type": "string" },
+          "position": { "type": "string" },
+          "style": { "type": "string" }
+        }
+      }
+    },
+    "educational": {
+      "type": "object",
+      "description": "教育相关配置",
+      "properties": {
+        "learningObjectives": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "学习目标"
+        },
+        "keyPoints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "关键知识点"
+        },
+        "commonMistakes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "常见错误理解"
+        },
+        "quizQuestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": { "type": "string" },
+              "options": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "correctAnswer": { "type": "string" },
+              "explanation": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "punnettSquareData": {
+      "type": "object",
+      "description": "Punnett方格数据",
+      "required": ["maleGametes", "femaleGametes", "parentalCross", "offspring"],
+      "properties": {
+        "maleGametes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "雄配子列表"
+        },
+        "femaleGametes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "雌配子列表"
+        },
+        "parentalCross": {
+          "type": "object",
+          "properties": {
+            "male": {
+              "type": "object",
+              "properties": {
+                "genotype": { "type": "string" },
+                "phenotype": { "type": "string" }
+              }
+            },
+            "female": {
+              "type": "object",
+              "properties": {
+                "genotype": { "type": "string" },
+                "phenotype": { "type": "string" }
+              }
+            }
+          }
+        },
+        "offspring": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "genotype": { "type": "string" },
+              "phenotype": { "type": "string" },
+              "probability": { "type": "number" },
+              "sex": { "type": "string", "enum": ["male", "female"] }
+            }
+          }
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "inheritancePathData": {
+      "type": "object",
+      "description": "遗传路径数据",
+      "required": ["generations", "inheritance"],
+      "properties": {
+        "generations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "generation": { "type": "number" },
+              "individuals": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "sex": { "type": "string", "enum": ["male", "female"] },
+                    "genotype": { "type": "string" },
+                    "phenotype": { "type": "string" },
+                    "affected": { "type": "boolean" },
+                    "carrier": { "type": "boolean" },
+                    "parents": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          },
+          "inheritance": {
+            "type": "object",
+            "properties": {
+              "pattern": { "type": "string" },
+              "chromosome": { "type": "string" },
+              "gene": { "type": "string" }
+            }
+          },
+          "explanation": { "type": "string" }
+        }
+      }
+    },
+    "probabilityDistributionData": {
+      "type": "object",
+      "description": "概率分布数据",
+      "required": ["categories", "values"],
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "values": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "colors": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "total": { "type": "string" },
+        "formula": { "type": "string" }
+      }
+    },
+    "knowledgeGraphData": {
+      "type": "object",
+      "description": "知识图谱数据",
+      "required": ["nodes", "links"],
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "level": { "type": "number" },
+              "isFoundation": { "type": "boolean" }
+            }
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source": { "type": "string" },
+              "target": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "processData": {
+      "type": "object",
+      "description": "过程类可视化数据",
+      "required": ["steps"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": { "type": "number" },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "duration": { "type": "string" },
+              "components": {
+                "type": "array",
+                "items": { "type": "object" }
+              },
+              "products": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+        "totalDuration": { "type": "string" },
+        "startingMaterials": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "finalProducts": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,11 +1,18 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Play, RotateCw, CheckCircle, XCircle, Zap, Loader2, BookOpen, Target, Bot, Eye, MessageSquare, Send, PenTool, BookText, GraduationCap } from 'lucide-react';
-import { quizApi, QuizQuestion, AnswerEvaluationResult, ExplanationResult } from '@/utils/api-quiz';
+import { Play, RotateCw, CheckCircle, XCircle, Zap, Loader2, BookOpen, Target, Bot, Eye, MessageSquare, Send, PenTool, BookText, GraduationCap, AlertCircle } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { quizApi, QuizQuestion, AnswerEvaluationResult } from '@/utils/api-quiz';
 import { agentApi } from '@/api/agent';
 import { GENETICS_TOPICS } from '@/data/genetics-topics';
-import { QuestionPanel } from '@/components/Visualization/QuestionPanel';
+import { GENETICS_CHAPTERS } from '@/data/chapters';
 import { renderVisualization } from '@/components/Visualization/VisualDesignerView';
+import EssayAnswerPanel from '@/components/EssayAnswerPanel';
+import { A2UIComponentRenderer } from '@/components/A2UI/A2UIComponentRenderer';
+import { A2UIRenderer } from '@/components/A2UI/A2UIRenderer';
 import type { VisualizationSuggestion } from '@shared/types/agent.types';
+import type { A2UIPayload } from '@shared/types/a2ui.types';
+import { Difficulty } from '@shared/types/genetics.types';
 
 enum QuizState {
   CONFIG = 'config',
@@ -26,10 +33,16 @@ interface ChatMessage {
   content: string;
   timestamp: Date;
   visualization?: VisualizationSuggestion;
+  a2uiTemplate?: any;
   examples?: Array<{ title: string; description: string }>;
   followUpQuestions?: string[];
   relatedConcepts?: string[];
   learningPath?: Array<{ id: string; name: string; level: number }>;
+  citations?: Array<{ chunkId: string; content: string; chapter?: string; section?: string }>;
+  sources?: Array<{ documentId: string; title: string; chapter?: string; section?: string }>;
+  error?: string;
+  isStreaming?: boolean;
+  streamingProgress?: number;
 }
 
 interface QuizAnswer {
@@ -60,6 +73,8 @@ export default function SpeedModePage() {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+  const [selectedChapters, setSelectedChapters] = useState<number[]>([]);
+  const [useChapterMode, setUseChapterMode] = useState<boolean>(true);
   const [questionCount, setQuestionCount] = useState(10);
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard' | 'mixed'>('medium');
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -68,10 +83,16 @@ export default function SpeedModePage() {
   const [error, setError] = useState<string | null>(null);
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
   const [aiVisualization, setAiVisualization] = useState<VisualizationSuggestion | null>(null);
+  const [aiA2UITemplate, setAiA2UITemplate] = useState<any>(null);
   const [aiExamples, setAiExamples] = useState<Array<{ title: string; description: string }>>([]);
+  const [showEssayPanel, setShowEssayPanel] = useState(false);
+  const [essayAnswer, setEssayAnswer] = useState<string>('');
+  const [essayAnswers, setEssayAnswers] = useState<Map<string, string>>(new Map());
+  const [wordLimit] = useState(2000);
   const [aiFollowUpQuestions, setAiFollowUpQuestions] = useState<string[]>([]);
   const [aiRelatedConcepts, setAiRelatedConcepts] = useState<string[]>([]);
   const [aiLearningPath, setAiLearningPath] = useState<Array<{ id: string; name: string; level: number }>>([]);
+  const [aiSources, setAiSources] = useState<Array<{ documentId: string; title: string; chapter?: string; section?: string }>>([]);
   const [isGeneratingAiExplanation, setIsGeneratingAiExplanation] = useState(false);
   const [showAiPanel, setShowAiPanel] = useState(true);
   
@@ -84,9 +105,15 @@ export default function SpeedModePage() {
   const currentQuestion = questions[currentQuestionIndex];
   const answeredCount = answers.size;
   const correctCount = Array.from(answers.values()).filter((a) => a.isCorrect).length;
+  const remainingCount = questions.length - answeredCount;
+  const progressPercent = questions.length > 0 ? Math.round((answeredCount / questions.length) * 100) : 0;
 
   const startQuiz = async () => {
-    if (selectedTopics.length === 0) {
+    if (useChapterMode && selectedChapters.length === 0) {
+      setError('请至少选择一个章节');
+      return;
+    }
+    if (!useChapterMode && selectedTopics.length === 0) {
       setError('请至少选择一个知识点');
       return;
     }
@@ -97,12 +124,49 @@ export default function SpeedModePage() {
     setCurrentQuestionIndex(0);
 
     try {
-      const generatedQuestions = await quizApi.generateQuestions({
-        topics: selectedTopics,
-        difficulty,
-        count: questionCount,
-        userLevel: 'intermediate',
-      });
+      let generatedQuestions: QuizQuestion[] = [];
+      
+      if (useChapterMode) {
+        console.log('Using chapter mode, fetching questions from quiz bank');
+        try {
+          generatedQuestions = await agentApi.getQuestionsByChapters({
+            chapters: selectedChapters,
+            difficulty: difficulty === 'mixed' ? undefined : (difficulty === 'easy' ? Difficulty.EASY : difficulty === 'hard' ? Difficulty.HARD : Difficulty.MEDIUM),
+            count: questionCount,
+          });
+          
+          if (generatedQuestions.length === 0) {
+            throw new Error('No questions found in quiz bank');
+          }
+          
+          console.log(`Retrieved ${generatedQuestions.length} questions from quiz bank`);
+        } catch (quizBankError) {
+          console.warn('Failed to fetch from quiz bank, falling back to AI generation:', quizBankError);
+          
+          const topics = selectedChapters.flatMap(chapterNum => {
+            const chapter = GENETICS_CHAPTERS.find(c => c.number === chapterNum);
+            return chapter ? chapter.topics : [];
+          });
+          
+          if (topics.length === 0) {
+            throw new Error('无法获取章节对应的知识点');
+          }
+          
+          generatedQuestions = await quizApi.generateQuestions({
+            topics,
+            difficulty,
+            count: questionCount,
+            userLevel: 'intermediate',
+          });
+        }
+      } else {
+        generatedQuestions = await quizApi.generateQuestions({
+          topics: selectedTopics,
+          difficulty,
+          count: questionCount,
+          userLevel: 'intermediate',
+        });
+      }
 
       if (!generatedQuestions || generatedQuestions.length === 0) {
         setError('生成题目失败，未能生成任何题目。请重试。');
@@ -110,7 +174,13 @@ export default function SpeedModePage() {
         return;
       }
 
+      if (generatedQuestions.length !== questionCount) {
+        console.warn(`Requested ${questionCount} questions but received ${generatedQuestions.length}`);
+        setError(`注意：请求 ${questionCount} 道题，实际生成 ${generatedQuestions.length} 道题（题库中可用题目不足）`);
+      }
+
       setQuestions(generatedQuestions as QuizQuestion[]);
+      console.log(`Starting quiz with ${generatedQuestions.length} questions`);
       setQuizState(QuizState.ANSWERING);
     } catch (err) {
       console.error('Failed to generate questions:', err);
@@ -122,7 +192,15 @@ export default function SpeedModePage() {
   };
 
   const submitAnswer = async () => {
-    if (!currentQuestion || !selectedAnswer) return;
+    if (!currentQuestion) return;
+
+    if (currentQuestion.type === 'essay' || currentQuestion.type === 'calculation') {
+      setEssayAnswer(essayAnswers.get(currentQuestion.id) || '');
+      setShowEssayPanel(true);
+      return;
+    }
+
+    if (!selectedAnswer) return;
 
     setQuizState(QuizState.EVALUATING);
 
@@ -190,7 +268,10 @@ export default function SpeedModePage() {
     setAiLearningPath([]);
 
     try {
-      const questionText = `${currentQuestion.content}\n\n选项：\n${currentQuestion.options?.map(o => `${o.label}. ${o.content}`).join('\n')}\n\n用户答案：${selectedAnswer}\n\n正确答案：${currentQuestion.correctAnswer}`;
+      const correctAnswerText = Array.isArray(currentQuestion.correctAnswer)
+        ? currentQuestion.correctAnswer.join(', ')
+        : currentQuestion.correctAnswer;
+      const questionText = `${currentQuestion.content}\n\n选项：\n${currentQuestion.options?.map(o => `${o.label}. ${o.content}`).join('\n')}\n\n用户答案：${selectedAnswer}\n\n正确答案：${correctAnswerText}`;
 
       const response = await agentApi.askVisualizationQuestion({
         concept: currentQuestion.topic,
@@ -199,15 +280,40 @@ export default function SpeedModePage() {
         conversationHistory: [],
       });
 
-      console.log('AI response:', response);
+      console.log('=== AI Response ===');
+      console.log('Full response:', JSON.stringify(response, null, 2));
       console.log('Has visualization:', !!response.visualization);
+      console.log('Has a2uiTemplate:', !!response.a2uiTemplate);
+      console.log('Visualization type:', response.visualization?.type);
+      console.log('Visualization data:', JSON.stringify(response.visualization?.data, null, 2));
+      console.log('Visualization title:', response.visualization?.title);
+      console.log('Visualization description:', response.visualization?.description);
+      console.log('Visualization elements:', response.visualization?.elements);
+      console.log('Visualization colors:', response.visualization?.colors);
+      console.log('A2UI Template:', response.a2uiTemplate ? JSON.stringify(response.a2uiTemplate, null, 2) : 'N/A');
+      console.log('A2UI Template structure:', response.a2uiTemplate ? {
+        hasSurface: !!response.a2uiTemplate.surface,
+        hasDataModel: !!response.a2uiTemplate.dataModel,
+        hasA2uiTemplate: !!response.a2uiTemplate.a2uiTemplate,
+        hasParameters: !!response.a2uiTemplate.parameters
+      } : 'N/A');
+      console.log('=====================');
 
       setAiExplanation(response.textAnswer);
-      setAiVisualization(response.visualization || null);
-      setAiExamples(response.examples || []);
+
+      if (response.a2uiTemplate) {
+        console.log('Setting A2UI template instead of visualization');
+        setAiA2UITemplate(response.a2uiTemplate);
+        setAiVisualization(null);
+      } else {
+        setAiVisualization(response.visualization || null);
+        setAiA2UITemplate(null);
+      }
+      setAiExamples((response.examples || []).map((item, index) => typeof item === 'string' ? { title: `Example ${index + 1}`, description: item } : item));
       setAiFollowUpQuestions(response.followUpQuestions || []);
       setAiRelatedConcepts(response.relatedConcepts || []);
-      setAiLearningPath(response.learningPath || []);
+      setAiLearningPath((response.learningPath || []).map((item, index) => typeof item === 'string' ? { id: `lp-${index}`, name: item, level: 1 } : item));
+      setAiSources(response.sources || []);
       setShowAiPanel(true);
     } catch (err) {
       console.error('Failed to generate AI explanation:', err);
@@ -232,15 +338,58 @@ export default function SpeedModePage() {
       setEvaluation(null);
       setAiExplanation(null);
       setAiVisualization(null);
+      setAiA2UITemplate(null);
       setAiExamples([]);
       setAiFollowUpQuestions([]);
       setAiRelatedConcepts([]);
       setAiLearningPath([]);
+      setAiSources([]);
       setShowAiPanel(false);
       setQuizState(QuizState.ANSWERING);
     } else {
       setQuizState(QuizState.SUMMARY);
     }
+  };
+
+  const saveEssayAnswer = (answer: string) => {
+    if (!currentQuestion) return;
+    
+    setEssayAnswers((prev) => {
+      const newMap = new Map(prev);
+      newMap.set(currentQuestion.id, answer);
+      return newMap;
+    });
+    
+    setEssayAnswer(answer);
+    setShowEssayPanel(false);
+    setQuizState(QuizState.EVALUATING);
+    
+    const result = {
+      isCorrect: true,
+      confidence: 0.8,
+      reason: '论述题已提交，AI将进行内容评估',
+      needsSelfAssessment: true,
+      textAnswer: answer,
+    };
+    
+    setEvaluation(result);
+    setAnswers((prev) => {
+      const newMap = new Map(prev);
+      newMap.set(currentQuestion.id, {
+        questionId: currentQuestion.id,
+        userAnswer: answer,
+        isCorrect: true,
+        evaluation: result,
+      });
+      return newMap;
+    });
+    
+    setQuizState(QuizState.EXPLAINING);
+  };
+
+  const cancelEssayAnswer = () => {
+    setShowEssayPanel(false);
+    setEssayAnswer('');
   };
 
   const skipQuestion = () => {
@@ -270,6 +419,7 @@ export default function SpeedModePage() {
     setQuestions([]);
     setCurrentQuestionIndex(0);
     setSelectedTopics([]);
+    setSelectedChapters([]);
     setAnswers(new Map());
     setError(null);
   };
@@ -283,7 +433,16 @@ export default function SpeedModePage() {
     });
   };
 
-  const handleSendChatMessage = async (question?: string) => {
+  const toggleChapter = (chapterNumber: number) => {
+    setSelectedChapters((prev) => {
+      if (prev.includes(chapterNumber)) {
+        return prev.filter((n) => n !== chapterNumber);
+      }
+      return [...prev, chapterNumber];
+    });
+  };
+
+  const handleSendChatMessage = async (question?: string, requireVisualization: boolean = false) => {
     const messageToSend = question || chatInput;
     if (!messageToSend.trim() || !currentChatTopic || isChatLoading) return;
 
@@ -298,39 +457,167 @@ export default function SpeedModePage() {
     setChatInput('');
     setIsChatLoading(true);
 
+    const assistantMessageId = (Date.now() + 1).toString();
+    const assistantMessage: ChatMessage = {
+      id: assistantMessageId,
+      role: 'assistant',
+      content: '',
+      timestamp: new Date(),
+      isStreaming: true,
+      visualization: undefined,
+      examples: [],
+      followUpQuestions: [],
+      relatedConcepts: [],
+      learningPath: [],
+      citations: [],
+      sources: [],
+    };
+
+    setChatMessages((prev) => [...prev, assistantMessage]);
+
     try {
-      const response = await agentApi.askVisualizationQuestion({
+      const questionText = requireVisualization 
+        ? `${messageToSend}\n\n请为这个问题生成详细的可视化内容，包括图表、示意图或动画说明。` 
+        : messageToSend;
+
+      agentApi.askVisualizationQuestionStream({
         concept: currentChatTopic,
-        question: messageToSend,
-        conversationHistory: chatMessages.map((m) => ({
-          role: m.role,
-          content: m.content,
-        })),
+        question: questionText,
+        userLevel: 'intermediate',
+      }, {
+        onMessage: (chunk) => {
+          setChatMessages((prev) => {
+            const messageIndex = prev.findIndex(m => m.id === assistantMessageId);
+            if (messageIndex === -1) return prev;
+            
+            const updatedMessages = [...prev];
+            const currentMessage = updatedMessages[messageIndex];
+
+            switch (chunk.type) {
+              case 'skeleton':
+                console.log('Received skeleton:', chunk.data);
+                break;
+              case 'surface':
+                console.log('Received surface:', chunk.data);
+                updatedMessages[messageIndex] = {
+                  ...currentMessage,
+                  a2uiTemplate: {
+                    ...currentMessage.a2uiTemplate,
+                    surface: {
+                      ...currentMessage.a2uiTemplate?.surface,
+                      components: chunk.data.components,
+                      rootId: chunk.data.rootId
+                    }
+                  }
+                };
+                break;
+              case 'dataModel':
+                console.log('Received dataModel:', chunk.data);
+                updatedMessages[messageIndex] = {
+                  ...currentMessage,
+                  a2uiTemplate: {
+                    ...currentMessage.a2uiTemplate,
+                    dataModel: chunk.data
+                  }
+                };
+                break;
+              case 'chunk':
+                updatedMessages[messageIndex] = {
+                  ...currentMessage,
+                  content: currentMessage.content + chunk.data.chunk,
+                  streamingProgress: chunk.data.progress,
+                };
+                break;
+              case 'data':
+                console.log('Received a2uiTemplate data:', chunk.data);
+                updatedMessages[messageIndex] = {
+                  ...currentMessage,
+                  a2uiTemplate: chunk.data.a2uiTemplate,
+                };
+                break;
+              case 'done':
+                updatedMessages[messageIndex] = {
+                  ...currentMessage,
+                  isStreaming: false,
+                  streamingProgress: undefined,
+                  examples: chunk.data.examples || [],
+                  followUpQuestions: chunk.data.followUpQuestions || [],
+                };
+                break;
+              case 'error':
+                console.error('Stream error:', chunk.error);
+                updatedMessages[messageIndex] = {
+                  ...currentMessage,
+                  content: currentMessage.content || '抱歉，生成过程中出现错误。',
+                  error: chunk.error,
+                  isStreaming: false,
+                };
+                break;
+            }
+            
+            return updatedMessages;
+          });
+        },
+        onComplete: () => {
+          console.log('Stream completed');
+          setIsChatLoading(false);
+        },
+        onError: (error) => {
+          console.error('SSE connection error:', error);
+          
+          setChatMessages((prev) => {
+            const messageIndex = prev.findIndex(m => m.id === assistantMessageId);
+            if (messageIndex === -1) return prev;
+            
+            const updatedMessages = [...prev];
+            updatedMessages[messageIndex] = {
+              ...updatedMessages[messageIndex],
+              content: updatedMessages[messageIndex].content || '抱歉，连接服务器失败。',
+              error: 'SSE连接错误',
+              isStreaming: false,
+            };
+            return updatedMessages;
+          });
+          
+          setIsChatLoading(false);
+        },
       });
-
-      const assistantMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: response.textAnswer,
-        timestamp: new Date(),
-        visualization: response.visualization,
-        examples: response.examples,
-        followUpQuestions: response.followUpQuestions,
-        relatedConcepts: response.relatedConcepts,
-        learningPath: response.learningPath,
-      };
-
-      setChatMessages((prev) => [...prev, assistantMessage]);
     } catch (err) {
       console.error('Failed to send chat message:', err);
-      const errorMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: '抱歉，我遇到了一些问题，请稍后再试。',
-        timestamp: new Date(),
-      };
-      setChatMessages((prev) => [...prev, errorMessage]);
-    } finally {
+      
+      let errorMessage = '抱歉，我遇到了一些问题，请稍后再试。';
+      let errorDetails = '';
+      
+      if (err instanceof Error) {
+        if (err.message.includes('Invalid JSON response')) {
+          errorMessage = '抱歉，AI返回的数据格式有误。请重新提问或尝试简化您的问题。';
+          errorDetails = '错误类型：数据解析错误';
+        } else if (err.message.includes('API Error')) {
+          errorMessage = '抱歉，无法连接到服务器。请检查网络连接后重试。';
+          errorDetails = '错误类型：网络连接错误';
+        } else if (err.message.includes('timeout')) {
+          errorMessage = '抱歉，请求超时了。请稍后重试或尝试简化问题。';
+          errorDetails = '错误类型：请求超时';
+        } else {
+          errorMessage = `抱歉，遇到了问题：${err.message}`;
+          errorDetails = err.message;
+        }
+      }
+      
+      setChatMessages((prev) => {
+        const messageIndex = prev.findIndex(m => m.id === assistantMessageId);
+        if (messageIndex === -1) return prev;
+        
+        const updatedMessages = [...prev];
+        updatedMessages[messageIndex] = {
+          ...prev[messageIndex],
+          content: errorMessage,
+          error: errorDetails,
+          isStreaming: false,
+        };
+        return updatedMessages;
+      });
+      
       setIsChatLoading(false);
     }
   };
@@ -408,42 +695,99 @@ export default function SpeedModePage() {
 
           {speedMode === SpeedMode.QUIZ && (
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-blue-600" />
-                选择知识点
-              </h3>
-              <div className="space-y-4">
-                {TOPIC_CATEGORIES.map((category) => (
-                  <div key={category.name}>
-                    <button
-                      onClick={() => {
-                        if (selectedTopics.length === 0 && category.topics.every((t) => !selectedTopics.includes(t))) {
-                          toggleTopic(category.topics[0]);
-                        }
-                      }}
-                      className="w-full text-left px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                    >
-                      {category.name} ({category.topics.length})
-                    </button>
-                    <div className="ml-4 mt-2 space-y-1">
-                      {category.topics.map((topic) => (
-                        <button
-                          key={topic}
-                          onClick={() => toggleTopic(topic)}
-                          className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
-                            selectedTopics.includes(topic)
-                              ? 'bg-blue-100 text-blue-700 border border-blue-300'
-                              : 'text-gray-600 hover:bg-gray-100'
-                          }`}
-                        >
-                          {selectedTopics.includes(topic) ? '✓ ' : ''}
-                          {topic}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-lg flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-blue-600" />
+                  选择模式
+                </h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setUseChapterMode(true)}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      useChapterMode
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    按章节
+                  </button>
+                  <button
+                    onClick={() => setUseChapterMode(false)}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      !useChapterMode
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    按知识点
+                  </button>
+                </div>
               </div>
+
+              {useChapterMode ? (
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-3">选择章节</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    {GENETICS_CHAPTERS.map((chapter) => (
+                      <button
+                        key={chapter.number}
+                        onClick={() => toggleChapter(chapter.number)}
+                        className={`p-4 rounded-xl border-2 transition-all text-left ${
+                          selectedChapters.includes(chapter.number)
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-semibold text-gray-800">
+                            第{chapter.number}章
+                          </span>
+                          {selectedChapters.includes(chapter.number) && (
+                            <CheckCircle className="w-5 h-5 text-blue-500" />
+                          )}
+                        </div>
+                        <div className="text-sm text-gray-700 mb-2">{chapter.title}</div>
+                        <div className="text-xs text-gray-500">
+                          约 {chapter.estimatedQuestions} 道题
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {TOPIC_CATEGORIES.map((category) => (
+                    <div key={category.name}>
+                      <button
+                        onClick={() => {
+                          if (selectedTopics.length === 0 && category.topics.every((t) => !selectedTopics.includes(t))) {
+                            toggleTopic(category.topics[0]);
+                          }
+                        }}
+                        className="w-full text-left px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        {category.name} ({category.topics.length})
+                      </button>
+                      <div className="ml-4 mt-2 space-y-1">
+                        {category.topics.map((topic) => (
+                          <button
+                            key={topic}
+                            onClick={() => toggleTopic(topic)}
+                            className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                              selectedTopics.includes(topic)
+                                ? 'bg-blue-100 text-blue-700 border border-blue-300'
+                                : 'text-gray-600 hover:bg-gray-100'
+                            }`}
+                          >
+                            {selectedTopics.includes(topic) ? '✓ ' : ''}
+                            {topic}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -496,7 +840,10 @@ export default function SpeedModePage() {
             <div className={`flex items-center justify-between rounded-xl p-4 ${speedMode === SpeedMode.QUIZ ? 'bg-blue-50' : 'bg-purple-50'}`}>
               <div>
                 <div className={`text-sm ${speedMode === SpeedMode.QUIZ ? 'text-blue-600' : 'text-purple-600'}`}>
-                  已选择 {selectedTopics.length} 个知识点
+                  {useChapterMode 
+                    ? `已选择 ${selectedChapters.length} 个章节` 
+                    : `已选择 ${selectedTopics.length} 个知识点`
+                  }
                 </div>
                 <div className={`text-lg font-bold ${speedMode === SpeedMode.QUIZ ? 'text-blue-800' : 'text-purple-800'}`}>
                   共 {questionCount} 道题
@@ -504,7 +851,7 @@ export default function SpeedModePage() {
               </div>
               <button
                 onClick={startQuiz}
-                disabled={selectedTopics.length === 0 || isLoading}
+                disabled={(useChapterMode ? selectedChapters.length === 0 : selectedTopics.length === 0) || isLoading}
                 className="btn-primary px-8 py-3 text-lg flex items-center gap-2"
               >
                 {isLoading ? (
@@ -532,28 +879,40 @@ export default function SpeedModePage() {
 
       {(quizState === QuizState.ANSWERING || quizState === QuizState.EVALUATING || quizState === QuizState.EXPLAINING) && speedMode === SpeedMode.QUIZ && (
         <div className="space-y-4">
-          <div className="bg-white rounded-xl shadow-sm p-4 flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-blue-600" />
-                <span className="text-gray-700">题目 {currentQuestionIndex + 1} / {questions.length}</span>
+          <div className="bg-white rounded-xl shadow-sm p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-8">
+                <div className="flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-blue-600" />
+                  <span className="text-gray-700">题目 {currentQuestionIndex + 1} / {questions.length}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <span className="text-green-600">{correctCount} 正确</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <XCircle className="w-5 h-5 text-red-600" />
+                  <span className="text-red-600">{answeredCount - correctCount} 错误</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-                <span className="text-green-600">{correctCount} 正确</span>
-              </div>
-              <div>
-                <span className="text-gray-700">
-                  正确率: {answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0}%
-                </span>
-              </div>
+              <button
+                onClick={() => jumpToQuestion(0)}
+                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm"
+              >
+                查看所有题目
+              </button>
             </div>
-            <button
-              onClick={() => jumpToQuestion(0)}
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm"
-            >
-              查看所有题目
-            </button>
+            
+            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-3">
+              <div 
+                className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
+                style={{ width: `${progressPercent}%` }}
+              ></div>
+            </div>
+            
+            <div className="text-center text-sm text-gray-600">
+              已答: {answeredCount} | 剩余: {remainingCount} | 进度: {progressPercent}% | 正确率: {answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0}%
+            </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm p-8">
@@ -567,6 +926,39 @@ export default function SpeedModePage() {
             </div>
 
             <h2 className="text-xl font-semibold mb-6">{currentQuestion?.content || ''}</h2>
+
+            {(quizState === QuizState.ANSWERING || quizState === QuizState.EVALUATING || quizState === QuizState.EXPLAINING) && (
+              <div className="mb-6">
+                {currentQuestion?.type === 'essay' || currentQuestion?.type === 'calculation' ? (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <PenTool className="w-5 h-5 text-blue-600" />
+                      <div>
+                        <div className="font-semibold text-blue-700">论述题</div>
+                        <div className="text-sm text-blue-600">
+                          请详细阐述您的观点，字数限制：{wordLimit} 字
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setEssayAnswer(essayAnswers.get(currentQuestion.id) || '');
+                        setShowEssayPanel(true);
+                      }}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center gap-2"
+                    >
+                      <BookText className="w-5 h-5" />
+                      开始作答
+                    </button>
+                  </div>
+                ) : (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-center gap-2">
+                    <Target className="w-5 h-5 text-yellow-600" />
+                    <span className="text-yellow-800 font-medium">选择题 - 请选择正确答案</span>
+                  </div>
+                )}
+              </div>
+            )}
 
             {(quizState === QuizState.ANSWERING || quizState === QuizState.EVALUATING || quizState === QuizState.EXPLAINING) && currentQuestion?.options && (
               <div className="space-y-3 mb-6">
@@ -665,8 +1057,8 @@ export default function SpeedModePage() {
                     ) : (
                       <>
                         <div className="p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg">
-                          <div className="text-base text-gray-700 leading-relaxed whitespace-pre-line">
-                            {aiExplanation}
+                          <div className="text-base text-gray-700 leading-relaxed">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiExplanation || ''}</ReactMarkdown>
                           </div>
                         </div>
 
@@ -695,6 +1087,28 @@ export default function SpeedModePage() {
                             </div>
                             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
                               {renderVisualization(aiVisualization, {}, undefined, undefined)}
+                            </div>
+                          </div>
+                        )}
+
+                        {aiA2UITemplate && currentQuestion && (
+                          <div className="mt-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Eye className="w-4 h-4 text-purple-600" />
+                              <span className="text-xs font-medium text-purple-600">交互式可视化</span>
+                            </div>
+                            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                              {aiA2UITemplate.surface ? (
+                                <A2UIRenderer payload={aiA2UITemplate as A2UIPayload} />
+                              ) : aiA2UITemplate.a2uiTemplate ? (
+                                <A2UIComponentRenderer
+                                  component={aiA2UITemplate.a2uiTemplate}
+                                  dataModel={aiA2UITemplate.parameters}
+                                  onAction={(action) => console.log('A2UI action:', action)}
+                                />
+                              ) : (
+                                <div className="text-red-500">无效的A2UI模板格式</div>
+                              )}
                             </div>
                           </div>
                         )}
@@ -752,6 +1166,28 @@ export default function SpeedModePage() {
                                   </span>
                                   <span className="flex-1 text-sm">{item.name}</span>
                                   <span className="text-xs text-gray-500">Lv.{item.level}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {aiSources.length > 0 && (
+                          <div className="mt-4">
+                            <p className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
+                              <BookOpen className="w-3 h-3" />
+                              知识来源（教材章节）
+                            </p>
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                              {aiSources.map((source, i) => (
+                                <div
+                                  key={i}
+                                  className={`flex items-start gap-2 py-1 ${i < aiSources.length - 1 ? 'border-b border-blue-100' : ''}`}
+                                >
+                                  <BookText className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                                  <div className="flex-1">
+                                    <p className="text-sm text-gray-700">{source.title}</p>
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -842,9 +1278,24 @@ export default function SpeedModePage() {
                       <Bot className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
                     )}
                     <div className="flex-1">
-                      <p className="text-sm whitespace-pre-wrap leading-relaxed">
-                        {message.content}
-                      </p>
+                      {message.error && (
+                        <div className="mb-2 bg-red-50 border border-red-200 rounded-lg p-3">
+                          <div className="flex items-center gap-2 text-red-700">
+                            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                            <span className="text-xs font-medium">出错了</span>
+                          </div>
+                          <p className="text-xs text-red-600 mt-1">{message.error}</p>
+                        </div>
+                      )}
+                      {message.isStreaming && message.streamingProgress !== undefined && (
+                        <div className="mb-2 flex items-center gap-2 text-xs text-purple-600">
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>正在生成... {message.streamingProgress.toFixed(0)}%</span>
+                        </div>
+                      )}
+                      <div className="text-sm leading-relaxed">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                      </div>
                       {message.examples && message.examples.length > 0 && (
                         <div className="mt-3 space-y-2">
                           <p className="text-xs font-medium opacity-70">举例说明：</p>
@@ -867,6 +1318,25 @@ export default function SpeedModePage() {
                           </div>
                           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
                             {renderVisualization(message.visualization, {}, undefined, undefined)}
+                          </div>
+                        </div>
+                      )}
+                      {message.a2uiTemplate && (
+                        <div className="mt-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Eye className="w-4 h-4 text-purple-600" />
+                            <span className="text-xs font-medium text-purple-600">交互式可视化</span>
+                          </div>
+                          <div className="bg-white rounded-lg shadow-sm border border-purple-200 p-4">
+                            {message.a2uiTemplate.surface ? (
+                              <A2UIRenderer 
+                                payload={message.a2uiTemplate as A2UIPayload}
+                              />
+                            ) : (
+                              <div className="text-xs text-gray-500">
+                                等待可视化数据...
+                              </div>
+                            )}
                           </div>
                         </div>
                       )}
@@ -921,6 +1391,25 @@ export default function SpeedModePage() {
                           </div>
                         </div>
                       )}
+
+                      {message.sources && message.sources.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs font-medium opacity-70 mb-2 flex items-center gap-1">
+                            <BookOpen className="w-3 h-3" />
+                            知识来源（教材章节）
+                          </p>
+                          <div className="space-y-1">
+                            {message.sources.map((source, i) => (
+                              <div
+                                key={i}
+                                className="text-xs bg-white bg-opacity-30 rounded px-2 py-1"
+                              >
+                                {source.title}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -956,13 +1445,36 @@ export default function SpeedModePage() {
                 className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none disabled:bg-gray-50"
               />
               <button
-                onClick={handleSendChatMessage}
+                onClick={() => handleSendChatMessage(chatInput, true)}
+                disabled={!chatInput.trim() || isChatLoading}
+                title="生成可视化内容"
+                className="px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
+              >
+                <Eye className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => handleSendChatMessage()}
                 disabled={!chatInput.trim() || isChatLoading}
                 className="px-6 py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
               >
                 <Send className="w-5 h-5" />
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showEssayPanel && currentQuestion && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="w-full max-w-5xl max-h-[90vh] overflow-y-auto">
+            <EssayAnswerPanel
+              questionText={currentQuestion.content}
+              initialAnswer={essayAnswer}
+              onSave={saveEssayAnswer}
+              onCancel={cancelEssayAnswer}
+              wordLimit={wordLimit}
+              autoSaveDelay={3000}
+            />
           </div>
         </div>
       )}

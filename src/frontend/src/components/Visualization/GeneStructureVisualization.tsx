@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface GeneStructureData {
@@ -296,7 +296,6 @@ export function GeneStructureVisualization({ data, colors }: GeneStructureVisual
                 <g transform="translate(0, 20)">
                   {geneElements.map((element, index) => {
                     const x = 80 + index * 85;
-                    const details = getElementDetails(element.id);
                     const isHovered = hoveredElement === element.id;
 
                     return (
@@ -314,6 +313,7 @@ export function GeneStructureVisualization({ data, colors }: GeneStructureVisual
                           filter="url(#shadow)"
                           onMouseEnter={() => setHoveredElement(element.id)}
                           onMouseLeave={() => setHoveredElement(null)}
+                          onClick={() => console.log('Element clicked:', element.id)}
                           style={{ cursor: 'pointer' }}
                         />
                         <text

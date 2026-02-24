@@ -277,7 +277,7 @@ export interface SixAgentOutput {
   prerequisiteTree: PrerequisiteNode;
   geneticsEnrichment: GeneticsEnrichment;
   visualDesign: VisualizationSuggestion;
-  narrativeComposition: NarrativeComposition;
+  narrativeComposition?: NarrativeComposition;
   quiz?: QuizQuestion;
 }
 
@@ -285,8 +285,16 @@ export interface SixAgentOutput {
 export interface VisualizationAnswerResponse {
   textAnswer: string;           // 文字回答
   visualization?: VisualizationSuggestion; // 可视化（如适用）
+  a2uiTemplate?: {
+    templateId: string;
+    a2uiTemplate: any;
+    parameters: Record<string, any>;
+    schema: any;
+  }; // A2UI模板蓝图（供应用内agent填充和前端渲染）
   examples?: Array<{ title: string; description: string }>; // 举例
   followUpQuestions?: string[]; // 后续建议问题
   relatedConcepts?: string[];   // 相关概念
   learningPath?: Array<{ id: string; name: string; level: number }>; // 学习路径
+  citations?: Array<{ chunkId: string; content: string; chapter?: string; section?: string }>; // 引用的具体内容
+  sources?: Array<{ documentId: string; title: string; chapter?: string; section?: string }>; // 来源文档
 }

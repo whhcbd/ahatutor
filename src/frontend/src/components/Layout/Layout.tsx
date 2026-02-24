@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, Zap, Network, BookX, BarChart3, Eye, BookOpen, X } from 'lucide-react';
+import { Home, Zap, Network, BookX, BarChart3, Eye, X } from 'lucide-react';
 import { useState } from 'react';
 
 const navItems = [
@@ -7,7 +7,6 @@ const navItems = [
   { path: '/speed', label: '速通模式', icon: Zap },
   { path: '/depth', label: '深度模式', icon: Network },
   { path: '/visualize', label: '概念可视化', icon: Eye },
-  { path: '/narrative', label: '学习叙事', icon: BookOpen },
   { path: '/mistakes', label: '错题本', icon: BookX },
   { path: '/report', label: '学情报告', icon: BarChart3 },
 ];

@@ -1,0 +1,283 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "templateId": "mendel-segregation-law",
+    "createdAt": "2024-01-15T00:00:00.000Z",
+    "author": "AhaTutor Team",
+    "source": "遗传学教材 第3章 第1节"
+  },
+  "concept": {
+    "name": "孟德尔第一定律（分离定律）",
+    "nameEn": "Mendel's First Law - Law of Segregation",
+    "category": "经典遗传学",
+    "difficulty": "basic",
+    "definition": "在生物体的细胞中，控制同一性状的遗传因子成对存在，且不相融合。在形成配子（生殖细胞）时，成对的遗传因子彼此分离，分别进入不同的配子中，随配子遗传给后代。",
+    "prerequisites": ["基因", "等位基因", "配子"],
+    "relatedConcepts": ["孟德尔第二定律", "基因型", "表现型", "测交"]
+  },
+  "visualizationType": "punnett_square",
+  "elements": [
+    {
+      "id": "male-parent",
+      "type": "cell",
+      "label": "雄性亲本",
+      "description": "基因型为Aa的雄性个体",
+      "position": { "x": 100, "y": 100 },
+      "color": "#4CAF50",
+      "data": { "genotype": "Aa", "phenotype": "杂合子" }
+    },
+    {
+      "id": "female-parent",
+      "type": "cell",
+      "label": "雌性亲本",
+      "description": "基因型为Aa的雌性个体",
+      "position": { "x": 300, "y": 100 },
+      "color": "#F06292",
+      "data": { "genotype": "Aa", "phenotype": "杂合子" }
+    },
+    {
+      "id": "gamete-A",
+      "type": "gamete",
+      "label": "配子A",
+      "description": "携带显性基因A的配子",
+      "position": { "x": 150, "y": 250 },
+      "color": "#2196F3",
+      "data": { "allele": "A" }
+    },
+    {
+      "id": "gamete-a",
+      "type": "gamete",
+      "label": "配子a",
+      "description": "携带隐性基因a的配子",
+      "position": { "x": 250, "y": 250 },
+      "color": "#FF9800",
+      "data": { "allele": "a" }
+    },
+    {
+      "id": "offspring-AA",
+      "type": "offspring",
+      "label": "后代AA",
+      "description": "显性纯合子",
+      "position": { "x": 100, "y": 400 },
+      "color": "#4CAF50",
+      "data": { "genotype": "AA", "phenotype": "显性", "probability": 0.25 }
+    },
+    {
+      "id": "offspring-Aa",
+      "type": "offspring",
+      "label": "后代Aa",
+      "description": "杂合子",
+      "position": { "x": 200, "y": 400 },
+      "color": "#2196F3",
+      "data": { "genotype": "Aa", "phenotype": "显性", "probability": 0.5 }
+    },
+    {
+      "id": "offspring-aa",
+      "type": "offspring",
+      "label": "后代aa",
+      "description": "隐性纯合子",
+      "position": { "x": 300, "y": 400 },
+      "color": "#FF9800",
+      "data": { "genotype": "aa", "phenotype": "隐性", "probability": 0.25 }
+    }
+  ],
+  "relationships": [
+    {
+      "from": "male-parent",
+      "to": "gamete-A",
+      "type": "causal",
+      "label": "分离",
+      "direction": "directed"
+    },
+    {
+      "from": "male-parent",
+      "to": "gamete-a",
+      "type": "causal",
+      "label": "分离",
+      "direction": "directed"
+    },
+    {
+      "from": "female-parent",
+      "to": "gamete-A",
+      "type": "causal",
+      "label": "分离",
+      "direction": "directed"
+    },
+    {
+      "from": "female-parent",
+      "to": "gamete-a",
+      "type": "causal",
+      "label": "分离",
+      "direction": "directed"
+    },
+    {
+      "from": "gamete-A",
+      "to": "offspring-AA",
+      "type": "causal",
+      "label": "受精",
+      "direction": "directed"
+    },
+    {
+      "from": "gamete-a",
+      "to": "offspring-aa",
+      "type": "causal",
+      "label": "受精",
+      "direction": "directed"
+    }
+  ],
+  "data": {
+    "punnettSquare": {
+      "maleGametes": ["A", "a"],
+      "femaleGametes": ["A", "a"],
+      "parentalCross": {
+        "male": {
+          "genotype": "Aa",
+          "phenotype": "杂合子（高茎）"
+        },
+        "female": {
+          "genotype": "Aa",
+          "phenotype": "杂合子（高茎）"
+        }
+      },
+      "offspring": [
+        {
+          "genotype": "AA",
+          "phenotype": "显性纯合（高茎）",
+          "probability": 0.25
+        },
+        {
+          "genotype": "Aa",
+          "phenotype": "杂合子（高茎）",
+          "probability": 0.5
+        },
+        {
+          "genotype": "aa",
+          "phenotype": "隐性纯合（矮茎）",
+          "probability": 0.25
+        }
+      ],
+      "description": "单因子杂交：Aa × Aa → 1AA:2Aa:1aa，表型比为3:1"
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "spacing": 50,
+    "align": "center",
+    "padding": 20
+  },
+  "style": {
+    "theme": "educational",
+    "colorScheme": {
+      "primary": "#4CAF50",
+      "secondary": "#2196F3",
+      "accent": "#FF9800",
+      "background": "#FFFFFF",
+      "text": "#333333"
+    },
+    "font": {
+      "family": "Arial, sans-serif",
+      "size": 14,
+      "weight": "normal"
+    }
+  },
+  "animation": {
+    "enabled": true,
+    "type": "sequential",
+    "duration": 5000,
+    "easing": "ease-in-out",
+    "autoplay": false,
+    "steps": [
+      {
+        "elementId": "male-parent",
+        "action": "highlight",
+        "delay": 0,
+        "duration": 1000
+      },
+      {
+        "elementId": "female-parent",
+        "action": "highlight",
+        "delay": 1000,
+        "duration": 1000
+      },
+      {
+        "elementId": "gamete-A",
+        "action": "appear",
+        "delay": 2000,
+        "duration": 500
+      },
+      {
+        "elementId": "gamete-a",
+        "action": "appear",
+        "delay": 2500,
+        "duration": 500
+      },
+      {
+        "elementId": "offspring-AA",
+        "action": "appear",
+        "delay": 3500,
+        "duration": 500
+      },
+      {
+        "elementId": "offspring-Aa",
+        "action": "appear",
+        "delay": 4000,
+        "duration": 500
+      },
+      {
+        "elementId": "offspring-aa",
+        "action": "appear",
+        "delay": 4500,
+        "duration": 500
+      }
+    ]
+  },
+  "interactions": ["click", "hover", "zoom"],
+  "annotations": [
+    {
+      "id": "note1",
+      "target": "male-parent",
+      "text": "配子形成时，等位基因A和a分离",
+      "position": "top",
+      "style": "info"
+    },
+    {
+      "id": "note2",
+      "target": "offspring-Aa",
+      "text": "杂合子表型为显性",
+      "position": "bottom",
+      "style": "warning"
+    }
+  ],
+  "educational": {
+    "learningObjectives": [
+      "理解孟德尔分离定律的核心内容",
+      "掌握配子形成时等位基因的分离过程",
+      "能够计算单因子杂交的遗传比例"
+    ],
+    "keyPoints": [
+      "遗传因子成对存在",
+      "配子形成时成对因子彼此分离",
+      "分离后的因子分别进入不同配子",
+      "后代基因型比例为1:2:1"
+    ],
+    "commonMistakes": [
+      "认为配子中同时含有成对的等位基因",
+      "认为杂合子的两种性状会同时表现",
+      "忽视隐性基因在配子形成时的分离"
+    ],
+    "quizQuestions": [
+      {
+        "question": "基因型为Aa的个体，能产生几种配子？比例是多少？",
+        "options": ["1种，Aa", "2种，A:a=1:1", "2种，A:a=1:2", "4种"],
+        "correctAnswer": "2种，A:a=1:1",
+        "explanation": "根据分离定律，等位基因在配子形成时分离，Aa个体产生A和a两种配子，比例为1:1"
+      },
+      {
+        "question": "Aa × Aa杂交，后代中隐性纯合子的比例是多少？",
+        "options": ["1/4", "1/2", "3/4", "0"],
+        "correctAnswer": "1/4",
+        "explanation": "Aa × Aa的Punnett方格显示，基因型比例为1AA:2Aa:1aa，隐性纯合子aa占1/4"
+      }
+    ]
+  }
+}

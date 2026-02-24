@@ -172,7 +172,6 @@ export class LLMService {
   ): Promise<T> {
     const provider = options?.provider || this.defaultProvider;
 
-    // 添加 JSON 格式要求到系统消息
     const jsonMessages = [
       {
         role: 'system' as const,
@@ -186,18 +185,58 @@ ${JSON.stringify(schema, null, 2)}`,
     const response = await this.chat(jsonMessages, { ...options, provider });
 
     try {
-      // 尝试提取 JSON（处理可能的 markdown 代码块）
       let jsonText = response.content.trim();
-      if (jsonText.startsWith('```')) {
-        const match = jsonText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-        if (match) {
-          jsonText = match[1];
+      
+      this.logger.debug(`Parsing LLM response, length: ${jsonText.length}`);
+      this.logger.debug(`Original response preview: ${response.content.substring(0, 200)}`);
+      
+      const extractionMethods = [
+        {
+          name: 'Markdown code block',
+          extract: (text: string) => {
+            const match = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+            return match ? match[1] : null;
+          }
+        },
+        {
+          name: 'First complete JSON object',
+          extract: (text: string) => {
+            const match = text.match(/\{[\s\S]*\}/);
+            return match ? match[0] : null;
+          }
+        },
+        {
+          name: 'Raw text',
+          extract: (text: string) => text
+        }
+      ];
+
+      for (const method of extractionMethods) {
+        const extracted = method.extract(jsonText);
+        if (extracted) {
+          try {
+            const result = JSON.parse(extracted) as T;
+            this.logger.debug(`Successfully parsed JSON using ${method.name}`);
+            return result;
+          } catch (e) {
+            this.logger.warn(`Failed to parse with ${method.name}: ${e instanceof Error ? e.message : String(e)}`);
+          }
         }
       }
-      return JSON.parse(jsonText) as T;
+
+      this.logger.error('All JSON extraction methods failed', {
+        responseContent: response.content.substring(0, 1000),
+        fullLength: response.content.length
+      });
+      
+      throw new Error('Invalid JSON response from LLM: All extraction methods failed');
     } catch (error) {
-      this.logger.error('Failed to parse LLM response as JSON:', response.content);
-      throw new Error(`Invalid JSON response from LLM: ${error}`);
+      this.logger.error('Failed to parse LLM response as JSON:', {
+        error: error instanceof Error ? error.message : String(error),
+        responseContent: response.content.substring(0, 1000),
+        fullLength: response.content.length
+      });
+      throw new Error(`Invalid JSON response from LLM: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 }

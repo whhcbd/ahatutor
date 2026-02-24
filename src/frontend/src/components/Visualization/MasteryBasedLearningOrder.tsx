@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { GraphNode, GraphEdge } from './KnowledgeGraph';
 import { getMasteryColor } from '../../constants/visualization-colors';
 
@@ -29,8 +29,8 @@ export function MasteryBasedLearningOrder({
   onStartLearning 
 }: MasteryBasedLearningOrderProps) {
   const learningOrder = useMemo(() => {
-    return calculateLearningOrder(nodes, edges, currentTopic);
-  }, [nodes, edges, currentTopic]);
+    return calculateLearningOrder(nodes, edges);
+  }, [nodes, edges]);
 
   const getPriorityColor = (priority: LearningOrderItem['priority']) => {
     switch (priority) {
@@ -191,8 +191,7 @@ export function MasteryBasedLearningOrder({
 
 export function calculateLearningOrder(
   nodes: GraphNode[],
-  edges: GraphEdge[],
-  currentTopic?: string
+  edges: GraphEdge[]
 ): LearningOrderItem[] {
   const nodeMap = new Map(nodes.map(n => [n.id, n]));
   const adjacencyList = new Map<string, string[]>();
@@ -291,10 +290,9 @@ export function calculateLearningOrder(
 export function useMasteryBasedLearningOrder() {
   const updateLearningOrder = (
     nodes: GraphNode[],
-    edges: GraphEdge[],
-    currentTopic?: string
+    edges: GraphEdge[]
   ): LearningOrderItem[] => {
-    return calculateLearningOrder(nodes, edges, currentTopic);
+    return calculateLearningOrder(nodes, edges);
   };
 
   const getRecommendations = (order: LearningOrderItem[], limit = 5): LearningOrderItem[] => {

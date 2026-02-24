@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import type { VisualizationData } from '../types';
 
-interface RibosomeData extends VisualizationData {
+interface RibosomeData {
   type?: string;
   subunits?: string[];
   function?: string;

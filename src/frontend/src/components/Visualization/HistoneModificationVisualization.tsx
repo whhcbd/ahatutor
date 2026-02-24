@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface HistoneModificationVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function HistoneModificationVisualization({ data, colors }: HistoneModificationVisualizationProps) {
+export function HistoneModificationVisualization({ colors }: HistoneModificationVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'acetylation' | 'methylation' | 'phosphorylation' | 'code'>('acetylation');
 
   const defaultColors = {

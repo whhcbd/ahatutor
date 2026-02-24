@@ -5,12 +5,13 @@ import { LLMModule } from './modules/llm/llm.module';
 import { AgentModule } from './modules/agents/agent.module';
 import { RAGModule } from './modules/rag/rag.module';
 import { GraphModule } from './modules/knowledge-graph/graph.module';
+import { KnowledgeGraphModule } from './modules/knowledge-graph/knowledge-graph.module';
 import { MistakeModule } from './modules/mistake/mistake.module';
 import { ReportModule } from './modules/report/report.module';
 import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProgressModule } from './modules/progress/progress.module';
-import { MinerUModule } from './modules/mineru/mineru.module';
+import { QuizBankModule } from './modules/quiz-bank/quiz-bank.module';
 
 @Module({
   imports: [
@@ -30,17 +31,18 @@ import { MinerUModule } from './modules/mineru/mineru.module';
     LLMModule.register(),
     KnowledgeBaseModule,
     AgentModule.register(),
-    RAGModule,
+    // RAGModule,
     GraphModule,
-    MistakeModule,
-    ReportModule,
+    KnowledgeGraphModule,
+    // MistakeModule,
+    // ReportModule,
 
     // 用户和进度模块
     AuthModule,
     ProgressModule,
 
-    // 文档解析模块
-    MinerUModule,
+    // 题库模块
+    QuizBankModule,
   ],
   controllers: [],
   providers: [],

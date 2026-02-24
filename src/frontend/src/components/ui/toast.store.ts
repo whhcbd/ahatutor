@@ -10,7 +10,7 @@ export interface Toast {
   duration?: number;
 }
 
-interface ToastStore {
+export interface ToastStore {
   toasts: Toast[];
   addToast: (toast: Omit<Toast, 'id'>) => void;
   removeToast: (id: string) => void;

@@ -23,24 +23,25 @@ import { ReplicationForkVisualization } from './ReplicationForkVisualization';
 import { LeadingStrandVisualization } from './LeadingStrandVisualization';
 import { LaggingStrandVisualization } from './LaggingStrandVisualization';
 import { DNAPolymeraseVisualization } from './DNAPolymeraseVisualization';
-import { PromoterVisualization } from './PromoterVisualization';
-import { SplicingVisualization } from './SplicingVisualization';
-import { RibosomeVisualization } from './RibosomeVisualization';
-import { LacOperonVisualization } from './LacOperonVisualization';
 import { DNARepairVisualization } from './DNARepairVisualization';
 import { GeneRegulationVisualization } from './GeneRegulationVisualization';
 import { EpigeneticMemoryVisualization } from './EpigeneticMemoryVisualization';
 import { ChromosomalAberrationVisualization } from './ChromosomalAberrationVisualization';
 import { TrisomyVisualization } from './TrisomyVisualization';
-import { DNAMethylationVisualization } from './DNAMethylationVisualization';
-import { HistoneModificationVisualization } from './HistoneModificationVisualization';
-import { RNAInterferenceVisualization } from './RNAInterferenceVisualization';
-import { ChromatinRemodelingVisualization } from './ChromatinRemodelingVisualization';
 import { GeneEngineeringVisualization } from './GeneEngineeringVisualization';
 import { GeneCloningVisualization } from './GeneCloningVisualization';
 import { VectorSystemVisualization } from './VectorSystemVisualization';
 import { PCRVisualization } from './PCRVisualization';
 import { UnderstandingInsights } from './UnderstandingInsights';
+import { DNAHelixVisualization } from './DNAHelixVisualization';
+import { ChromosomeDetailedVisualization, ChromosomeAberrationVisualization } from './ChromosomeDetailedVisualization';
+import { MitosisProcessVisualization } from './MitosisProcessVisualization';
+import { TrisomyDetailedVisualization, AneuploidyVisualization } from './TrisomyDetailedVisualization';
+import { SynapsisVisualization, HomologousRecombinationVisualization } from './RecombinationVisualization';
+import { KaryotypeVisualization, RobertsonTranslocationVisualization } from './KaryotypeVisualization';
+import { DNAMethylationVisualization, HistoneModificationVisualization, RNAInterferenceVisualization, ChromatinRemodelingVisualization as EpigeneticChromatinVisualization, NoncodingRNAVisualization, GenomicImprintingVisualization } from './EpigeneticsVisualization';
+import { MutationVisualization } from './MutationVisualization';
+import { PedigreeChart } from './PedigreeChart';
 
 interface VisualDesignerViewProps {
   concept: string;
@@ -278,6 +279,14 @@ export function renderVisualization(
   },
   onNodeClick?: (node: any) => void
 ) {
+  console.log('=== renderVisualization called ===');
+  console.log('Visualization type:', visualization?.type);
+  console.log('Visualization data:', visualization?.data);
+  console.log('Visualization title:', visualization?.title);
+  console.log('Has data:', !!visualization?.data);
+  console.log('Data keys:', visualization?.data ? Object.keys(visualization.data) : 'N/A');
+  console.log('==========================');
+
   if (visualization.type === 'diagram' && visualization.data && 'components' in visualization.data) {
     return <CRISPRVisualization data={visualization.data as any} colors={visualization.colors} />;
   }
@@ -416,7 +425,10 @@ function ChromosomeBehaviorPlaceholder() {
 
 // ==================== Legacy Render Functions ====================
 
-function renderPedigreeChart(_visualization: VisualizationSuggestion) {
+function renderPedigreeChart(visualization: VisualizationSuggestion) {
+  if (visualization.data) {
+    return <PedigreeChart data={visualization.data as any} colors={visualization.colors} />;
+  }
   return (
     <div className="h-96 flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50">
       <div className="text-center">
@@ -485,7 +497,7 @@ function renderDiagram(visualization: VisualizationSuggestion, _config: Record<s
   }
   
   if (visualization.title === '有丝分裂过程可视化') {
-    return <MitosisVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <MitosisVisualization data={visualization.data as any} />;
   }
   
   if (visualization.title === 'DNA复制过程可视化') {
@@ -517,15 +529,15 @@ function renderDiagram(visualization: VisualizationSuggestion, _config: Record<s
   }
   
   if (visualization.title === '等位基因概念可视化') {
-    return <AlleleVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <AlleleVisualization colors={visualization.colors} />;
   }
   
   if (visualization.title === '纯合子与杂合子可视化') {
-    return <HomozygousHeterozygousVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <HomozygousHeterozygousVisualization colors={visualization.colors} />;
   }
   
   if (visualization.title === '中心法则可视化' || visualization.title === '中心法则：转录与翻译可视化') {
-    return <CentralDogmaVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <CentralDogmaVisualization colors={visualization.colors} />;
   }
   
   if (visualization.title === '基因结构可视化' && visualization.data && 'structure' in visualization.data) {
@@ -537,45 +549,121 @@ function renderDiagram(visualization: VisualizationSuggestion, _config: Record<s
   }
   
   if (visualization.title === '染色体畸变类型可视化') {
-    return <ChromosomalAberrationVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <ChromosomalAberrationVisualization colors={visualization.colors} />;
   }
   
   if (visualization.title === '三体综合征可视化') {
-    return <TrisomyVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <TrisomyVisualization colors={visualization.colors} />;
   }
   
   if (visualization.title === 'DNA甲基化可视化') {
     return <DNAMethylationVisualization data={visualization.data as any} colors={visualization.colors} />;
   }
-  
+
   if (visualization.title === '组蛋白修饰可视化') {
     return <HistoneModificationVisualization data={visualization.data as any} colors={visualization.colors} />;
   }
-  
+
   if (visualization.title === 'RNA干扰可视化') {
     return <RNAInterferenceVisualization data={visualization.data as any} colors={visualization.colors} />;
   }
-  
+
   if (visualization.title === '染色质重塑可视化') {
-    return <ChromatinRemodelingVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <EpigeneticChromatinVisualization data={visualization.data as any} colors={visualization.colors} />;
   }
-  
+
   if (visualization.title === '基因工程可视化') {
-    return <GeneEngineeringVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <GeneEngineeringVisualization colors={visualization.colors} />;
   }
   
   if (visualization.title === '基因克隆技术可视化') {
-    return <GeneCloningVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <GeneCloningVisualization colors={visualization.colors} />;
   }
   
   if (visualization.title === '基因载体系统可视化') {
-    return <VectorSystemVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <VectorSystemVisualization colors={visualization.colors} />;
   }
   
   if (visualization.title === 'PCR技术可视化') {
-    return <PCRVisualization data={visualization.data as any} colors={visualization.colors} />;
+    return <PCRVisualization colors={visualization.colors} />;
   }
-  
+
+  if (visualization.title === 'DNA双螺旋结构可视化') {
+    return <DNAHelixVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '染色体结构可视化' && visualization.data && 'parts' in visualization.data) {
+    return <ChromosomeDetailedVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '染色体结构可视化' && visualization.data && 'structure' in visualization.data) {
+    return <ChromosomeDetailedVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '有丝分裂过程可视化') {
+    return <MitosisProcessVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '染色体畸变类型可视化') {
+    return <ChromosomeAberrationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '三体综合征可视化') {
+    return <TrisomyDetailedVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '非整倍体类型可视化') {
+    return <AneuploidyVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '减数分裂联会可视化') {
+    return <SynapsisVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '同源重组机制可视化') {
+    return <HomologousRecombinationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '人类核型分析可视化') {
+    return <KaryotypeVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '染色体组型分析可视化') {
+    return <KaryotypeVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '罗伯逊易位机制可视化') {
+    return <RobertsonTranslocationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === 'DNA甲基化机制可视化') {
+    return <DNAMethylationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '组蛋白修饰可视化') {
+    return <HistoneModificationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === 'RNA干扰机制可视化') {
+    return <RNAInterferenceVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '染色质重塑复合物可视化') {
+    return <EpigeneticChromatinVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '非编码RNA功能可视化') {
+    return <NoncodingRNAVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '基因组印记机制可视化') {
+    return <GenomicImprintingVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
+  if (visualization.title === '基因突变类型与机制可视化') {
+    return <MutationVisualization data={visualization.data as any} colors={visualization.colors} />;
+  }
+
   return (
     <div className="h-96 flex items-center justify-center bg-gray-50">
       <div className="text-center">

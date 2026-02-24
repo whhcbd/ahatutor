@@ -8,6 +8,7 @@ import neo4j, { Driver, Session } from 'neo4j-driver';
 @Injectable()
 export class Neo4jService implements OnModuleInit, OnModuleDestroy {
   private driver: Driver | null = null;
+  private connected = false;
   private readonly uri: string;
   private readonly user: string;
   private readonly password: string;
@@ -19,16 +20,20 @@ export class Neo4jService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
+    if (!process.env.NEO4J_URI && !process.env.NEO4J_USER) {
+      console.warn('Neo4j connection skipped - not configured');
+      return;
+    }
     try {
       this.driver = neo4j.driver(
         this.uri,
         neo4j.auth.basic(this.user, this.password),
       );
 
-      // 测试连接
       const session = this.driver.session();
       try {
         await session.run('RETURN 1');
+        this.connected = true;
         console.log('Neo4j connection established successfully');
       } finally {
         await session.close();
@@ -47,11 +52,15 @@ export class Neo4jService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
+  isConnected(): boolean {
+    return this.connected && this.driver !== null;
+  }
+
   /**
    * 获取会话
    */
   getSession(): Session | null {
-    if (!this.driver) return null;
+    if (!this.driver || !this.connected) return null;
     return this.driver.session();
   }
 
@@ -197,12 +206,5 @@ export class Neo4jService implements OnModuleInit, OnModuleDestroy {
       totalEdges: (edgeResult[0]?.count as number | undefined) ?? 0,
       nodeTypes,
     };
-  }
-
-  /**
-   * 检查连接状态
-   */
-  isConnected(): boolean {
-    return this.driver !== null;
   }
 }

@@ -1,13 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMService } from '../../llm/llm.service';
 import { VectorRetrievalService } from './vector-retrieval.service';
-import {
-  ContextRetrievalInput,
-  ContextRetrievalOutput,
-  RetrievalResult,
-  SkillExecutionResult,
-  SkillType,
-} from '@shared/types/skill.types';
+import { ContextRetrievalInput, ContextRetrievalOutput, RetrievalResult, SkillExecutionResult, SkillType } from '@shared/types/skill.types';
+import {  } from '@shared/types/agent.types';
 
 /**
  * 上下文检索服务

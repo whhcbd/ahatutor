@@ -173,7 +173,7 @@ export function requestIdleCallback(
       didTimeout: false,
       timeRemaining: () => 0,
     });
-  }, 1);
+  }, 1) as unknown as number;
 }
 
 /**

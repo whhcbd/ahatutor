@@ -1,13 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMService } from '../../llm/llm.service';
-import {
-  StreamingAnswerInput,
-  StreamingAnswerOutput,
-  StreamingChunk,
-  SkillExecutionResult,
-  SkillType,
-  RetrievalResult,
-} from '@shared/types/skill.types';
+import { StreamingAnswerInput, StreamingAnswerOutput, StreamingChunk, SkillExecutionResult, SkillType, RetrievalResult } from '@shared/types/skill.types';
+import {  } from '@shared/types/agent.types';
 
 /**
  * 流式输出服务
@@ -39,11 +33,17 @@ export class StreamingAnswerService {
 
       const prompt = this.buildPrompt(query, context, conversationHistory, mode, style);
 
-      const stream = this.llmService.chatStream([
-        { role: 'system', content: this.getSystemPrompt(mode, style) },
-        ...((conversationHistory || []) as any),
-        { role: 'user' as const, content: prompt },
-      ]);
+      const stream = this.llmService.chatStream(
+        [
+          { role: 'system', content: this.getSystemPrompt(mode, style) },
+          ...((conversationHistory || []) as any),
+          { role: 'user' as const, content: prompt },
+        ],
+        {
+          temperature: 0.7,
+          maxTokens: 4000,
+        },
+      );
 
       const chunks: StreamingChunk[] = [];
       const fullAnswer: string[] = [];
@@ -136,24 +136,34 @@ export class StreamingAnswerService {
     style: string = 'detailed',
   ): string {
     const contextText = context.length > 0
-      ? context.map((r, i) => `[参考资料${i + 1}] ${r.content}`).join('\n\n')
+      ? context.map((r, i) => {
+          const source = r.metadata.chapter
+            ? `[${r.metadata.chapter}${r.metadata.section ? ' - ' + r.metadata.section : ''}]`
+            : '[未知章节]';
+          return `[参考资料${i + 1} - 来源：${source}] ${r.content}`;
+        }).join('\n\n---\n\n')
       : '没有找到相关的参考资料。';
 
-    let prompt = `请根据以下参考资料回答问题。
+    let prompt = `请**严格基于以下参考资料**回答问题，不要使用参考资料之外的知识。
 
-参考资料：
 ${contextText}
+
+**重要要求：**
+1. **必须使用参考资料中的内容**：答案必须基于提供的参考资料，不能编造或使用外部知识
+2. **标注来源**：在回答的每个关键点后，用[参考资料N]标注来自哪个参考资料
+3. **明确章节**：在回答中明确说明答案来自课本的哪个章节（如"根据第X章..."）
+4. **优先级**：参考资料是唯一的答案来源，如果参考资料不足以回答，请说明
 
 问题：${query}
 
 `;
 
     if (style === 'concise') {
-      prompt += '请用简洁的语言回答，每句话不超过20字。';
+      prompt += '请用简洁的语言回答，每句话不超过20字，但必须标注来源。';
     } else if (style === 'detailed') {
-      prompt += '请详细解释，包括背景、原理和例子。';
+      prompt += '请详细解释，包括背景、原理和例子。每个关键概念都要标注来自哪个章节和参考资料。';
     } else if (style === 'tutorial') {
-      prompt += '请用教学的方式回答，引导思考，分步骤说明。';
+      prompt += '请用教学的方式回答，引导思考，分步骤说明。每一步都要说明基于哪个参考资料。';
     }
 
     return prompt;
@@ -163,28 +173,100 @@ ${contextText}
    * 获取系统提示词
    */
   private getSystemPrompt(mode: string, style: string): string {
-    const basePrompt = '你是一个遗传学专家，帮助学生理解遗传学概念。';
+    const basePrompt = `你是一个遗传学专家，帮助学生理解遗传学概念。
+
+**核心原则：**
+1. **严格基于提供的参考资料回答** - 你的所有答案都必须来自用户提供的参考资料
+2. **绝不编造或使用外部知识** - 如果参考资料中没有相关内容，明确说明"根据提供的参考资料，没有找到相关信息"
+3. **清晰标注来源** - 在每个关键点后标注来自哪个参考资料，并说明来自课本的哪个章节
+4. **引导学生使用教材** - 鼓励学生回到教材对应章节深入学习
+
+**可视化能力 - A2UI-MINDMAP 指令：**
+当问题涉及复杂的概念关系、层级结构或流程时，可以使用 A2UI-MINDMAP 指令生成思维导图可视化。
+
+**何时使用思维导图：**
+- 问题涉及多个相关的概念或原理
+- 需要展示概念之间的层级关系
+- 涉及复杂的流程或步骤
+- 需要展示知识点的整体结构
+
+**A2UI-MINDMAP 指令格式：**
+\`\`\`
+[A2UI-MINDMAP]
+  title: "思维导图标题"
+  description: "思维导图的简要说明"
+  root: {
+    id: "唯一标识符",
+    text: "节点文本",
+    type: "concept|principle|example|definition|process|outcome",
+    level: 0,
+    expanded: true,
+    children: [子节点列表]
+  }
+  layout: "radial|horizontal|vertical|tree"
+  style: {
+    nodeShape: "rounded",
+    edgeType: "solid",
+    edgeWidth: 2,
+    fontFamily: "Arial",
+    fontSize: 14
+  }
+  interactions: ["click", "hover", "zoom", "drag", "expand"]
+  annotations: [注释列表]
+[/A2UI-MINDMAP]
+\`\`\`
+
+**节点类型说明：**
+- concept: 核心概念，表示主要知识点
+- principle: 原理或定律，表示基本原理
+- example: 示例，表示具体例子
+- definition: 定义，表示概念定义
+- process: 过程，表示流程或步骤
+- outcome: 结果，表示结果或结论
+
+**使用规则：**
+- 最大层级深度不超过 6 层
+- 每个节点的直接子节点数量不超过 8 个
+- 节点文本不超过 20 个字符
+- 使用 kebab-case 命法命名节点 ID
+- 布局选择：radial（放射状）、horizontal（水平）、vertical（垂直）、tree（树状）
+
+**回答格式要求：**
+- 开头先说明答案主要来自哪个章节
+- 中间每个关键点后用[参考资料N]标注
+- 结尾总结知识点的章节位置
+- 如果适合，在回答中嵌入 A2UI-MINDMAP 指令生成思维导图`;
 
     const modePrompt: Record<string, string> = {
-      answer: '直接回答学生的问题。',
-      explanation: '解释相关概念和原理。',
-      step_by_step: '分步骤引导学生理解。',
+      answer: '直接回答学生的问题，所有答案都必须有来源标注。',
+      explanation: '解释相关概念和原理，每个概念都要说明来自哪个章节。',
+      step_by_step: '分步骤引导学生理解，每一步都要基于参考资料。',
     };
 
     const stylePrompt: Record<string, string> = {
-      concise: '语言简洁，直击要点。',
-      detailed: '详细说明，提供完整信息。',
-      tutorial: '循循善诱，启发思考。',
+      concise: '语言简洁，直击要点，但每个要点都必须有来源标注。',
+      detailed: '详细说明，提供完整信息，详细标注每个知识点的章节位置。',
+      tutorial: '循循善诱，启发思考，引导学生回到教材学习。',
     };
 
-    return `${basePrompt}${modePrompt[mode] || ''}${stylePrompt[style] || ''}`;
+    return `${basePrompt}\n\n${modePrompt[mode] || ''}\n\n${stylePrompt[style] || ''}`;
   }
 
   /**
    * 提取引用
    */
-  private extractCitations(answer: string, context: RetrievalResult[]): Array<{ chunkId: string; content: string }> {
-    const citations: Array<{ chunkId: string; content: string }> = [];
+  private extractCitations(answer: string, context: RetrievalResult[]): Array<{ 
+    chunkId: string; 
+    content: string; 
+    chapter?: string; 
+    section?: string 
+  }> {
+    const citations: Array<{ 
+      chunkId: string; 
+      content: string; 
+      chapter?: string; 
+      section?: string 
+    }> = [];
     const citationPattern = /\[参考资料(\d+)\]/g;
 
     let match;
@@ -194,6 +276,8 @@ ${contextText}
         citations.push({
           chunkId: context[index].chunkId,
           content: context[index].content,
+          chapter: context[index].metadata.chapter,
+          section: context[index].metadata.section,
         });
       }
     }
@@ -204,14 +288,32 @@ ${contextText}
   /**
    * 提取来源
    */
-  private extractSources(context: RetrievalResult[]): Array<{ documentId: string; title: string; url?: string }> {
-    const sourceMap = new Map<string, { documentId: string; title: string; url?: string }>();
+  private extractSources(context: RetrievalResult[]): Array<{ 
+    documentId: string; 
+    title: string; 
+    chapter?: string;
+    section?: string;
+    url?: string 
+  }> {
+    const sourceMap = new Map<string, { 
+      documentId: string; 
+      title: string; 
+      chapter?: string;
+      section?: string;
+      url?: string 
+    }>();
 
     for (const result of context) {
       if (!sourceMap.has(result.documentId)) {
+        const title = result.metadata.chapter 
+          ? `${result.metadata.chapter}${result.metadata.section ? ' - ' + result.metadata.section : ''}`
+          : `文档 ${result.documentId}`;
+        
         sourceMap.set(result.documentId, {
           documentId: result.documentId,
-          title: result.metadata.chapter || `文档 ${result.documentId}`,
+          title,
+          chapter: result.metadata.chapter,
+          section: result.metadata.section,
           url: undefined,
         });
       }

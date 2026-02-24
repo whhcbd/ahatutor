@@ -1,0 +1,295 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "templateId": "sex-linked-inheritance",
+    "createdAt": "2024-01-15T00:00:00.000Z",
+    "author": "AhaTutor Team",
+    "source": "遗传学教材 第6章 第2节"
+  },
+  "concept": {
+    "name": "伴性遗传",
+    "nameEn": "Sex-linked Inheritance",
+    "category": "特殊遗传现象",
+    "difficulty": "intermediate",
+    "definition": "控制某些性状的基因位于性染色体上，这些性状的遗传与性别相关联的现象。",
+    "prerequisites": ["染色体", "性染色体", "等位基因", "分离定律"],
+    "relatedConcepts": ["X连锁遗传", "Y连锁遗传", "伴X隐性遗传", "伴X显性遗传"]
+  },
+  "visualizationType": "inheritance_path",
+  "elements": [
+    {
+      "id": "gen-1-female-carrier",
+      "type": "cell",
+      "label": "第一代-母亲（携带者）",
+      "description": "基因型X^BX^b，表型正常但携带色盲基因",
+      "position": { "x": 200, "y": 50 },
+      "color": "#F06292",
+      "data": { "genotype": "X^BX^b", "phenotype": "正常", "carrier": true, "sex": "female" }
+    },
+    {
+      "id": "gen-1-male-normal",
+      "type": "cell",
+      "label": "第一代-父亲（正常）",
+      "description": "基因型X^BY，表型正常",
+      "position": { "x": 400, "y": 50 },
+      "color": "#64B5F6",
+      "data": { "genotype": "X^BY", "phenotype": "正常", "sex": "male" }
+    },
+    {
+      "id": "gen-2-daughter-1",
+      "type": "cell",
+      "label": "第二代-女儿1",
+      "description": "基因型X^BX^B，表型正常",
+      "position": { "x": 100, "y": 200 },
+      "color": "#F06292",
+      "data": { "genotype": "X^BX^B", "phenotype": "正常", "sex": "female" }
+    },
+    {
+      "id": "gen-2-daughter-2",
+      "type": "cell",
+      "label": "第二代-女儿2（携带者）",
+      "description": "基因型X^BX^b，表型正常但携带色盲基因",
+      "position": { "x": 200, "y": 200 },
+      "color": "#F06292",
+      "data": { "genotype": "X^BX^b", "phenotype": "正常", "carrier": true, "sex": "female" }
+    },
+    {
+      "id": "gen-2-son-1",
+      "type": "cell",
+      "label": "第二代-儿子1（色盲）",
+      "description": "基因型X^bY，表型色盲",
+      "position": { "x": 400, "y": 200 },
+      "color": "#64B5F6",
+      "data": { "genotype": "X^bY", "phenotype": "色盲", "affected": true, "sex": "male" }
+    },
+    {
+      "id": "gen-2-son-2",
+      "type": "cell",
+      "label": "第二代-儿子2（正常）",
+      "description": "基因型X^BY，表型正常",
+      "position": { "x": 500, "y": 200 },
+      "color": "#64B5F6",
+      "data": { "genotype": "X^BY", "phenotype": "正常", "sex": "male" }
+    },
+    {
+      "id": "gen-3-grandson-1",
+      "type": "cell",
+      "label": "第三代-孙子1（色盲）",
+      "description": "携带者母亲X^BX^b与正常父亲X^BY婚配，可能生出X^bY色盲儿子",
+      "position": { "x": 300, "y": 350 },
+      "color": "#64B5F6",
+      "data": { "genotype": "X^bY", "phenotype": "色盲", "affected": true, "sex": "male" }
+    }
+  ],
+  "relationships": [
+    {
+      "from": "gen-1-female-carrier",
+      "to": "gen-2-daughter-1",
+      "type": "genetic",
+      "label": "遗传",
+      "direction": "directed"
+    },
+    {
+      "from": "gen-1-female-carrier",
+      "to": "gen-2-daughter-2",
+      "type": "genetic",
+      "label": "遗传",
+      "direction": "directed"
+    },
+    {
+      "from": "gen-1-male-normal",
+      "to": "gen-2-daughter-1",
+      "type": "genetic",
+      "label": "遗传",
+      "direction": "directed"
+    },
+    {
+      "from": "gen-1-male-normal",
+      "to": "gen-2-daughter-2",
+      "type": "genetic",
+      "label": "遗传",
+      "direction": "directed"
+    },
+    {
+      "from": "gen-1-female-carrier",
+      "to": "gen-2-son-1",
+      "type": "genetic",
+      "label": "遗传",
+      "direction": "directed"
+    },
+    {
+      "from": "gen-1-male-normal",
+      "to": "gen-2-son-2",
+      "type": "genetic",
+      "label": "遗传",
+      "direction": "directed"
+    },
+    {
+      "from": "gen-2-daughter-2",
+      "to": "gen-3-grandson-1",
+      "type": "genetic",
+      "label": "遗传",
+      "direction": "directed"
+    }
+  ],
+  "data": {
+    "inheritancePath": {
+      "generations": [
+        {
+          "generation": 1,
+          "individuals": [
+            {
+              "id": "gen-1-female-carrier",
+              "sex": "female",
+              "genotype": "X^BX^b",
+              "phenotype": "正常",
+              "carrier": true,
+              "parents": []
+            },
+            {
+              "id": "gen-1-male-normal",
+              "sex": "male",
+              "genotype": "X^BY",
+              "phenotype": "正常",
+              "carrier": false,
+              "parents": []
+            }
+          ]
+        },
+        {
+          "generation": 2,
+          "individuals": [
+            {
+              "id": "gen-2-daughter-1",
+              "sex": "female",
+              "genotype": "X^BX^B",
+              "phenotype": "正常",
+              "carrier": false,
+              "parents": ["gen-1-female-carrier", "gen-1-male-normal"]
+            },
+            {
+              "id": "gen-2-daughter-2",
+              "sex": "female",
+              "genotype": "X^BX^b",
+              "phenotype": "正常",
+              "carrier": true,
+              "parents": ["gen-1-female-carrier", "gen-1-male-normal"]
+            },
+            {
+              "id": "gen-2-son-1",
+              "sex": "male",
+              "genotype": "X^bY",
+              "phenotype": "色盲",
+              "affected": true,
+              "parents": ["gen-1-female-carrier", "gen-1-male-normal"]
+            },
+            {
+              "id": "gen-2-son-2",
+              "sex": "male",
+              "genotype": "X^BY",
+              "phenotype": "正常",
+              "affected": false,
+              "parents": ["gen-1-female-carrier", "gen-1-male-normal"]
+            }
+          ]
+        },
+        {
+          "generation": 3,
+          "individuals": [
+            {
+              "id": "gen-3-grandson-1",
+              "sex": "male",
+              "genotype": "X^bY",
+              "phenotype": "色盲",
+              "affected": true,
+              "parents": ["gen-2-daughter-2", "unknown-male"]
+            }
+          ]
+        }
+      ],
+      "inheritance": {
+        "pattern": "X连锁隐性遗传",
+        "chromosome": "X染色体",
+        "gene": "色盲基因"
+      },
+      "explanation": "伴X隐性遗传病的特点：1) 男性患者多于女性；2) 男性患者的致病基因只能从母亲传来，且只能传给女儿（交叉遗传）；3) 女性患者的父亲和儿子通常都是患者；4) 女性携带者表型正常，但能将致病基因传给儿子。色盲是典型的伴X隐性遗传病。"
+    }
+  },
+  "layout": {
+    "type": "hierarchical",
+    "spacing": 30,
+    "align": "center",
+    "padding": 20
+  },
+  "style": {
+    "theme": "educational",
+    "colorScheme": {
+      "primary": "#F06292",
+      "secondary": "#64B5F6",
+      "accent": "#F44336",
+      "background": "#FFFFFF",
+      "text": "#333333"
+    }
+  },
+  "animation": {
+    "enabled": true,
+    "type": "sequential",
+    "duration": 6000,
+    "easing": "ease-in-out",
+    "autoplay": false
+  },
+  "interactions": ["click", "hover", "zoom", "select"],
+  "annotations": [
+    {
+      "id": "note1",
+      "target": "gen-1-female-carrier",
+      "text": "携带者女性表型正常，但基因中含有一个隐性致病基因",
+      "position": "top",
+      "style": "info"
+    },
+    {
+      "id": "note2",
+      "target": "gen-2-son-1",
+      "text": "男性只有一条X染色体，X^b基因必定表达",
+      "position": "bottom",
+      "style": "warning"
+    }
+  ],
+  "educational": {
+    "learningObjectives": [
+      "理解伴性遗传的基本原理",
+      "掌握X连锁隐性遗传的特点",
+      "能够分析家族系谱中的遗传模式"
+    ],
+    "keyPoints": [
+      "致病基因位于性染色体上",
+      "遗传方式与性别相关",
+      "男性发病率高于女性",
+      "存在交叉遗传现象"
+    ],
+    "commonMistakes": [
+      "认为男女发病率相同",
+      "忽视交叉遗传现象",
+      "混淆携带者和患者"
+    ],
+    "quizQuestions": [
+      {
+        "question": "红绿色盲是伴X隐性遗传病。若父亲正常、母亲携带者，他们生出色盲儿子的概率是多少？",
+        "options": ["0%", "25%", "50%", "75%"],
+        "correctAnswer": "25%",
+        "explanation": "父亲正常（X^BY），母亲携带者（X^BX^b）。生出儿子的概率为50%，儿子中色盲（X^bY）的概率为50%，所以总概率为50%×50%=25%"
+      },
+      {
+        "question": "伴X隐性遗传病的特点是？",
+        "options": [
+          "女性患者多于男性",
+          "男性患者多于女性",
+          "男女发病率相同",
+          "只遗传给男性"
+        ],
+        "correctAnswer": "男性患者多于女性",
+        "explanation": "伴X隐性遗传病中，男性只有一条X染色体，只要携带致病基因就会发病，而女性有两条X染色体，需要两条都携带致病基因才会发病，所以男性患者多于女性"
+      }
+    ]
+  }
+}

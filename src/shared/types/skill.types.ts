@@ -3,7 +3,6 @@
  */
 
 import type { UnderstandingInsight } from './agent.types';
-import type { DocumentChunk, DocumentMetadata } from './rag.types';
 
 export { UnderstandingInsight } from './agent.types';
 
@@ -147,8 +146,52 @@ export interface InteractiveControlOutput {
 }
 
 // ==================== RAG 相关类型（从 rag.types 导入）====================
-export { DocumentType, DocumentMetadata } from './rag.types';
-export type { DocumentChunk } from './rag.types';
+// 注意：这些类型从 rag.types.ts 重新定义，避免循环依赖
+
+// 文档类型
+export enum DocumentType {
+  PDF = 'pdf',
+  WORD = 'word',
+  MARKDOWN = 'markdown',
+  TEXT = 'text',
+}
+
+// 文档元数据
+export interface DocumentMetadata {
+  id?: string;
+  type?: string;
+  title?: string;
+  author?: string;
+  source?: string;
+  topics?: string[];
+  pageNumber?: number;
+  chapter?: string;
+  section?: string;
+  difficulty?: string;
+  size?: number;
+  images?: string[];
+  layouts?: string[];
+  parser?: 'mineru' | 'local' | 'mammoth';
+}
+
+// 文档块
+export interface DocumentChunk {
+  id: string;
+  documentId: string;
+  content: string;
+  metadata: {
+    pageNumber?: number;
+    chapter?: string;
+    section?: string;
+    subsection?: string;
+    tags?: string[];
+    documentId?: string;
+    topics?: string[];
+    chunkIndex?: number;
+    difficulty?: string;
+  };
+  embedding?: number[];
+}
 
 // 文档索引输入
 export interface DocumentIndexingInput {
@@ -180,6 +223,7 @@ export interface VectorRetrievalInput {
     topics?: string[];
     difficulty?: string;
     documentId?: string;
+    chapter?: string;
   };
   rerank?: boolean;
 }
@@ -190,7 +234,17 @@ export interface RetrievalResult {
   documentId: string;
   content: string;
   score: number;
-  metadata: DocumentChunk["metadata"];
+  metadata: {
+    pageNumber?: number;
+    chapter?: string;
+    section?: string;
+    subsection?: string;
+    tags?: string[];
+    documentId?: string;
+    topics?: string[];
+    chunkIndex?: number;
+    difficulty?: string;
+  };
 }
 
 // 向量检索输出
@@ -250,8 +304,8 @@ export interface StreamingChunk {
 export interface StreamingAnswerOutput {
   stream: AsyncGenerator<StreamingChunk> | null;
   fullAnswer: string;
-  citations: Array<{ chunkId: string; content: string }>;
-  sources: Array<{ documentId: string; title: string; url?: string }>;
+  citations: Array<{ chunkId: string; content: string; chapter?: string; section?: string }>;
+  sources: Array<{ documentId: string; title: string; chapter?: string; section?: string; url?: string }>;
   generationTime: number;
 }
 

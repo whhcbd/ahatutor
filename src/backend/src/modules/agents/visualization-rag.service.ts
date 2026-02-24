@@ -29,7 +29,12 @@ export class VisualizationRAGService implements OnModuleInit {
   constructor(private readonly llmService: LLMService) {}
 
   async onModuleInit() {
-    await this.initializeVisualizationIndex();
+    try {
+      await this.initializeVisualizationIndex();
+    } catch (error) {
+      this.logger.warn('Failed to initialize visualization RAG index, continuing without it:', error);
+      this.isInitialized = false;
+    }
   }
 
   async initializeVisualizationIndex() {
@@ -43,17 +48,21 @@ export class VisualizationRAGService implements OnModuleInit {
         const viz = getHardcodedVisualization(concept);
         if (viz) {
           const searchKey = this.buildSearchKey(concept, viz);
-          const embedding = await this.llmService.generateEmbedding(searchKey);
+          try {
+            const embedding = await this.llmService.generateEmbedding(searchKey);
 
-          this.embeddings.push({
-            concept,
-            title: viz.title,
-            description: viz.description,
-            elements: viz.elements,
-            type: viz.type,
-            visualization: viz,
-            embedding,
-          });
+            this.embeddings.push({
+              concept,
+              title: viz.title,
+              description: viz.description,
+              elements: viz.elements,
+              type: viz.type,
+              visualization: viz,
+              embedding,
+            });
+          } catch (embedError) {
+            this.logger.warn(`Failed to generate embedding for concept "${concept}":`, embedError);
+          }
         }
       }
 
@@ -61,6 +70,7 @@ export class VisualizationRAGService implements OnModuleInit {
       this.logger.log(`Visualization RAG index initialized with ${this.embeddings.length} visualizations`);
     } catch (error) {
       this.logger.error('Failed to initialize visualization index:', error);
+      throw error;
     }
   }
 

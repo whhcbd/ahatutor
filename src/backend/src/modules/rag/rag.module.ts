@@ -4,7 +4,9 @@ import { RAGService } from './services/rag.service';
 import { DocumentService } from './services/document.service';
 import { ChunkService } from './services/chunk.service';
 import { EmbeddingService } from './services/embedding.service';
+import { LocalEmbeddingService } from './services/local-embedding.service';
 import { VectorStoreService } from './services/vector-store.service';
+import { LocalVectorStoreService } from './services/local-vector-store.service';
 import { RetrievalService } from './services/retrieval.service';
 import { DocumentIndexingService } from './services/document-indexing.service';
 import { DocumentSplitterService } from './services/document-splitter.service';
@@ -12,18 +14,19 @@ import { VectorRetrievalService } from './services/vector-retrieval.service';
 import { ContextRetrievalService } from './services/context-retrieval.service';
 import { StreamingAnswerService } from './services/streaming-answer.service';
 import { LLMModule } from '../llm/llm.module';
-import { MinerUModule } from '../mineru/mineru.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [LLMModule.register(), MinerUModule, ConfigModule],
+  imports: [LLMModule.register(), ConfigModule],
   controllers: [RAGController],
   providers: [
     RAGService,
     DocumentService,
     ChunkService,
     EmbeddingService,
+    LocalEmbeddingService,
     VectorStoreService,
+    LocalVectorStoreService,
     RetrievalService,
     DocumentIndexingService,
     DocumentSplitterService,
@@ -36,7 +39,9 @@ import { ConfigModule } from '@nestjs/config';
     DocumentService,
     ChunkService,
     EmbeddingService,
+    LocalEmbeddingService,
     VectorStoreService,
+    LocalVectorStoreService,
     RetrievalService,
     DocumentIndexingService,
     DocumentSplitterService,

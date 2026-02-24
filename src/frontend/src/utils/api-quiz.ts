@@ -1,4 +1,5 @@
 import apiClient from './api-client';
+import { Difficulty } from '@shared/types/genetics.types';
 
 export interface Option {
   id: string;
@@ -21,12 +22,6 @@ export enum QuestionType {
   SHORT_ANSWER = 'short_answer',
   ESSAY = 'essay',
   CALCULATION = 'calculation',
-}
-
-export enum Difficulty {
-  EASY = 'easy',
-  MEDIUM = 'medium',
-  HARD = 'hard',
 }
 
 export interface QuizQuestion {

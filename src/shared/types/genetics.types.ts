@@ -40,6 +40,8 @@ export interface QuizQuestion {
   metadata?: {
     source?: string;
     estimatedTime?: number;
+    chapter?: string;
+    chapterNumber?: number;
   };
 }
 

@@ -1,12 +1,15 @@
-import { Controller, Post, Body, Get, Query, Logger } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { Controller, Post, Body, Get, Param, UseGuards, Query, Req, Logger, Optional, Res, Headers, Sse } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiProperty } from '@nestjs/swagger';
 import { IsString, IsEnum, IsOptional, IsNumber, IsArray, IsBoolean, IsObject } from 'class-validator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Request, Response } from 'express';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AgentPipelineService } from './agent-pipeline.service';
 import { ConceptAnalyzerService } from './concept-analyzer.service';
 import { PrerequisiteExplorerService } from './prerequisite-explorer.service';
 import { GeneticsEnricherService } from './genetics-enricher.service';
 import { VisualDesignerService } from './visual-designer.service';
-import { NarrativeComposerService } from './narrative-composer.service';
 import { QuizGeneratorService } from './quiz-generator.service';
 import { WebSearchService } from './skills/web-search.service';
 import { ResourceRecommendService } from './skills/resource-recommend.service';
@@ -15,9 +18,9 @@ import { GeneticsVisualizationService } from './skills/genetics-visualization.se
 import { InteractiveControlService } from './skills/interactive-control.service';
 import { AnswerEvaluatorService } from './skills/answer-evaluator.service';
 import { VisualizationRAGService } from './visualization-rag.service';
-import { SixAgentInput } from '@shared/types/agent.types';
-import { Difficulty, QuestionType, QuizQuestion, Option, QuizExplanation } from '@shared/types/genetics.types';
-import { ResourceType } from '@shared/types/skill.types';
+import { StreamResponseService } from './stream-response.service';
+import { ComponentCatalogService } from './component-catalog.service';
+import { SixAgentInput, Difficulty, QuestionType, QuizQuestion, Option, QuizExplanation, ResourceType, UserAction } from '@ahatutor/shared';
 
 class QuizQuestionDto {
   @ApiProperty({ description: '题目ID' })
@@ -228,17 +231,6 @@ class VisualDesignDto {
   @ApiProperty({ description: '包含前置知识树', required: false })
   @IsOptional()
   includePrerequisites?: boolean;
-}
-
-class NarrativeDto {
-  @ApiProperty({ description: '目标概念' })
-  @IsString()
-  concept!: string;
-
-  @ApiProperty({ description: '用户水平', enum: ['beginner', 'intermediate', 'advanced'], required: false })
-  @IsOptional()
-  @IsEnum(['beginner', 'intermediate', 'advanced'] as const)
-  userLevel?: 'beginner' | 'intermediate' | 'advanced';
 }
 
 class WebSearchDto {
@@ -465,18 +457,19 @@ export class AgentController {
   constructor(
     private readonly pipelineService: AgentPipelineService,
     private readonly conceptAnalyzer: ConceptAnalyzerService,
-    private readonly prerequisiteExplorer: PrerequisiteExplorerService,
-    private readonly geneticsEnricher: GeneticsEnricherService,
-    private readonly visualDesigner: VisualDesignerService,
-    private readonly narrativeComposer: NarrativeComposerService,
-    private readonly quizGenerator: QuizGeneratorService,
-    private readonly webSearchService: WebSearchService,
-    private readonly resourceRecommendService: ResourceRecommendService,
-    private readonly visualizationGenerator: VisualizationGeneratorService,
-    private readonly geneticsVisualization: GeneticsVisualizationService,
-    private readonly interactiveControl: InteractiveControlService,
-    private readonly answerEvaluator: AnswerEvaluatorService,
-    private readonly visualizationRAG: VisualizationRAGService,
+    @Optional() private readonly prerequisiteExplorer: PrerequisiteExplorerService,
+    @Optional() private readonly geneticsEnricher: GeneticsEnricherService,
+    @Optional() private readonly visualDesigner: VisualDesignerService,
+    @Optional() private readonly quizGenerator: QuizGeneratorService,
+    @Optional() private readonly webSearchService: WebSearchService,
+    @Optional() private readonly resourceRecommendService: ResourceRecommendService,
+    @Optional() private readonly visualizationGenerator: VisualizationGeneratorService,
+    @Optional() private readonly geneticsVisualization: GeneticsVisualizationService,
+    @Optional() private readonly interactiveControl: InteractiveControlService,
+    @Optional() private readonly answerEvaluator: AnswerEvaluatorService,
+    @Optional() private readonly visualizationRAG: VisualizationRAGService,
+    @Optional() private readonly streamResponseService: StreamResponseService,
+    private readonly componentCatalogService: ComponentCatalogService,
   ) {}
 
   @Post('pipeline')
@@ -494,6 +487,12 @@ export class AgentController {
   @Post('explore')
   @ApiOperation({ summary: '探索前置知识' })
   async explore(@Body() dto: ExploreDto) {
+    if (!this.prerequisiteExplorer) {
+      return {
+        success: false,
+        message: 'Prerequisite Explorer service is not available',
+      };
+    }
     const tree = await this.prerequisiteExplorer.explorePrerequisites(
       dto.concept,
       dto.maxDepth || 3
@@ -508,12 +507,21 @@ export class AgentController {
   @Post('enrich')
   @ApiOperation({ summary: '丰富遗传学知识' })
   async enrich(@Body() dto: EnrichDto) {
+    if (!this.geneticsEnricher) {
+      return { message: 'GeneticsEnricher service is not available' };
+    }
     return await this.geneticsEnricher.enrichConcept(dto.concept);
   }
 
   @Post('quiz/generate')
   @ApiOperation({ summary: '生成题目' })
   async generateQuiz(@Body() dto: GenerateQuizDto) {
+    if (!this.quizGenerator) {
+      return {
+        success: false,
+        message: 'Quiz Generator service is not available',
+      };
+    }
     if (dto.count && dto.count > 1) {
       return await this.quizGenerator.generateQuestions({
         topics: dto.topics,
@@ -532,6 +540,12 @@ export class AgentController {
   @Post('quiz/evaluate')
   @ApiOperation({ summary: '评估答案（旧版，保持兼容）' })
   async evaluateAnswer(@Body() dto: EvaluateAnswerDto) {
+    if (!this.quizGenerator) {
+      return {
+        success: false,
+        message: 'Quiz Generator service is not available',
+      };
+    }
     return await this.quizGenerator.evaluateAnswer({
       question: {
         id: 'temp',
@@ -556,6 +570,12 @@ export class AgentController {
   @Post('quiz/evaluate/v2')
   @ApiOperation({ summary: '评估答案（新版，支持分等级解析）' })
   async evaluateAnswerV2(@Body() dto: EvaluateAnswerV2Dto) {
+    if (!this.answerEvaluator) {
+      return {
+        success: false,
+        message: 'Answer Evaluator service is not available',
+      };
+    }
     this.logger.log(`Received evaluate request - Question ID: ${dto.question.id}, Type: ${dto.question.type}, Difficulty: ${dto.question.difficulty}`);
     this.logger.log(`Question object: ${JSON.stringify(dto.question)}`);
     
@@ -575,6 +595,12 @@ export class AgentController {
   @Post('quiz/self-assess')
   @ApiOperation({ summary: '用户自评处理' })
   async processSelfAssessment(@Body() dto: SelfAssessmentDto) {
+    if (!this.answerEvaluator) {
+      return {
+        success: false,
+        message: 'Answer Evaluator service is not available',
+      };
+    }
     return await this.answerEvaluator.processSelfAssessment({
       question: dto.question,
       userAnswer: dto.userAnswer,
@@ -586,6 +612,12 @@ export class AgentController {
   @Post('quiz/explanation')
   @ApiOperation({ summary: '获取分等级解析' })
   async getExplanation(@Body() dto: GetExplanationDto) {
+    if (!this.answerEvaluator) {
+      return {
+        success: false,
+        message: 'Answer Evaluator service is not available',
+      };
+    }
     return await this.answerEvaluator.getExplanation({
       question: dto.question,
       userAnswer: dto.userAnswer,
@@ -597,6 +629,12 @@ export class AgentController {
   @Post('quiz/similar')
   @ApiOperation({ summary: '生成相似题（举一反三）' })
   async generateSimilarQuestions(@Body() dto: SimilarQuestionDto) {
+    if (!this.quizGenerator) {
+      return {
+        success: false,
+        message: 'Quiz Generator service is not available',
+      };
+    }
     return await this.quizGenerator.generateSimilarQuestions({
       question: {
         id: 'temp',
@@ -628,19 +666,27 @@ export class AgentController {
     const conceptAnalysis = await this.conceptAnalyzer.analyze(dto.concept);
 
     let enrichment, tree;
-    if (dto.includeEnrichment) {
+    if (dto.includeEnrichment && this.geneticsEnricher) {
       enrichment = await this.geneticsEnricher.enrichConcept(dto.concept);
     }
-    if (dto.includePrerequisites) {
+    if (dto.includePrerequisites && this.prerequisiteExplorer) {
       tree = await this.prerequisiteExplorer.explorePrerequisites(dto.concept, 3);
     }
 
-    const visualization = await this.visualDesigner.designVisualization(
+    const visualization = await this.visualDesigner?.designVisualization(
       dto.concept,
       conceptAnalysis,
       enrichment,
       tree
     );
+
+    if (!visualization || !this.visualDesigner) {
+      return {
+        visualization: null,
+        d3Config: null,
+        graphData: null,
+      };
+    }
 
     return {
       visualization,
@@ -653,8 +699,16 @@ export class AgentController {
   @ApiOperation({ summary: '生成可视化配置' })
   async generateVisualizationCode(@Query('concept') concept: string) {
     const conceptAnalysis = await this.conceptAnalyzer.analyze(concept);
-    const enrichment = await this.geneticsEnricher.enrichConcept(concept);
-    const tree = await this.prerequisiteExplorer.explorePrerequisites(concept, 2);
+    const enrichment = this.geneticsEnricher ? await this.geneticsEnricher.enrichConcept(concept) : undefined;
+    const tree = this.prerequisiteExplorer ? await this.prerequisiteExplorer.explorePrerequisites(concept, 2) : undefined;
+
+    if (!this.visualDesigner) {
+      return {
+        visualization: null,
+        d3Config: null,
+        graphData: { nodes: [], links: [] },
+      };
+    }
 
     const visualization = await this.visualDesigner.designVisualization(
       concept,
@@ -673,75 +727,14 @@ export class AgentController {
     };
   }
 
-  // ==================== NarrativeComposer Routes ====================
-
-  @Post('narrative')
-  @ApiOperation({ summary: '创建学习叙事' })
-  async composeNarrative(@Body() dto: NarrativeDto) {
-    const conceptAnalysis = await this.conceptAnalyzer.analyze(dto.concept, dto.userLevel);
-    const tree = await this.prerequisiteExplorer.explorePrerequisites(dto.concept, 3);
-    const enrichment = await this.geneticsEnricher.enrichConcept(dto.concept);
-
-    const narrative = await this.narrativeComposer.composeNarrative(
-      dto.concept,
-      conceptAnalysis,
-      tree,
-      enrichment
-    );
-
-    return {
-      narrative,
-      treeText: this.narrativeComposer.flattenTreeToString(tree),
-    };
-  }
-
-  @Post('narrative/script')
-  @ApiOperation({ summary: '生成详细学习脚本' })
-  async generateLearningScript(@Body() dto: NarrativeDto) {
-    const conceptAnalysis = await this.conceptAnalyzer.analyze(dto.concept, dto.userLevel);
-    const tree = await this.prerequisiteExplorer.explorePrerequisites(dto.concept, 3);
-    const enrichment = await this.geneticsEnricher.enrichConcept(dto.concept);
-
-    const narrative = await this.narrativeComposer.composeNarrative(
-      dto.concept,
-      conceptAnalysis,
-      tree,
-      enrichment
-    );
-
-    const script = await this.narrativeComposer.generateLearningScript(
-      narrative,
-      dto.concept,
-      dto.userLevel
-    );
-
-    return { narrative, ...script };
-  }
-
-  @Post('narrative/interactive')
-  @ApiOperation({ summary: '生成互动式学习流程' })
-  async generateInteractiveFlow(@Body() dto: NarrativeDto) {
-    const conceptAnalysis = await this.conceptAnalyzer.analyze(dto.concept, dto.userLevel);
-    const tree = await this.prerequisiteExplorer.explorePrerequisites(dto.concept, 3);
-    const enrichment = await this.geneticsEnricher.enrichConcept(dto.concept);
-
-    const narrative = await this.narrativeComposer.composeNarrative(
-      dto.concept,
-      conceptAnalysis,
-      tree,
-      enrichment
-    );
-
-    const flow = await this.narrativeComposer.generateInteractiveFlow(narrative);
-
-    return { narrative, flow };
-  }
-
   // ==================== Skills Routes ====================
 
   @Post('skills/search')
   @ApiOperation({ summary: '联网搜索' })
   async webSearch(@Body() dto: WebSearchDto) {
+    if (!this.webSearchService) {
+      return { message: 'WebSearch service is not available' };
+    }
     return await this.webSearchService.search({
       query: dto.query,
       numResults: dto.numResults || 5,
@@ -753,12 +746,18 @@ export class AgentController {
   @Post('skills/search/concept')
   @ApiOperation({ summary: '搜索概念相关最新资讯' })
   async searchForConcept(@Body('concept') concept: string) {
+    if (!this.webSearchService) {
+      return { message: 'WebSearch service is not available' };
+    }
     return await this.webSearchService.searchForConcept(concept);
   }
 
   @Post('skills/resources')
   @ApiOperation({ summary: '推荐学习资源' })
   async recommendResources(@Body() dto: ResourceRecommendDto) {
+    if (!this.resourceRecommendService) {
+      return { message: 'ResourceRecommend service is not available' };
+    }
     return await this.resourceRecommendService.recommend({
       concept: dto.concept,
       userLevel: dto.userLevel,
@@ -773,6 +772,9 @@ export class AgentController {
   @Post('visualize/ask')
   @ApiOperation({ summary: '基于可视化回答用户问题' })
   async askVisualizationQuestion(@Body() dto: AskQuestionDto) {
+    if (!this.visualDesigner) {
+      return { answer: 'VisualDesigner service is not available', context: null };
+    }
     return await this.visualDesigner.answerQuestion(
       dto.concept,
       dto.question,
@@ -781,10 +783,174 @@ export class AgentController {
     );
   }
 
+  @Sse('visualize/ask/stream')
+  @ApiOperation({ summary: '基于可视化的流式问答（SSE）' })
+  streamAskVisualization(
+    @Query('concept') concept: string,
+    @Query('question') question: string,
+    @Query('userLevel') userLevel?: 'beginner' | 'intermediate' | 'advanced',
+  ): Observable<any> {
+    if (!this.visualDesigner || !this.streamResponseService) {
+      throw new Error('Required services are not available');
+    }
+
+    const stream = this.streamResponseService.createStreamResponse(
+      () => this.visualDesigner.answerQuestion(
+        concept,
+        question,
+        userLevel || 'intermediate',
+        []
+      ),
+      {
+        chunkSize: 50,
+        enableSkeleton: true,
+        enableProgressiveData: true
+      }
+    );
+
+    return stream.pipe(
+      map(chunk => ({ data: chunk }))
+    );
+  }
+
+  @Post('action')
+  @ApiOperation({ summary: '处理A2UI组件的用户操作' })
+  async handleUserAction(@Body() action: UserAction) {
+    this.logger.log(`Received user action: ${action.actionType} on component ${action.componentId}`);
+
+    try {
+      const validation = this.componentCatalogService.validateUserAction(action);
+
+      if (!validation.valid) {
+        this.logger.warn(`User action validation failed: ${validation.errors.join(', ')}`);
+        return {
+          success: false,
+          error: 'Validation failed',
+          details: validation.errors,
+          message: 'Action validation failed'
+        };
+      }
+
+      if (this.componentCatalogService.checkAuthRequirement(action.componentId)) {
+        this.logger.warn(`Component ${action.componentId} requires authentication`);
+        return {
+          success: false,
+          error: 'Authentication required',
+          message: `Component ${action.componentId} requires authentication`
+        };
+      }
+
+      const result = await this.processUserAction(action);
+      return {
+        success: true,
+        result,
+        message: 'Action processed successfully'
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Failed to process user action: ${errorMessage}`);
+      return {
+        success: false,
+        error: errorMessage,
+        message: 'Failed to process action'
+      };
+    }
+  }
+
   @Get('visualize/concepts')
-  @ApiOperation({ summary: '获取所有可用的硬编码概念列表' })
+  @ApiOperation({ summary: '获取所有硬编码可视化概念' })
   async getHardcodedConcepts() {
+    if (!this.visualDesigner) {
+      return { concepts: [] };
+    }
     return await this.visualDesigner.getHardcodedConcepts();
+  }
+
+  private async processUserAction(action: UserAction) {
+    this.logger.log(`Processing user action: ${action.actionType} for component ${action.componentId}`);
+
+    switch (action.actionType) {
+      case 'click':
+        return this.handleClickAction(action);
+      case 'change':
+        return this.handleChangeAction(action);
+      case 'submit':
+        return this.handleSubmitAction(action);
+      case 'focus':
+      case 'blur':
+      case 'input':
+        return this.handleInputAction(action);
+      default:
+        this.logger.warn(`Unknown action type: ${action.actionType}`);
+        return { processed: false, message: 'Unknown action type' };
+    }
+  }
+
+  private async handleClickAction(action: UserAction) {
+    const { componentId, payload } = action;
+    this.logger.log(`Handling click action on ${componentId}`, payload);
+
+    return {
+      processed: true,
+      componentId,
+      actionType: 'click',
+      response: {
+        type: 'update',
+        componentId,
+        timestamp: Date.now()
+      }
+    };
+  }
+
+  private async handleChangeAction(action: UserAction) {
+    const { componentId, payload } = action;
+    this.logger.log(`Handling change action on ${componentId}`, payload);
+
+    return {
+      processed: true,
+      componentId,
+      actionType: 'change',
+      response: {
+        type: 'data_update',
+        componentId,
+        updatedData: payload,
+        timestamp: Date.now()
+      }
+    };
+  }
+
+  private async handleSubmitAction(action: UserAction) {
+    const { componentId, payload } = action;
+    this.logger.log(`Handling submit action on ${componentId}`, payload);
+
+    return {
+      processed: true,
+      componentId,
+      actionType: 'submit',
+      response: {
+        type: 'confirmation',
+        componentId,
+        message: '操作已提交',
+        timestamp: Date.now()
+      }
+    };
+  }
+
+  private async handleInputAction(action: UserAction) {
+    const { componentId, payload, actionType } = action;
+    this.logger.log(`Handling ${actionType} action on ${componentId}`, payload);
+
+    return {
+      processed: true,
+      componentId,
+      actionType,
+      response: {
+        type: 'input_update',
+        componentId,
+        eventType: actionType,
+        timestamp: Date.now()
+      }
+    };
   }
 
   // ==================== Pipeline Shortcuts ====================
@@ -830,6 +996,12 @@ export class AgentController {
   @Post('skills/visualization/generate')
   @ApiOperation({ summary: '生成可视化配置' })
   async generateVisualization(@Body() dto: VisualizationGenerateDto) {
+    if (!this.visualizationGenerator) {
+      return {
+        success: false,
+        message: 'Visualization Generator service is not available',
+      };
+    }
     return await this.visualizationGenerator.generate({
       concept: dto.concept,
       context: {
@@ -847,12 +1019,24 @@ export class AgentController {
   @Post('skills/visualization/genetics')
   @ApiOperation({ summary: '生成遗传学专用可视化' })
   async generateGeneticsVisualization(@Body() dto: GeneticsVisualizationDto) {
+    if (!this.geneticsVisualization) {
+      return {
+        success: false,
+        message: 'Genetics Visualization service is not available',
+      };
+    }
     return await this.geneticsVisualization.generate(dto as any);
   }
 
   @Post('skills/visualization/control')
   @ApiOperation({ summary: '控制可视化交互' })
   async controlVisualization(@Body() dto: InteractiveControlDto) {
+    if (!this.interactiveControl) {
+      return {
+        success: false,
+        message: 'Interactive Control service is not available',
+      };
+    }
     return await this.interactiveControl.control(dto as any);
   }
 
@@ -897,12 +1081,18 @@ export class AgentController {
   @Get('visualization-rag/status')
   @ApiOperation({ summary: '获取可视化RAG索引状态' })
   async getVisualizationRAGStatus() {
+    if (!this.visualizationRAG) {
+      return { status: 'disabled', message: 'Visualization RAG service is not available' };
+    }
     return await this.visualizationRAG.getIndexStatus();
   }
 
   @Post('visualization-rag/search')
   @ApiOperation({ summary: '根据问题检索相关可视化' })
   async searchVisualization(@Body() body: { question: string; threshold?: number; topK?: number }) {
+    if (!this.visualizationRAG) {
+      return { message: 'Visualization RAG service is not available' };
+    }
     return await this.visualizationRAG.retrieveByQuestion(
       body.question,
       body.threshold || 0.7,
@@ -913,6 +1103,9 @@ export class AgentController {
   @Post('visualization-rag/reindex')
   @ApiOperation({ summary: '重新初始化可视化RAG索引' })
   async reindexVisualizationRAG() {
+    if (!this.visualizationRAG) {
+      return { message: 'Visualization RAG service is not available' };
+    }
     await this.visualizationRAG.reinitializeIndex();
     return { message: 'Visualization RAG index reinitialized' };
   }

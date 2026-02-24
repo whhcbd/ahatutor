@@ -1,22 +1,19 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { LLMService } from '../llm/llm.service';
 import { VisualizationRAGService } from './visualization-rag.service';
 import { PathFinderService } from '../knowledge-graph/services/path-finder.service';
-import {
-  VisualizationSuggestion,
-  ConceptAnalysis,
-  GeneticsEnrichment,
-  PrerequisiteNode,
-  PunnettSquareData,
-  InheritancePathData,
-  ProbabilityDistributionData,
-  UnderstandingInsight,
-  VisualizationAnswerResponse,
-} from '@shared/types/agent.types';
+import { VectorRetrievalService } from '../rag/services/vector-retrieval.service';
+import { RetrievalResult } from '@shared/types/skill.types';
+import { VisualizationSuggestion, ConceptAnalysis, GeneticsEnrichment, PrerequisiteNode, PunnettSquareData, InheritancePathData, ProbabilityDistributionData, PedigreeChartData, UnderstandingInsight, VisualizationAnswerResponse } from '@ahatutor/shared';
 import {
   getHardcodedVisualization,
   getHardcodedConceptList,
 } from './data/hardcoded-visualizations.data';
+import { DynamicVizGeneratorService } from './dynamic-viz-generator.service';
+import { A2UIAdapterService } from './a2ui-adapter.service';
+import type { A2UIPayload } from '@shared/types/a2ui.types';
+import { TemplateMatcherService } from './template-matcher.service';
+import { buildA2UIPayload } from './data/a2ui-templates.data';
 
 /**
  * Agent 4: VisualDesigner
@@ -122,8 +119,12 @@ export class VisualDesignerService {
 
   constructor(
     private readonly llmService: LLMService,
-    private readonly visualizationRAG: VisualizationRAGService,
-    private readonly pathFinder: PathFinderService,
+    @Optional() private readonly visualizationRAG: VisualizationRAGService,
+    @Optional() private readonly pathFinder: PathFinderService,
+    @Optional() private readonly vectorRetrieval: VectorRetrievalService,
+    @Optional() private readonly dynamicVizGenerator: DynamicVizGeneratorService,
+    @Optional() private readonly a2uiAdapter: A2UIAdapterService,
+    @Optional() private readonly templateMatcher: TemplateMatcherService,
   ) {}
 
   /**
@@ -137,26 +138,44 @@ export class VisualDesignerService {
   ): Promise<VisualizationSuggestion> {
     this.logger.log(`Designing visualization for: ${concept}`);
 
-    // 优先检查是否有硬编码的数据
+    // 硬编码检查 - 用于概念可视化功能
     const hardcodedViz = getHardcodedVisualization(concept);
     if (hardcodedViz) {
       this.logger.log(`Using hardcoded visualization for: ${concept}`);
-
-      // 生成理解提示（即使是硬编码数据也生成提示）
       const insights = await this.generateUnderstandingInsights(
         concept,
         hardcodedViz.type,
         hardcodedViz.data,
         prerequisiteTree,
       );
-
       return {
         ...hardcodedViz,
         insights,
       };
     }
 
-    // 没有硬编码数据，使用AI生成
+    let ragKnowledgePoints: Record<string, any> = {};
+
+    if (this.vectorRetrieval) {
+      try {
+        const retrievalResult = await this.vectorRetrieval.retrieve({
+          query: concept,
+          topK: 5
+        });
+
+        if (retrievalResult.data?.results && retrievalResult.data.results.length > 0) {
+          ragKnowledgePoints = {
+            content: retrievalResult.data.results.map(r => r.content).join('\n\n'),
+            metadata: retrievalResult.data.results.map(r => r.metadata)
+          };
+          this.logger.log(`Retrieved ${retrievalResult.data.results.length} relevant chunks from RAG for knowledge points`);
+        }
+      } catch (ragError) {
+        this.logger.warn('Failed to retrieve knowledge points from RAG:', ragError);
+      }
+    }
+
+    // 使用AI生成可视化
     // 1. 确定可视化类型
     const vizType = this.determineVisualizationType(concept, conceptAnalysis);
 
@@ -166,6 +185,7 @@ export class VisualDesignerService {
       vizType,
       conceptAnalysis,
       geneticsEnrichment,
+      ragKnowledgePoints,
     );
 
     // 3. 生成理解提示
@@ -223,6 +243,7 @@ export class VisualDesignerService {
     vizType: VisualizationSuggestion['type'],
     analysis: ConceptAnalysis,
     enrichment?: GeneticsEnrichment,
+    ragKnowledgePoints?: Record<string, any>,
   ): Promise<Omit<VisualizationSuggestion, 'insights'>> {
     const baseDesign = await this.generateBaseDesign(concept, vizType, analysis, enrichment);
 
@@ -230,13 +251,16 @@ export class VisualDesignerService {
 
     switch (vizType) {
       case 'punnett_square':
-        data = await this.generatePunnettSquareData(concept, enrichment);
+        data = await this.generatePunnettSquareData(concept, enrichment, ragKnowledgePoints);
         break;
       case 'inheritance_path':
-        data = await this.generateInheritancePathData(concept, enrichment);
+        data = await this.generateInheritancePathData(concept, enrichment, ragKnowledgePoints);
         break;
       case 'probability_distribution':
-        data = await this.generateProbabilityDistributionData(concept, enrichment);
+        data = await this.generateProbabilityDistributionData(concept, enrichment, ragKnowledgePoints);
+        break;
+      case 'pedigree_chart':
+        data = await this.generatePedigreeChartData(concept, enrichment, ragKnowledgePoints);
         break;
       default:
         // knowledge_graph 等类型由前端处理
@@ -364,12 +388,21 @@ ${enrichment ? `
   private async generatePunnettSquareData(
     concept: string,
     enrichment?: GeneticsEnrichment,
+    ragKnowledgePoints?: Record<string, any>,
   ): Promise<PunnettSquareData> {
     const enrichmentInfo = enrichment
       ? `\n相关原理：${enrichment.principles.join(', ')}\n相关例子：${enrichment.examples.map(e => e.name).join(', ')}`
       : '';
 
     const prompt = `你是遗传学专家。请为"${concept}"生成一个 Punnett 方格（杂交棋盘）的数据。${enrichmentInfo}
+
+重要提示：
+- 你会收到RAG知识库检索到的知识点内容
+- 请将这些知识点内容准确填入对应的字段
+- 不要生成新的知识点，而是使用知识库中已有的内容
+
+RAG知识库知识点内容：
+${JSON.stringify(ragKnowledgePoints || {}, null, 2)}
 
 要求：
 1. 选择一个经典且具有代表性的杂交组合
@@ -378,8 +411,13 @@ ${enrichment ? `
 4. 给出每个后代的基因型、表型和概率
 5. 如涉及伴性遗传，标注性别
 6. 添加简要说明
+7. **从RAG知识库提取知识点并填充**：
+   - keyPoints: 从RAG知识库中提取3-5个关键知识点
+   - understandingPoints: 从RAG知识库中提取理解要点
+   - commonMistakes: 从RAG知识库中提取常见错误
+   - checkQuestions: 从RAG知识库中提取自检问题
 
-返回 JSON 格式的 Punnett 方格数据。`;
+返回 JSON 格式的 Punnett 方格数据（必须包含从RAG知识库填充的知识点字段）。`;
 
     const schema = {
       type: 'object',
@@ -433,6 +471,26 @@ ${enrichment ? `
         description: {
           type: 'string',
           description: '杂交方式简要说明'
+        },
+        keyPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '3-5个关键知识点，帮助学生理解遗传规律'
+        },
+        understandingPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '如何通过这个Punnett方格理解概念'
+        },
+        commonMistakes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '学生常见的错误理解'
+        },
+        checkQuestions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '帮助学生自检的问题'
         }
       },
       required: ['maleGametes', 'femaleGametes', 'parentalCross', 'offspring']
@@ -473,6 +531,7 @@ ${enrichment ? `
   private async generateInheritancePathData(
     concept: string,
     enrichment?: GeneticsEnrichment,
+    ragKnowledgePoints?: Record<string, any>,
   ): Promise<InheritancePathData> {
     const enrichmentInfo = enrichment
       ? `\n相关原理：${enrichment.principles.join(', ')}\n常见误区：${enrichment.misconceptions.join(', ')}`
@@ -480,14 +539,27 @@ ${enrichment ? `
 
     const prompt = `你是遗传学专家。请为"${concept}"设计一个家族遗传路径的可视化数据。${enrichmentInfo}
 
+重要提示：
+- 你会收到RAG知识库检索到的知识点内容
+- 请将这些知识点内容准确填入对应的字段
+- 不要生成新的知识点，而是使用知识库中已有的内容
+
+RAG知识库知识点内容：
+${JSON.stringify(ragKnowledgePoints || {}, null, 2)}
+
 要求：
 1. 设计一个3-4代的家族系谱
 2. 包含不同性别的个体
 3. 清楚标注每个个体的基因型、表型、是否患病、是否携带者
 4. 展示基因是如何在代际间传递的
 5. 给出清晰的遗传模式解释
+6. **从RAG知识库提取知识点并填充**：
+   - keyPoints: 从RAG知识库中提取3-5个关键知识点
+   - understandingPoints: 从RAG知识库中提取理解要点
+   - commonMistakes: 从RAG知识库中提取常见错误
+   - checkQuestions: 从RAG知识库中提取自检问题
 
-返回 JSON 格式的遗传路径数据。`;
+返回 JSON 格式的遗传路径数据（必须包含从RAG知识库填充的知识点字段）。`;
 
     const schema = {
       type: 'object',
@@ -530,6 +602,26 @@ ${enrichment ? `
         explanation: {
           type: 'string',
           description: '遗传路径的详细解释说明'
+        },
+        keyPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '3-5个关键知识点，帮助学生理解遗传规律'
+        },
+        understandingPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '如何通过这个遗传路径理解概念'
+        },
+        commonMistakes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '学生常见的错误理解'
+        },
+        checkQuestions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '帮助学生自检的问题'
         }
       },
       required: ['generations', 'inheritance', 'explanation']
@@ -550,12 +642,13 @@ ${enrichment ? `
   }
 
   /**
-   * 根据问题生成 Punnett 方格数据
+   * 生成 Punnett 方格数据（带问题）
    */
   private async generatePunnettSquareDataWithQuestion(
     concept: string,
     question: string,
     enrichment?: GeneticsEnrichment,
+    ragKnowledgePoints?: Record<string, any>,
   ): Promise<PunnettSquareData> {
     const enrichmentInfo = enrichment
       ? `\n相关原理：${enrichment.principles.join(', ')}\n相关例子：${enrichment.examples.map(e => e.name).join(', ')}`
@@ -565,6 +658,14 @@ ${enrichment ? `
 
 请为这个问题设计一个 Punnett 方格（杂交棋盘）的数据。${enrichmentInfo}
 
+重要提示：
+- 你会收到RAG知识库检索到的知识点内容
+- 请将这些知识点内容准确填入对应的字段
+- 不要生成新的知识点，而是使用知识库中已有的内容
+
+RAG知识库知识点内容：
+${JSON.stringify(ragKnowledgePoints || {}, null, 2)}
+
 要求：
 1. 选择一个经典且具有代表性的杂交组合，能够回答用户的问题
 2. 明确双亲的基因型和表型
@@ -572,8 +673,13 @@ ${enrichment ? `
 4. 给出每个后代的基因型、表型和概率
 5. 如涉及伴性遗传，标注性别
 6. 添加简要说明
+7. **从RAG知识库提取知识点并填充**：
+   - keyPoints: 从RAG知识库中提取3-5个关键知识点
+   - understandingPoints: 从RAG知识库中提取理解要点
+   - commonMistakes: 从RAG知识库中提取常见错误
+   - checkQuestions: 从RAG知识库中提取自检问题
 
-返回 JSON 格式的 Punnett 方格数据。`;
+返回 JSON 格式的 Punnett 方格数据（必须包含从RAG知识库填充的知识点字段）。`;
 
     const schema = {
       type: 'object',
@@ -627,6 +733,26 @@ ${enrichment ? `
         description: {
           type: 'string',
           description: '杂交方式简要说明'
+        },
+        keyPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '3-5个关键知识点，帮助学生理解遗传规律'
+        },
+        understandingPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '如何通过这个Punnett方格理解概念'
+        },
+        commonMistakes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '学生常见的错误理解'
+        },
+        checkQuestions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '帮助学生自检的问题'
         }
       },
       required: ['maleGametes', 'femaleGametes', 'parentalCross', 'offspring']
@@ -653,6 +779,7 @@ ${enrichment ? `
     concept: string,
     question: string,
     enrichment?: GeneticsEnrichment,
+    ragKnowledgePoints?: Record<string, any>,
   ): Promise<InheritancePathData> {
     const enrichmentInfo = enrichment
       ? `\n相关原理：${enrichment.principles.join(', ')}\n常见误区：${enrichment.misconceptions.join(', ')}`
@@ -662,14 +789,27 @@ ${enrichment ? `
 
 请为这个问题设计一个家族遗传路径的可视化数据。${enrichmentInfo}
 
+重要提示：
+- 你会收到RAG知识库检索到的知识点内容
+- 请将这些知识点内容准确填入对应的字段
+- 不要生成新的知识点，而是使用知识库中已有的内容
+
+RAG知识库知识点内容：
+${JSON.stringify(ragKnowledgePoints || {}, null, 2)}
+
 要求：
 1. 设计一个3-4代的家族系谱
 2. 包含不同性别的个体
 3. 清楚标注每个个体的基因型、表型、是否患病、是否携带者
 4. 展示基因是如何在代际间传递的，特别要回答用户的问题
 5. 给出清晰的遗传模式解释
+6. **从RAG知识库提取知识点并填充**：
+   - keyPoints: 从RAG知识库中提取3-5个关键知识点
+   - understandingPoints: 从RAG知识库中提取理解要点
+   - commonMistakes: 从RAG知识库中提取常见错误
+   - checkQuestions: 从RAG知识库中提取自检问题
 
-返回 JSON 格式的遗传路径数据。`;
+返回 JSON 格式的遗传路径数据（必须包含从RAG知识库填充的知识点字段）。`;
 
     const schema = {
       type: 'object',
@@ -712,6 +852,26 @@ ${enrichment ? `
         explanation: {
           type: 'string',
           description: '遗传路径的详细解释说明'
+        },
+        keyPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '3-5个关键知识点，帮助学生理解遗传规律'
+        },
+        understandingPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '如何通过这个遗传路径理解概念'
+        },
+        commonMistakes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '学生常见的错误理解'
+        },
+        checkQuestions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '帮助学生自检的问题'
         }
       },
       required: ['generations', 'inheritance', 'explanation']
@@ -737,6 +897,7 @@ ${enrichment ? `
   private async generateProbabilityDistributionData(
     concept: string,
     enrichment?: GeneticsEnrichment,
+    ragKnowledgePoints?: Record<string, any>,
   ): Promise<ProbabilityDistributionData> {
     const enrichmentInfo = enrichment
       ? `\n相关公式：${enrichment.formulas.map(f => `${f.key}: ${f.latex}`).join('\n')}`
@@ -744,14 +905,27 @@ ${enrichment ? `
 
     const prompt = `你是遗传学专家。请为"${concept}"生成一个概率分布的可视化数据。${enrichmentInfo}
 
+重要提示：
+- 你会收到RAG知识库检索到的知识点内容
+- 请将这些知识点内容准确填入对应的字段
+- 不要生成新的知识点，而是使用知识库中已有的内容
+
+RAG知识库知识点内容：
+${JSON.stringify(ragKnowledgePoints || {}, null, 2)}
+
 要求：
 1. 根据概念确定要展示的概率分布类型
 2. 给出清晰的分类（如基因型类别、表型类别）
 3. 计算各分类的概率值（总和应为1）
 4. 如有相关公式，一并提供
 5. 说明这些概率的实际意义
+6. **从RAG知识库提取知识点并填充**：
+   - keyPoints: 从RAG知识库中提取3-5个关键知识点
+   - understandingPoints: 从RAG知识库中提取理解要点
+   - commonMistakes: 从RAG知识库中提取常见错误
+   - checkQuestions: 从RAG知识库中提取自检问题
 
-返回 JSON 格式的概率分布数据。`;
+返回 JSON 格式的概率分布数据（必须包含从RAG知识库填充的知识点字段）。`;
 
     const schema = {
       type: 'object',
@@ -778,6 +952,26 @@ ${enrichment ? `
         formula: {
           type: 'string',
           description: '相关公式（如有）'
+        },
+        keyPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '3-5个关键知识点，帮助学生理解遗传规律'
+        },
+        understandingPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '如何通过这个概率分布理解概念'
+        },
+        commonMistakes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '学生常见的错误理解'
+        },
+        checkQuestions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '帮助学生自检的问题'
         }
       },
       required: ['categories', 'values']
@@ -800,6 +994,132 @@ ${enrichment ? `
         colors: ['#4CAF50', '#2196F3', '#FF9800'],
         total: '总和 = 1 (100%)',
         formula: '双杂合子自交：Aa × Aa → 1AA:2Aa:1aa'
+      };
+    }
+  }
+
+  /**
+   * 生成家系表数据
+   */
+  private async generatePedigreeChartData(
+    concept: string,
+    enrichment?: GeneticsEnrichment,
+    ragKnowledgePoints?: Record<string, any>,
+  ): Promise<PedigreeChartData> {
+    const enrichmentInfo = enrichment
+      ? `\n相关原理：${enrichment.principles.join(', ')}\n常见例子：${enrichment.examples.map(e => e.name).join(', ')}`
+      : '';
+
+    const prompt = `你是遗传学专家。请为"${concept}"设计一个家系表（系谱图）的数据。${enrichmentInfo}
+
+重要提示：
+- 你会收到RAG知识库检索到的知识点内容
+- 请将这些知识点内容准确填入对应的字段
+- 不要生成新的知识点，而是使用知识库中已有的内容
+
+RAG知识库知识点内容：
+${JSON.stringify(ragKnowledgePoints || {}, null, 2)}
+
+要求：
+1. 设计一个经典且具有代表性的家系结构（3-5代）
+2. 明确每个成员的性别、表型、是否患病或携带
+3. 清晰展示亲缘关系和配偶关系
+4. 明确遗传模式（显性/隐性、常染色体/性染色体）
+5. 添加简要说明
+6. **从RAG知识库提取知识点并填充**：
+   - keyPoints: 从RAG知识库中提取3-5个关键知识点
+   - understandingPoints: 从RAG知识库中提取理解要点
+   - commonMistakes: 从RAG知识库中提取常见错误
+   - checkQuestions: 从RAG知识库中提取自检问题
+
+返回 JSON 格式的家系表数据（必须包含从RAG知识库填充的知识点字段）。`;
+
+    const schema = {
+      type: 'object',
+      properties: {
+        individuals: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', description: '个体唯一标识符' },
+              sex: { type: 'string', enum: ['male', 'female'], description: '性别' },
+              affected: { type: 'boolean', description: '是否患病' },
+              carrier: { type: 'boolean', description: '是否为携带者' },
+              generation: { type: 'number', description: '世代数（1, 2, 3...）' },
+              position: { type: 'number', description: '在该代中的位置' },
+              parents: {
+                type: 'object',
+                properties: {
+                  father: { type: 'string', description: '父亲ID' },
+                  mother: { type: 'string', description: '母亲ID' }
+                }
+              },
+              spouse: { type: 'string', description: '配偶ID' }
+            },
+            required: ['id', 'sex', 'affected', 'generation', 'position']
+          },
+          description: '家系成员列表'
+        },
+        legend: {
+          type: 'object',
+          properties: {
+            condition: { type: 'string', description: '疾病或性状名称' },
+            inheritancePattern: { type: 'string', description: '遗传模式' }
+          },
+          required: ['condition', 'inheritancePattern']
+        },
+        keyPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '3-5个关键知识点，帮助学生理解遗传规律'
+        },
+        understandingPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '如何通过这个家系表理解概念'
+        },
+        commonMistakes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '学生常见的错误理解'
+        },
+        checkQuestions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '帮助学生自检的问题'
+        }
+      },
+      required: ['individuals', 'legend']
+    };
+
+    try {
+      const response = await this.llmService.structuredChat<PedigreeChartResponse>(
+        [{ role: 'user', content: prompt }],
+        schema,
+        { temperature: 0.2 }
+      );
+
+      return response;
+    } catch (error) {
+      this.logger.error('Failed to generate pedigree chart data:', error);
+      return {
+        individuals: [
+          { id: 'I1', sex: 'male', affected: false, generation: 1, position: 1 },
+          { id: 'I2', sex: 'female', affected: false, generation: 1, position: 2, spouse: 'I1' },
+          { id: 'II1', sex: 'male', affected: false, generation: 2, position: 1, parents: { father: 'I1', mother: 'I2' } },
+          { id: 'II2', sex: 'female', affected: true, generation: 2, position: 2, parents: { father: 'I1', mother: 'I2' }, spouse: 'II1' },
+          { id: 'III1', sex: 'male', affected: false, generation: 3, position: 1, parents: { father: 'II1', mother: 'II2' } },
+          { id: 'III2', sex: 'female', affected: true, generation: 3, position: 2, parents: { father: 'II1', mother: 'II2' } },
+        ],
+        legend: {
+          condition: '血友病（X连锁隐性遗传）',
+          inheritancePattern: 'X连锁隐性遗传，男性患病，女性携带者'
+        },
+        keyPoints: ['X连锁隐性遗传特征', '携带者概念', '隔代遗传现象'],
+        understandingPoints: ['通过性别和表型分布判断遗传方式', '携带者外观正常但可传递致病基因'],
+        commonMistakes: ['误认为女性也会患病', '忽略携带者的重要性'],
+        checkQuestions: ['为什么男性更容易患病？', '携带者的后代遗传风险如何？'],
       };
     }
   }
@@ -858,6 +1178,49 @@ ${data ? `
     } catch (error) {
       this.logger.error('Failed to generate understanding insights:', error);
       return [];
+    }
+  }
+
+  /**
+   * 使用动态可视化生成器生成可视化
+   * 当没有硬编码或 RAG 匹配的可视化时使用
+   */
+  private async generateDynamicVisualization(
+    concept: string,
+    question: string,
+    userLevel: 'beginner' | 'intermediate' | 'advanced'
+  ): Promise<VisualizationSuggestion> {
+    if (!this.dynamicVizGenerator) {
+      throw new Error('DynamicVizGeneratorService is not available');
+    }
+
+    this.logger.log(`Generating dynamic visualization for concept: ${concept}, question: ${question}`);
+
+    try {
+      const dynamicResult = await this.dynamicVizGenerator.generateDynamicVisualization({
+        question,
+        concept,
+        userLevel
+      });
+
+      if (!dynamicResult.visualizationApplicable || !dynamicResult.visualizationData) {
+        throw new Error('Dynamic visualization generation failed or not applicable');
+      }
+
+      this.logger.log(`Dynamic visualization generated successfully: ${dynamicResult.selectedTemplate?.templateId}`);
+
+      return {
+        type: dynamicResult.visualizationData.type || 'punnett_square',
+        title: dynamicResult.visualizationData.title || `动态可视化：${concept}`,
+        description: dynamicResult.visualizationData.description || '基于 AI 动态生成的可视化',
+        data: dynamicResult.visualizationData.data,
+        colors: this.getDefaultColors(dynamicResult.visualizationData.type || 'punnett_square'),
+        elements: dynamicResult.visualizationData.elements || [],
+        interactions: ['hover', 'click'],
+      };
+    } catch (error) {
+      this.logger.error('Dynamic visualization generation failed:', error);
+      throw error;
     }
   }
 
@@ -958,6 +1321,55 @@ ${data ? `
   }
 
   /**
+   * 清理文本回答中的重复内容
+   * 移除examples、followUpQuestions、relatedConcepts在textAnswer中的重复
+   */
+  private cleanTextAnswer(
+    textAnswer: string,
+    examples?: Array<{ title: string; description: string }>,
+    followUpQuestions?: string[],
+    relatedConcepts?: string[]
+  ): string {
+    if (!textAnswer) return textAnswer;
+
+    let cleanedAnswer = textAnswer;
+
+    if (examples && examples.length > 0) {
+      const examplePatterns = [
+        /举例说明[：:][\s\S]*?(?=\n\n|\n(?=[一二三四五六七八九十]|您可能还想了解)|$)/g,
+        /例子[：:][\s\S]*?(?=\n\n|\n(?=[一二三四五六七八九十]|您可能还想了解)|$)/g,
+        /例如[：:][\s\S]*?(?=\n\n|\n(?=[一二三四五六七八九十]|您可能还想了解)|$)/g,
+      ];
+      examplePatterns.forEach(pattern => {
+        cleanedAnswer = cleanedAnswer.replace(pattern, '');
+      });
+    }
+
+    if (followUpQuestions && followUpQuestions.length > 0) {
+      const questionPatterns = [
+        /后续建议问题[：:][\s\S]*?(?=\n\n|\n(?=[一二三四五六七八九十])|$)/g,
+        /您可能还想了解[：:][\s\S]*?(?=\n\n|\n(?=[一二三四五六七八九十])|$)/g,
+      ];
+      questionPatterns.forEach(pattern => {
+        cleanedAnswer = cleanedAnswer.replace(pattern, '');
+      });
+    }
+
+    if (relatedConcepts && relatedConcepts.length > 0) {
+      const conceptPatterns = [
+        /相关概念[：:][\s\S]*?(?=\n\n|\n(?=[一二三四五六七八九十])|$)/g,
+      ];
+      conceptPatterns.forEach(pattern => {
+        cleanedAnswer = cleanedAnswer.replace(pattern, '');
+      });
+    }
+
+    cleanedAnswer = cleanedAnswer.replace(/\n{3,}/g, '\n\n').trim();
+
+    return cleanedAnswer;
+  }
+
+  /**
    * 基于可视化回答用户问题
    * @param concept 当前学习的概念
    * @param question 用户的问题
@@ -973,32 +1385,86 @@ ${data ? `
   ): Promise<VisualizationAnswerResponse> {
     this.logger.log(`Answering question for concept: ${concept}, question: ${question}`);
 
+    // 检测用户是否明确要求可视化内容
+    const requiresVisualization = question.includes('请为这个问题生成详细的可视化内容') ||
+                                  question.includes('生成可视化内容') ||
+                                  question.includes('可视化说明') ||
+                                  question.includes('可视化') ||
+                                  question.includes('图表') ||
+                                  question.includes('图示') ||
+                                  question.includes('展示') ||
+                                  question.includes('表现') ||
+                                  question.includes('画') ||
+                                  question.includes('画出') ||
+                                  question.includes('图解') ||
+                                  question.includes('图示') ||
+                                  question.includes('系谱') ||
+                                  question.includes('图') ||
+                                  question.includes('可视化表现');
+
+    // 使用向量检索获取相关知识库内容
+    let ragContext: RetrievalResult[] = [];
+    let ragContextText = '';
+    
+    if (this.vectorRetrieval) {
+      try {
+        const retrievalResult = await this.vectorRetrieval.retrieve({
+          query: question,
+          topK: 5,
+        });
+        
+        if (retrievalResult.success && retrievalResult.data) {
+          ragContext = retrievalResult.data.results;
+          
+          if (ragContext.length > 0) {
+            ragContextText = `\n\n**参考资料（来自遗传学教材）：**\n\n${ragContext.map((r, i) => {
+              const source = r.metadata.chapter
+                ? `${r.metadata.chapter}${r.metadata.section ? ' - ' + r.metadata.section : ''}`
+                : '未知章节';
+              return `[参考资料${i + 1} - 来源：${source}]\n${r.content}`;
+            }).join('\n\n---\n\n')}`;
+            
+            this.logger.log(`Retrieved ${ragContext.length} relevant chunks from RAG knowledge base`);
+          }
+        }
+      } catch (ragError) {
+        this.logger.warn('Vector RAG retrieval failed:', ragError);
+      }
+    }
+
     let selectedVisualization: Omit<VisualizationSuggestion, 'insights'> | null = null;
     let matchedConcept: string | null = null;
 
-    try {
-      const matches = await this.visualizationRAG.retrieveByQuestion(question, 0.5, 5);
+    if (this.visualizationRAG) {
+      try {
+        const matches = await this.visualizationRAG.retrieveByQuestion(question, 0.3, 5);
 
-      if (matches.length > 0) {
-        const bestMatch = matches[0];
-        selectedVisualization = bestMatch.visualization;
-        matchedConcept = bestMatch.concept;
-        this.logger.log(`RAG found matching visualization: ${bestMatch.concept} (score: ${bestMatch.score.toFixed(3)})`);
+        if (matches.length > 0) {
+          const bestMatch = matches[0];
+          selectedVisualization = bestMatch.visualization;
+          matchedConcept = bestMatch.concept;
+          this.logger.log(`RAG found matching visualization: ${bestMatch.concept} (score: ${bestMatch.score.toFixed(3)})`);
+        } else {
+          this.logger.log(`RAG found no matches for question: "${question}" (threshold: 0.3)`);
+        }
+      } catch (ragError) {
+        this.logger.warn('Visualization RAG retrieval failed:', ragError);
       }
-    } catch (ragError) {
-      this.logger.warn('Visualization RAG retrieval failed:', ragError);
     }
 
     let contextInfo = '';
     let useRagVisualization = false;
     if (selectedVisualization) {
       useRagVisualization = true;
-      contextInfo = `\n\n相关可视化信息：\n知识点：${matchedConcept}\n标题：${selectedVisualization.title}\n描述：${selectedVisualization.description}\n元素：${selectedVisualization.elements.join('、')}\n类型：${selectedVisualization.type}\n\n重要：这是系统为你找到的最相关的可视化，请直接使用它，不需要再建议新的可视化类型！`;
+      contextInfo = `\n\n相关可视化信息（来自RAG检索）：\n知识点：${matchedConcept}\n标题：${selectedVisualization.title}\n描述：${selectedVisualization.description}\n元素：${selectedVisualization.elements.join('、')}\n类型：${selectedVisualization.type}\n\n重要：这是系统通过向量检索为你找到的最相关的可视化，请直接使用它，不需要再建议新的可视化类型！`;
+      this.logger.log(`Using RAG-retrieved visualization for concept: ${matchedConcept}`);
     } else {
-      const hardcodedViz = getHardcodedVisualization(concept);
-      if (hardcodedViz) {
-        contextInfo = `\n\n当前可视化信息：\n标题：${hardcodedViz.title}\n描述：${hardcodedViz.description}\n元素：${hardcodedViz.elements.join('、')}\n类型：${hardcodedViz.type}`;
-      }
+      // 硬编码检查已禁用 - 完全使用AI生成和RAG检索
+      // const hardcodedViz = getHardcodedVisualization(concept);
+      // if (hardcodedViz) {
+      //   contextInfo = `\n\n当前可视化信息（来自硬编码）：\n标题：${hardcodedViz.title}\n描述：${hardcodedViz.description}\n元素：${hardcodedViz.elements.join('、')}\n类型：${hardcodedViz.type}`;
+      //   this.logger.log(`Using hardcoded visualization for concept: ${concept}`);
+      // }
     }
 
     const historyContext = conversationHistory.length > 0
@@ -1007,7 +1473,41 @@ ${data ? `
 
     const prompt = `你是遗传学教育专家。用户正在学习"${concept}"概念，并提出了以下问题。
 
+${ragContextText}
 ${contextInfo}${historyContext}
+
+**核心要求：**
+${ragContext.length > 0 
+  ? '1. **严格基于参考资料回答**：所有答案必须来自上面的参考资料，不能编造或使用外部知识\n2. **标注来源**：在每个关键点后用[参考资料N]标注来自哪个参考资料\n3. **说明章节**：明确说明答案来自课本的哪个章节\n4. **如果参考资料不足**：请明确说明"根据提供的参考资料，没有找到相关信息"，不要编造答案'
+  : '如果没有提供参考资料，请基于遗传学知识回答'}
+
+**回答要求（非常重要）：**
+1. **详细全面**：请提供详细的解释，不要只给简短的几句话。每个概念都要充分展开说明。
+2. **结构清晰**：使用分段、分点的方式组织内容，让回答更容易理解。
+3. **背景知识**：在回答主要问题时，适当补充相关的背景知识和上下文。
+4. **逐步推导**：如果是计算或推导类问题，请详细展示每个步骤。
+5. **适用范围**：说明原理的适用条件和限制。
+
+**重要格式要求（必须遵守）：**
+- **textAnswer字段**：只包含对用户问题的直接文字回答，**不要**在其中单独列出"举例说明"、"后续建议问题"、"相关概念"等标题或段落。所有例子、后续问题、相关概念都应该放在对应的结构化字段中。
+- **examples字段**：将具体的例子放在这个数组中，包含title和description，**不要**在textAnswer中重复。
+- **followUpQuestions字段**：将后续建议问题放在这个数组中，**不要**在textAnswer中重复。
+- **relatedConcepts字段**：将相关概念放在这个数组中，**不要**在textAnswer中重复。
+
+错误示例（textAnswer中包含了例子、后续问题和相关概念）：
+textAnswer包含了"举例说明："、"后续建议问题："、"相关概念："等标题，这是错误的。
+
+正确示例（textAnswer只包含核心回答内容，其他内容放在结构化字段中）：
+textAnswer: "基因组测序技术在个性化医疗中的应用非常广泛。通过分析个体的基因组，可以预测个体患某些遗传性疾病的可能性，从而采取预防措施。此外，基因组测序还可以帮助医生了解患者对特定药物的反应，从而选择最合适的治疗方案。在癌症治疗中，测序可以帮助识别癌症中的基因突变，从而指导治疗策略，例如靶向治疗和免疫治疗[参考资料1]。"
+examples: [
+  {"title": "癌症治疗中的基因组测序应用", "description": "通过基因组测序，医生可以识别患者的肿瘤中哪些基因发生了突变，从而选择针对性的药物进行治疗。"},
+  {"title": "遗传性疾病的基因组测序诊断", "description": "基因组测序可以帮助医生确定患者的基因突变，从而提供准确的诊断和治疗方案。"}
+]
+followUpQuestions: [
+  "个性化医疗如何改变现代医学实践？",
+  "基因组测序技术在罕见病诊断中的应用有哪些？"
+]
+relatedConcepts: ["疾病风险评估", "药物反应预测", "遗传性疾病的诊断", "癌症治疗", "基因组测序"]
 
 用户问题：${question}
 
@@ -1017,14 +1517,15 @@ ${contextInfo}${historyContext}
 - 如果问题与遗传学相关，请详细回答。
 
 请提供：
-1. 清晰、简洁的文字回答（根据用户水平${userLevel}调整深度）
+1. **详细的文字回答**（根据用户水平${userLevel}调整深度，但务必详细和完整，**只包含核心回答内容**）
 2. 如果问题可以通过可视化更好地回答，建议合适的可视化类型
-3. 1-2个具体的例子，帮助用户理解概念（如果适用）
-4. 2-3个后续建议问题，帮助用户深入理解（如果是非遗传学问题，可以提供遗传学相关的问题建议）
+3. 1-2个具体的例子，帮助用户理解概念（如果适用，放在examples数组中）
+4. 2-3个后续建议问题，帮助用户深入理解（如果是非遗传学问题，可以提供遗传学相关的问题建议，放在followUpQuestions数组中）
 
 **重要说明：后续建议问题必须是具体的遗传学知识问题，例如"孟德尔分离定律是什么？"、"基因如何影响生物的表型？"、"伴性遗传有什么特点？"等，而不是"你想要了解什么？"、"你想学习更多信息吗？"等元问题。问题应该直接指向具体的遗传学概念或现象。**
 
-**关于可视化的重要说明：
+**关于可视化的重要说明：**
+- ${requiresVisualization ? '用户明确要求生成可视化内容，请优先考虑创建详细的可视化说明，确保可视化内容能够准确回答用户的问题。' : ''}
 - 如果"相关可视化信息"部分提供了具体的可视化（包含类型、标题、描述、元素），这表示系统已经为你找到了最相关的可视化，请直接使用它：
   - 将needVisualization设为true
   - 将suggestedVisualizationType设为该可视化的类型
@@ -1094,63 +1595,216 @@ ${contextInfo}${historyContext}
       }>(
         [{ role: 'user', content: prompt }],
         schema,
-        { temperature: 0.4 }
+        { 
+          temperature: 0.7,
+          maxTokens: 4000,
+        }
       );
 
       let visualization: VisualizationSuggestion | undefined;
+    let a2uiTemplate: any = null;
 
-      if (useRagVisualization && selectedVisualization) {
-        this.logger.log(`Using RAG-matched visualization: ${matchedConcept}`);
-        visualization = {
-          ...selectedVisualization,
-          insights: undefined
-        } as VisualizationSuggestion;
-      } else if (response.needVisualization) {
-        if (!useRagVisualization) {
-          const hardcodedViz = getHardcodedVisualization(concept);
-          if (hardcodedViz) {
-            this.logger.log(`Using hardcoded visualization for concept: ${concept}`);
+      if (requiresVisualization) {
+      this.logger.log(`User explicitly requested visualization, trying template matching first`);
+
+      try {
+        const templateMatch = await this.templateMatcher?.matchTemplate(question, concept);
+
+        if (templateMatch?.matched && templateMatch.template && templateMatch.confidence > 0.7) {
+          this.logger.log(`Template matched: ${templateMatch.templateId} with confidence ${templateMatch.confidence.toFixed(2)}`);
+
+          const mergedParameters = {
+            ...templateMatch.template.defaultValues,
+            ...templateMatch.suggestedParameters
+          };
+
+          a2uiTemplate = buildA2UIPayload(templateMatch.template, mergedParameters);
+
+          this.logger.log(`Generated A2UI payload for: ${templateMatch.templateId}`);
+        }
+      } catch (templateError) {
+        this.logger.warn('Template matching failed, falling back to dynamic generation:', templateError);
+      }
+      
+      if (!a2uiTemplate) {
+        this.logger.log(`No template match or confidence too low, trying dynamic generation`);
+        
+        try {
+          visualization = await this.generateDynamicVisualization(
+            concept,
+            question,
+            userLevel
+          );
+          this.logger.log(`Successfully generated dynamic visualization for question: ${question.substring(0, 50)}`);
+        } catch (vizError) {
+          this.logger.warn('Failed to generate dynamic visualization, trying RAG fallback:', vizError);
+          
+          if (useRagVisualization && selectedVisualization) {
+            this.logger.log(`Using RAG-matched visualization: ${matchedConcept}`);
             visualization = {
-              ...hardcodedViz,
+              ...selectedVisualization,
               insights: undefined
             } as VisualizationSuggestion;
-          } else if (response.suggestedVisualizationType && response.suggestedVisualizationType !== 'none') {
-            try {
-              visualization = await this.generateQuestionBasedVisualization(
-                concept,
-                question,
-                response.suggestedVisualizationType,
-                userLevel
-              );
-            } catch (vizError) {
-              this.logger.warn('Failed to generate question-based visualization, continuing without visualization:', vizError);
+          } else {
+            // 硬编码检查已禁用 - 完全使用AI生成和RAG检索
+            // const hardcodedViz = getHardcodedVisualization(concept);
+            // if (hardcodedViz) {
+            //   this.logger.log(`Using hardcoded visualization for concept: ${concept}`);
+            //   visualization = {
+            //     ...hardcodedViz,
+            //     insights: undefined
+            //   } as VisualizationSuggestion;
+            // } else 
+            if (response.suggestedVisualizationType && response.suggestedVisualizationType !== 'none') {
+              try {
+                this.logger.log(`Trying question-based visualization as final fallback`);
+                visualization = await this.generateQuestionBasedVisualization(
+                  concept,
+                  question,
+                  response.suggestedVisualizationType,
+                  userLevel
+                );
+              } catch (fallbackError) {
+                this.logger.warn('Failed to generate fallback visualization, continuing without visualization:', fallbackError);
+              }
+            }
+          }
+        }
+      }
+      } else if (response.needVisualization) {
+        this.logger.log(`LLM suggested visualization, prioritizing dynamic generation`);
+        
+        try {
+          visualization = await this.generateDynamicVisualization(
+            concept,
+            question,
+            userLevel
+          );
+          this.logger.log(`Successfully generated dynamic visualization`);
+        } catch (vizError) {
+          this.logger.warn('Failed to generate dynamic visualization, trying fallback:', vizError);
+          
+          if (useRagVisualization && selectedVisualization) {
+            this.logger.log(`Using RAG-matched visualization: ${matchedConcept}`);
+            visualization = {
+              ...selectedVisualization,
+              insights: undefined
+            } as VisualizationSuggestion;
+          } else {
+            const hardcodedViz = getHardcodedVisualization(concept);
+            if (hardcodedViz) {
+              this.logger.log(`Using hardcoded visualization for concept: ${concept}`);
+              visualization = {
+                ...hardcodedViz,
+                insights: undefined
+              } as VisualizationSuggestion;
+            } else if (response.suggestedVisualizationType && response.suggestedVisualizationType !== 'none') {
+              try {
+                this.logger.log(`Trying question-based visualization as final fallback`);
+                visualization = await this.generateQuestionBasedVisualization(
+                  concept,
+                  question,
+                  response.suggestedVisualizationType,
+                  userLevel
+                );
+              } catch (fallbackError) {
+                this.logger.warn('Failed to generate fallback visualization, continuing without visualization:', fallbackError);
+              }
             }
           }
         }
       }
 
       let learningPath: Array<{ id: string; name: string; level: number }> | undefined;
-      try {
-        const pathResult = await this.pathFinder.getLearningPath(concept);
-        learningPath = pathResult.path;
-        this.logger.log(`Generated learning path for ${concept}: ${learningPath?.length || 0} nodes`);
-      } catch (pathError) {
-        this.logger.warn('Failed to generate learning path, continuing without path:', pathError);
+      if (this.pathFinder) {
+        try {
+          const pathResult = await this.pathFinder.getLearningPath(concept);
+          learningPath = pathResult.path;
+          this.logger.log(`Generated learning path for ${concept}: ${learningPath?.length || 0} nodes`);
+        } catch (pathError) {
+          this.logger.warn('Failed to generate learning path, continuing without path:', pathError);
+        }
       }
 
+      // 提取来源信息
+      const citations = ragContext.length > 0 ? ragContext.map(r => ({
+        chunkId: r.chunkId,
+        content: r.content,
+        chapter: r.metadata.chapter,
+        section: r.metadata.section,
+      })) : undefined;
+
+      const sources = ragContext.length > 0 ? (() => {
+        const sourceMap = new Map<string, { documentId: string; title: string; chapter?: string; section?: string }>();
+        for (const result of ragContext) {
+          if (!sourceMap.has(result.documentId)) {
+            const title = result.metadata.chapter 
+              ? `${result.metadata.chapter}${result.metadata.section ? ' - ' + result.metadata.section : ''}`
+              : `文档 ${result.documentId}`;
+            sourceMap.set(result.documentId, {
+              documentId: result.documentId,
+              title,
+              chapter: result.metadata.chapter,
+              section: result.metadata.section,
+            });
+          }
+        }
+        return Array.from(sourceMap.values());
+      })() : undefined;
+
       return {
-        textAnswer: response.textAnswer,
+        textAnswer: this.cleanTextAnswer(
+          response.textAnswer,
+          response.examples,
+          response.followUpQuestions,
+          response.relatedConcepts
+        ),
         visualization,
+        a2uiTemplate,
         examples: response.examples,
         followUpQuestions: response.followUpQuestions,
         relatedConcepts: response.relatedConcepts,
-        learningPath
+        learningPath,
+        citations,
+        sources,
       };
     } catch (error) {
-      this.logger.error('Failed to answer question:', error);
+      this.logger.error('Failed to answer question:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        concept,
+        question: question.substring(0, 100)
+      });
+
+      const errorType = this.classifyError(error);
+      
+      let errorMessage: string;
+      let recoverySuggestion: string;
+
+      switch (errorType) {
+        case 'LLM_TIMEOUT':
+          errorMessage = '很抱歉，AI响应时间过长，请求已超时。';
+          recoverySuggestion = '请尝试简化您的问题，或者稍后再试。';
+          break;
+        case 'LLM_QUOTA_EXCEEDED':
+          errorMessage = '很抱歉，API调用次数已达上限。';
+          recoverySuggestion = '请稍后再试，或联系管理员增加配额。';
+          break;
+        case 'INVALID_JSON':
+          errorMessage = '很抱歉，AI返回的数据格式有误。';
+          recoverySuggestion = '请尝试重新表述您的问题。';
+          break;
+        case 'NETWORK_ERROR':
+          errorMessage = '很抱歉，网络连接出现问题。';
+          recoverySuggestion = '请检查网络连接后重试。';
+          break;
+        default:
+          errorMessage = `很抱歉，我在处理您的问题时遇到了一些困难。`;
+          recoverySuggestion = `请尝试重新表述您的问题，或者查看"${concept}"的基本可视化内容来理解相关概念。`;
+      }
 
       return {
-        textAnswer: `很抱歉，我在处理您的问题时遇到了一些困难。请尝试重新表述您的问题，或者查看"${concept}"的基本可视化内容来理解相关概念。`,
+        textAnswer: `${errorMessage}\n\n${recoverySuggestion}`,
         followUpQuestions: [
           `什么是${concept}的核心原理？`,
           `${concept}有哪些实际应用例子？`,
@@ -1158,6 +1812,86 @@ ${contextInfo}${historyContext}
         ]
       };
     }
+  }
+
+  async generateA2UIForVisualization(
+    visualizationType: string,
+    visualizationData: any,
+    context?: {
+      question?: string;
+      knowledgeBase?: string[];
+    }
+  ): Promise<A2UIPayload | undefined> {
+    this.logger.log(`Generating A2UI for visualization type: ${visualizationType}`);
+
+    if (!this.a2uiAdapter) {
+      this.logger.warn('A2UIAdapterService not available, skipping A2UI generation');
+      return undefined;
+    }
+
+    try {
+      const a2uiPayload = await this.a2uiAdapter.generateA2UIFromVisualization(
+        visualizationType,
+        visualizationData
+      );
+
+      if (context) {
+        a2uiPayload.metadata = {
+          ...a2uiPayload.metadata,
+          ...context
+        };
+      }
+
+      return a2uiPayload;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Failed to generate A2UI: ${errorMessage}`);
+      return undefined;
+    }
+  }
+
+  async answerQuestionWithA2UI(
+    concept: string,
+    question: string,
+    userLevel: 'beginner' | 'intermediate' | 'advanced' = 'intermediate',
+    conversationHistory: Array<{ role: 'user' | 'assistant'; content: string }> = [],
+    enableA2UI: boolean = true
+  ): Promise<VisualizationAnswerResponse & { a2uiPayload?: A2UIPayload }> {
+    this.logger.log(`Answering question with A2UI support for concept: ${concept}`);
+
+    const response = await this.answerQuestion(
+      concept,
+      question,
+      userLevel,
+      conversationHistory
+    );
+
+    let a2uiPayload: A2UIPayload | undefined;
+
+    if (enableA2UI && response.visualization) {
+      try {
+        a2uiPayload = await this.generateA2UIForVisualization(
+          response.visualization.type,
+          response.visualization.data,
+          {
+            question,
+            knowledgeBase: response.citations?.map(c => c.content)
+          }
+        );
+
+        if (a2uiPayload) {
+          this.logger.log(`Successfully generated A2UI payload: ${a2uiPayload.metadata?.templateId || a2uiPayload.surface.rootId}`);
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        this.logger.warn(`Failed to generate A2UI, continuing without it: ${errorMessage}`);
+      }
+    }
+
+    return {
+      ...response,
+      a2uiPayload
+    };
   }
 
   /**
@@ -1177,9 +1911,30 @@ ${contextInfo}${historyContext}
     const truncatedQuestion = question.length > 50 ? question.substring(0, 50) + '...' : question;
 
     try {
+      let ragKnowledgePoints: Record<string, any> = {};
+
+      if (this.vectorRetrieval) {
+        try {
+          const retrievalResult = await this.vectorRetrieval.retrieve({
+            query: `${concept} ${question}`,
+            topK: 5
+          });
+
+          if (retrievalResult.data?.results && retrievalResult.data.results.length > 0) {
+            ragKnowledgePoints = {
+              content: retrievalResult.data.results.map(r => r.content).join('\n\n'),
+              metadata: retrievalResult.data.results.map(r => r.metadata)
+            };
+            this.logger.log(`Retrieved ${retrievalResult.data.results.length} relevant chunks from RAG for knowledge points`);
+          }
+        } catch (ragError) {
+          this.logger.warn('Failed to retrieve knowledge points from RAG:', ragError);
+        }
+      }
+
       switch (vizType) {
         case 'punnett_square':
-          const punnettData = await this.generatePunnettSquareDataWithQuestion(concept, question);
+          const punnettData = await this.generatePunnettSquareDataWithQuestion(concept, question, undefined, ragKnowledgePoints);
           return {
             type: 'punnett_square',
             title: `针对您的问题：${truncatedQuestion}`,
@@ -1191,7 +1946,7 @@ ${contextInfo}${historyContext}
           };
 
         case 'inheritance_path':
-          const inheritanceData = await this.generateInheritancePathDataWithQuestion(concept, question);
+          const inheritanceData = await this.generateInheritancePathDataWithQuestion(concept, question, undefined, ragKnowledgePoints);
           return {
             type: 'inheritance_path',
             title: `针对您的问题：${truncatedQuestion}`,
@@ -1204,7 +1959,7 @@ ${contextInfo}${historyContext}
           };
 
         case 'probability_distribution':
-          const probData = await this.generateProbabilityDistributionData(concept);
+          const probData = await this.generateProbabilityDistributionData(concept, undefined, ragKnowledgePoints);
           return {
             type: 'probability_distribution',
             title: `针对您的问题：${truncatedQuestion}`,
@@ -1246,5 +2001,29 @@ ${contextInfo}${historyContext}
         description: viz?.description || ''
       };
     });
+  }
+
+  /**
+   * 分类错误类型
+   */
+  private classifyError(error: unknown): string {
+    if (error instanceof Error) {
+      const errorMessage = error.message.toLowerCase();
+      
+      if (errorMessage.includes('timeout') || errorMessage.includes('timed out')) {
+        return 'LLM_TIMEOUT';
+      }
+      if (errorMessage.includes('quota') || errorMessage.includes('limit') || errorMessage.includes('429')) {
+        return 'LLM_QUOTA_EXCEEDED';
+      }
+      if (errorMessage.includes('invalid json') || errorMessage.includes('parse')) {
+        return 'INVALID_JSON';
+      }
+      if (errorMessage.includes('network') || errorMessage.includes('econnrefused') || errorMessage.includes('fetch')) {
+        return 'NETWORK_ERROR';
+      }
+    }
+    
+    return 'UNKNOWN_ERROR';
   }
 }

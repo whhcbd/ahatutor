@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface RNAInterferenceVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function RNAInterferenceVisualization({ data, colors }: RNAInterferenceVisualizationProps) {
+export function RNAInterferenceVisualization({ colors }: RNAInterferenceVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'mirna' | 'sirna' | 'mechanism' | 'applications'>('mirna');
 
   const defaultColors = {

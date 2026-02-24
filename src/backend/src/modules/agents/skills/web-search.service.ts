@@ -1,12 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  WebSearchInput,
-  WebSearchOutput,
-  SearchResult,
-  SkillExecutionResult,
-  SkillType,
-} from '@shared/types/skill.types';
+import { WebSearchInput, WebSearchOutput, SearchResult, SkillExecutionResult, SkillType } from '@shared/types/skill.types';
+import {  } from '@shared/types/agent.types';
 
 /**
  * 搜索提供商接口

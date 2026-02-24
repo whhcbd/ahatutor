@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export interface FollowUpQuestion {
   id: string;
@@ -172,7 +172,7 @@ export function useFollowUpQuestions() {
 
   const prioritizeQuestions = (
     questions: FollowUpQuestion[],
-    userLevel?: 'beginner' | 'intermediate' | 'advanced'
+    _userLevel?: 'beginner' | 'intermediate' | 'advanced'
   ): FollowUpQuestion[] => {
     const categoryOrder: Record<FollowUpQuestion['category'], number> = {
       deepen: 1,
@@ -180,7 +180,7 @@ export function useFollowUpQuestions() {
       application: 3,
     };
 
-    const difficultyOrder: Record<FollowUpQuestion['difficulty'], number> = {
+    const difficultyOrder: Record<Exclude<FollowUpQuestion['difficulty'], undefined>, number> = {
       easy: 1,
       medium: 2,
       hard: 3,

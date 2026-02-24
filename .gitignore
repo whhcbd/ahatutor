@@ -102,3 +102,24 @@ src/shared/types/*.js.map
 # 备份文件
 *.bak
 *.backup
+
+# 根目录分析脚本（已移至 scripts/analysis）
+analyze-*.js
+check-*.js
+verify-*.js
+debug-*.js
+deep-*.js
+direct-*.js
+inspect-*.js
+final-*.js
+comprehensive-*.js
+detailed-*.js
+*-report.json
+*-analysis.json
+
+# 根目录文档（已移至 docs/reference）
+full.md
+目录.md
+
+# 临时项目目录
+biological-mindmap/

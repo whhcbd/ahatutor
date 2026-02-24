@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import type { VisualizationData } from '../types';
+
+interface VisualizationData {
+  type?: string;
+  description?: string;
+}
 
 interface LaggingStrandData extends VisualizationData {
   synthesisRate?: string;

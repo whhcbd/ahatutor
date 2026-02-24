@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface KnowledgeGap {
   id: string;
   concept: string;

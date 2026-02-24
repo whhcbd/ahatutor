@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import type { VisualizationData } from '../types';
 
-interface DNAPolymeraseData extends VisualizationData {
+interface DNAPolymeraseData {
   types?: string[];
   activities?: string[];
   direction?: string;
@@ -15,7 +14,6 @@ export function DNAPolymeraseVisualization({ data, colors = {} }: { data?: DNAPo
   const secondaryColor = colors.secondary || '#10B981';
   const accentColor = colors.accent || '#F59E0B';
   const dangerColor = colors.danger || '#EF4444';
-  const warningColor = colors.warning || '#F97316';
   const backgroundColor = colors.background || '#F3F4F6';
   const textColor = colors.text || '#1F2937';
 

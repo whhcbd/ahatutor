@@ -8,7 +8,6 @@ interface XLinkedInheritanceProps {
 
 export function XLinkedInheritance({ data, colors }: XLinkedInheritanceProps) {
   const [activeTab, setActiveTab] = useState<'recessive' | 'dominant' | 'examples'>('recessive');
-  const [hoveredElement, setHoveredElement] = useState<string | null>(null);
 
   const defaultColors = {
     xChromosome: colors?.xChromosome || VisualizationColors.chromosomeX,

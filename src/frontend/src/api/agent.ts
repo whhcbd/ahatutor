@@ -241,16 +241,83 @@ class AgentApiClient {
     concept: string;
     question: string;
     conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>;
+    userLevel?: 'beginner' | 'intermediate' | 'advanced';
   }): Promise<{
     textAnswer: string;
     visualization?: VisualizationSuggestion;
+    a2uiTemplate?: {
+      templateId: string;
+      surface?: any;
+      dataModel?: any;
+      a2uiTemplate?: any;
+      parameters?: Record<string, any>;
+      schema?: any;
+    };
     followUpQuestions?: string[];
     relatedConcepts?: string[];
+    examples?: string[];
+    learningPath?: string[];
+    citations?: Array<{ chunkId: string; content: string; chapter?: string; section?: string }>;
+    sources?: Array<{ documentId: string; title: string; chapter?: string; section?: string }>;
+    streamingProgress?: number;
   }> {
     return this.request('/agent/visualize/ask', {
       method: 'POST',
       body: JSON.stringify(params),
     });
+  }
+
+  askVisualizationQuestionStream(
+    params: {
+      concept: string;
+      question: string;
+      userLevel?: 'beginner' | 'intermediate' | 'advanced';
+    },
+    callbacks: {
+      onMessage: (chunk: {
+        type: 'skeleton' | 'chunk' | 'surface' | 'dataModel' | 'data' | 'done' | 'error';
+        id: string;
+        timestamp: number;
+        data: any;
+        error?: string;
+      }) => void;
+      onComplete: () => void;
+      onError: (error: Error) => void;
+    }
+  ): EventSource {
+    const queryParams = new URLSearchParams({
+      concept: params.concept,
+      question: params.question,
+    });
+    
+    if (params.userLevel) {
+      queryParams.append('userLevel', params.userLevel);
+    }
+    
+    const url = `${this.baseUrl}/agent/visualize/ask/stream?${queryParams}`;
+    const eventSource = new EventSource(url);
+
+    eventSource.onmessage = (event) => {
+      try {
+        const chunk = JSON.parse(event.data);
+        callbacks.onMessage(chunk);
+        
+        if (chunk.type === 'done') {
+          callbacks.onComplete();
+          eventSource.close();
+        }
+      } catch (error) {
+        console.error('Failed to parse SSE chunk:', error, event.data);
+      }
+    };
+
+    eventSource.onerror = (error) => {
+      console.error('SSE connection error:', error);
+      callbacks.onError(new Error('SSE connection failed'));
+      eventSource.close();
+    };
+
+    return eventSource;
   }
 
   async getHardcodedConcepts(): Promise<Array<{
@@ -260,6 +327,27 @@ class AgentApiClient {
     description: string;
   }>> {
     return this.request('/agent/visualize/concepts');
+  }
+
+  async sendUserAction(action: {
+    type: string;
+    componentId: string;
+    action: string;
+    data?: Record<string, any>;
+    messageId?: string;
+  }): Promise<{
+    success: boolean;
+    result?: any;
+    error?: string;
+    message: string;
+  }> {
+    return this.request('/agent/action', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...action,
+        timestamp: Date.now()
+      }),
+    });
   }
 
   // ==================== Narrative Composer ====================
@@ -365,6 +453,81 @@ class AgentApiClient {
       queryParams.append('userLevel', params.userLevel);
     }
     return this.request(`/agent/quiz/topic?${queryParams}`);
+  }
+
+  // ==================== Quiz Bank ====================
+
+  async getQuestionsByChapters(params: {
+    chapters: number[];
+    difficulty?: Difficulty;
+    count?: number;
+  }): Promise<QuizQuestion[]> {
+    const queryParams = new URLSearchParams({
+      chapters: params.chapters.join(','),
+    });
+    if (params.difficulty) {
+      queryParams.append('difficulty', params.difficulty);
+    }
+    if (params.count) {
+      queryParams.append('count', String(params.count));
+    }
+    return this.request(`/quiz-bank/questions?${queryParams}`);
+  }
+
+  async getQuestionsByTopics(params: {
+    topics: string[];
+    difficulty?: Difficulty;
+    count?: number;
+  }): Promise<QuizQuestion[]> {
+    const queryParams = new URLSearchParams({
+      topics: params.topics.join(','),
+    });
+    if (params.difficulty) {
+      queryParams.append('difficulty', params.difficulty);
+    }
+    if (params.count) {
+      queryParams.append('count', String(params.count));
+    }
+    return this.request(`/quiz-bank/questions/by-topics?${queryParams}`);
+  }
+
+  async getRandomQuestions(params: {
+    count: number;
+    difficulty?: Difficulty;
+    chapters?: number[];
+  }): Promise<QuizQuestion[]> {
+    const queryParams = new URLSearchParams({
+      count: String(params.count),
+    });
+    if (params.difficulty) {
+      queryParams.append('difficulty', params.difficulty);
+    }
+    if (params.chapters) {
+      queryParams.append('chapters', params.chapters.join(','));
+    }
+    return this.request(`/quiz-bank/questions/random?${queryParams}`);
+  }
+
+  async getChapters(): Promise<Array<{
+    number: number;
+    name: string;
+    exerciseCount: number;
+  }>> {
+    return this.request('/quiz-bank/chapters');
+  }
+
+  async getTopics(): Promise<string[]> {
+    return this.request('/quiz-bank/topics');
+  }
+
+  async getQuizBankStats(): Promise<{
+    totalExercises: number;
+    totalChapters: number;
+    totalTopics: number;
+    byDifficulty: Record<string, number>;
+    byType: Record<string, number>;
+  }> {
+    return this.request('/quiz-bank/stats');
   }
 
   // ==================== Skills ====================

@@ -1,0 +1,2380 @@
+{
+  "totalChunks": 968,
+  "totalCharacters": 677357,
+  "avgChunkSize": 700,
+  "chapters": 472,
+  "sections": 0,
+  "subsections": 0,
+  "chunksByLevel": {
+    "1": 968,
+    "2": 0,
+    "3": 0
+  },
+  "chunksByType": {
+    "chapter": 923,
+    "section": 0,
+    "content": 45
+  },
+  "sectionStructure": [
+    {
+      "level": 1,
+      "title": "遗传学",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "Genetics",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "Genetics",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "遗传学",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "（第4版）",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "内容提要",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "图书在版编目（CIP）数据",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "YICHUANXUE",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程（基础版）",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "遗传学",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "（第4版）",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "登录方法：",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程微视频目录",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第4版前言",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "目录",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一章 绪论· 001",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 遗传学发展历史 001",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 遗传与变异 007",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 遗传学研究与社会发展的紧密关系 007",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二章 孟德尔定律· 009",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 分离定律 010",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 自由组合定律 016",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 遗传学数据的统计处理 020",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 孟德尔遗传与人类疾病 031",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、X连锁隐性遗传 035",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、人类孟德尔遗传性状和疾病数据库 036",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三章 遗传的染色体学说 ……………………040",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 染色体 043",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 细胞分裂 043",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 染色体周期 048",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 遗传的染色体学说 054",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四章 孟德尔遗传的拓展· 058",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 环境的影响和基因的表型效应 058",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 显隐性关系的相对性 063",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十九章 遗传与进化 468",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一章绪论",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 遗传学发展历史",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、遗传学代表性研究成果",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、遗传学具有里程碑式的发现",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 遗传与变异",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 遗传学研究与社会发展的紧密关系",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二章 孟德尔定律",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 分离定律",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、显性和隐性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、分离现象",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、孟德尔假设",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、基因型和表型",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、孟德尔假设的验证",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、配子形成时发生分离的证明",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "七、分离比实现的条件",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 自由组合定律",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、两对性状的自由组合",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、对自由组合的解释",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、两对基因杂种的基因型和表型",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、多基因杂种",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 遗传学数据的统计处理",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、概率",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、遗传比例的计算",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、二项式展开",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、适合度测验",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、用卡平方来测定适合度",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 孟德尔遗传与人类疾病",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、常染色体显性遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、常染色体隐性遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、X连锁显性遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、X连锁隐性遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、人类孟德尔遗传性状和疾病数据库",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三章",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "遗传的染色体学说",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 染色体",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 细胞分裂",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、细菌的二分分裂",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、真核细胞的有丝分裂",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、减数分裂",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 染色体周期",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、动物的生活史",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、植物的生活史",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、动、植物生活史的比较",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、真菌类的生活史",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 遗传的染色体学说",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四章",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "孟德尔遗传的拓展",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 环境的影响和基因的表型效应",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、环境与基因作用的关系",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、性状的多基因决定",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、基因的多效性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、表现度和外显率",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、拟表型",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 显隐性关系的相对性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、不完全显性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、镶嵌显性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、并显性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、显隐性可随所依据的标准而更改",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "fi、显性与环境的影响",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 致死基因",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 复等位现象",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、瓢虫的鞘翅色斑",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、ABO血型",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、孟买型与H抗原",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、Rh血型与母子间不相容",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、家禽的母子间的血型不相容",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、自交不亲和",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第五节 非等位基因间的相互作用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、互补基因",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、修饰基因",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、上位效应",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第五章",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "遗传的分子基础",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 遗传物质是DNA（或RNA）",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、DNA是遗传物质的间接证据",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、DNA是遗传物质的直接证据",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 DNA的分子结构与复制",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、两种核酸和它们的分布",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、DNA的化学结构",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、DNA的模型",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、DNA的变性和复性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、DNA的复制",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 基因的本质",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、基因与DNA",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "$^{12}\\mathbf{P}$ TCAGCCCCATGGTT",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、生化突变型与一个基因一个酶假说",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、人的先天代谢缺陷",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、位置效应与顺反子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、基因概念的发展",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 重组DNA技术",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、限制性内切酶",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、目的基因的分离和制备",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第五节 基因型分型技术",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、Southern印迹",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、聚合酶链式反应",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、DNA测序",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第六章性别决定与伴性遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 性别决定",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、性染色体",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、性染色体与性别决定",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 伴性遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、果蝇的伴性遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、高等植物的伴性遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、鸡的伴性遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 遗传的染色体学说的直接证明",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 其他类型的性别决定",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、蜂的性别决定",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、后蜡的性别决定",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、高等植物的性别决定",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、环境对性别分化的影响",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第五节 人类的性别决定",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、几种性别畸形",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、遗传变异与人类性别决定",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第六节 基因与性指数",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、果蝇的性指数",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、人类的睾丸决定因子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第七章 连锁交换与连锁分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 连锁与交换",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、连锁",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、交换",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、雌雄的连锁不同",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、连锁群",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、三点试验与基因直线排列",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、连锁图",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "七、重组率与交换率",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "八、孟德尔研究过的7对基因位于7对不同染色体上吗",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 真菌类的连锁分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、着丝粒作图",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、粗糙链泡粤的连锁",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、染色单体干涉",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 人类孟德尔遗传病的连锁分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、限制性片段长度多态性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、连锁分析与孟德尔遗传病的间接遗传测试",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 染色体遗传机制在理论和实践上的意义",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第八章",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "细菌和噬菌体的重组和连锁",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 细菌和病毒在遗传学研究中的地位",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 细菌的遗传分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、细菌的杂交",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、F因子与接合",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、高频重组与中断杂交技术",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、F因子整合到细菌染色体的过程",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、细菌基因的交换过程",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、重组作图",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "七、性导",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 噬菌体的遗传分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、烈性噬菌体",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、噬菌体的基因重组",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、溶原性细菌",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、转导",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第九章数量性状遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 数量性状的遗传学分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、数量性状的多基因假说",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、数量性状与质量性状的关系",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、数量性状和选择",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 分析数量性状的基本统计方法",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、平均数",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、方差",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、标准误",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 遗传变异和遗传率",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、遗传率",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、对遗传率的几点说明",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 近亲繁殖和杂种优势",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、近交和近交系数",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、近交系数的计算",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、近交的遗传效应",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、杂种优势及其遗传理论",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、杂种优势的实践利用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十章遗传物质的改变(一)染色体畸变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 染色体结构的改变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、染色体畸变的研究材料和研究方法",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、缺失",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、重复",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、易位",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、倒位",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、平衡致死系",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "七、染色体结构变异的发生机制",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "八、染色体结构变异在育种上的应用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 染色体数目的改变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、染色体数目变异的分类",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、单倍体",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、同源多倍体",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、异源多倍体",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、多倍体的诱发与实践应用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、非整倍体",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "七、人类的非整倍体",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "八、三体在配制一代杂种中的应用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "九、人非整倍体细胞系与细胞学作图",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十一章",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "遗传物质的改变（二）",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "——基因突变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 基因突变概述",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、突变体的表型特性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、突变率",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、突变的性质",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 突变的检出",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、果蝇突变的检出",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、粗糙链泡霉突变的检出",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、人突变的检出",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 自发突变与诱发突变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、自发突变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、辐射和紫外线照射诱变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、化学诱变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、诱变在育种上的应用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 突变的分子基础与遗传效应",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、碱基类似物的诱发突变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、改变DNA化学结构的诱变剂",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、结合到DNA分子上的诱变剂",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、基因突变与氨基酸顺序",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、基因突变与血红蛋白病",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十二章 重组、转座与DNA损伤修复",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 重组的分子基础",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、基因重组的可能机制",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、基因转变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、遗传重组的分子基础",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 转座与转座因子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、原核生物中的转座因子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、真核生物中的转座因子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、反转录转座和反转录转座子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、转座的遗传效应和进化意义",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 DNA损伤的修复",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、紫外线照射对细菌DNA的损伤",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、光复活",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、切除修复",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、错配修复",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、同源重组修复",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、其他DNA修复途径",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "七、DNA损伤修复缺陷与人类疾病",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十三章 细胞质和遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 母性影响",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、短暂的母性影响",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、持久的母性影响",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 细胞质遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、高等植物叶绿体的遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、叶绿体遗传的分子基础",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、真菌类线粒体的遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、线粒体遗传的分子基础",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、人类线粒体遗传与机制",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、草履虫放毒型的遗传",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 核质互作与禾谷类作物的雄性不育",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十四章 基因组",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 基因组概述",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、基因组",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、病毒基因组",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、原核生物基因组",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、真核生物的线粒体基因组和叶绿体基因组",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、模式真核生物核基因组测序的完成情况",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 真核生物基因组的结构和组成特点",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、真核生物染色体包装方式",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、割裂基因",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、基因家族与基因超家族",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、真核生物基因组中的非编码序列",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 人类基因组计划和人类基因组",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、人类基因组计划",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、人类基因组的组成和特点",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、人类基因组常见的遗传变异",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 基因组作图和测序",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、遗传图谱和分子遗传标记",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、物理图谱",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、基因测序与测序策略",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第五节 后基因组时代",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十五章 基因表达与基因表达调控",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 从DNA到蛋白质",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、中心法则",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、性状与蛋白质",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、蛋白质的结构和组成",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "非摄性氨基酸",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "极性不带电氨基酸",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "极性带正电氨基酸",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "极性带负电氨基酸",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 原核生物的基因转录与翻译",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、RNA转录和RNA聚合酶",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、 $\\sigma$ 因子与启动子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、转录终止",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、信使RNA与密码子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、转运RNA与反密码子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、核糖体与核糖体RNA",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "七、蛋白质的生物合成",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 原核生物的基因表达调控",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、操纵子模型",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、大肠杆菌乳糖操纵子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、大肠杆菌色氨酸操纵子",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、大肠杆菌代谢抑制",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、大肠杆菌色氨酸衰减作用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 真核生物的基因转录与翻译",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、基因转录起始",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、mRNA的转录后加工",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、蛋白质翻译与修饰",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、蛋白质降解",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第五节 真核生物的基因表达调控",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、顺式调控元件",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、反式调控元件",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、管家基因与奢侈基因",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、可变剪接",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第六节 表观遗传调控",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、染色质结构与组蛋白修饰",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、DNA甲基化与基因组印记",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、RNA干扰",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、lncRNA与基因表达调控",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十六章 遗传分析策略与方法",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 正向遗传学与反向遗传学",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、海德堡筛选",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、正向遗传学的优点与局限",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、反向遗传学",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、反向遗传学的改进",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 人类单基因性状的基因克隆",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、功能克隆",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、家系连锁分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、优势对数记分法",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、定位克隆",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 复杂疾病易感基因的筛选",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、复杂疾病",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、关联分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、关联分析中的遗传标记",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、关联分析的基本方法",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、全基因组关联分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、连锁与关联的区别与联系",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十七章 遗传与个体发育",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 个体发育的一般模式",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、受精",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、卵裂",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、图式形成",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、形态发生",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、细胞分化",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、细胞生长和细胞凋亡",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 基因在胚胎发育中的作用分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、果蝇胚胎的发育过程",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、果蝇胚胎早期发育的关键调控基因",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、发育相关基因的调控作用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 几个发育现象的遗传学分析",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、基因重排与细胞分化",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、发育突变体分析与基因功能预测",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、植物花器官的发育与ABC模型",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 噬菌体和原生生物的分化",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、噬菌体的自发装配",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、细菌的孢子形成",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、伞藻的再生和嫁接实验",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十八章 遗传与肿瘤",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 肿瘤的特征",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、肿瘤的遗传性",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、肿瘤的细胞学特征",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、肿瘤的流行情况及主要病因",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 肿瘤发生是一系列基因连续变异的累积结果",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、癌基因",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、肿瘤抑制基因",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、病毒感染与肿瘤",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、表观遗传与肿瘤",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 利用肿瘤遗传变异特征改进肿瘤治疗策略",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、靶向治疗",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、免疫治疗",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第十九章 遗传与进化",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第一节 进化概述",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、蛋白质进化",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、核酸进化",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、遗传体系的进化",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、分子进化",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第二节 进化理论",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、拉马克的获得性状遗传学说",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、达尔文的自然选择学说",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、突变为进化提供原材料",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "四、新基因的起源",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "五、群体中的遗传平衡",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "六、突变与群体的基因频率",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "七、选择与群体的基因频率",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "八、突变和选择共同作用下的群体平衡",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "九、遗传漂变",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "十、选择的创造性作用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "十一、定向选择与不定向变异",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第三节 新种形成",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、物种的定义",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、隔离的几种方式",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、新种形成的两种形式",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "第四节 育种实践中的人工选择与远缘杂交",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "一、环境条件的作用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "二、遗传变异的作用",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "三、远缘杂交",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "习题",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "数字课程学习",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "索引",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "A",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "B",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "C",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "D",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "E",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "F",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "G",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "H",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "J",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "K",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "L",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "M",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "N",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "0",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "P",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "Q",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "R",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "S",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "T",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "W",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "X",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "Z",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "郑重声明",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "防伪查询说明",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "反盗版短信举报",
+      "childCount": 0
+    },
+    {
+      "level": 1,
+      "title": "防伪客服电话",
+      "childCount": 0
+    }
+  ]
+}

@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface GeneEngineeringVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function GeneEngineeringVisualization({ data, colors }: GeneEngineeringVisualizationProps) {
+export function GeneEngineeringVisualization({ colors }: GeneEngineeringVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'cloning' | 'vector' | 'expression' | 'applications'>('cloning');
 
   const defaultColors = {

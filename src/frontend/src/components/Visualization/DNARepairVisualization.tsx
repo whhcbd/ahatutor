@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import type { VisualizationData } from '../types';
 
-interface DNARepairData extends VisualizationData {
+interface DNARepairData {
   types?: string[];
   enzymes?: string[];
   function?: string;

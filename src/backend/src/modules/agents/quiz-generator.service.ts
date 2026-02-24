@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { LLMService } from '../llm/llm.service';
 import { QuizQuestion, Difficulty, QuestionType } from '@shared/types/genetics.types';
+import { QuizBankService } from '../quiz-bank/quiz-bank.service';
 
 /**
  * Agent 6: QuizGenerator
@@ -61,7 +62,10 @@ interface SimilarQuestionsResponse {
 export class QuizGeneratorService {
   private readonly logger = new Logger(QuizGeneratorService.name);
 
-  constructor(private readonly llmService: LLMService) {}
+  constructor(
+    private readonly llmService: LLMService,
+    @Optional() private readonly quizBankService: QuizBankService
+  ) {}
 
   /**
    * 生成单道题目
@@ -155,10 +159,33 @@ export class QuizGeneratorService {
   }): Promise<QuizQuestion[]> {
     this.logger.log(`Generating ${params.count} questions`);
 
-    const questions: QuizQuestion[] = [];
+    let questions: QuizQuestion[] = [];
 
-    for (let i = 0; i < params.count; i++) {
-      // 循环选择知识点
+    try {
+      if (this.quizBankService) {
+        this.logger.log('Attempting to fetch questions from quiz bank');
+        
+        const bankQuestions = await this.quizBankService.getQuestionsByTopics({
+          topics: params.topics,
+          difficulty: params.difficulty,
+          count: params.count
+        });
+
+        if (bankQuestions.length >= params.count) {
+          this.logger.log(`Successfully retrieved ${bankQuestions.length} questions from quiz bank`);
+          return bankQuestions.slice(0, params.count);
+        } else if (bankQuestions.length > 0) {
+          this.logger.log(`Retrieved ${bankQuestions.length} questions from quiz bank, will generate ${params.count - bankQuestions.length} more`);
+          questions = bankQuestions;
+        }
+      }
+    } catch (error) {
+      this.logger.warn('Failed to fetch from quiz bank, falling back to AI generation:', error);
+    }
+
+    const remainingCount = params.count - questions.length;
+    
+    for (let i = 0; i < remainingCount; i++) {
       const topic = params.topics[i % params.topics.length];
 
       let maxRetries = 3;

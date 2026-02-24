@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Neo4jService } from './neo4j.service';
 import { GraphBuilderService } from './graph-builder.service';
 import { PathFinderService } from './path-finder.service';
@@ -15,6 +15,7 @@ import {
  */
 @Injectable()
 export class GraphService {
+  private readonly logger = new Logger(GraphService.name);
   constructor(
     private readonly neo4j: Neo4jService,
     private readonly graphBuilder: GraphBuilderService,
@@ -26,7 +27,8 @@ export class GraphService {
    */
   async createNode(dto: CreateNodeDto) {
     if (!this.neo4j.isConnected()) {
-      throw new Error('Neo4j is not connected');
+      this.logger.warn('Neo4j is not connected, cannot create node');
+      return null;
     }
 
     const nodeId = `node_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
@@ -44,6 +46,10 @@ export class GraphService {
    * 获取节点
    */
   async getNode(id: string) {
+    if (!this.neo4j.isConnected()) {
+      this.logger.warn('Neo4j is not connected, cannot get node');
+      return null;
+    }
     return this.neo4j.getNode(id);
   }
 
@@ -51,6 +57,10 @@ export class GraphService {
    * 搜索节点
    */
   async searchNodes(query: string) {
+    if (!this.neo4j.isConnected()) {
+      this.logger.warn('Neo4j is not connected, cannot search nodes');
+      return [];
+    }
     return this.neo4j.searchNodes(query);
   }
 
@@ -58,6 +68,10 @@ export class GraphService {
    * 获取节点关系
    */
   async getNodeRelations(id: string, direction: 'incoming' | 'outgoing' | 'both') {
+    if (!this.neo4j.isConnected()) {
+      this.logger.warn('Neo4j is not connected, cannot get node relations');
+      return { incoming: [], outgoing: [] };
+    }
     return this.neo4j.getNodeRelations(id, direction);
   }
 
@@ -65,6 +79,10 @@ export class GraphService {
    * 删除节点
    */
   async deleteNode(id: string) {
+    if (!this.neo4j.isConnected()) {
+      this.logger.warn('Neo4j is not connected, cannot delete node');
+      return;
+    }
     return this.neo4j.deleteNode(id);
   }
 
@@ -72,6 +90,10 @@ export class GraphService {
    * 创建关系
    */
   async createEdge(dto: CreateEdgeDto) {
+    if (!this.neo4j.isConnected()) {
+      this.logger.warn('Neo4j is not connected, cannot create edge');
+      return null;
+    }
     const edge = await this.neo4j.createEdge(
       dto.from,
       dto.to,
@@ -85,6 +107,10 @@ export class GraphService {
    * 删除关系
    */
   async deleteEdge(id: string) {
+    if (!this.neo4j.isConnected()) {
+      this.logger.warn('Neo4j is not connected, cannot delete edge');
+      return;
+    }
     return this.neo4j.deleteEdge(id);
   }
 

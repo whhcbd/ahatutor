@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraphNode, GraphEdge } from '../visualization/KnowledgeGraph';
+import { GraphNode, GraphEdge } from '../Visualization/KnowledgeGraph';
 
 export interface PathNode {
   id: string;
@@ -29,8 +29,134 @@ interface LearningPathRecommenderProps {
   onStartNode?: (nodeId: string) => void;
 }
 
-export function LearningPathRecommender({ 
-  nodes, 
+const findShortestPath = (
+  nodes: GraphNode[],
+  edges: GraphEdge[],
+  startId: string,
+  endId: string
+): GraphNode[] | null => {
+  const nodeMap = new Map(nodes.map(n => [n.id, n]));
+  const adjList = new Map<string, Array<{ id: string; weight: number }>>();
+
+  nodes.forEach(node => {
+    adjList.set(node.id, []);
+  });
+
+  edges.forEach(edge => {
+    const sourceId = typeof edge.source === 'string' ? edge.source : edge.source.id;
+    const targetId = typeof edge.target === 'string' ? edge.target : edge.target.id;
+
+    if (edge.bidirectional) {
+      adjList.get(sourceId)?.push({ id: targetId, weight: edge.weight });
+      adjList.get(targetId)?.push({ id: sourceId, weight: edge.weight });
+    } else {
+      adjList.get(sourceId)?.push({ id: targetId, weight: edge.weight });
+    }
+  });
+
+  const distances = new Map<string, number>();
+  const previous = new Map<string, string | null>();
+  const visited = new Set<string>();
+
+  nodes.forEach(node => {
+    distances.set(node.id, Infinity);
+    previous.set(node.id, null);
+  });
+
+  distances.set(startId, 0);
+
+  while (visited.size < nodes.length) {
+    const current = [...distances.entries()]
+      .filter(([id]) => !visited.has(id))
+      .sort(([, a], [, b]) => a - b)[0];
+
+    if (!current) break;
+    if (current[1] === Infinity) break;
+
+    const [currentId] = current;
+    visited.add(currentId);
+
+    if (currentId === endId) break;
+
+    const neighbors = adjList.get(currentId) || [];
+    for (const neighbor of neighbors) {
+      const alt = current[1] + neighbor.weight;
+      if (alt < (distances.get(neighbor.id) || Infinity)) {
+        distances.set(neighbor.id, alt);
+        previous.set(neighbor.id, currentId);
+      }
+    }
+  }
+
+  if (!previous.get(endId)) return null;
+
+  const path: GraphNode[] = [];
+  let current = endId;
+  while (current !== null) {
+    const node = nodeMap.get(current);
+    if (node) path.unshift(node);
+    current = previous.get(current) || '';
+  }
+
+  return path;
+};
+
+const createLearningPath = (
+  id: string,
+  name: string,
+  description: string,
+  nodes: PathNode[],
+  totalEstimatedTime: number,
+  difficulty: LearningPath['difficulty'],
+  completionPercentage: number
+): LearningPath => {
+  return {
+    id,
+    name,
+    description,
+    nodes,
+    totalEstimatedTime,
+    difficulty,
+    completionPercentage,
+  };
+};
+
+export function generateLearningPaths(
+  nodes: GraphNode[],
+  edges: GraphEdge[],
+  startNodeId?: string,
+  targetNodeId?: string
+): LearningPath[] {
+  const paths: LearningPath[] = [];
+
+  if (startNodeId && targetNodeId) {
+    const shortestPath = findShortestPath(nodes, edges, startNodeId, targetNodeId);
+    if (shortestPath) {
+      const pathNodes: PathNode[] = shortestPath.map(n => ({
+        id: n.id,
+        name: n.name,
+        type: n.type,
+        mastery: n.mastery || 0,
+        level: n.level || 1,
+        estimatedTime: (n as any).estimatedTime
+      }));
+      paths.push(createLearningPath(
+        'shortest',
+        '最短路径',
+        `从 ${startNodeId} 到 ${targetNodeId} 的最短学习路径`,
+        pathNodes,
+        60,
+        'intermediate',
+        40
+      ));
+    }
+  }
+
+  return paths;
+}
+
+export function LearningPathRecommender({
+  nodes,
   edges,
   startNodeId,
   targetNodeId,
@@ -198,155 +324,7 @@ export function LearningPathRecommender({
 }
 
 export function useLearningPathRecommender() {
-  const findShortestPath = (
-    nodes: GraphNode[],
-    edges: GraphEdge[],
-    startId: string,
-    endId: string
-  ): GraphNode[] | null => {
-    const nodeMap = new Map(nodes.map(n => [n.id, n]));
-    const adjList = new Map<string, Array<{ id: string; weight: number }>>();
-
-    nodes.forEach(node => {
-      adjList.set(node.id, []);
-    });
-
-    edges.forEach(edge => {
-      const sourceId = typeof edge.source === 'string' ? edge.source : edge.source.id;
-      const targetId = typeof edge.target === 'string' ? edge.target : edge.target.id;
-
-      if (edge.bidirectional) {
-        adjList.get(sourceId)?.push({ id: targetId, weight: edge.weight });
-        adjList.get(targetId)?.push({ id: sourceId, weight: edge.weight });
-      } else {
-        adjList.get(sourceId)?.push({ id: targetId, weight: edge.weight });
-      }
-    });
-
-    const distances = new Map<string, number>();
-    const previous = new Map<string, string | null>();
-    const visited = new Set<string>();
-
-    nodes.forEach(node => {
-      distances.set(node.id, Infinity);
-      previous.set(node.id, null);
-    });
-
-    distances.set(startId, 0);
-
-    while (visited.size < nodes.length) {
-      const current = [...distances.entries()]
-        .filter(([id]) => !visited.has(id))
-        .sort(([, a], [, b]) => a - b)[0];
-
-      if (!current) break;
-      if (current[1] === Infinity) break;
-
-      const [currentId] = current;
-      visited.add(currentId);
-
-      if (currentId === endId) break;
-
-      const neighbors = adjList.get(currentId) || [];
-      for (const neighbor of neighbors) {
-        const alt = current[1] + neighbor.weight;
-        if (alt < (distances.get(neighbor.id) || Infinity)) {
-          distances.set(neighbor.id, alt);
-          previous.set(neighbor.id, currentId);
-        }
-      }
-    }
-
-    if (!previous.get(endId)) return null;
-
-    const path: GraphNode[] = [];
-    let current = endId;
-    while (current !== null) {
-      const node = nodeMap.get(current);
-      if (node) path.unshift(node);
-      current = previous.get(current) || '';
-    }
-
-    return path;
-  };
-
-  const generateLearningPaths = (
-    nodes: GraphNode[],
-    edges: GraphEdge[],
-    startNodeId?: string,
-    targetNodeId?: string
-  ): LearningPath[] => {
-    const paths: LearningPath[] = [];
-
-    if (startNodeId && targetNodeId) {
-      const shortestPath = findShortestPath(nodes, edges, startNodeId, targetNodeId);
-      if (shortestPath) {
-        paths.push(createLearningPath('最短路径', '基于知识图谱的最短学习路径', shortestPath, nodes));
-      }
-    }
-
-    const lowMasteryNodes = nodes.filter(n => n.mastery < 50).sort((a, b) => a.mastery - b.mastery);
-    if (lowMasteryNodes.length > 0) {
-      const reviewPath = createLearningPath(
-        '复习路径',
-        '针对掌握度较低的知识点进行强化复习',
-        lowMasteryNodes.slice(0, 5),
-        nodes
-      );
-      paths.push(reviewPath);
-    }
-
-    const recommendedPath = nodes
-      .filter(n => n.mastery >= 50 && n.mastery < 80)
-      .sort((a, b) => a.level - b.level);
-
-    if (recommendedPath.length > 0) {
-      paths.push(createLearningPath(
-        '推荐路径',
-        '根据当前学习状态推荐的渐进式学习路径',
-        recommendedPath.slice(0, 5),
-        nodes
-      ));
-    }
-
-    return paths;
-  };
-
-  const createLearningPath = (
-    name: string,
-    description: string,
-    pathNodes: GraphNode[],
-    allNodes: GraphNode[]
-  ): LearningPath => {
-    const nodes: PathNode[] = pathNodes.map(node => ({
-      id: node.id,
-      name: node.name,
-      type: node.type,
-      mastery: node.mastery,
-      level: node.level,
-      estimatedTime: Math.max(5, (100 - node.mastery) / 10),
-    }));
-
-    const totalEstimatedTime = nodes.reduce((sum, n) => sum + (n.estimatedTime || 0), 0);
-    const avgMastery = nodes.reduce((sum, n) => sum + n.mastery, 0) / nodes.length;
-    const avgLevel = nodes.reduce((sum, n) => sum + n.level, 0) / nodes.length;
-
-    const difficulty: LearningPath['difficulty'] = avgLevel < 2 ? 'beginner' : avgLevel < 4 ? 'intermediate' : 'advanced';
-    const completionPercentage = Math.round(avgMastery);
-
-    return {
-      id: `path-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      name,
-      description,
-      nodes,
-      totalEstimatedTime,
-      difficulty,
-      completionPercentage,
-    };
-  };
-
   return {
-    generateLearningPaths,
     findShortestPath,
     createLearningPath,
   };

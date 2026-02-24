@@ -207,6 +207,60 @@ export const MOLECULAR_GENETICS: Record<string, Omit<VisualizationSuggestion, 'i
     ]
   },
 
+  'DNA双螺旋结构': {
+    type: 'diagram',
+    title: 'DNA双螺旋结构可视化',
+    description: '展示DNA分子的双螺旋结构：由两条互补的核苷酸链反向平行缠绕成螺旋状，每圈螺旋包含约10个碱基对。',
+    elements: ['磷酸基团', '脱氧核糖', '含氮碱基', '碱基对', '氢键', '磷酸二酯键', '双螺旋'],
+    layout: 'hierarchical',
+    interactions: ['click', 'hover', 'zoom'],
+    colors: {
+      phosphate: '#E91E63',
+      sugar: '#2196F3',
+      adenine: '#4CAF50',
+      thymine: '#FFC107',
+      guanine: '#FF5722',
+      cytosine: '#9C27B0',
+      backbone: '#1565C0'
+    },
+    data: {
+      structure: {
+        backbone: '磷酸基团和脱氧核糖交替排列，形成骨架',
+        bases: 'A-T、G-C配对，通过氢键连接',
+        antiparallel: '两条链方向相反（5\'→3\'和3\'→5\'）',
+        helical: '右手螺旋，每圈10.5个碱基对'
+      },
+      basePairs: [
+        { pair: 'A-T', hydrogenBonds: 2, strength: '中等' },
+        { pair: 'G-C', hydrogenBonds: 3, strength: '强' }
+      ],
+      components: [
+        { name: '磷酸基团', role: '形成DNA骨架，带负电荷' },
+        { name: '脱氧核糖', role: '五碳糖，连接磷酸基团和碱基' },
+        { name: '含氮碱基', role: '携带遗传信息（A、T、G、C）' },
+        { name: '氢键', role: '维持碱基配对，可解离' }
+      ]
+    },
+    animationConfig: {
+      duration: 8000,
+      easing: 'easeInOut',
+      autoplay: false,
+      steps: [
+        { phase: '结构展示', description: '展示DNA双螺旋的三维结构', duration: 2000 },
+        { phase: '碱基配对', description: '高亮显示A-T和G-C碱基对及氢键', duration: 2000 },
+        { phase: '骨架组成', description: '展示磷酸-脱氧核糖骨架', duration: 2000 },
+        { phase: '旋转演示', description: '旋转DNA分子展示双螺旋特征', duration: 2000 }
+      ]
+    },
+    annotations: [
+      'DNA双螺旋结构是遗传物质储存的分子基础',
+      '两条链通过碱基配对互补，保证遗传信息准确传递',
+      '双螺旋结构使DNA能够紧凑地储存大量遗传信息',
+      '碱基的排列顺序包含遗传密码信息',
+      '磷酸二酯键连接核苷酸，形成稳定的骨架结构'
+    ]
+  },
+
   '核糖体': {
     type: 'diagram',
     title: '核糖体结构与功能可视化',
@@ -1012,6 +1066,85 @@ export const MOLECULAR_GENETICS: Record<string, Omit<VisualizationSuggestion, 'i
       '复杂的调控网络确保基因在正确的时间、正确的地点表达',
       '调控异常是许多疾病的分子基础',
       '理解调控机制有助于开发靶向治疗药物'
+    ]
+  },
+
+  '冈崎片段': {
+    type: 'diagram',
+    title: '冈崎片段合成过程可视化',
+    description: '展示冈崎片段在后随链上的合成过程：由于DNA聚合酶只能沿5\'→3\'方向合成，后随链必须分段合成冈崎片段，最后由DNA连接酶连接成完整的链。',
+    elements: ['冈崎片段', '后随链', 'RNA引物', 'DNA聚合酶', 'DNA连接酶', '复制叉', '前导链'],
+    layout: 'hierarchical',
+    interactions: ['hover', 'click'],
+    colors: {
+      okazakiFragment: '#FF9800',
+      laggingStrand: '#FFB74D',
+      leadingStrand: '#4CAF50',
+      templateStrand: '#81C784',
+      rnaPrimer: '#9C27B0',
+      polymerase: '#2196F3',
+      ligase: '#F44336',
+      fork: '#FF5722',
+    },
+    animationConfig: {
+      duration: 8000,
+      easing: 'easeInOut',
+      autoplay: false,
+      steps: [
+        { phase: '复制叉移动', description: '复制叉向右移动，暴露后随链模板', duration: 1000 },
+        { phase: '引物合成', description: '引物酶合成RNA引物，为DNA聚合酶提供3\'-OH', duration: 1000 },
+        { phase: '片段合成', description: 'DNA聚合酶沿5\'→3\'方向合成冈崎片段', duration: 1500 },
+        { phase: '重复过程', description: '随着复制叉继续移动，合成多个冈崎片段', duration: 2000 },
+        { phase: '引物去除', description: 'RNA引物被DNA聚合酶I（原核）或核酸酶切除', duration: 1000 },
+        { phase: '片段连接', description: 'DNA连接酶将相邻冈崎片段连接成完整DNA链', duration: 1500 }
+      ]
+    },
+    data: {
+      structure: {
+        definition: '后随链上合成的不连续的短DNA片段',
+        length: {
+          prokaryotic: '1000-2000个核苷酸',
+          eukaryotic: '100-200个核苷酸（由于核小体存在）'
+        },
+        composition: '5\'端为RNA引物，3\'端为新合成的DNA'
+      },
+      synthesisProcess: {
+        reason: 'DNA聚合酶只能沿5\'→3\'方向合成，而后随链模板方向相反',
+        mechanism: '必须反向分段合成，形成冈崎片段',
+        direction: '与复制叉移动方向相反'
+      },
+      enzymes: [
+        { name: '引物酶', function: '合成RNA引物，为DNA聚合酶提供3\'-OH起始点' },
+        { name: 'DNA聚合酶III（原核）/δ（真核）', function: '合成冈崎片段的主体部分' },
+        { name: 'DNA聚合酶I（原核）/核酸酶（真核）', function: '切除RNA引物' },
+        { name: 'DNA连接酶', function: '将相邻冈崎片段的磷酸二酯键连接' }
+      ],
+      significance: [
+        '是DNA半不连续复制的直接证据',
+        '解释了为什么DNA复制需要连接酶',
+        '真核生物冈崎片段较短与核小体结构相关',
+        '为理解DNA复制机制提供了关键概念'
+      ],
+      examples: [
+        {
+          organism: '大肠杆菌（原核）',
+          fragmentLength: '1000-2000个核苷酸',
+          feature: '冈崎片段较长，需要较少的引物和连接操作'
+        },
+        {
+          organism: '真核生物',
+          fragmentLength: '100-200个核苷酸',
+          feature: '冈崎片段较短，需要更多引物和连接酶，与核小体结构相关'
+        }
+      ]
+    },
+    annotations: [
+      '冈崎片段由日本科学家冈崎令治及其团队在1968年发现',
+      '前导链连续合成，后随链不连续合成（冈崎片段）',
+      '原核生物冈崎片段比真核生物长10倍左右',
+      '冈崎片段的存在证明了DNA复制是半不连续的',
+      '每个冈崎片段都需要RNA引物来启动合成',
+      'DNA连接酶的活性对于形成完整的DNA链至关重要'
     ]
   }
 };

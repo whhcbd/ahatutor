@@ -1,0 +1,4712 @@
+{
+  "exercises": [
+    {
+      "id": "ex_ea66c06c",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "为什么分离现象比显、隐性现象更有重要意义？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "隐性"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性"
+        ]
+      }
+    },
+    {
+      "id": "ex_98c6f2c2",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "在番茄中，红果色 (R) 对黄果色 (r) 是显性，问下列杂交可以产生哪些基因型，哪些表现型，它们的比例如何？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "显性",
+        "基因型",
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "基因型",
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_13cee27a",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "下面是紫茉莉的几组杂交，基因型和表型已写明。问它们产生杂种后代的基因型和表型怎样？ 粉红红色 白色 粉红 粉红 粉红",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "基因型",
+        "表型",
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "表型",
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_3a170a9f",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "在南瓜中，果实的白色 (W) 对黄色 (w) 是显性，果实盘状 (D) 对球状 (d) 是显性，这两对基因是自由组合的。问下列杂交可以产生哪些基因型，哪些表型，它们的比例如何？ (3）Wdd×wwDd",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "显性",
+        "基因型",
+        "表型",
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "基因型",
+          "表型",
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_12426c95",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "在豌豆中，菱茎 (T) 对矮茎 (t) 是显性，绿豆荚 (G) 对黄豆荚 (g) 是显性，圆种子 (R) 对皱种子 (r) 是显性。现在有下列两种杂交组合，问它们后代的表型如何？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "显性",
+        "表型",
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "表型",
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_449daf85",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "在番茄中，缺刻叶和马铃薯叶是一对相对性状，显性基因 C 控制缺刻叶，基因型 cc 是马铃薯叶。紫茎和绿茎是另一对相对性状，显性基因 A 控制紫茎，基因型 aa 的植株是绿茎。把紫茎、马铃薯叶的纯合植株与绿茎、缺刻叶的纯合植株杂交，在 \\mathbf{F}_2 中得到 9:3:3:1 的分离比。如果把 \\mathbf{F}_1:(1) 与紫茎、马铃薯叶亲本回交；(2)与绿茎、缺刻叶亲本回交；(3)用双隐性植株测交时，后代表型比例各如何？",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "隐性",
+        "基因型",
+        "表型",
+        "杂交",
+        "回交",
+        "测交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "隐性",
+          "基因型",
+          "表型",
+          "杂交",
+          "回交",
+          "测交"
+        ]
+      }
+    },
+    {
+      "id": "ex_6813b5c7",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "根据第6题的题干内容分析下表中番茄的5组不同交配的结果，写出每一交配中亲本植株的最可能的基因型。（这些数据不是实验资料，是为了说明方便而假设的。） <table><tr><td rowspan=\"2\">亲本表型</td><td colspan=\"4\">F1数目</td></tr><tr><td>紫茎缺刻叶</td><td>紫茎马铃薯叶</td><td>绿茎缺刻叶</td><td>绿茎马铃薯叶</td></tr><tr><td>a.紫茎缺刻叶×绿茎缺刻叶</td><td>321</td><td>101</td><td>310</td><td>107</td></tr><tr><td>b.紫茎缺刻叶×紫茎马铃薯叶</td><td>219</td><td>207</td><td>64</td><td>71</td></tr><tr><td>c.紫茎缺刻叶×绿茎缺刻叶</td><td>722</td><td>231</td><td>0</td><td>0</td></tr><tr><td>d.紫茎缺刻叶×绿茎马铃薯叶</td><td>404</td><td>0</td><td>387</td><td>0</td></tr><tr><td>e.紫茎马铃薯叶×绿茎缺刻叶</td><td>70</td><td>91</td><td>86</td><td>77</td></tr></table>",
+      "type": "essay",
+      "difficulty": "hard",
+      "tags": [
+        "基因型",
+        "表型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "表型"
+        ]
+      }
+    },
+    {
+      "id": "ex_d04b9548",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "纯种的紫茎番茄植株（AA）与绿茎的番茄植株（aa）杂交，F1植株是紫茎。F1植株与绿茎植株回交时，后代有482株是紫茎的，526株是绿茎的。问上述结果是否符合 1:1 的回交比例，用 \\chi^2 测验。",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "杂交",
+        "回交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交",
+          "回交"
+        ]
+      }
+    },
+    {
+      "id": "ex_2f15587a",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "真实遗传的紫茎、缺刻叶植株（AACC）与真实遗传的绿茎、马铃薯叶植株（aacc）杂交，F2结果如下： <table><tr><td>紫茎缺刻叶</td><td>紫茎马铃薯叶</td><td>绿茎缺刻叶</td><td>绿茎马铃薯叶</td></tr><tr><td>247</td><td>90</td><td>83</td><td>34</td></tr></table> 问这两对基因是否是自由组合的？进行 \\chi^2 测验。",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_dd56b787",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "一个合子有两对同源染色体 A 和 A' 及 B 和 B', 在它的生长期间, （1）你预测在体细胞中是下面的哪种组合：AA'BB，AABB，AA'BB，AABB，A'A'B'B'，还是另有其他组合？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_ed5a7fce",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "如果一个植株有 4 对基因是显性纯合的, 另一植株有相应的 4 对基因是隐性纯合的, 把这两个植株相互杂交, 问 \\mathrm{F}_{2} 中表型和父本、母本完全相同的各有多少?",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "显性",
+        "隐性",
+        "表型",
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "隐性",
+          "表型",
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_c5c24ffa",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "如果两对基因 A 和 a, B 和 b , 是独立分配的, 而且 A 对 a 是显性, B 对 b 是显性。 （1）从 AaBb 个体中得到 AB 配子的概率是多少？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "显性"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性"
+        ]
+      }
+    },
+    {
+      "id": "ex_139d69cb",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "遗传性共济失调（hereditary ataxia）的临床表型是四肢运动失调，啮呆，眼球震颤。本病有以显性方式遗传的，也有以隐性方式遗传的。下面是本病患者的一个家系。你看哪一种遗传方式更可能？请注明家系中各成员的基因型。如这病是由显性基因引起，用符号 A ；如由隐性基因引起，用符号 a 。 ![](images/d8d22560cf05c4bce0f3a6664ae0f55f27ebb77b0d776f61575bc8a7905454a8.jpg)",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "隐性",
+        "基因型",
+        "表型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "显性",
+          "隐性",
+          "基因型",
+          "表型"
+        ]
+      }
+    },
+    {
+      "id": "ex_c96e299b",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "下面家系的个别成员思有极为罕见的病，已知这病是以隐性方式遗传的，假设患病个体的基因型是 aa。 （1）注明I-1，I-2，Ⅱ-4，Ⅲ-2，IV-1和V-1的基因型。 （3）V-1个体的两个妹妹全是杂合子的概率是多少？ ![](images/a2fdff31b5e5c59beaaac5072ac362dabae32b8a058fd9bc5237e620c275b4a3.jpg)",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "隐性",
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "隐性",
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_3ab7c95c",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "假设地球上每对夫妇在第一胎生了儿子后，就停止生孩子，性别比例将会有什么变化？",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_da018aac",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "你认为孟德尔的豌豆杂交实验能够取得重大遗传发现的原因是什么？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "孟德尔",
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "孟德尔",
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_fb153526",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "判断以下4个家系中，遗传疾病最可能的遗传方式，并简述理由。 ![](images/afc3b1a410e51c68b58f7ad642261b3593e83781187638ee8e80c74d7eff4c81.jpg) ![](images/f9d79b04b228f97895d9d2cc903b0e08f1b6299184b9e6a7209637fef324eab9.jpg) ![](images/5766d6afd7460db6eb42764ea92135b04a441af3f0a0bc76f118992738d39a40.jpg) ![](images/f58565a219a6e777e04cea5ecf41adde5289e5acdff6992b049ce64e97ab2b68.jpg)",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_28de1173",
+      "chapter": "第1章",
+      "chapterNumber": 1,
+      "question": "假设你在科研中遇到了一种新的疾病，尚无研究报道。 （1）如何判定该疾病是遗传性的还是散发性的？ (2）如何判定该疾病是孟德尔遗传还是非孟德尔遗传？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "孟德尔"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "孟德尔"
+        ]
+      }
+    },
+    {
+      "id": "ex_8fbdbf55",
+      "chapter": "第2章",
+      "chapterNumber": 2,
+      "question": "有丝分裂和减数分裂的区别在哪里？从遗传学角度来看，这两种分裂各有什么意义？无性生殖会发生性状分离吗？试加以说明。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_3c46a040",
+      "chapter": "第2章",
+      "chapterNumber": 2,
+      "question": "木稻正常的孢子体组织中染色体数目是12对，问下列各组织的染色体数目是多少？ （1）胚乳；(2）花粉管的管核；(3）胚囊；(4）叶；(5）根端；(6）种子的胚；(7）颗片。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_c22c6034",
+      "chapter": "第2章",
+      "chapterNumber": 2,
+      "question": "用基因型 Aabb 的玉米花粉给基因型 Aabb 的玉米雌花授粉，你预期下一代胚乳的基因型是什么类型，比例如何？",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_620726cc",
+      "chapter": "第2章",
+      "chapterNumber": 2,
+      "question": "某生物有两对同源染色体，一对染色体是中间着丝粒，另一对是端部着丝粒，以模式图方式画出： （1）减数分裂I的中期图；",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_2db0874c",
+      "chapter": "第2章",
+      "chapterNumber": 2,
+      "question": "畜豆的体细胞有 12 条染色体, 也就是 6 对同源染色体 (6 个来自父本, 6 个来自母本)。一个学生说, 在减数分裂时, 只有 1/4 的配子的 6 条染色体完全来自父本或母本, 你认为他的回答对吗?",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_d9639340",
+      "chapter": "第2章",
+      "chapterNumber": 2,
+      "question": "在玉米中： （1）5个小孢子母细胞能产生多少配子？ （3）5个花粉细胞能产生多少配子？ （4）5个脏囊能产生多少配子？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_92c0ffac",
+      "chapter": "第2章",
+      "chapterNumber": 2,
+      "question": "马的二倍体染色体数目是64，驴的二倍体染色体数目是62，请回答： （1）马和驴的杂种的体细胞染色体数是多少？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_5569d6a7",
+      "chapter": "第2章",
+      "chapterNumber": 2,
+      "question": "在玉米中，与糊粉层着色有关的基因很多，其中三对是 A / a, l / i 和 Pr / pr 。要糊粉层着色，除其他有关基因必须存在外，还必须有 A 基因存在，而且不能有 I 基因存在。如有 Pr 存在，糊粉层紫色。如果基因型是 prpr ，糊粉层是红色。假使在一个隔离的玉米试验区中，基因型 Aapprii 的种子种在偶数行，基因型 aaPrprii 的种子种在奇数行。植株长起来时，允许天然授粉，问在偶数行生长的植株上的果糖的糊粉层颜色怎样？在杂数行上又怎样？（提示：糊粉层是胚乳的一部分，所以是 3n 。）",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_42544cf2",
+      "chapter": "第2章",
+      "chapterNumber": 2,
+      "question": "兔的卵没有受精，经过刺激，发育成兔。在这种孤雌生殖的兔中，其中某些兔的有些基因是杂合的。你怎样解释？（提示：极体受精。）",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_c9e6e7b6",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "从基因与性状之间的关系，怎样正确理解遗传学上内因与外因的关系？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_b772d43b",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "在血型遗传中，现把双亲的基因型写出来，问他们子女的基因型应该如何？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_7866cc7f",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "如果父亲的血型是B型，母亲是O型，有一个孩子是O型，问第二个孩子是O型的机会是多少？是B型的机会是多少？是A型或AB型的机会是多少？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_b7b2d5a8",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "当母亲的表型是 \\mathrm{ORh}^{-}\\mathrm{MN} , 子女的表型是 \\mathrm{ORh}^{+}\\mathrm{MN} 时, 问在下列组合中, 哪一个或哪几个组合不可能是子女的父亲的表型? ABRh\\*M,ARh\\*MN,BRh\\*MN,ORhN。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "表型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型"
+        ]
+      }
+    },
+    {
+      "id": "ex_5aee0cc4",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "某个女人和某个男人结婚，生了 4 个孩子，有下列的基因型：iiRRLMLN, iRrLNLN, iiRRNLN, IbrrLMM, 他们父母亲的基因型是什么？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_d941e60b",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "已知兔子的毛色基因存在复等位现象，有 4 种等位基因类型，包括 C, c^{ch}, c^{b}, c 。请通过下表中不同基因型兔子的表型判断 4 个等位基因之间的显隐性关系。 <table><tr><td>基因型</td><td>CC CcabCcCc</td><td>ccbc</td><td>ccbc</td><td>ccbc</td><td>cc</td></tr><tr><td>表型</td><td>野生型棕毛兔</td><td>灰毛兔(毛白色, 毛尖黑色)</td><td>浅灰色</td><td>爪等体端黑色的 白毛兔</td><td>白毛兔</td></tr></table>",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "基因型",
+        "表型",
+        "等位基因"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "基因型",
+          "表型",
+          "等位基因"
+        ]
+      }
+    },
+    {
+      "id": "ex_e30609fb",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "兔子有一种病，叫作Pelger异常。有这种病的兔子，并没有什么严重的症状，就是某些白细胞的核不分叶。如果把患有典型Pelger异常的兔子与纯质正常的兔子杂交，下代有217只显示Pelger异常，237只是正常的。你认为Pelger异常的遗传基础是什么？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_9099b6d2",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "当有Pelger异常的兔子相互交配时，得到的下一代中，223只正常，439只显示Pelger异常，39只极度病变。极度病变的个体除了有不正常的白细胞外，还显示骨骼系统畸形，生后不久就几乎全部死亡。这些极度病变的个体的基因型是什么？为什么只有39只，你怎样解释？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_bdb79187",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "在小鼠中, 有一复等位基因系列, 其中 3 个基因如下: A^{Y}= 黄色, 纯合致死; A= 鼠色, 野生型; a= 非鼠色 (黑色)。这一复等位基因系列位于常染色体上, 列在前面的基因对列在后面的基因是显性。 A^{Y} A^{Y} 个体在胚胎期死亡。现在有下列 5 个杂交组合, 问它们子代的表型如何?",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "显性",
+        "表型",
+        "杂交",
+        "染色体",
+        "等位基因"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "表型",
+          "杂交",
+          "染色体",
+          "等位基因"
+        ]
+      }
+    },
+    {
+      "id": "ex_b20b31ca",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "假定进行很多 A^Y a \\times A a 的杂交，平均每窝生8只小鼠。问在同样条件下，进行很多 A^Y a \\times A^Y a 杂交，你预期每窝平均生几只小鼠？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_0a02d733",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "一只黄色雄鼠 (A^Y) 跟几只非鼠色雌鼠 (aa) 杂交，你能不能在子代中同时得到鼠色和非鼠色小鼠，为什么？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_f5fac1c4",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "鸡冠的种类很多，我们在图4-18中介绍过4种。假定你最初用的是纯种豌豆冠和纯种玫瑰冠，问从什么样的交配中可以获得单冠？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_452a83fc",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "Nilsson-Ehle用两种燕麦杂交，一种是白颖，一种是黑颖，两者杂交， F_{1} 是黑颖。 F_{2}(F_{1} \\times F_{1}) 共得560株，其中黑颖418，灰颖106，白颖36。 （1）说明颖亮颜色的遗传方式。",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_87d0bc05",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "在家蚕中, 一个结白茧的个体与另一结白茧的个体杂交, 子代中结白茧的个体与结黄茧的个体的比例是 3:1 , 问两个亲本的基因型怎样?",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "基因型",
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_37b6d699",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "在小鼠中, 我们已知道黄鼠基因 A^Y 对正常的野生型基因 A 是显性, 另外还有一短尾基因 T , 对正常野生型基因 t 也是显性。这两对基因在纯合态时都是胚胎期致死, 它们相互之间是独立地分配的。 （1）两个黄色短尾个体相互交配，子代的表型比例怎样？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "显性",
+        "表型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "表型"
+        ]
+      }
+    },
+    {
+      "id": "ex_c43320cf",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "有一种观赏植物, 纯合的蓝色品种与纯合的鲜红色品种杂交, F_{1} 均为蓝色。若让 F_{1} 蓝色与纯合鲜红色的品种杂交, 子代的表现型及其比例为蓝色: 鲜红色 = 3:1。请问:",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_a01049ad",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "在一种植物中，叶子的颜色由 A, B, C, D 4个基因控制，它们的突变型等位基因 a, b, c, d 不能完成相应的催化合成作用。一株基因型为 AaBbCcDd 的植株和一株基因型为 AaBbCcdd 的植株进行杂交，请问： （1）亲本的叶子的颜色是哪种？ ![](images/5034a2c9ab26433ab54b48fe53a15e5bdf40776b1bf279b0c4fa02e55de0c024.jpg)",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "基因型",
+        "杂交",
+        "等位基因",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "基因型",
+          "杂交",
+          "等位基因",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_9d20c22d",
+      "chapter": "第3章",
+      "chapterNumber": 3,
+      "question": "后代中是否出现可预期的孟德尔分离比是我们判断孟德尔遗传规律最重要的依据。现有如下两种情况，请分析讨论：",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "孟德尔"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "孟德尔"
+        ]
+      }
+    },
+    {
+      "id": "ex_74bdefab",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "解释下列名词：半保留复制、顺反子、突变子、重组子。 2、哪些实验证明DNA是双螺旋结构？这种结构在遗传学上有什么意义？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "突变",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_4864dafb",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "摩尔根曾提出，基因是功能单位，基因是突变单位，基因是重组单位，即三位一体。利用现代的遗传学观点，你如何看待摩尔根提出的这3点基因属性，请简述理由？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "突变",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_6b5dfcf1",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "从经典遗传学到分子遗传学，基因的概念有什么发展？现在基因的概念是怎样的？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_5270c475",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "有一简单的4核苷酸链, 碱基顺序是A—T—C—G, 问: ①你能识别这条短链吗? 是DNA还是RNA? ②如以这条短链为模板, 形成一条互补的DNA链, 它的碱基顺序怎样? ③如以这条短链为模板, 形成一条互补的RNA链, 它的碱基顺序怎样?",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_b427ebc8",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "DNA双链的两条互补链带有相同的遗传信息吗？请说明。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_f1c3a750",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "在双链的DNA分子中（A+T)/(G+C)是否与（A+C)/(G+T）的比例相同？请解释。",
+      "type": "calculation",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_79fbdde0",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "E.coli的染色体含有长度约为 1100 \\mu \\mathrm{m} 的DNA, 问这条染色体有多少核苷酸对? (提示: DNA 双链的每两对碱基间的距离是 0.34 \\mathrm{~nm} 。)",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_9e8dbad8",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "粗链链孢霉的许多不同的营养突变型能在添加精氨酸的基本培养基上生长，其中一些也能在添加其他物质的基本培养基上生长 (+) ，如下表所示： <table><tr><td rowspan=\"2\">突变类型</td><td colspan=\"5\">生长反应</td></tr><tr><td>基本培养基</td><td>谷氨半醛</td><td>鸟氨酸</td><td>瓜氨酸</td><td>精氨酸</td></tr><tr><td>arg-8,-9</td><td>-</td><td>+</td><td>+</td><td>+</td><td>+</td></tr><tr><td>arg-4,-5,-6,-7</td><td>-</td><td>-</td><td>+</td><td>+</td><td>+</td></tr><tr><td>arg-2,-3,-12</td><td>-</td><td>-</td><td>-</td><td>+</td><td>+</td></tr><tr><td>arg-1,-10</td><td>-</td><td>-</td><td>-</td><td>-</td><td>+</td></tr></table> 你认为精氨酸的代谢途径是怎样的？",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_86ec96bb",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "如果黑尿酸尿症患者的食物中含有大量的苯丙酮酸，他们尿中尿黑酸的排泄量会增加吗？如果含有大量的对羟苯丙酮酸，他们尿中尿黑酸的排泄量会增加吗？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_4619afe3",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "有时由于基因突变，发生代谢障碍，有化学物质积聚，这个事实对于我们说明单个基因突变的多效现象有什么启发？",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_23241714",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "什么叫DNA的重链（H）轻链（L）？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_f5345bdc",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "培养粗糙链孢霉时，在培养基中添加生物素，但培养青霉菌时在培养基中不需要添加生物素。是不是在青霉菌细胞的生化反应中，生物素不起作用呢？把你的解答延伸到其他生物中。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_065020c7",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "假使一个基因决定一个多肽,那么为什么一个基因不决定一个性状呢?",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_34709ee2",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "有一基因型 \\frac{+a}{b + } 如果发现互补作用，表示什么意思？如果没有互补作用，又是什么意思？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_e8654ada",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "已知 a_1, a_2 和 b 都是隐性突变，且仅有 a_1 和 a_2 位于同一基因内部。请写出下列4种基因型所对应的表型，并简述理由。 顺式杂合子：（1）a+a+ （2）a+ b +++ + + 反式杂合子：（3） + + （4） + + b",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "隐性",
+        "基因型",
+        "表型",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "基因型",
+          "表型",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_1e9d1f42",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "科学家在一次大规模的诱变筛选中获得了导致果蝇眼睛颜色变为白色的两个隐性纯合突变品系, 分别用 m_{1} m_{1} 和 m_{2} m_{2} 表示。请问如何利用杂交实验鉴别这两个突变位于两对非等位基因内部, 还是位于同一基因内部? 请给出实验的具体步骤和结果分析。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "隐性",
+        "杂交",
+        "等位基因",
+        "非等位基因",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "杂交",
+          "等位基因",
+          "非等位基因",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_ff41045a",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "简述重新组DNA技术的原理、操作方法及应用。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_41f3512d",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "简述至少3种常用的基因型分型的方法，并谈谈它们的不同。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_5aebd24b",
+      "chapter": "第4章",
+      "chapterNumber": 4,
+      "question": "已知镰状细胞贫血症的发病原因是 \\beta -珠蛋白编码基因的单核苷酸突变（GAG \\rightarrow GTG），该突变可以造成野生型等位基因内部一个MstⅡ酶切位点的丢失。下图是研究者对4份DNA样本进行基因分型的结果，研究者首先对 \\beta -珠蛋白编码基因进行PCR扩增，再经MstⅡ酶切后电泳分离，结果如右图所示。请判断各泳道所对应DNA样品(A、B、C和D)的基因型。 ![](images/f642441f523a45d4f22754a86dcdd61ada80cc5ea0f19608f0ea798445dea13d.jpg)",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "基因型",
+        "等位基因",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "基因型",
+          "等位基因",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_19a1de16",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "嗅乳动物中，雌雄比例大致接近 1:1 ，怎样解释？",
+      "type": "calculation",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_dca19ffa",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "你怎样区别某一性状是常染色体遗传，还是伴性遗传的？举例说明。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [
+        "染色体",
+        "伴性遗传"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体",
+          "伴性遗传"
+        ]
+      }
+    },
+    {
+      "id": "ex_0dd954ea",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "在果蝇中, 长翅 (Vg) 对残翅 (vg) 是显性, 这基因在常染色体上; 红眼 (W) 对白眼 (w) 是显性, 这基因在 X 染色体上。果蝇的性别决定是 XY 型, 蛌蝇是 XX, 雄蝇是 XY, 问下列交配所产生的子代, 基因型和表型如何?",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "显性",
+        "基因型",
+        "表型",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "基因型",
+          "表型",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_60274c1a",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "纯种芦花公鸡和非芦花母鸡交配, 得到 F_{1} 。 F_{1} 个体互相交配, 问 F_{2} 的芦花性状与性别的关系如何?",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_6dc47662",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "在鸡中, 羽毛的显色需要呈性基因 C 的存在, 基因型 cc 的鸡总是白色。已知, 羽毛的芦花斑纹是由伴性(或Z连锁)显性基因 B 控制的, 而且母鸡是异配性别。一只基因型是 ccZ^{W} 的白羽母鸡跟一只芦花公鸡交配, F_{1} 都是芦花斑纹, 如果这些子代个体相互交配, 它们的子群的表型分离比是怎样的? (注: 基因型 C_ZZ^b 和 C_ZW 鸡的羽毛是非芦花斑纹。)",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "基因型",
+        "表型",
+        "连锁"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "基因型",
+          "表型",
+          "连锁"
+        ]
+      }
+    },
+    {
+      "id": "ex_34ffb55d",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "在火鸡的一个优良品系中，出现一种遗传性的白化症，养禽工作者把5只有关的公禽进行检测，发现其中3只带有白化基因。当这3只公禽与无亲缘关系的正常母禽交配时，得到229只幼禽，其中45只是白化的，而且全是母的。育种场中可以进行一雄多雌交配，但在表型正常的184只幼禽中，育种工作者除了要消除白化基因外，想尽量多地保存其他个体。你看火鸡的这种白化症的遗传方式怎样？哪些个体应该淘汰，哪些个体可以放心地保存？你怎样做？",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "表型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型"
+        ]
+      }
+    },
+    {
+      "id": "ex_6d72ba75",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "有一视觉正常的女子，她的父亲是色盲。这个女人与正常视觉的男人结婚，但这个男人的父亲也是色盲。问这对配偶所生的子女视觉如何？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_69fc9bf8",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "一个没有血友病的男人与表型正常的女人结婚后，有了一个患血友病和克兰费尔特综合征的儿子。说明他们两人的染色体组成和基因型。（提示：在形成卵子的第二次减数分裂时，X染色体可发生不分离现象。）",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [
+        "基因型",
+        "表型",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "表型",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_878d59d2",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "植物 Lycnis alba 是雌雄异株。把闻叶雄株与萼叶雄株杂交，得到的 F1 雌雄配株都是阔叶的，但 F2 雌性植株有两种类型——阔叶和窄叶，你怎样解释？哪一个性别是异配性别 (XY)，哪一个性别是同配性别？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_5c724608",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "下面是一个DMD家系，是一个女人和两个男人在两次分别的婚姻中产生的。你认为哪种遗传方式最有可能。请写出家系中各成员的基因型。 ![](images/f64a1d4cf5094fa32f62ae423502fc1d1d52b0e83050c6649a4c077a11d45b28.jpg)",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_1e83d083",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "请问：①双亲都是色盲，他们能生出一个色觉正常的儿子吗？②双亲都是色盲，他们能生出一个色觉正常的女儿吗？③双亲色觉正常，他们能生出一个色盲的儿子吗？④双亲色觉正常，他们能生出一个色盲的女儿吗？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_8699b8f5",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "在黑腹果蝇中, 截别毛 (bobbed bristles) 基因存在于 X 和 Y 的两源区域, 所以 X 和 Y 上都有这基因。这基因记作 bb, 它对野生型基因 (+) 为隐性。隐性纯合子的刚毛短而细。如果将 截刚毛雌蝇 (X^{\\text{公}}X^{\\text{公}}) 与纯合子正常刚毛雄蝇 (X^{+}Y^{+}) 交配，问 \\mathbb{F}_1 和 \\mathbb{F}_2 的基因型和表型的比例如何？",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "基因型",
+        "表型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "基因型",
+          "表型"
+        ]
+      }
+    },
+    {
+      "id": "ex_df7b7781",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "火鸡的卵有时能孤雌生殖, 这有 3 个可能的机制: ① 卵没有经过减数分裂, 仍为二倍体; ② 卵核被极体受精; ③ 卵核染色体加倍。你预期每一假设机制所产生的子代的性比如何? (假定雏鸡要能活下去, 一个 Z 染色体是必须存在的。)",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_e3672d9a",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "在小家鼠中，有一突变基因使尾巴弯曲。现在有一系列杂交实验，结果如下： <table><tr><td rowspan=\"2\">杂交</td><td colspan=\"2\">亲代</td><td colspan=\"2\">子代</td></tr><tr><td>雄</td><td>雄</td><td>雄</td><td>雄</td></tr><tr><td>1</td><td>正常</td><td>弯曲</td><td>全部弯曲</td><td>全部正常</td></tr><tr><td>2</td><td>弯曲</td><td>正常</td><td>1/2弯曲,1/2正常</td><td>1/2弯曲,1/2正常</td></tr><tr><td>3</td><td>弯曲</td><td>正常</td><td>全部弯曲</td><td>全部弯曲</td></tr><tr><td>4</td><td>正常</td><td>正常</td><td>全部正常</td><td>全部正常</td></tr><tr><td>5</td><td>弯曲</td><td>弯曲</td><td>全部弯曲</td><td>全部弯曲</td></tr><tr><td>6</td><td>弯曲</td><td>弯曲</td><td>全部弯曲</td><td>1/2弯曲,1/2正常</td></tr></table> 问：①这突变基因是显性还是隐性？②是常染色体遗传，还是伴性遗传？③表中6个杂交中，亲代和子代的基因型各如何？",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "隐性",
+        "基因型",
+        "杂交",
+        "染色体",
+        "伴性遗传",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "隐性",
+          "基因型",
+          "杂交",
+          "染色体",
+          "伴性遗传",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_33d58674",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "假设果蝇的X染色体（X）和常染色体组（A）的组成分别为（1X，2A）、（2X，2A）、（3X，3A）、（2X，4A）、（4X，4A），试分析这些果蝇的性别表型。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "表型",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_a78a6e8d",
+      "chapter": "第5章",
+      "chapterNumber": 5,
+      "question": "一只性染色体组成为XY的小鼠胚胎，如果Y染色体上缺失了Sry基因，它将发育成雌鼠还是雄鼠？另一只性染色体组成为XY的小鼠胚胎的Sry基因正常，但它常染色体上的Sox9基因缺失，这只小鼠又将发育成什么性别？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_0299c06a",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "在番茄中，圆形 (O) 对长形 (o) 是显性，单一花序 (S) 对复状花序 (s) 是显性。这两对基因是连锁的，现有一杂交 Os / os \\times os / os 得到下面4种植株：圆形、单一花序 (OS)23 ，长形、单一花序 (os)83 ，圆形、复状花序 (Os)85 ，长形、复状花序 (os)19 。问： O - s 间的重组率是多少？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "显性",
+        "杂交",
+        "连锁",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "杂交",
+          "连锁",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_17380ddb",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "根据上一题求得的 O - s 间的重组率，你预期 Os / oS \\times Os / oS 杂交结果，下一代4种表型的比例如何？",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "表型",
+        "杂交",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型",
+          "杂交",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_fae59462",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "在家鸡中, 白色由于隐性基因 c 与 o 的两者或任何一个处于纯合态, 有色要有两个显性基因 C 与 O 的同时存在, 今有下列的交配: ![](images/ec15c6133dea11e898fe804c69329ade7cf41401fb2286831f1a1de23e800dd9.jpg) F_{1} 用双隐性个体 c c o o 测交。做了很多这样的支配，得到的后代中，有色68只，白色204只。问： o - c 之间有连锁吗？如有连锁，重组率是多少？",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "隐性",
+        "测交",
+        "连锁",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "显性",
+          "隐性",
+          "测交",
+          "连锁",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_a5cb00d7",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "双杂合子产生的配子比例可以用测交来估算。现有一交配如下： ![](images/b0884016218d0b8f01205a12d763aa2f5250be508957863e2f88722129dbedd5.jpg) 问：①独立分配时，p=？②完全连锁时，p=？③有一定程度连锁时，p=？",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "测交",
+        "连锁"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "测交",
+          "连锁"
+        ]
+      }
+    },
+    {
+      "id": "ex_fb957599",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "在家鸡中, px 和 al 是引起阵发性痉挛和白化的伴性隐性基因, 相应的野生型等位基因为 Px 和 Al 。今有一双因子杂种公鸡 pxAl / Pxal 与正常母鸡交配, 解出 74 只小鸡, 其中 16 只是白化。假定小鸡有一半是母鸡, 没有一只早期死亡, 而 px 与 al 之间的重组率是 10\\% , 那么在小鸡 4 周龄时, 显出阵发性痉挛时, ① 在白化小鸡中有多少数目显出这种症状, ② 在非白化小鸡中有多少数目显出这种症状?",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "等位基因",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "等位基因",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_e397961a",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "因为 px 是致死的，所以该基因只能通过公鸡传递。上题的小公鸡既不显示 px ，也不显示 al ，因为它们从正常母鸡得到 Px, Al 基因。问多少小公鸡带有 px ？多少小公鸡带有 al ？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_c0a30563",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "在果蝇中, 有一品系对 3 个常染色体隐性基因 a 、 b 和 c 是纯合的, 但不一定在同一条染色体上, 另一品系对显性野性型等位基因 A 、 B 、 C 是纯合子, 把这两品系交配, 用 \\mathrm{F}_{1} 雌蝇与隐性纯合雄蝇亲本回交, 观察到下列结果: <table><tr><td>表型</td><td>数目</td></tr><tr><td>a b c</td><td>211</td></tr><tr><td>A B C</td><td>209</td></tr><tr><td>a B c</td><td>212</td></tr><tr><td>A b C</td><td>208</td></tr></table> 问： ① 这3个基因中哪两个是连锁的？ ② 连锁基因间重组率是多少？",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "隐性",
+        "表型",
+        "回交",
+        "染色体",
+        "等位基因",
+        "连锁",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "隐性",
+          "表型",
+          "回交",
+          "染色体",
+          "等位基因",
+          "连锁",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_d848bc13",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "在番茄中，基因 o (oblate = flattened fruit), p (peach = hairy fruit) 和 s (compound inflorescence) 是在第二染色体上。用 + 表示这 3 个基因的野生型等位基因。将一个 3 基因杂合子与隐性纯合个体进行测交，得到下列结果： <table><tr><td>测交的子代表型</td><td>数目</td></tr><tr><td>+++</td><td>73</td></tr><tr><td>++s</td><td>348</td></tr><tr><td>+p+</td><td>2</td></tr><tr><td>+ps</td><td>96</td></tr><tr><td>o++</td><td>110</td></tr><tr><td>o+s</td><td>2</td></tr><tr><td>op+</td><td>306</td></tr><tr><td>ops</td><td>63</td></tr></table> 问：①这3个基因在第二染色体上的顺序如何？②两个纯合亲本的基因型是什么？③这些基因间的图距是多少？④并发率是多少？",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "基因型",
+        "表型",
+        "测交",
+        "染色体",
+        "等位基因"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "基因型",
+          "表型",
+          "测交",
+          "染色体",
+          "等位基因"
+        ]
+      }
+    },
+    {
+      "id": "ex_c0eebbca",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "下面是位于同一条染色体上的 3 个基因的隐性基因连锁图,并注明了遗传图距。 ![](images/fc2ba5c2f32c7dfa440979f738b1f1b352faf5cd4084670bf2f2ad0158b204e3.jpg) 如果并发率是 60\\% ，在 \\alpha \\beta \\gamma / + + + \\times \\alpha \\beta \\gamma /\\alpha \\beta \\gamma 杂交的1000个子代中预期表型频率是多少？",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "表型",
+        "杂交",
+        "染色体",
+        "连锁"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "隐性",
+          "表型",
+          "杂交",
+          "染色体",
+          "连锁"
+        ]
+      }
+    },
+    {
+      "id": "ex_4efcf9d3",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "减数分裂过程中包括两次分裂，染色体的减数发生在减数分裂I的时候。我们已经知道基因在染色体上，既然染色体在第一次分裂时减数，为什么位于染色体上的基因有时可以在第二次分裂时分离呢？（提示：参考图7-20。）",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_eff325e8",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "某次交换如下图所示，设第一次交换发生在非姐妹染色单体2—3间，如第二次交换可发生在任意两非姐妹染色单体间，机会相等，请画出4种可能的双交换，并分别写出子囊的基因型。 ![](images/d475f0168153a3dd1e960ec025e5eb00a7b4c89d55c728069382107e52e97e35.jpg)",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "基因型",
+        "交换"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "基因型",
+          "交换"
+        ]
+      }
+    },
+    {
+      "id": "ex_8a374220",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "根据表7-5的资料，计算重组率，得到 ![](images/fe048cd9afbfe51f6a9ef67c9c18cc0e13502393b691901bf75396600761ac0d.jpg) 为什么 5.05\\% + 5.20\\% > 9.30\\% 呢？因为 -ade 间的重组值低估了。我们看下表： <table><tr><td rowspan=\"2\">子囊型</td><td colspan=\"3\">每一子囊被计算为重组子的染色单体数</td><td rowspan=\"2\">子囊数</td><td colspan=\"3\">在所有子囊中被计算为重组子的染色单体 数</td></tr><tr><td>- -nic</td><td>nic- ade</td><td>- -ade</td><td>- -nic</td><td>nic- ade</td><td>- -adc</td></tr><tr><td>2</td><td>0</td><td>4</td><td>0</td><td>1</td><td>0</td><td>4</td><td>0</td></tr><tr><td>3</td><td>0</td><td>2</td><td>2</td><td>90</td><td>0</td><td>180</td><td>180</td></tr><tr><td>4</td><td></td><td></td><td></td><td>5</td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td>90</td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td>1</td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td>5</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td>总计</td><td>202</td><td>+ 208</td><td>≠ 372</td></tr></table> 这里， \\frac{202 + 208 - 372}{4000} = 0.95\\% ，是低估了的重组率。把这低估的数值加上去，就完全符合了： ![](images/007f8cfa8728944dae753ba18c435dc05396714e3ac8333e93a20c5b9e06d222.jpg) 请在表中空白处填上数字。",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_b1f71f9f",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "雌果蝇X染色体的遗传组成是 \\frac {+ + + + + +}{a b c d e f} 有一隐性致死基因位于上面一条X染色体的某处，但不知其确切位置。经杂交后，统计此雌蝇产下的1000个雄性子代，其表型如下： <table><tr><td>表型</td><td>数目</td></tr><tr><td>a b c d e f</td><td>750</td></tr><tr><td>a b c d e</td><td>60</td></tr><tr><td>a b c d</td><td>20</td></tr><tr><td>a b c</td><td>30</td></tr><tr><td>d e f</td><td>70</td></tr><tr><td>c d e f</td><td>40</td></tr><tr><td>b c d e f</td><td>30</td></tr><tr><td>合计</td><td>1 000</td></tr></table> 为简易起见，不考虑多次交换，而且已经知道所给的基因顺序是正确的。请写出这些基因间的距离以及致死基因 l 的位置。",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "表型",
+        "杂交",
+        "染色体",
+        "交换"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "表型",
+          "杂交",
+          "染色体",
+          "交换"
+        ]
+      }
+    },
+    {
+      "id": "ex_61dd906d",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "\\beta 地中海贫血为一种常见的遗传性贫血症，重型患者 (\\beta^{\\mathrm{T}} / \\beta^{\\mathrm{T}}, \\mathrm{T} 代表thalassmia）常因心力衰竭而死亡。目前对此病尚无根治方法，仅能通过产前诊断，以防患儿出生。 曾溢滔等利用他们备有的几种DNA探针和几种限制性内切酶,对5例 \\beta 地中海贫血家系的患者及其父母进行RFLP分析。根据所得结果,随即选用特定的限制性内切酶和探针对胎儿的绒毛或羊水细胞DNA进行产前基因诊断。 下面是选出的两个 \\beta 地中海贫血家系。请根据RFLP分析结果，对要进行产前诊断的胎儿作出你的判断，并加以讨论。 ![](images/3b647ed6c40753214b4d83f32504e771347721a4dbf5b7ac84a04ab3f4571e55.jpg) ![](images/299dde5026938a7a413b65cf06ec51d482de7b643540546c7fc5d360f94aa2af.jpg) 京系(1)：用限制性内切的HincⅡ和探针 \\Psi \\beta_{1} 进行分析。 家系(2):用限制性内切酶AvaⅡ和探针βIVS以及限制性内切酶HindⅢ和探针pRK28进行分析。 家系(2)解答提示： （1）β珠蛋白基因簇上限制性酶切位点如下图： ![](images/41f227e0515c73d24cabf0380f0b0197c252408f6f388ac23251c5114dc2e447.jpg) 再从HindⅢ海切位点多态性来看：患儿从母亲得到的15.3这一染色体上有 \\beta^{\\mathrm{T}} 基因，所以胎儿不可能是正常纯合子，从而必为 \\beta^{\\mathrm{T}} / \\beta^{\\mathrm{T}} （重型患者）。",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_bc2a9f02",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "以RFLP为代表的分子遗传标记与传统标记相比，有哪些优点和缺点？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_305cf9d5",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "下图所示的是某常染色体隐性遗传病的一个家系，在致病基因附近有两个完全连锁的RFLP遗传标记(Sph I 和 HindIII)。分型结果如下，请判断孩子2和3的基因型和表型，并简要写出分析过程。 ![](images/4adccf5a3752a99d990a181b9889c7197a10d551745892008c7056f38435b935.jpg)",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "隐性",
+        "基因型",
+        "表型",
+        "染色体",
+        "连锁"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "隐性",
+          "基因型",
+          "表型",
+          "染色体",
+          "连锁"
+        ]
+      }
+    },
+    {
+      "id": "ex_4521db95",
+      "chapter": "第6章",
+      "chapterNumber": 6,
+      "question": "下图的家系中表示了两种X染色体连锁的隐性遗传病的传递，请问： （1）请写出I-1，I-2个体的基因型。（甲病基因用A/a表示，乙病基因用B/b表示） ![](images/3b93a828b7bd5da5921872b97f64830bea5a4890780821f7fa1a6221c3fa4f9e.jpg) 数字课程学习 ![](images/4022833f992368489d515b4fd62e0af0ecf3f504be5a2fa5d41f3f6c9e0d0068.jpg) 在线自说",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "基因型",
+        "染色体",
+        "连锁"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "隐性",
+          "基因型",
+          "染色体",
+          "连锁"
+        ]
+      }
+    },
+    {
+      "id": "ex_a514839c",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "为什么说细菌和病毒是遗传学研究的好材料？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_6ab5dbc8",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "大肠杆菌的遗传物质的传递方式与具有典型减数分裂过程的生物有什么不同？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_d5ac5a27",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "解释下列名词：F菌株，F菌株，Hfr菌株；F因子，F因子，质粒，附加体；溶原性细菌，非溶原性细菌；烈性噬菌体，温和噬菌体，原噬菌体；部分合子（部分二倍体）。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_d742ffbe",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "部分合子在细菌的遗传分析中有什么用处？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_3a1d69fe",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "什么叫转导、普遍性转导、特异性转导（局限性转导）？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_1d7069bf",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "转导和性导有何不同？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_f16d5fae",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "一个基因型为 a^*b^*c^*d^*e^* 并对链霉素敏感的大肠杆菌Hfr菌株与基因型为 a^*b^*c^*d^*e^* 并对链霉素抗性的F菌株接合，30min后，用链霉素处理，然后从成活的受体中选出e ^* 型的原养型，发现它们的其他野生型（+）基因频率如下： a^*70\\%, b^*0\\%, c^*85\\%, d^*10\\% 。问：a、b、c、d4个基因与供体染色体起点（最先进入F受体之点）相对位置如何？",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "基因型",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_e4f76289",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "为了能在接合后检出重组子，必须要有一个可供选择用的供体标记基因，这样可以认出重组子。另一方面，在选择重组子的时候，为了不选择供体细胞本身，必须防止供体菌株的继续存在，换句话说，供体菌株也应带有一个特殊标记，能使它自己不被选择。例如供体菌株是链霉素敏感的，这样当结合体在含有链霉素的培养基上生长时，供体菌株就被杀死了。问：如果一个Hfr菌株是链霉素敏感的，你认为这个基因应位于染色体的哪一方为好，是在起始端还是在末端？",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "染色体",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_c091576b",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "有一个环境条件能使 T 倍数噬菌体 (T-even phages) 吸附到寄主细胞上, 这个环境条件就是色氨酸的存在。这种噬菌体称为色氨酸需要型 (C) 。然而某些噬菌体突变成色氨酸非依赖型 (C^{\\prime}) 。有趣的是, 当用 C 和 C^{\\prime} 噬菌体感染细菌时, 将近一半的色氨酸非依赖型子代在进一步的实验中表现为基因型 C 。你如何解释这个发现?",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "基因型",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_0b74377f",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "Doerman 用 T4 噬菌体的两个品系感染大肠杆菌。一个品系是小噬菌斑 (m) 快速溶菌 (r) 和浑浊噬菌斑 (u) 突变型。另一个品系对这 3 个标记都是野生型 (++) 。把这种感染的溶菌产物涂平板，并分类如下： <table><tr><td></td><td>基因型</td><td></td><td>噬菌斑数</td></tr><tr><td>m</td><td>r</td><td>tu</td><td>3467</td></tr><tr><td>+</td><td>i</td><td>+</td><td>3729</td></tr><tr><td>m</td><td>r</td><td>+</td><td>853</td></tr><tr><td>m</td><td>+</td><td>tu</td><td>162</td></tr><tr><td>m</td><td>+</td><td>+</td><td>520</td></tr><tr><td>+</td><td>r</td><td>tu</td><td>474</td></tr><tr><td>+</td><td>r</td><td>+</td><td>172</td></tr><tr><td>+</td><td>+</td><td>tu</td><td>965</td></tr><tr><td></td><td></td><td></td><td>10342</td></tr></table> 问：①计算 m - r, r - tu 和 m - tu 的连锁距离。②你认为这3个基因的连锁序列怎样？③在这个杂交中，并发系数是多少？它意味着什么？",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [
+        "基因型",
+        "杂交",
+        "连锁",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "杂交",
+          "连锁",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_a089a8da",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "用一野生型菌株抽提出来的DNA来转化一个不能合成污氨酸（Ala）、脯氨酸（Pro）和精氨酸（Arg）的突变型菌株，产生不同转化类型的菌落，其数如下： <table><tr><td>8 400</td><td>ala*pro*arg*</td><td>840</td><td>ala*pro*arg*</td></tr><tr><td>2 100</td><td>ala*pro*arg*</td><td>1 400</td><td>ala*pro*arg*</td></tr><tr><td>420</td><td>ala*pro*arg*</td><td>840</td><td>ala*pro*arg*</td></tr><tr><td>840</td><td>ala*pro*arg*</td><td></td><td></td></tr></table> 问：①这些基因间的图距为多少？②这些基因的顺序如何？",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_b69c6093",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "利用中断杂交技术，检查了 5 个 Hfr 菌株 (1,2,3,4,5)，想知道这几个菌株把若干不同基因 (F,G,O,P,Q,R,S,W,X,Y) 转移到一个 F 菌株的顺序。结果发现，各个 Hfr 菌株都以自己特有的顺序转移，如下所示（各品系只记下最初转移进去的 6 个基因）： <table><tr><td rowspan=\"2\">转移顺序</td><td colspan=\"5\">Hfr菌株</td></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>第一</td><td>Q</td><td>Y</td><td>R</td><td>O</td><td>Q</td></tr><tr><td>第二</td><td>S</td><td>G</td><td>S</td><td>P</td><td>W</td></tr><tr><td>第三</td><td>R</td><td>F</td><td>Q</td><td>R</td><td>X</td></tr><tr><td>第四</td><td>P</td><td>O</td><td>W</td><td>S</td><td>Y</td></tr><tr><td>第五</td><td>O</td><td>P</td><td>X</td><td>Q</td><td>G</td></tr><tr><td>第六</td><td>F</td><td>R</td><td>Y</td><td>W</td><td>F</td></tr></table> 问：这些Hfr菌株的原始菌株的基因顺序如何？（提示：Hfr品系是环状DNA。）",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_668c1d27",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "为了检出λ噬菌体的4个基因（co，mi，c和s）间的连锁关系，Kaiser做了一个杂交实验，下面是杂交结果的一部分数据： <table><tr><td>亲本</td><td>子代</td></tr><tr><td>(a)co1+×+mi</td><td>5162co1+,6510+mi,311++,341co1mi</td></tr><tr><td>(b)mi+×+s</td><td>502mi+,647+s,65++,56mis</td></tr><tr><td>(c)c++s</td><td>566c+,808+s,19++,20cs</td></tr><tr><td>(d)c++×+mi</td><td>1213c+,1205+mi,84++,75cmi</td></tr></table> 问：①每个杂交组合的重组率是多少？②画出 co_{1} ， mi, c 和 s4 个基因的连锁图。",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "杂交",
+        "连锁",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交",
+          "连锁",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_97fbbc8b",
+      "chapter": "第7章",
+      "chapterNumber": 7,
+      "question": "用P1进行普遍性转导，供体菌是pur\\*nad\\*pdx，受体菌是pur\\*nad\\*pdx。转导后选择具有pur的转导子，然后在100个pur转导子中鉴定其他供体菌基因有否也转导过来。所得结果如右表： <table><tr><td>基因型</td><td>菌落数</td></tr><tr><td>nad+pdx*</td><td>1</td></tr><tr><td>nad−pdx-</td><td>24</td></tr><tr><td>nad−pdx*</td><td>50</td></tr><tr><td>nad−pdx-</td><td>25</td></tr><tr><td>合计</td><td>100</td></tr></table> 问：① pur 和 nad 的共转导频率是多少？② pur 和 pdx 的共转导频率是多少？③ 哪个非选择性基因座最靠近 pur？④ nad 和 pdx 在 pur 的同一侧，还是在它的两侧？⑤ 根据你得出的基因顺序，解释实验中得到的基因型的相对比例。",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_9634715c",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "数量性状在遗传上有些什么特点，在实践上有什么特点？数量性状遗传和质量性状遗传有什么主要区别？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_1981e4a7",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "解释名词：遗传率、广义遗传率、狭义遗传率、平均显性程度。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "显性"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性"
+        ]
+      }
+    },
+    {
+      "id": "ex_f2a057fc",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "自然界中杂交繁殖的生物强制进行自交或其他方式近交时生活力降低，为什么自然界中自交的生物继续自交没有不良影响呢？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "杂交",
+        "自交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交",
+          "自交"
+        ]
+      }
+    },
+    {
+      "id": "ex_1701cf90",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "约翰森用莱豆做实验，得出纯系学说。这个学说的重要意义在哪里，它有什么局限性？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_b8b43c37",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "纯种或自交系的维持比较困难，那么制造单交种或双交种时，为什么要用纯种或自交系呢？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "自交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "自交"
+        ]
+      }
+    },
+    {
+      "id": "ex_49d96a42",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "在数量性状遗传中，已知某小麦籽粒颜色是由3对等效可相加的等位基因控制，且基因作用可以相加，子代表型取决于等位基因中显性基因的个数。实验发现将纯系红粒小麦（AABBCC）与纯系白粒小麦（aabbcc）杂交，得到的 \\mathbf{F}_2 的表型颜色有深有浅，从深到浅的分离比为 1:6:15:20:15:6:1 。请结合下图解释这一分离比的由来。 ![](images/2fe2137f851e7aae1bd2145ab1edb8bbe0e6bfebaf39a732859aa3cb1479916c.jpg)",
+      "type": "essay",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "表型",
+        "杂交",
+        "等位基因"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "显性",
+          "表型",
+          "杂交",
+          "等位基因"
+        ]
+      }
+    },
+    {
+      "id": "ex_28a09f46",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "假设多对等位基因控制了某一表型，用计量数值衡量各个等位基因对该表型的遗传贡献。如： A_{0}, B_{0}, C_{0} 等位基因的表型贡献各是 5 个单位，而 A_{1}, B_{1}, C_{1} 等位基因的表型贡献各是 10 个单位，请计算 A_{0}A_{0}B_{1}B_{1}C_{1}C_{1} 和 A_{1}A_{1}B_{0}B_{0}C_{0}C_{0} 两个亲本和它们 F_{1} 杂种表型的计量数值。设：① 共显性；② A_{1} 对 A_{0} 是完全显性；③ A_{1} 对 A_{0} 是完全显性， B_{1} 对 B_{0} 是完全显性。",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "表型",
+        "等位基因"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "表型",
+          "等位基因"
+        ]
+      }
+    },
+    {
+      "id": "ex_5a49c77f",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "根据上题的假定，导出下列的 \\mathbb{F}_2 频率分布，并作图。 <table><tr><td>计量数值</td><td>(1)</td><td>(2)</td><td>(3)</td></tr><tr><td>30</td><td>1/64</td><td>1/64</td><td>1/64</td></tr><tr><td>35</td><td>6/64</td><td>4/64</td><td>2/64</td></tr><tr><td>40</td><td>15/64</td><td>9/64</td><td>7/64</td></tr><tr><td>45</td><td>20/64</td><td>16/64</td><td>12/64</td></tr><tr><td>50</td><td>15/64</td><td>19/64</td><td>15/64</td></tr><tr><td>55</td><td>6/64</td><td>12/64</td><td>18/64</td></tr><tr><td>60</td><td>1/64</td><td>3/64</td><td>9/64</td></tr></table>",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_d664744c",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "上海奶牛的泌乳量比根赛牛(Guernseys)高 12\\% ，而根赛牛的奶油含量比上海奶牛高 30\\% 。泌乳量和奶油含量的差异大约各包括10个基因位点，均为共显性。在上海奶牛和根赛牛的杂交中， \\mathbf{F}_2 中有多少比例的个体的泌乳量跟上海奶牛一样高，而奶油含量跟根赛牛一样高？",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "显性",
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_52215e73",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "测量 101 只成熟的矮脚鸡的体重, 得下列结果: <table><tr><td>只数</td><td>体重/kg</td></tr><tr><td>8</td><td>0.60</td></tr><tr><td>17</td><td>0.65</td></tr><tr><td>52</td><td>0.70</td></tr><tr><td>15</td><td>0.75</td></tr><tr><td>9</td><td>0.80</td></tr></table> 计算体重的平均数和方差。",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_b1508c21",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "测量矮脚鸡、芦花鸡和它们的杂种中成熟公鸡的体重，得到下列的平均体重和表型方差： <table><tr><td></td><td>平均体重/kg</td><td>方差</td></tr><tr><td>矮脚鸡</td><td>0.70</td><td>0.025</td></tr><tr><td>芦花鸡</td><td>3.30</td><td>0.125</td></tr><tr><td>F1</td><td>1.70</td><td>0.075</td></tr><tr><td>F₂</td><td>1.80</td><td>0.300</td></tr><tr><td>B1</td><td>1.25</td><td>0.200</td></tr><tr><td>B₂</td><td>2.40</td><td>0.250</td></tr></table> 计算显性程度以及广义和狭义遗传率。",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "表型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "表型"
+        ]
+      }
+    },
+    {
+      "id": "ex_b049a0fc",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "设亲本植株 AA 的高度是 20, aa 的高度是 10, F_{1} 椎 Aa 的高度是 17 。计算 F_{2} 植株的平均高度和方差。",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_0ec01cd3",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "假定有两对基因, 每对各有两个等位基因, A / a 和 B / b , 以相加效应的方式决定植株的高度。纯合子 AABB 高 50 \\mathrm{~cm} , 纯合子 aabb 高 30 \\mathrm{~cm} , 问: ① 这两个纯合子之间杂交, F_{1} 的高度是多少? ② 在 F_{1} \\times F_{1} 杂交后, F_{2} 中什么样的基因型表现 40 \\mathrm{~cm} 的高度? ③ 这些 40 \\mathrm{~cm} 高的植株在 F_{2} 中占多少比例?",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [
+        "基因型",
+        "杂交",
+        "等位基因"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "杂交",
+          "等位基因"
+        ]
+      }
+    },
+    {
+      "id": "ex_d5891b5f",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "一连续自交的群体，由一个杂合子开始，需要经多少代才能得到大约 97\\% 的纯合子？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "自交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "自交"
+        ]
+      }
+    },
+    {
+      "id": "ex_bb80f73f",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "预测双交种 (A \\times B) \\times (C \\times D) 产量的最好方法是求 4 个单交种 A \\times C, B \\times C, A \\times D 和 B \\times D 的产量的平均数，为什么？如 A 和 D 是姊妹自交系，B 和 C 也是姊妹自交系，为了使双交种的杂种优势最强，在这些可能的单交中，你将选哪一个单交种进行杂交？",
+      "type": "calculation",
+      "difficulty": "medium",
+      "tags": [
+        "杂交",
+        "自交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交",
+          "自交"
+        ]
+      }
+    },
+    {
+      "id": "ex_716779c1",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "下面是一个箭头式的家系。家系中 S 是 D 和 P 的子裔，D 是 C 和 B 的子裔等。问：① 谁是共同祖先？② 谁是近交子裔？③ 计算近交子裔的近交系数。 ![](images/bef3e7748d9618d50d47a427a89d0f739b15bcfa1cc1fe8047a3928c511d9eb9.jpg)",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_a66eceac",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "请计算以下双重亲表兄妹的近交系数（常染色体和X染色体分别计算）。 ![](images/56452f2180e943230ffc0c7f00bacd8102f052fd0b7a6c995fc1f49eef9c5383.jpg)",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_76d3435d",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "请计算以下叔父侄女婚配的近交系数（常染色体和X染色体分别计算）。 ![](images/8ef07a0a3b55f9e99c2a618ce264aa69772eb042591df9ee7b31ad2208846f79.jpg)",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_424ced8c",
+      "chapter": "第8章",
+      "chapterNumber": 8,
+      "question": "请计算以下从表见殊婚配的近交系数（常染色体和X染色体分别计算）。 ![](images/8fa1caadf04a023d044ecdacd13e41e97178ad96413a5a06ce59da33ead4ff27.jpg) 数字课程学习 在线自泓",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_b00bdaf8",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "什么叫染色体畸变？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_435c44c2",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "解释下列名词：缺失，重复，倒位，易位。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_a4385fda",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "什么叫平衡致死品系？在遗传学研究中，它有什么用处？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_5a0b7222",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "解释下列名词：单倍体，二倍体，多倍体；单体，缺体，三体；同源多倍体，异源多倍体。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_d7fec2cc",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "用图解说明无籽西瓜制种原理。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_19d36bba",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "异源八倍体小黑果是如何合成的？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_265bcc69",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "为什么单倍体的个体多不育？是否有例外？请举例说明。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_a4385fda",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "有一玉米植株，它的一条第9染色体有缺失，另一条第9染色体正常，该植株对第9染色体上决定糊粉层颜色的基因是杂合的，缺失的染色体带有产生色素的显性基因 C ，而正常的染色体带有无色隐性等位基因 c ，已知含有缺失染色体的花粉不能成活。如以这样一种杂合子玉米植株作为父本，以 cc 植株作为母本，在杂交后代中，有 10\\% 的有色籽粒出现。你如何解释这种结果？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "显性",
+        "隐性",
+        "杂交",
+        "染色体",
+        "等位基因"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "隐性",
+          "杂交",
+          "染色体",
+          "等位基因"
+        ]
+      }
+    },
+    {
+      "id": "ex_ad6b65d8",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "已知某二倍体物种的两条野生型染色体的基因顺序分别为 12345-678 和 abcde-fgh（·表示着丝粒）。请判断以下畸变染色体的结构变异名称，并绘出畸变杂合子染色体联会时的形态。",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_a01107e3",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "某实验小组利用X射线诱变野生型的雄性果蝇，然后将这些雄蝇与纯合隐性突变的雌蝇杂交，该雌蝇在X染色体上一共携带了5个隐性突变，具体顺序为： y - cv - ct sn - m 。分析杂交F₁雌蝇，发现大多数雌蝇都是野生型，但有一只雌蝇表现出ct和sn突变表型。该小组成员继续将这只例外的突变果蝇与野生型雌蝇杂交，得到的后代中雌、雄比例为2:1。 请问：（1）那只例外的ctsn突变雌蝇发生了何种变异？你的依据是？",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "表型",
+        "杂交",
+        "染色体",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "表型",
+          "杂交",
+          "染色体",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_c599200e",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "相互易位并不改变细胞内遗传物质的总量，但也可以引起严重的表型。例如，9号染色体和22号染色体的相互易位可以导致慢性髓系白血病的发生。请问造成这一疾病表型的遗传机制是什么？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "表型",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_0e663330",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "在玉米中，谱质基因和淡绿色基因在正常情况下是连锁的，然而发现在某一品种中，这两个基因是独立分配的。问：①你认为可以用哪一种染色体时变来解释这个结果？②写一种染色体畸变将产生相反的效应，即干扰基因之间预期的独立分配？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "染色体",
+        "连锁"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体",
+          "连锁"
+        ]
+      }
+    },
+    {
+      "id": "ex_3f4941a3",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "曼陀罗有12对染色体，有人发现12种可能的“ 2n + 1 ”型。问有多少个“ 2n + 1 + 1 ”型？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_dab152e2",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "无籽西瓜为什么没有种子？是否绝对没有种子？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_480b48fc",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "有一个三倍体, 它的染色体数是 3n = 33 。假定减数分裂时, 或形成三价体, 其中两条分向一极, 一条分向另一极; 或形成二价体与一价体, 二价体分离正常, 一价体随机地分向一极, 问可产生多少可育的配子?",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_431218e3",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "同源三倍体是高度不育的，已知得到平衡配子(2n和n)的机会仅为(1/2)。问这数值是怎么求得的？又如假定只有平衡的配子是有受精功能的，且假定受精过程随机，问得到不平衡 合子的机会是多少？",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_57651bb1",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "为什么多倍体在植物中比在动物中普遍得多？你能给出一些解释吗？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_60808ded",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "有一种四倍体植物, 它的两个植株的基因型是 A A A a 和 A a a a . 假定: (1) A 基因在着丝粒附近; (2) 各个染色体形成的姐妹染色单体各移向一极. 则每个植株产生的各种双倍体配子比例如何?",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "基因型",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_9eef444e",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "两个21三体的个体结婚，在他们的子代中，恩盖氏综合征的个体占多少比例？（假定 2n + 2 的个体是致死的。）",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_d83805ac",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "一对表型正常的男人与女人结婚后，生育了一个同时患有血友病和克兰费尔特综合征的儿子，请说明患儿及其父母的染色体组成和基因型。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [
+        "基因型",
+        "表型",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "表型",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_59ff6684",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "平衡易位杂合子 (7 / 7p^{\\bullet}, 9 / 9p^{\\bullet}) 形成生殖细胞，在粗线期时，其有关染色体的配对图形是怎样的？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_e6d942bd",
+      "chapter": "第9章",
+      "chapterNumber": 9,
+      "question": "有一男子，他是一个13、14平衡易位携带者，他的染色体组成为45,XY,-13,-14,1(13q;14q)。①把有关染色体画出来。②有关染色体在第一次减数分裂时配对的图像如何？③可能的分离情况如何？形成的配子中，有关染色体的组成如何？④正常卵被这些精子受精后，子代有关染色体组成如何？预期的子代表型效应如何？ [提示：可能的分离情况为：(14)对 (14 + 13;13) （邻近分离）；（14+13;14）对（13）（邻近分离）；(13+14)对(13;14)(交互分离)]",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "表型",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_09e25c12",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "解释下列名词：基因突变，自发突变，诱发突变，可见突变，生化突变，致死突变，回复突变，突变率，碱基替换（转换和颠换），移码突变，无义突变，错义突变，同义突变。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_80d2b8bb",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "从改变遗传信息的角度，基因突变可以分为哪几类？请分别描述它们的突变特点及遗传信息的变化。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_88cb29da",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "进行 Muller-5 测验时, 要检验的雄蝇与 Muller-5 雄蝇交配得到 F_{1} 后, 一定要做单对交配, 观察 F_{2} 的分离情况。为什么一定要做单对交配?",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_c2d2bc92",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "为什么多倍体可以阻止基因突变的显现？同源多倍体和异源多倍体在这方面有什么不同？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_50274117",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "在鸽子中，有一伴性的复等位基因系列，包括 B^{4} = 灰红色 B = 野生型（蓝） b = 巧克力色 显性可以认为是完全的，次序从左到右。我们已经知道鸟类的性决定是：ZZ，ZW。 基因型 B^{A}b 的雄鸽是灰红色的，可是有时在它们的某些羽毛上出现巧克力斑点。请对这现象提出两个说明，一个从染色体方面，一个从基因方面。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [
+        "显性",
+        "基因型",
+        "染色体",
+        "等位基因"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "基因型",
+          "染色体",
+          "等位基因"
+        ]
+      }
+    },
+    {
+      "id": "ex_0cb8aeaf",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "如果在遗传型 B^{4}(-) 的雌鸽中出现斑点，这斑点往往是巧克力色，但在这类鸽子中有时也可看到蓝色斑点。这个事实对你的上述两个解释中哪一个有利？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_2e6faf12",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "在牛群中，外貌正常的双亲生产一头矮生的雄犊。这种矮生究竟是由于突变的直接结果，是由于隐性矮生基因的“携带者”的偶尔交配后发生的分离，还是由于非遗传（环境）的影响？你怎样决定？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "隐性",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_0a1c18a5",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "一野生型的雄果蝇与一个白眼基因纯合的雌果蝇杂交，子代中发现有一只雌果蝇具有白眼表型。你怎样决定这个结果是由于一个点突变引起的，还是由于缺失造成的？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "表型",
+        "杂交",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型",
+          "杂交",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_eb12785d",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "用 4000 \\mathrm{r} 的 X 线照射, 使处理过的果蝇配子中有 12 \\% 发生了性连锁隐性致死突变。假定在没有照射过的果蝇配子中, 几乎没有可检出的突变发生, 又假定突变率与剂量之间有严格的线性关系, 请问, 用下列剂量进行照射时, 预期发生的致死突变率各为多少? （1）1000r；（2）2000r；（3）5000r；（4）6000r。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "隐性",
+        "连锁",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "连锁",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_5e46c531",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "原子弹在日本长崎和广岛爆炸后，最初的一个遗传学研究是调查受到过辐射的个体，了解他们的子女性比情况。为什么？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_dacfe45b",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "在辐射的剂量效应中，一般认为易位的出现需要两个独立的断裂。所以易位的频率大致上与剂量的平方成比例。可是在多数实验中，易位的出现往往与剂量的3/2次方成比例。这可能是由于某些断裂重新愈合的结果。 现在有一实验，对果蝇的精子进行照射，在每100个存活的子代中，发现易位的数目如下： <table><tr><td>照射剂量</td><td>500 r</td><td>1 000 r</td><td>2 000 r</td></tr><tr><td>未成熟精子</td><td>8</td><td>27</td><td>70</td></tr><tr><td>成熟精子</td><td>1</td><td>7</td><td>13</td></tr></table> 根据公式 y = kD^{2} ，计算剂量 D = 0.5\\mathrm{kr}(\\mathrm{\\Omega} = 500\\mathrm{r}) 时的 k 值，然后利用这个 k 值计算 D = 1\\mathrm{kr} 和 D = 2\\mathrm{kr} 时的 y 值。把这些预期值与用公式 y = kD^{3 / 2} 所得的数值相比较。你得出什么样的结论？",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_c8aed224",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "在大肠杆菌的色素碳合成酶的蛋白质 A 的某一位点（位置 223）上观察到下列氨基酸的替换： ![](images/073d25c4c3a0290627a5632c6e1ca100a6d4018d362ab2a538ec56381bca7cab.jpg) 问：①假定每个氨基酸的替换只是由一个核苷酸的改变引起的。利用遗传密码表，指出什么密码子适合这系列的变化？②你预期两个突变结合能重组形成野生型（Gly）？③哪两个突变结合不能重组形成野生型？④上述氨基酸的改变中，哪一个表示碱基转换？哪一个是碱基换？",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "突变",
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "突变",
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_6dbe726f",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "某研究小组利用 Southern 印迹的方法对不同的囊性纤维化患者家系进行了研究。研究者针对 CFTR 基因突变特点设计了两种杂交探针, 其中野生型探针 oligo-N 能够和野生型 CFTR 编码基因特异性结合; \\Delta F508 突变型探针 oligo- \\Delta F 能够与造成 CFTR 的 508 位苯丙氨酸缺失的突变等位基因特异性结合, 结果如下图所示。我们用 C 表示野生型 CFTR 编码基因, c 表示造成 CFTR 的 508 位苯丙氨酸缺失的突变等位基因。请问: ![](images/f3503a709e8ef4b87fb3265744e05a7f5b69114fea539eddc50a359e1da9c24b.jpg) （4）如何解释家族C中子女患病的原因？",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "杂交",
+        "等位基因",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "杂交",
+          "等位基因",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_d2b748c2",
+      "chapter": "第10章",
+      "chapterNumber": 10,
+      "question": "某同学在获得了一只携带点突变的杂合小鼠和一只携带 20 \\mathrm{bp} 缺失的杂合小鼠, 为了实验需要, 它将突变体分别与野生型小鼠杂交, 得到了 \\mathbb{F}_{1} 。为了确认子代的基因型, 首要剪尾巴插提基因组 DNA, 做基因型分析。请你帮他设计不同的分子生物学实验方法分别鉴定点突变和缺失突变 (结合第五章的相关知识)。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "基因型",
+        "杂交",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "杂交",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_421d13c7",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "什么是染色体断裂愈合模型和填写选择模型？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_a12f16c6",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "什么是基因转变？什么是杂种DNA模型？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_4d6237df",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "转座因子和反转承转座子进行转座的机制有何不同？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_dd765090",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "转座能带来哪些遗传学效应，试结合具体的转座因子加以解释。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_fbaf567d",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "来外线诱变的作用机制如何？它引起的DNA损伤的修复途径是什么？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_0cae56aa",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "简述电离辐射引起的DNA的损伤及其修复。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_3001c12f",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "就某一反子来说，正向突变率往往比回复突变率至少高一个数量级。如何解释？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_56d0817a",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "M品系的雌蝇和P品系的雄蝇杂交的F1果蝇出现杂种不育的表型。研究发现造成这一突变表型的原因是P因子在发育中的生殖细胞系中发生转座，染色体出现断裂和重排，导致大量生殖细胞无法发育成熟，因此出现不育性状。请问：",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "表型",
+        "杂交",
+        "染色体",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型",
+          "杂交",
+          "染色体",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_b50e5529",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "常见的DNA损伤有哪些类型？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_baed0aa3",
+      "chapter": "第11章",
+      "chapterNumber": 11,
+      "question": "简述大肠杆菌同源重组修复的基本过程，为什么这条修复途径只能发生在细胞周期的S期和G期？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "重组"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "重组"
+        ]
+      }
+    },
+    {
+      "id": "ex_1f289cd1",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "母性影响和细胞质遗传有什么不同？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_2a0270f3",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "细胞质基因和核基因有什么相同和不同的地方？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_c0069d16",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "在玉米中，利用细胞质雄性不育和育性恢复基因，制造双交种。有一种方式是这样的：先把雄性不育自交系A \\left\\lfloor (S) r f r f \\right\\rfloor 与雄性可育自交系B \\left[ (N) r f r f \\right] 杂交，得单交种AB。把雄性不育自交系C \\left[ (S) r f r f \\right] 与雄性可育自交系D \\left[ (N) R f R f \\right] 杂交，得单交种CD。然后再把两个单交种杂交，得双交种ABCD，问双交种的基因型和表型有哪几种，它们的比例怎样？",
+      "type": "calculation",
+      "difficulty": "hard",
+      "tags": [
+        "基因型",
+        "表型",
+        "杂交",
+        "自交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "表型",
+          "杂交",
+          "自交"
+        ]
+      }
+    },
+    {
+      "id": "ex_9b1138c4",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "“遗传上分离的”小菌落酵母菌在表型上跟我们讲过的“细胞质”小菌落酵母菌相似。当一个遗传上分离的小菌落酵母菌与一个正常酵母菌杂交，二倍体细胞是正常的，以后形成子囊孢子时，每个子囊中两个孢子是正常的，两个孢子产生小菌落酵母菌。用图说明这些结果，并注明相应的基因型。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [
+        "基因型",
+        "表型",
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "表型",
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_4643ed0e",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "“遗传上分离的”小菌落酵母菌与“细胞质”小菌落酵母菌杂交，形成的二倍体是正常的。这些二倍体细胞形成的子囊，正常细胞与突变细胞各有两个。解释这些结果，作图概括你的说明。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "杂交",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_f2a6ff7f",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "一个雄性不育植株，用对育性恢复基因 Rf 是纯合的花粉授粉， F_{1} 的基因型怎样，表型怎样？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "基因型",
+        "表型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "表型"
+        ]
+      }
+    },
+    {
+      "id": "ex_628f6461",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "上题的 \\mathbf{F}_{1} 植株作为母本，用一正常植株（rfrf）的花粉测交，测交的结果应该怎样？写出基因型和表型，注明细胞质种类。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "基因型",
+        "表型",
+        "测交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "表型",
+          "测交"
+        ]
+      }
+    },
+    {
+      "id": "ex_70b83e4d",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "举一个经典的孟德尔式遗传的例子，正交和反交的结果是不同的。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "孟德尔"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "孟德尔"
+        ]
+      }
+    },
+    {
+      "id": "ex_cf6cfe58",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "一个基因型为 Dd 的推实爆自交，子代的基因型和表型怎样？如子代个体自交，它们的下一代典型又怎样？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "基因型",
+        "表型",
+        "自交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "表型",
+          "自交"
+        ]
+      }
+    },
+    {
+      "id": "ex_d470add7",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "上题中开始做实验所用的杂合子推实娜的表型是怎样的？请说明。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [
+        "表型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型"
+        ]
+      }
+    },
+    {
+      "id": "ex_a03f1515",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "正、反交在 \\mathbf{F}_{1} 往往得出不同的结果，这可以由伴性遗传、细胞质遗传或母性影响来解释。怎样用实验方法来区分这3种遗传机制？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "伴性遗传"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "伴性遗传"
+        ]
+      }
+    },
+    {
+      "id": "ex_ca7d908c",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "根据现有科学事实, 怎样正确理解在遗传中细胞核与细胞质之间的关系。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_f43b6d67",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "衣藻的一个链霉素抗性品系，在细胞核和细胞质中都有抗性因子。它与链霉素类敏感品系杂交，如果抗性品系是“+”亲本，敏感品系是“-”亲本，预期的结果是什么？如果做的是反交，结果又如何？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "杂交"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交"
+        ]
+      }
+    },
+    {
+      "id": "ex_8a6001aa",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "人群中，遗传性心肌病的表现从轻度到严重型不等。图13-9给出了一个家系中心肌病的发病情况及患病程度。请问： （1）该家系具有哪些线粒体遗传的特征？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_e2033653",
+      "chapter": "第12章",
+      "chapterNumber": 12,
+      "question": "2002年，丹麦学者报道了一例严重运动耐受能力低下的临床患者（Schwartz,2002），患者肌肉细胞线粒体DNA的ND2基因发生2bp的缺失，造成移码突变。ND2是呼吸链复合物I的蛋白质编码基因，突变造成了ND2的功能丢失。请问：",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_2fe6766a",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "请解释以下名词：割裂基因、重叠基因、基因家族、假基因、卫星DNA、散在重复序列。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_4905abb6",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "什么是分子遗传标记？常见的分子遗传标记有哪些？请举例说明它们各自的优点和缺点。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_779a15d4",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "下图是一张限制性酶切作用得到的结果，请根据酶切结果将 EcoRI 和 BamHI 的酶切位点标记到这段 4.9 \\mathrm{~kb} 的 DNA 上。请问结果有几种可能性？你能设计实验进行改进以得到唯一的结果吗？ ![](images/8432fc221fc62c28680e6b1bb5c7c9e0539f9d4f3513e1a01bdde9f82eb9d0d0.jpg)",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_8a1b4910",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "人类基因组的编码基因数目不到3万，远远小于我们所预期的，比线虫略多一些，比拟南齐还少一些。你如何理解这个数值和人的复杂性之间的关系。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_247d06aa",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "什么叫非编码RNA, 人类基因组中有哪些类型的非编码RNA? 试举例介绍它们的功能。",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_149a1b2a",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "微卫星是常用的分子遗传标记，在人类基因组中分布广泛，且具有较高的多态性。请问：(1) 什么是微卫星，它为什么具有较高的多态性？(2) 设计至少两种基因分型的实验方法对微卫星多态进行鉴定，写出简要的实验方案。",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_cf4548e3",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "人类基因组中有哪些类型的转录序列？请简述它们的类别和特点。",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_31b8c8fc",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "重复序列在人类基因组中的比重非常高, 请从基因组结构、功能以及进化3个角度分别举例说明重复序列的功能和意义。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_9bad4c20",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "人类的珠蛋白基因家族含有两个基因簇，其中， \\alpha- 珠蛋白基因簇位于16号染色体， \\beta- 珠蛋白基因簇位于11号染色体。如图14-10所示，两个基因簇内均含有多个序列相似但功能有所不同的基因家族成员以及一些无功能的假基因，请问： （1）什么是基因家族？人类基因组中出现多拷贝的麻蛋白基因家族有何意义？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_ac21c548",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "有一段长度为 10000 \\mathrm{bp} 的DNA序列，我们要对它进行鸟枪法测序。为了完成这个任务，先将这段DNA序列扩增后随机打断，然后对这些片段进行测序。一般需要约100个测序反应（已知每个测序反应能够完成 500 \\mathrm{bp} 的测序）才能完成最后的测序，即实际测序得到的碱基总量与这段序列的大小的比值为5，这个比值被称为什么？为什么在实际操作中要进行如此多的测序反应，说说你的理解。",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_aeee694b",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "全基因组鸟枪法测定序和层次鸟枪法测定序的优劣各是什么？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_390acb2b",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "写出以下几个国际性研究计划的主要研究目标和研究手段： <table><tr><td>计划名称</td><td>主要研究目标</td><td>基本研究手段</td></tr><tr><td>人类基因组计划</td><td></td><td></td></tr><tr><td>国际单倍型图谱计划</td><td></td><td></td></tr><tr><td>ENCODE 计划</td><td></td><td></td></tr></table>",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_588567b3",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "2010年5月20日，文特尔领导的实验室向世界宣布首例人造生命诞生，这是一种完全由人造基因控制的单细胞细菌Synthia。这个人造生命的诞生显然得益于基因组研究的发展。你对基因组研究的发展方向有怎样的看法？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_49c676e5",
+      "chapter": "第13章",
+      "chapterNumber": 13,
+      "question": "在基因组的发展和应用过程中, 是否也会出现一些问题, 甚至是弊端, 我们该如何对待?",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_96ec4184",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "根据中心法则的内容, 你能否大胆猜测: 在生命早期, 是先有 DNA, 还是 RNA, 又或是先有蛋白质? 谈谈你的理由。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_8d7b45e2",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "在E.coli中有如下一个基因序列（从转录起始位点开始，上游启动子序列未给出）： 5'-GAGCAATATG TCAGAACTGC CATGCTTCAT ATGAATAGAC CTCTAGGATA A-3' 1 10 20 30 40 50 假如这是有义链的序列，请写出该基因的mRNA序列，并给出相应的多肽序列。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_376535a5",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "上题中，如果所给序列分别发生了以下突变：①第8位的A丢失；②第28位的C之后添加了一个G；③32位的T突变为A；那么该基因将翻译成怎样的多肽序列？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_5047ad93",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "请解释下列名词：因子、RNA聚合酶、密码子、反密码子、操纵子、衰减子、普遍转录因子、特异转录因子、增强子、沉默子、绝缘子、基因座控制区、中介子、泛素、基因组印记、RNA干扰。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_c173cd32",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "通过本章的学习，你能否总结一下，原核基因表达和真核基因表达的异同点有哪些？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_9e4eebe8",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "在分析转录因子的 DNA 结合域时, 我们发现绝大多数的 DNA 结合域都与 DNA 螺旋的大沟相互结合。请从 DNA 双螺旋的化学结构特征思考产生这种规律的原因。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_bdaf6cd4",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "请分析下列E.coli突变体中乳糖操纵子的表达情况： <table><tr><td>基因型</td><td>+葡萄糖 +乳糖</td><td>+葡萄糖 -乳糖</td><td>-葡萄糖 +乳糖</td><td>-葡萄糖 -乳糖</td></tr><tr><td>野生型</td><td>关闭</td><td>关闭</td><td>开启</td><td>关闭</td></tr><tr><td>lacP-(启动子突变,不能与RNA聚合酶结合)</td><td></td><td></td><td></td><td></td></tr><tr><td>lacOC-(操纵基因突变,不能与阻遏蛋白结合)</td><td></td><td></td><td></td><td></td></tr><tr><td>lacI-(阻遏蛋白编码基因突变,无蛋白产物)</td><td></td><td></td><td></td><td></td></tr><tr><td>lacI5-(阻遏蛋白编码基因突变,产物不能被诱导物结合)</td><td></td><td></td><td></td><td></td></tr><tr><td>CAPC(CAP蛋白编码基因突变,不依赖cAMP也能与启动子结合)</td><td></td><td></td><td></td><td></td></tr></table>",
+      "type": "essay",
+      "difficulty": "hard",
+      "tags": [
+        "基因型",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "基因型",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_e157db7f",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "大肠杆菌的色氨酸操纵子的结构如图15-19所示。其中，调节基因trpR编码阻遏蛋白，启动子基因trpP是RNA聚合酶的结合位点，操纵基因trpO可以与有活性的阻遏蛋白结合，关闭下游基因表达。结构基因TrpE,D,C,B,A依次编码和色氨酸合成有关的多肽。研究发现：①当环境中缺乏色氨酸时，trpR编码的阻遏物没有活性，不能与操纵基因结合；②当环境中存在色氨酸时，trpR编码的阻遏物与色氨酸结合，形成有活性的阻遏物，与操纵基因结合。请问： （1）当环境中无色氨酸时，色氨酸合成相关的结构基因的转录状态是？当环境中添加色氨酸时，色氨酸合成相关的结构基因的转录状态是？",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_4571faa9",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "果蝇 yellow 基因负责体表多处的色素合成，包括翅、四肢、幼虫、刚毛等。野生型呈黑棕色，突变型呈黄褐色。某同学发现了少数特殊的突变体果蝇，它们仅在部分器官出现黄褐色变异，其他器官正常。请分析可能的遗传机制，并尝试设计实验进行证明。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_8eec72f1",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "试举例说明调控真核基因时空特异性表达的机制有哪些。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_a6605d14",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "Igf2基因隐性纯合突变（功能丧失型突变）雌鼠和野生型雌鼠杂交得到的F<sub>1</sub>发育出现障碍，胚胎偏小，但是Igf2隐性纯合突变的雌鼠和野生型雄鼠杂交得到的F<sub>1</sub>发育正常。请从遗传学角度对这一现象进行解释。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "隐性",
+        "杂交",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "杂交",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_c4c7bad9",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "siRNA 和 miRNA 介导的转录后基因沉默有很多相似的地方, 但也有显著不同, 试对比分析二者的异同。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_05a3e129",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "20世纪90年代初，一些植物研究人员通过向矮牵牛中转入紫色色素合成酶基因的方法进行花卉改良，希望转基因花朵更鲜艳。结果发现矮牵牛花出现了紫色，花瓣几近变成了白色。进一步研究发现细胞内部该基因mRNA降解速率大大提高，但机制不明，这一现象在当时被称为共抑制现象（co-suppression of gene expression）。请问这实际上是一种什么遗传机制？并简述它的作用过程与特点。",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_0fbfc933",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "两个科学小组共同开展某一疾病的发病机制研究，通过对正常个体的细胞和患者细胞进行遗传分析他们获得了如下发现： （1）小组A发现在疾病致病基因的启动子区域的CpG岛出现超甲基化。请问什么是CpG岛？CpG岛的超甲基化对疾病致病基因的表达会产生什么影响，并简述原因。",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_f2b1506c",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "研究者最先在线虫发育的基因表达调控中发现了第一个微RNA——lin-4。已知lin-4能调节早期发育调控基因lin-14。lin-14的蛋白质浓度是调节时序性发育的机制所在。在lin-14的功能缺失型突变（隐性突变）中，幼虫的部分发育阶段被跳过，产生早熟个体，而在lin-14的功能获得型突变（显性突变）中，早期幼虫的发育阶段被不断重复，造成了个体发育的延迟。请问： （1）已知微小RNA是非编码RNA的重要组成，请问什么是非编码RNA？",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "隐性",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性",
+          "隐性",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_aca21beb",
+      "chapter": "第14章",
+      "chapterNumber": 14,
+      "question": "研究者在随机诱变拟南齐时发现了一个叶形态的突变株，进一步研究发现直接控制这一性状的结构基因 L 的编码区序列没有碱基序列的变化，但是 L 基因的表达水平显著改变，请列出不通过改变编码区碱基序列影响基因表达水平的3种可能因素，并尝试详细说明这些因素的调控机制。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_8d501acf",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "什么是正向遗传学分析策略？请简述它的分析步骤。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_4c52f5a2",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "什么是反向遗传学分析策略？请简述它的优点和缺点。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_1fea043e",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "研究者在进行果蝇遗传诱变筛选时发现了一类特殊的常染色体隐性纯合突变雌果蝇，它本身类型完全正常，但当它与野生型雄果蝇杂交时，受精卵均不能正常发育成为幼虫。请问：该基因很可能属于哺乳类胚胎发育相关基因（请简要给出理由）？你推测这类基因的基本特点是什么？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "隐性",
+        "杂交",
+        "染色体",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "杂交",
+          "染色体",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_618a81b7",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "美国中西部草原上的草原田鼠(Microtus ochrogaster)遂捕一夫一妻制，雄性和雌性的草原田鼠之间有很强的依赖关系，雄性田鼠会向家里运送食物并照顾小鼠。草原田鼠的近亲草甸田鼠(Microtus pennsylvanicus)遵循一夫多妻制，雄性仅在发情期与雌性在一起，不负责照顾妻子。研究者推荐田鼠的中枢神经系统中加压素受体基因(VlaR)的表达与田鼠的“婚姻观”存在密切联系。同时，他们发现，草原田鼠的VlaR表达水平远高于草甸田鼠，但是这个基因的编码区在两种田鼠中没有显著差异，仅在草原田鼠的VlaR基因上游多出了一段428bp的DNA元件。请问： （1）如何解释两种田鼠中VaR基因编码区序列没有差异，但表达量显著不同？",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_9e06b07d",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "假如你在临床上收治了一位患有罕见孟德尔遗传病的患者。调发现, 有关该遗传病的研究甚少, 致病基因、发病机制和防治方法均不明确。请你利用本章所学知识, 设计一个定位克隆的研究方案, 寻找致病基因。请简要写出你的研究策略与大致步骤。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "孟德尔"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "孟德尔"
+        ]
+      }
+    },
+    {
+      "id": "ex_bb548305",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "下图给出的是一个神经母细胞瘤家系，研究发现该家系的发病原因是由NF1基因的突变造成的，且该突变基因在家系中遵循显性遗传。研究者利用连锁分析发现了一个和NF1基因紧密连锁的RFLP多态位点，并进一步用Southern印迹的方法分析了家系中该RFLP位点的多态性，结果如图所示。请问： ![](images/e626f78f1a0da6a1b21c6c8960feadc202d0cafcb5b2e51893da1a02646f8e09.jpg)",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "显性",
+        "连锁",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "显性",
+          "连锁",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_4b7915cb",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "为什么说定位克隆的研究方法不适用于多数复杂疾病/性状遗传机制的研究？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_6d4ebd70",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "什么是连锁不平衡？为什么连锁不平衡的存在是进行复杂疾病关联分析的基本条件？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "连锁"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "连锁"
+        ]
+      }
+    },
+    {
+      "id": "ex_8a511348",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "关联分析中的常用遗传标记是什么？研究者为什么选择这类标记用于遗传分析？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_bc60752b",
+      "chapter": "第15章",
+      "chapterNumber": 15,
+      "question": "请简述连锁分析和关联分析的区别与关系。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "连锁"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "连锁"
+        ]
+      }
+    },
+    {
+      "id": "ex_1be65ab2",
+      "chapter": "第16章",
+      "chapterNumber": 16,
+      "question": "个体发育的一般模式包括哪些基本过程？什么是图式形成？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_dd5dbb65",
+      "chapter": "第16章",
+      "chapterNumber": 16,
+      "question": "为了解果蝇发育过程中的基因的调控作用，某研究小组通过EMS诱发突变的方法获得了一些突变体果蝇胚胎（见下图）。结合本章所学知识，请分析造成这些突变体的基因类型是什么，并给出你的理由。 ![](images/aba8f78bb17bd7e3211aa1eaf71b4c47301fba6e0931c010e82d99a44a38910d.jpg) 野生型 ![](images/f8e7f491dba91c38796692eb4e7295387f9e7d537b04504487755473ee9c1e30.jpg) 突变体1 ![](images/79bb11a1a387e17b7693c7890562ff69afd2ed2c0bf3b1b61311ee605edb5b39.jpg) 突变体2 ![](images/3c0dc36813dea7463e7584aa051e3d70e5bd6433a5c64919037431cd7e293257.jpg) 突变体3",
+      "type": "essay",
+      "difficulty": "hard",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_1f202df8",
+      "chapter": "第16章",
+      "chapterNumber": 16,
+      "question": "上题中的研究小组还想利用这种遗传分析的方法寻找母体效应基因的突变体，在设计这个实验时，应该注意些什么？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_9b1f110f",
+      "chapter": "第16章",
+      "chapterNumber": 16,
+      "question": "研究者借鉴海德堡筛选的遗传分析方法又发现了一类特殊的常染色体隐性突变纯合雌果蝇，它本身表型完全正常，但当它与野生型雄蝇杂交后，受精卵均不能正常发育成为幼虫。请问该基因很可能属于哪类胚胎发育相关基因，请简要给出理由。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "隐性",
+        "表型",
+        "杂交",
+        "染色体",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "表型",
+          "杂交",
+          "染色体",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_a6be671e",
+      "chapter": "第16章",
+      "chapterNumber": 16,
+      "question": "在个体发育过程中, 细胞凋亡是在多基因的严格调控下有序进行的。研究者最初以线虫为模式生物研究细胞凋亡的调控途径, 它们发现基因 ced-9, ced-3 和 egl-1 是线虫细胞凋亡信号转导途径的关键基因。这些基因的功能丧失型突变 (lof) 的表型结果如下表, 请问: <table><tr><td>突变基因数</td><td>突变基因</td><td>细胞凋亡水平</td></tr><tr><td>0</td><td>无突变,野生型</td><td>正常</td></tr><tr><td rowspan=\"3\">1</td><td>ced-9(lof)</td><td>过度激活</td></tr><tr><td>ced-3(lof)</td><td>异常下降</td></tr><tr><td>egl-1(lof)</td><td>异常下降</td></tr><tr><td rowspan=\"2\">2</td><td>ced-9(lof);ced-3(lof)</td><td>异常下降</td></tr><tr><td>ced-9(lof);egl-1(lof)</td><td>过度激活</td></tr></table> （1）根据单基因突变的典型结果，请判断 ced-9, ced-3 和 egl-1 对细胞死亡途径是促进作用还是抑制作用。",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "表型",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_d3e1af34",
+      "chapter": "第16章",
+      "chapterNumber": 16,
+      "question": "在单细胞藻类——伞藻中，如把细胞中的核除去，然后反将子实体切除，将立即再生一个子实体。不过如在切除老的子实体时，也把邻近的一部分茎切去，无核的细胞就不能再生一个新的子实体。假定有一种“子实体形成物质”与再生有关，你能说明完整细胞中这种物质的性质、来源、分布和对性状的影响吗？",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_a38b8a8f",
+      "chapter": "第16章",
+      "chapterNumber": 16,
+      "question": "在少数情况下，母鸡的卵巢失去了作用（可能由于局部感染的结果），发育为睾丸，这样“生转换”后的母鸡甚至成为雏鸡的父亲。在这种情况下，染色体结构没有变化。这样看来，性腺发育所采取的途径以及性细胞分化为精子或卵，主要是由于细胞组成本身的作用，还是由于发育过程中提供给这些细胞的环境的作用呢？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_b241ade5",
+      "chapter": "第16章",
+      "chapterNumber": 16,
+      "question": "什么是同源异形突变？同源异形基因的保守性体现在哪些方面？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_10f80dcb",
+      "chapter": "第16章",
+      "chapterNumber": 16,
+      "question": "某一研究小组从拟南芥中发现了一个花发育的突变体，在进行表型和遗传分析时发现，该突变体的表型为心皮、雄蕊、雄蕊、心皮（从外到内），请问是哪种类型的基因突变造成了该突变体的产生，为什么？造成该表型变异的遗传机制是什么？",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [
+        "表型",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "表型",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_1e43a134",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "请解释以下名词：肿瘤转移、癌基因、肿瘤抑制基因、病毒癌基因、靶向治疗、癌症免疫治疗。",
+      "type": "essay",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_932dd7fd",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "遗传变异是肿瘤发生的重要风险因素，为什么遗传变异因素诱发的肿瘤多数仍然是不可遗传的？遗传性肿瘤与散发性肿瘤相比，它有哪些特点？",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_06ba3591",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "请简述肿瘤的基本特征。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_906b2698",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "肿瘤的发生发展是一系列肿瘤相关基因累积突变的结果，肿瘤相关基因主要包括癌基因和肿瘤抑制基因。请从以下几个方面分别讨论癌基因和肿瘤抑制基因的差别。 <table><tr><td></td><td>癌基因</td><td>肿瘤抑制基因</td></tr><tr><td>正常情况下的基因功能</td><td></td><td></td></tr><tr><td>基因突变对正常功能的影响</td><td></td><td></td></tr><tr><td>发生突变的基因拷贝数</td><td></td><td></td></tr></table>",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_4a38ecec",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "什么是肿瘤抑制基因的二次突变学说？肿瘤抑制基因突变造成的肿瘤案例中，有散发性和家族性之分，请从突变发生的时间简述这两种病例的主要差异。",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_5c15dbc9",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "为了分析肿瘤相关基因与肿瘤发生之间的联系，某研究小组分析肿瘤组织中候选基因的突变情况，发现： （1）基因 A 参与细胞周期调控，肿瘤细胞内的基因 A 发生了功能获得性突变。请推测基因 A 参与肿瘤发生的可能机制。",
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_6a240d49",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "BRCA1/2突变是乳腺癌的重要危险因素，是否所有女性都有接受BRCA1/2检测的必要？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_dccffd16",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "请简述DNA病毒与RNA病毒致癌机制的差异。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_32bb7c89",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "靶向治疗中原发耐药和继发耐药有什么区别？针对这两种耐药问题，你认为有哪些解决办法？",
+      "type": "multiple",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_f6891d0e",
+      "chapter": "第17章",
+      "chapterNumber": 17,
+      "question": "请简述PD-1抗体抑制肿瘤生长的机制。",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_2a333fb6",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "白花三叶草是自交不亲和的，所以阻止了白花受精。白花三叶草的叶子上缺乏条斑是一种隐性纯合状态 \\nu \\nu ，大约 16\\% 植株有这种类型。白花三叶草植株中有多少比例对这个隐性等位基因 \\nu 是杂合的？白花三叶草植株产生的花粉中，有多少比例带有这个隐性等位基因？",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "隐性",
+        "自交",
+        "等位基因"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "自交",
+          "等位基因"
+        ]
+      }
+    },
+    {
+      "id": "ex_6e1d7418",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "参考上一题, 假使把相互交配的白花三叶草群体中所有非条斑叶的植株都淘汰 (s = 1) , 那么下一代有多少比例的植株将是非条斑叶的? 假使你只把非条斑叶的植株淘汰一半 (s = 0.50) , 那么下一代有多少比例将是非条斑叶的?",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_f8736585",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "对个体生存有害的基因会受到自然选择的作用而逐渐淘汰。请问：有害的伴性隐性基因和有害的常染色体隐性基因，哪一种容易受到自然选择的作用？",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "隐性",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_3377161e",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "人类中，色盲男人在男性中约占 8\\% ，假定色盲是X连锁隐性遗传，问预期色盲女人在总人口中的比例应为多少？",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [
+        "隐性",
+        "连锁"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "连锁"
+        ]
+      }
+    },
+    {
+      "id": "ex_0c474fcc",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "下图所示的是一个常染色体隐性遗传病——先天性聋哑的家系，Ⅱ-5个体是该家系的先证者。我们又已知该疾病在群体中的发病率为1/10000，请问： ![](images/d9ab67420073879aee5b37de6bb03e2695387c5efb3505a44c76ea2aed96dfea.jpg) （1）请估算群体中先天性聋哑的突变基因的等位基因频率。 (2）如果Ⅲ-1和群体中表型正常的一位女性随机婚配，所生子女的患病概率是多少？",
+      "type": "multiple",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "表型",
+        "染色体",
+        "等位基因",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "隐性",
+          "表型",
+          "染色体",
+          "等位基因",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_1975b1d9",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "下图所示的是一个常染色体隐性遗传疾病的家系图。已知群体中致病基因 a 的频率为 1 \\% 。请估算系谱中第三代两种婚姻子女IV-1（Ⅲ-1和Ⅲ-2的子女）与IV-2（Ⅲ-2和Ⅲ-3的子女)的发病风险。二者发病风险的差异说明了什么？ ![](images/219df17709352dae07a33d7a4c53d88af858f2e1e60a1c041d244f2c72e91f7a.jpg)",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [
+        "隐性",
+        "染色体"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": true,
+        "relatedTopics": [
+          "隐性",
+          "染色体"
+        ]
+      }
+    },
+    {
+      "id": "ex_289e8555",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "假设在一个平衡群体中，B血型人占 45\\% ，O血型人占 36\\% ，请计算该群体中A血型和AB血型人的比例。",
+      "type": "calculation",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_14f7a675",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "在一个随机交配的群体中，如AA个体占 18\\% ,Aa 个体占 82\\% ，且假定隐性个体全部淘汰，结果如下表所示： <table><tr><td rowspan=\"2\">交配组合</td><td rowspan=\"2\">频率</td><td colspan=\"3\">子代频率</td></tr><tr><td>AA</td><td>Aa</td><td>aa</td></tr><tr><td>AA×AA</td><td>(0.18)^2=0.03</td><td>0.03</td><td></td><td></td></tr><tr><td>AA×Aa</td><td>2(0.18)(0.82)=0.30</td><td>0.15</td><td>0.15</td><td></td></tr><tr><td>Aa×Aa</td><td>(0.82)^2=0.67</td><td>0.17</td><td>0.33</td><td>0.17</td></tr><tr><td>合计</td><td>1.00</td><td>0.35</td><td>0.48</td><td>0.17</td></tr></table> 请你再算一代，证明隐性基因型的频率将从0.17降低到大约0.09。",
+      "type": "other",
+      "difficulty": "hard",
+      "tags": [
+        "隐性",
+        "基因型"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "隐性",
+          "基因型"
+        ]
+      }
+    },
+    {
+      "id": "ex_0e1ce8c0",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "家养动物和栽培植物的遗传变异比相应的野生群体要丰富得多, 为什么? 请从下列几个方面来考虑: ①交配体系, 即杂交和自交所占的比例; ②自然选择; ③突变。",
+      "type": "calculation",
+      "difficulty": "medium",
+      "tags": [
+        "杂交",
+        "自交",
+        "突变"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "杂交",
+          "自交",
+          "突变"
+        ]
+      }
+    },
+    {
+      "id": "ex_f80cf5a2",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "时常有人作为难题提出：“究竟鸡生蛋，还是蛋生鸡？”我们说是蛋生鸡，而不是鸡生蛋。试加说明。",
+      "type": "essay",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    },
+    {
+      "id": "ex_f4ca5a81",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "证明在显性完全、选择对显性个体不利时，基因 A 频率的改变是： \\Delta p = \\frac {- s p (1 - p) ^ {2}}{1 - s p (2 - p)}",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [
+        "显性"
+      ],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": [
+          "显性"
+        ]
+      }
+    },
+    {
+      "id": "ex_67f68d50",
+      "chapter": "第18章",
+      "chapterNumber": 18,
+      "question": "证明在杂合子的适合度比两个纯合子都高时，经一代选择后基因 a 频率的改变是： \\Delta q = \\frac {p q (p s - q t)}{1 - p ^ {2} s - q ^ {2} t}",
+      "type": "other",
+      "difficulty": "easy",
+      "tags": [],
+      "metadata": {
+        "originalLine": 0,
+        "hasImage": false,
+        "relatedTopics": []
+      }
+    }
+  ]
+}

@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface TrisomyVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function TrisomyVisualization({ data, colors }: TrisomyVisualizationProps) {
+export function TrisomyVisualization({ colors }: TrisomyVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'down' | 'patau' | 'edwards' | 'klinefelter'>('down');
 
   const defaultColors = {

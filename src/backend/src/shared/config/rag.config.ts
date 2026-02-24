@@ -1,38 +1,28 @@
-/**
- * RAG 配置
- */
+import { registerAs } from '@nestjs/config';
 
-export interface VectorStoreConfig {
-  type: 'pinecone' | 'weaviate';
-  apiKey: string;
-  environment?: string;
-  indexName: string;
-  baseURL?: string;
-}
+export const ragConfig = registerAs('rag', () => ({
+  enabled: process.env.RAG_ENABLED === 'true',
 
-export interface EmbeddingConfig {
-  provider: 'openai' | 'cohere';
-  model: string;
-  dimensions: number;
-}
+  chunksFile: process.env.RAG_CHUNKS_FILE ||
+    'c:/trae_coding/ahatutor/data/external/genetics-rag/chunks_fine_grained_simplified.json',
 
-export interface RAGConfig {
-  vectorStore: VectorStoreConfig;
-  embedding: EmbeddingConfig;
-  chunkSize: number;
-  chunkOverlap: number;
-  topK: number;
-  threshold: number;
-}
+  vectorsFile: process.env.RAG_VECTORS_FILE ||
+    'c:/trae_coding/ahatutor/data/external/genetics-rag/vectors_fine_grained.json',
 
-export const DEFAULT_RAG_CONFIG: Partial<RAGConfig> = {
-  chunkSize: 1000,
-  chunkOverlap: 200,
-  topK: 5,
-  threshold: 0.7,
-  embedding: {
-    provider: 'openai',
-    model: 'text-embedding-3-small',
-    dimensions: 1536,
+  chunkSize: parseInt(process.env.RAG_CHUNK_SIZE || '700', 10),
+  chunkOverlap: parseInt(process.env.RAG_CHUNK_OVERLAP || '200', 10),
+  topK: parseInt(process.env.RAG_TOP_K || '5', 10),
+  threshold: parseFloat(process.env.RAG_THRESHOLD || '0.7'),
+
+  dataSource: process.env.RAG_DATA_SOURCE || 'local',
+  vectorStoreType: process.env.RAG_VECTOR_STORE_TYPE || 'local',
+  embeddingModel: process.env.RAG_EMBEDDING_MODEL || 'local',
+  embeddingDimensions: parseInt(process.env.RAG_EMBEDDING_DIMENSIONS || '2000', 10),
+
+  mineru: {
+    baseUrl: process.env.MINERU_BASE_URL || 'http://3a092f40.r6.cpolar.cn',
+    apiEndpoint: process.env.MINERU_API_ENDPOINT || '/api/convert_pdf',
+    timeout: parseInt(process.env.MINERU_TIMEOUT || '600000', 10),
+    useMinerU: process.env.USE_MINERU === 'true',
   },
-};
+}));

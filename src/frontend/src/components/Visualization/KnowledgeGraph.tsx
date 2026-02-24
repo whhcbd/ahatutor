@@ -47,7 +47,6 @@ export function KnowledgeGraph({
 }: KnowledgeGraphProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const onNodeClickRef = useRef(onNodeClick);
-  const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
 
   // 获取相关概念
@@ -181,14 +180,14 @@ export function KnowledgeGraph({
       .attr('stroke-width', 2)
       .style('cursor', 'pointer')
       .on('mouseover', function(_event, d) {
-        setHoveredNode(d);
+        console.log('Node hovered:', d);
         d3.select(this)
           .transition()
           .duration(200)
           .attr('r', 25 + d.mastery / 10);
       })
       .on('mouseout', function(_event, d) {
-        setHoveredNode(null);
+        console.log('Node left:', d);
         d3.select(this)
           .transition()
           .duration(200)
@@ -196,7 +195,6 @@ export function KnowledgeGraph({
       })
       .on('click', (_event, d) => {
         setSelectedNode(d);
-        setHoveredNode(d);
         onNodeClick?.(d);
       });
 

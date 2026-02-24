@@ -1,9 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { ConceptAnalyzerService } from './concept-analyzer.service';
 import { PrerequisiteExplorerService } from './prerequisite-explorer.service';
 import { GeneticsEnricherService } from './genetics-enricher.service';
 import { VisualDesignerService } from './visual-designer.service';
-import { NarrativeComposerService } from './narrative-composer.service';
 import { QuizGeneratorService } from './quiz-generator.service';
 import { VisualizationGeneratorService } from './skills/visualization-generator.service';
 import { GeneticsVisualizationService } from './skills/genetics-visualization.service';
@@ -11,16 +10,7 @@ import { InteractiveControlService } from './skills/interactive-control.service'
 import { VectorRetrievalService } from '../rag/services/vector-retrieval.service';
 import { ContextRetrievalService } from '../rag/services/context-retrieval.service';
 import { StreamingAnswerService } from '../rag/services/streaming-answer.service';
-import { SixAgentInput, SixAgentOutput } from '@shared/types/agent.types';
-import { Difficulty } from '@shared/types/genetics.types';
-import {
-  VisualizationGenerateInput,
-  GeneticsVisualizationInput,
-  InteractiveControlInput,
-  VectorRetrievalInput,
-  ContextRetrievalInput,
-  StreamingAnswerInput,
-} from '@shared/types/skill.types';
+import { SixAgentInput, SixAgentOutput, Difficulty, VisualizationGenerateInput, GeneticsVisualizationInput, InteractiveControlInput, VectorRetrievalInput, ContextRetrievalInput, StreamingAnswerInput } from '@ahatutor/shared';
 
 /**
  * Agent 流水线服务
@@ -32,17 +22,16 @@ export class AgentPipelineService {
 
   constructor(
     private readonly conceptAnalyzer: ConceptAnalyzerService,
-    private readonly prerequisiteExplorer: PrerequisiteExplorerService,
-    private readonly geneticsEnricher: GeneticsEnricherService,
-    private readonly visualDesigner: VisualDesignerService,
-    private readonly narrativeComposer: NarrativeComposerService,
-    private readonly quizGenerator: QuizGeneratorService,
-    private readonly visualizationGenerator: VisualizationGeneratorService,
-    private readonly geneticsVisualization: GeneticsVisualizationService,
-    private readonly interactiveControl: InteractiveControlService,
-    private readonly vectorRetrieval: VectorRetrievalService,
-    private readonly contextRetrieval: ContextRetrievalService,
-    private readonly streamingAnswer: StreamingAnswerService,
+    @Optional() private readonly prerequisiteExplorer: PrerequisiteExplorerService,
+    @Optional() private readonly geneticsEnricher: GeneticsEnricherService,
+    @Optional() private readonly visualDesigner: VisualDesignerService,
+    @Optional() private readonly quizGenerator: QuizGeneratorService,
+    @Optional() private readonly visualizationGenerator: VisualizationGeneratorService,
+    @Optional() private readonly geneticsVisualization: GeneticsVisualizationService,
+    @Optional() private readonly interactiveControl: InteractiveControlService,
+    @Optional() private readonly vectorRetrieval: VectorRetrievalService,
+    @Optional() private readonly contextRetrieval: ContextRetrievalService,
+    @Optional() private readonly streamingAnswer: StreamingAnswerService,
   ) {}
 
   /**
@@ -70,38 +59,29 @@ export class AgentPipelineService {
 
       // Agent 2: 前置知识探索（核心创新）
       this.logger.debug('Step 2: PrerequisiteExplorer');
-      const prerequisiteTree = await this.prerequisiteExplorer.explorePrerequisites(
+      const prerequisiteTree = this.prerequisiteExplorer ? await this.prerequisiteExplorer.explorePrerequisites(
         input.concept,
         3 // 默认递归深度 3 层
-      );
+      ) : undefined;
 
       // Agent 3: 遗传学知识丰富
       this.logger.debug('Step 3: GeneticsEnricher');
-      const geneticsEnrichment = await this.geneticsEnricher.enrichConcept(
+      const geneticsEnrichment = this.geneticsEnricher ? await this.geneticsEnricher.enrichConcept(
         input.concept
-      );
+      ) : undefined;
 
       // Agent 4: 可视化设计
       this.logger.debug('Step 4: VisualDesigner');
-      const visualDesign = await this.visualDesigner.designVisualization(
+      const visualDesign = this.visualDesigner ? await this.visualDesigner.designVisualization(
         input.concept,
         conceptAnalysis,
         geneticsEnrichment,
         prerequisiteTree
-      );
+      ) : undefined;
 
-      // Agent 5: 叙事作曲
-      this.logger.debug('Step 5: NarrativeComposer');
-      const narrativeComposition = await this.narrativeComposer.composeNarrative(
-        input.concept,
-        conceptAnalysis,
-        prerequisiteTree,
-        geneticsEnrichment
-      );
-
-      // Agent 6: 题目生成（可选）
+      // Agent 5: 题目生成（可选）
       let quiz;
-      if (input.focusAreas?.includes('quiz')) {
+      if (input.focusAreas?.includes('quiz') && this.quizGenerator) {
         this.logger.debug('Step 6: QuizGenerator');
         const question = await this.quizGenerator.generateQuestion({
           topic: input.concept,
@@ -116,10 +96,9 @@ export class AgentPipelineService {
 
       return {
         conceptAnalysis,
-        prerequisiteTree,
-        geneticsEnrichment,
-        visualDesign,
-        narrativeComposition,
+        prerequisiteTree: prerequisiteTree as any,
+        geneticsEnrichment: geneticsEnrichment as any,
+        visualDesign: visualDesign as any,
         quiz,
       };
     } catch (error) {
@@ -133,12 +112,12 @@ export class AgentPipelineService {
    */
   async quickAnalyze(concept: string): Promise<{
     analysis: Awaited<ReturnType<ConceptAnalyzerService['analyze']>>;
-    tree: Awaited<ReturnType<PrerequisiteExplorerService['explorePrerequisites']>>;
+    tree: Awaited<ReturnType<PrerequisiteExplorerService['explorePrerequisites']>> | undefined;
   }> {
     this.logger.log(`Quick analysis for: ${concept}`);
 
     const analysis = await this.conceptAnalyzer.analyze(concept);
-    const tree = await this.prerequisiteExplorer.explorePrerequisites(concept, 2);
+    const tree = this.prerequisiteExplorer ? await this.prerequisiteExplorer.explorePrerequisites(concept, 2) : undefined;
 
     return { analysis, tree };
   }
@@ -156,17 +135,19 @@ export class AgentPipelineService {
     this.logger.log(`Generating learning path for: ${concept}`);
 
     // 获取前置知识树
-    const tree = await this.prerequisiteExplorer.explorePrerequisites(concept, 3);
+    const tree = this.prerequisiteExplorer ? await this.prerequisiteExplorer.explorePrerequisites(concept, 3) : undefined;
 
     // 扁平化为学习路径
-    const path = this.prerequisiteExplorer.flattenToLearningPath(tree);
+    const path = this.prerequisiteExplorer && tree ? this.prerequisiteExplorer.flattenToLearningPath(tree) : [concept];
 
     // 为每个概念获取丰富内容
     const enrichedContent = new Map();
     for (const node of path) {
       try {
-        const enrichment = await this.geneticsEnricher.enrichConcept(node);
-        enrichedContent.set(node, enrichment);
+        if (this.geneticsEnricher) {
+          const enrichment = await this.geneticsEnricher.enrichConcept(node);
+          enrichedContent.set(node, enrichment);
+        }
       } catch (error) {
         this.logger.error(`Failed to enrich ${node}:`, error);
       }
@@ -186,6 +167,10 @@ export class AgentPipelineService {
   }) {
     this.logger.log(`Generating quiz for topic: ${params.topic}`);
 
+    if (!this.quizGenerator) {
+      return [];
+    }
+
     const questions = await this.quizGenerator.generateQuestions({
       topics: [params.topic],
       difficulty: params.difficulty,
@@ -203,6 +188,9 @@ export class AgentPipelineService {
    */
   async generateVisualization(input: VisualizationGenerateInput) {
     this.logger.log(`Generating visualization for: ${input.concept}`);
+    if (!this.visualizationGenerator) {
+      return null;
+    }
     return await this.visualizationGenerator.generate(input);
   }
 
@@ -211,6 +199,9 @@ export class AgentPipelineService {
    */
   async generateGeneticsVisualization(input: GeneticsVisualizationInput) {
     this.logger.log(`Generating genetics visualization for: ${input.concept}`);
+    if (!this.geneticsVisualization) {
+      return null;
+    }
     return await this.geneticsVisualization.generate(input);
   }
 
@@ -219,6 +210,9 @@ export class AgentPipelineService {
    */
   async controlVisualization(input: InteractiveControlInput) {
     this.logger.log(`Controlling visualization: ${input.visualizationId}`);
+    if (!this.interactiveControl) {
+      return null;
+    }
     return await this.interactiveControl.control(input);
   }
 
@@ -229,6 +223,9 @@ export class AgentPipelineService {
     inputs: VisualizationGenerateInput[],
   ) {
     this.logger.log(`Generating batch visualization for ${inputs.length} concepts`);
+    if (!this.visualizationGenerator) {
+      return [];
+    }
     return await this.visualizationGenerator.generateBatch(inputs);
   }
 
@@ -239,6 +236,9 @@ export class AgentPipelineService {
    */
   async retrieveWithContext(input: VectorRetrievalInput) {
     this.logger.log(`Retrieving context for: ${input.query}`);
+    if (!this.vectorRetrieval) {
+      return [];
+    }
     return await this.vectorRetrieval.retrieve(input);
   }
 
@@ -247,6 +247,9 @@ export class AgentPipelineService {
    */
   async retrieveWithConversation(input: ContextRetrievalInput) {
     this.logger.log(`Retrieving conversation context`);
+    if (!this.contextRetrieval) {
+      return [];
+    }
     return await this.contextRetrieval.retrieve(input);
   }
 
@@ -255,6 +258,9 @@ export class AgentPipelineService {
    */
   async generateStreamingAnswer(input: StreamingAnswerInput) {
     this.logger.log(`Generating streaming answer for: ${input.query}`);
+    if (!this.streamingAnswer) {
+      return { text: 'Streaming answer service is not available' };
+    }
     return await this.streamingAnswer.generate(input);
   }
 }

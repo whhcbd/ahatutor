@@ -25,6 +25,3 @@ export function useToast() {
     toasts,
   };
 }
-
-// 重新导出便捷函数
-export { toastFn as toast };

@@ -197,7 +197,7 @@ const LacOperonVisualization: React.FC = () => {
         <div className="mb-6 p-4 bg-purple-50 rounded-lg border border-purple-200">
           <h4 className="font-bold text-purple-800 mb-3">调控过程步骤</h4>
           <div className="flex gap-2 mb-4">
-            {regulationSteps.map((step, index) => (
+            {regulationSteps.map((_step, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentStep(index)}

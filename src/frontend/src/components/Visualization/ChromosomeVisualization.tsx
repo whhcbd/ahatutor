@@ -118,11 +118,6 @@ export function ChromosomeVisualization({ data, colors }: ChromosomeVisualizatio
     },
   ];
 
-  const chromosomeTypes = data?.chromosomeTypes || [
-    { name: '常染色体', type: 'autosome', count: 22, pairs: 44 },
-    { name: '性染色体', type: 'sex', count: 2, pairs: 2 },
-  ];
-
   const functions = data?.functions || [
     { name: 'DNA包装', description: '保护DNA免受损伤，便于遗传物质分配' },
     { name: '基因携带', description: '携带和传递遗传信息' },

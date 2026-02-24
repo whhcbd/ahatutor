@@ -1,23 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LLMService } from '../../llm/llm.service';
-import {
-  VectorRetrievalInput,
-  VectorRetrievalOutput,
-  RetrievalResult,
-  SkillExecutionResult,
-  SkillType,
-} from '@shared/types/skill.types';
+import { LocalVectorStoreService } from './local-vector-store.service';
+import { VectorRetrievalInput, VectorRetrievalOutput, RetrievalResult, SkillExecutionResult, SkillType } from '@shared/types/skill.types';
+import {  } from '@shared/types/agent.types';
 
-/**
- * 向量检索服务
- *
- * 功能：
- * - 将用户查询向量化
- * - 在向量数据库中检索相关文档块
- * - 支持过滤和重排
- * - 构建上下文
- */
 @Injectable()
 export class VectorRetrievalService {
   private readonly logger = new Logger(VectorRetrievalService.name);
@@ -25,11 +12,9 @@ export class VectorRetrievalService {
   constructor(
     private readonly llmService: LLMService,
     private readonly configService: ConfigService,
+    private readonly localVectorStoreService: LocalVectorStoreService,
   ) {}
 
-  /**
-   * 向量检索
-   */
   async retrieve(
     input: VectorRetrievalInput,
   ): Promise<SkillExecutionResult<VectorRetrievalOutput>> {
@@ -81,9 +66,6 @@ export class VectorRetrievalService {
     }
   }
 
-  /**
-   * 批量检索
-   */
   async retrieveBatch(
     queries: string[],
     topK: number = 5,
@@ -113,30 +95,61 @@ export class VectorRetrievalService {
     };
   }
 
-  /**
-   * 搜索向量数据库
-   */
   private async searchVectorStore(
     embedding: number[],
     topK: number,
     filters?: VectorRetrievalInput['filters'],
   ): Promise<RetrievalResult[]> {
-    const vectorStoreType = this.configService.get<string>('VECTOR_STORE_TYPE', 'mock');
+    const vectorStoreType = this.configService.get<string>('rag.vectorStoreType', 'local');
 
     switch (vectorStoreType) {
       case 'pinecone':
         return await this.searchPinecone(embedding, topK, filters);
       case 'weaviate':
         return await this.searchWeaviate(embedding, topK, filters);
+      case 'local':
+        return await this.searchLocal(embedding, topK, filters);
       case 'mock':
       default:
         return await this.searchMock(embedding, topK, filters);
     }
   }
 
-  /**
-   * 搜索 Pinecone
-   */
+  private async searchLocal(
+    embedding: number[],
+    topK: number,
+    filters?: VectorRetrievalInput['filters'],
+  ): Promise<RetrievalResult[]> {
+    try {
+      const localResults = await this.localVectorStoreService.similaritySearch(embedding, {
+        topK,
+        threshold: 0.3,
+        filter: filters ? { chapter: filters.chapter } : undefined,
+      });
+
+      const results: RetrievalResult[] = localResults.map(({ chunk, score }) => ({
+        chunkId: chunk.id,
+        documentId: chunk.documentId,
+        content: chunk.content,
+        score,
+        metadata: {
+          documentId: chunk.documentId,
+          chunkIndex: 0,
+          topics: chunk.metadata.tags || [],
+          section: chunk.metadata.section,
+          chapter: chunk.metadata.chapter,
+          difficulty: 'beginner',
+        },
+      }));
+
+      this.logger.log(`Retrieved ${results.length} results from local vector store`);
+      return results;
+    } catch (error) {
+      this.logger.error('Local vector store search failed:', error);
+      return [];
+    }
+  }
+
   private async searchPinecone(
     embedding: number[],
     topK: number,
@@ -189,9 +202,6 @@ export class VectorRetrievalService {
     }
   }
 
-  /**
-   * 搜索 Weaviate
-   */
   private async searchWeaviate(
     embedding: number[],
     topK: number,
@@ -268,9 +278,6 @@ export class VectorRetrievalService {
     }
   }
 
-  /**
-   * Mock 搜索（用于开发测试）
-   */
   private async searchMock(
     _embedding: number[],
     topK: number,
@@ -310,9 +317,6 @@ export class VectorRetrievalService {
     ].slice(0, topK);
   }
 
-  /**
-   * 构建 Pinecone 过滤器
-   */
   private buildPineconeFilter(filters?: VectorRetrievalInput['filters']): Record<string, unknown> | null {
     if (!filters) return null;
 
@@ -337,9 +341,6 @@ export class VectorRetrievalService {
     return Object.keys(pineconeFilter).length > 0 ? pineconeFilter : null;
   }
 
-  /**
-   * 构建 Weaviate 过滤器
-   */
   private buildWeaviateFilter(filters?: VectorRetrievalInput['filters']): string | null {
     if (!filters) return null;
 
@@ -385,28 +386,11 @@ export class VectorRetrievalService {
     }`;
   }
 
-  /**
-   * 重排检索结果
-   */
   private async rerankResults(
     query: string,
     results: RetrievalResult[],
   ): Promise<RetrievalResult[]> {
     try {
-      interface RerankRequest {
-        model: string;
-        query: string;
-        documents: Array<{ id: string; text: string }>;
-        top_n: number;
-      }
-
-      interface RerankResponse {
-        results: Array<{
-          index: number;
-          relevance_score: number;
-        }>;
-      }
-
       const cohereApiKey = this.configService.get<string>('COHERE_API_KEY');
 
       if (!cohereApiKey) {
@@ -425,18 +409,18 @@ export class VectorRetrievalService {
           query,
           documents: results.map(r => ({ id: r.chunkId, text: r.content })),
           top_n: results.length,
-        } as RerankRequest),
+        }),
       });
 
       if (!response.ok) {
         throw new Error(`Cohere API error: ${response.status}`);
       }
 
-      const rerankData = await response.json() as RerankResponse;
+      const rerankData = await response.json();
 
       const rerankedResults = rerankData.results
-        .sort((a, b) => b.relevance_score - a.relevance_score)
-        .map(item => ({
+        .sort((a: any, b: any) => b.relevance_score - a.relevance_score)
+        .map((item: any) => ({
           ...results[item.index],
           score: item.relevance_score,
         }));
@@ -449,9 +433,6 @@ export class VectorRetrievalService {
     }
   }
 
-  /**
-   * 构建上下文
-   */
   private buildContext(results: RetrievalResult[]): string {
     if (results.length === 0) return '';
 
@@ -465,9 +446,6 @@ export class VectorRetrievalService {
       .join('\n\n---\n\n');
   }
 
-  /**
-   * 获取相似问题
-   */
   async getSimilarQuestions(
     question: string,
     topK: number = 5,

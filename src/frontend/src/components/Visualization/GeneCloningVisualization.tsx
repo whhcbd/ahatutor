@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface GeneCloningVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function GeneCloningVisualization({ data, colors }: GeneCloningVisualizationProps) {
+export function GeneCloningVisualization({ colors }: GeneCloningVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'workflow' | 'geneAcquisition' | 'vector' | 'transformation' | 'screening' | 'expression' | 'purification'>('workflow');
 
   const defaultColors = {

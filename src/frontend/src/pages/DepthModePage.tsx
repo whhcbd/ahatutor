@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Network, BookOpen, ChevronRight, ChevronDown, CheckCircle, Circle, Play, Loader2, ArrowRight } from 'lucide-react';
-import { deepApi } from '@/utils/api';
+import { Network, BookOpen, ChevronRight, ChevronDown, CheckCircle, Circle, Play, Loader2, ArrowRight, Search, X } from 'lucide-react';
+import { deepApi, knowledgeGraphApi } from '@/utils/api';
 import type { PrerequisiteNode } from '@shared/types/agent.types';
+import { KnowledgeGraphView } from '@/components/KnowledgeGraph';
+import type { KnowledgeGraph } from '@shared/types/knowledge-graph.types';
 
 type Step = 'input' | 'exploring' | 'learning' | 'complete';
 
@@ -39,6 +41,11 @@ export default function DepthModePage() {
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [completedNodes, setCompletedNodes] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
+  
+  const [knowledgeGraph, setKnowledgeGraph] = useState<KnowledgeGraph | null>(null);
+  const [isBuildingGraph, setIsBuildingGraph] = useState(false);
+  const [graphStats, setGraphStats] = useState<any>(null);
+  const [showGraphView, setShowGraphView] = useState(false);
 
   const currentNode = learningPath[currentNodeIndex];
 
@@ -137,6 +144,43 @@ export default function DepthModePage() {
     setCurrentNodeIndex(index);
     loadConceptData(learningPath[index].name);
     loadInteractiveFlow(learningPath[index].name);
+  };
+
+  const buildKnowledgeGraph = async () => {
+    setIsBuildingGraph(true);
+    try {
+      const graph = await knowledgeGraphApi.buildGraph();
+      setKnowledgeGraph(graph);
+      setShowGraphView(true);
+      
+      const stats = await knowledgeGraphApi.getStats();
+      setGraphStats(stats);
+    } catch (err) {
+      console.error('Failed to build knowledge graph:', err);
+      setError('构建知识图谱失败，请稍后重试');
+    } finally {
+      setIsBuildingGraph(false);
+    }
+  };
+
+  const queryKnowledgeGraph = async (concept?: string) => {
+    setIsBuildingGraph(true);
+    try {
+      const params: any = {};
+      if (concept) {
+        params.rootConcept = concept;
+        params.depth = 2;
+      }
+      
+      const graph = await knowledgeGraphApi.queryGraph(params);
+      setKnowledgeGraph(graph);
+      setShowGraphView(true);
+    } catch (err) {
+      console.error('Failed to query knowledge graph:', err);
+      setError('查询知识图谱失败，请稍后重试');
+    } finally {
+      setIsBuildingGraph(false);
+    }
   };
 
   const renderTree = (node: ConceptNode, level: number = 0): JSX.Element => {
@@ -240,6 +284,30 @@ export default function DepthModePage() {
                   <>
                     <Play className="w-5 h-5" />
                     <span>开始深度学习</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  if (searchQuery.trim()) {
+                    queryKnowledgeGraph(searchQuery);
+                  } else {
+                    buildKnowledgeGraph();
+                  }
+                }}
+                disabled={isBuildingGraph}
+                className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              >
+                {isBuildingGraph ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>构建中...</span>
+                  </>
+                ) : (
+                  <>
+                    <Search className="w-5 h-5" />
+                    <span>查看知识图谱</span>
                   </>
                 )}
               </button>
@@ -513,6 +581,56 @@ export default function DepthModePage() {
             >
               继续学习其他概念
             </button>
+          </div>
+        </div>
+      )}
+
+      {showGraphView && knowledgeGraph && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-7xl h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-xl font-bold">知识图谱</h2>
+              <button
+                onClick={() => setShowGraphView(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-hidden">
+              <KnowledgeGraphView
+                graph={knowledgeGraph}
+                onNodeClick={(node) => console.log('Node clicked:', node)}
+                width={undefined}
+                height={undefined}
+              />
+            </div>
+
+            {graphStats && (
+              <div className="p-4 border-t bg-gray-50">
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600">{graphStats.totalNodes}</div>
+                    <div className="text-sm text-gray-600">总节点</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">{graphStats.totalEdges}</div>
+                    <div className="text-sm text-gray-600">总连线</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-purple-600">{graphStats.totalClusters}</div>
+                    <div className="text-sm text-gray-600">知识簇</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-orange-600">
+                      {graphStats.categories?.length || 0}
+                    </div>
+                    <div className="text-sm text-gray-600">分类数</div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

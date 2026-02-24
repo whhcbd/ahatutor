@@ -1,0 +1,59 @@
+const http = require('http');
+
+const data = JSON.stringify({
+  concept: '孟德尔第一定律',
+  question: '什么是孟德尔分离定律？',
+  userLevel: 'beginner'
+});
+
+console.log('Sending request to:', 'http://localhost:3001/api/agent/visualize/ask');
+console.log('Request body:', data);
+
+const options = {
+  hostname: 'localhost',
+  port: 3001,
+  path: '/api/agent/visualize/ask',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Content-Length': data.length
+  }
+};
+
+const req = http.request(options, (res) => {
+  console.log(`Status: ${res.statusCode}`);
+  console.log(`Status Message: ${res.statusMessage}`);
+  console.log(`Headers: ${JSON.stringify(res.headers, null, 2)}`);
+
+  res.setEncoding('utf8');
+  let body = '';
+  res.on('data', (chunk) => {
+    body += chunk;
+    console.log('Received chunk:', chunk);
+  });
+  res.on('end', () => {
+    console.log('Full Response:', body);
+    try {
+      const json = JSON.parse(body);
+      console.log('Parsed JSON:', JSON.stringify(json, null, 2));
+    } catch (e) {
+      console.log('Failed to parse as JSON:', e.message);
+    }
+  });
+});
+
+req.on('error', (error) => {
+  console.error('Error:', error.message);
+});
+
+req.on('socket', (socket) => {
+  socket.on('connect', () => {
+    console.log('Socket connected');
+  });
+  socket.on('error', (err) => {
+    console.error('Socket error:', err.message);
+  });
+});
+
+req.write(data);
+req.end();

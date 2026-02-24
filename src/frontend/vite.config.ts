@@ -1,12 +1,23 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import globals from 'vitest/globals';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    exclude: [
+      'node_modules',
+      'dist',
+      '.git'
+    ],
+    setupFiles: ['./src/test/setup.ts']
+  },
   plugins: [
     react({
-      // 启用 React Fast Refresh
       fastRefresh: true,
     }),
   ],
@@ -36,34 +47,24 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: false, // 生产环境关闭 sourcemap 以减小体积
-    // 启用代码压缩和优化
+    sourcemap: false,
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true, // 移除 console.log
-        drop_debugger: true, // 移除 debugger
+        drop_console: true,
+        drop_debugger: true,
       },
     },
-    // 代码分割策略
     rollupOptions: {
       output: {
-        // 手动分包策略
         manualChunks: {
-          // React 核心库
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          // UI 组件库
           'ui-vendor': ['lucide-react'],
-          // 图表库
           'charts-vendor': ['echarts', 'echarts-for-react'],
-          // 数据可视化
           'viz-vendor': ['d3'],
-          // 状态管理
           'state-vendor': ['zustand', '@tanstack/react-query'],
-          // 其他第三方库
           'lib-vendor': ['axios', 'socket.io-client'],
         },
-        // 文件命名
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
         assetFileNames: (assetInfo) => {
@@ -81,12 +82,9 @@ export default defineConfig({
         },
       },
     },
-    // 分包大小警告阈值
     chunkSizeWarningLimit: 500,
-    // CSS 代码分割
     cssCodeSplit: true,
   },
-  // 优化依赖预构建
   optimizeDeps: {
     include: [
       'react',
@@ -98,10 +96,8 @@ export default defineConfig({
       'axios',
     ],
   },
-  // 预加载配置
   experimental: {
     renderBuiltUrl(filename, { type }) {
-      // 为关键资源添加 preload
       if (type === 'js' && filename.includes('main')) {
         return { runtime: `__VITE_PRELOAD__(${JSON.stringify(filename)})` };
       }

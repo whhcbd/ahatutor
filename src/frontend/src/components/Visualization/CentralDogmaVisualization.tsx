@@ -1,24 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface CentralDogmaVisualizationProps {
-  data?: Record<string, unknown>;
   colors?: Record<string, string>;
-}
-
-interface FlowPath {
-  from: string;
-  to: string;
-  label: string;
-  description: string;
-  examples?: string;
-}
-
-interface Molecule {
-  name: string;
-  structure: string;
-  location: string;
-  role: string;
 }
 
 export function CentralDogmaVisualization({ colors }: CentralDogmaVisualizationProps) {
@@ -36,33 +20,6 @@ export function CentralDogmaVisualization({ colors }: CentralDogmaVisualizationP
   };
 
   const c = colors || defaultColors;
-
-  const classicFlow: FlowPath[] = [
-    { from: 'DNA', to: 'RNA', label: '转录', description: '以DNA为模板合成RNA', examples: '在细胞核内进行' },
-    { from: 'RNA', to: '蛋白质', label: '翻译', description: '以mRNA为模板合成蛋白质', examples: '在细胞质中核糖体上进行' },
-  ];
-
-  const reverseFlow: FlowPath[] = [
-    { from: 'RNA', to: 'DNA', label: '逆转录', description: '以RNA为模板合成DNA', examples: 'HIV病毒、某些肿瘤病毒' },
-  ];
-
-  const rnaFlow: FlowPath[] = [
-    { from: 'RNA', to: 'RNA', label: 'RNA复制', description: '以RNA为模板合成RNA', examples: '流感病毒、冠状病毒' },
-  ];
-
-  const molecules: Record<string, Molecule[]> = {
-    DNA: [
-      { name: '脱氧核糖核酸', structure: '双螺旋结构', location: '细胞核', role: '遗传信息存储' },
-    ],
-    RNA: [
-      { name: '信使RNA (mRNA)', structure: '单链', location: '细胞核→细胞质', role: '携带遗传信息' },
-      { name: '转运RNA (tRNA)', structure: '三叶草结构', location: '细胞质', role: '运输氨基酸' },
-      { name: '核糖体RNA (rRNA)', structure: '与蛋白质结合', location: '核糖体', role: '核糖体组成' },
-    ],
-    蛋白质: [
-      { name: '蛋白质', structure: '多肽链折叠', location: '细胞质/细胞膜', role: '执行生命功能' },
-    ],
-  };
 
   const getClassicContent = () => (
     <div style={{ position: 'relative', width: '100%', height: '400px' }}>

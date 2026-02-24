@@ -1,0 +1,204 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "templateId": "hardy-weinberg-equilibrium",
+    "createdAt": "2024-01-15T00:00:00.000Z",
+    "author": "AhaTutor Team",
+    "source": "遗传学教材 第7章 第1节"
+  },
+  "concept": {
+    "name": "Hardy-Weinberg平衡",
+    "nameEn": "Hardy-Weinberg Equilibrium",
+    "category": "群体遗传学",
+    "difficulty": "advanced",
+    "definition": "在一个理想的大群体中，如果没有突变、迁移、选择和遗传漂变，基因频率和基因型频率在世代传递中保持不变。这是群体遗传学的基本定律。",
+    "prerequisites": ["等位基因频率", "基因型频率", "孟德尔定律"],
+    "relatedConcepts": ["自然选择", "遗传漂变", "基因流", "突变"]
+  },
+  "visualizationType": "probability_distribution",
+  "elements": [
+    {
+      "id": "population",
+      "type": "node",
+      "label": "理想大群体",
+      "description": "无限大、随机交配的群体",
+      "position": { "x": 300, "y": 100 },
+      "color": "#4CAF50"
+    },
+    {
+      "id": "allele-A",
+      "type": "node",
+      "label": "等位基因A",
+      "description": "显性等位基因，频率为p",
+      "position": { "x": 200, "y": 250 },
+      "color": "#2196F3",
+      "data": { "frequency": 0.7, "symbol": "p" }
+    },
+    {
+      "id": "allele-a",
+      "type": "node",
+      "label": "等位基因a",
+      "description": "隐性等位基因，频率为q",
+      "position": { "x": 400, "y": 250 },
+      "color": "#FF9800",
+      "data": { "frequency": 0.3, "symbol": "q" }
+    },
+    {
+      "id": "genotype-AA",
+      "type": "cell",
+      "label": "基因型AA",
+      "description": "显性纯合子，频率为p²",
+      "position": { "x": 100, "y": 400 },
+      "color": "#4CAF50",
+      "data": { "frequency": 0.49, "formula": "p²" }
+    },
+    {
+      "id": "genotype-Aa",
+      "type": "cell",
+      "label": "基因型Aa",
+      "description": "杂合子，频率为2pq",
+      "position": { "x": 250, "y": 400 },
+      "color": "#2196F3",
+      "data": { "frequency": 0.42, "formula": "2pq" }
+    },
+    {
+      "id": "genotype-aa",
+      "type": "cell",
+      "label": "基因型aa",
+      "description": "隐性纯合子，频率为q²",
+      "position": { "x": 400, "y": 400 },
+      "color": "#FF9800",
+      "data": { "frequency": 0.09, "formula": "q²" }
+    }
+  ],
+  "relationships": [
+    {
+      "from": "population",
+      "to": "allele-A",
+      "type": "causal",
+      "label": "包含",
+      "direction": "directed"
+    },
+    {
+      "from": "population",
+      "to": "allele-a",
+      "type": "causal",
+      "label": "包含",
+      "direction": "directed"
+    },
+    {
+      "from": "allele-A",
+      "to": "genotype-AA",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    },
+    {
+      "from": "allele-A",
+      "to": "genotype-Aa",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    },
+    {
+      "from": "allele-a",
+      "to": "genotype-Aa",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    },
+    {
+      "from": "allele-a",
+      "to": "genotype-aa",
+      "type": "causal",
+      "label": "形成",
+      "direction": "directed"
+    }
+  ],
+  "data": {
+    "probabilityDistribution": {
+      "categories": ["显性纯合 (AA)", "杂合 (Aa)", "隐性纯合 (aa)"],
+      "values": [0.49, 0.42, 0.09],
+      "colors": ["#4CAF50", "#2196F3", "#FF9800"],
+      "total": "总和 = 1 (100%)",
+      "formula": "(p + q)² = p² + 2pq + q²，其中 p = 0.7, q = 0.3"
+    }
+  },
+  "layout": {
+    "type": "circular",
+    "spacing": 40,
+    "align": "center",
+    "padding": 20
+  },
+  "style": {
+    "theme": "scientific",
+    "colorScheme": {
+      "primary": "#4CAF50",
+      "secondary": "#2196F3",
+      "accent": "#FF9800",
+      "background": "#F5F5F5",
+      "text": "#212121"
+    }
+  },
+  "animation": {
+    "enabled": true,
+    "type": "parallel",
+    "duration": 4000,
+    "easing": "ease-in-out",
+    "autoplay": false
+  },
+  "interactions": ["click", "hover", "zoom"],
+  "annotations": [
+    {
+      "id": "note1",
+      "target": "population",
+      "text": "Hardy-Weinberg平衡的前提条件：无限大群体、随机交配、无突变、无迁移、无选择",
+      "position": "top",
+      "style": "info"
+    },
+    {
+      "id": "note2",
+      "target": "genotype-AA",
+      "text": "p² = 0.7² = 0.49，即49%的个体为显性纯合子",
+      "position": "bottom",
+      "style": "success"
+    }
+  ],
+  "educational": {
+    "learningObjectives": [
+      "理解Hardy-Weinberg平衡的基本原理",
+      "掌握基因频率和基因型频率的计算方法",
+      "能够判断群体是否处于Hardy-Weinberg平衡状态"
+    ],
+    "keyPoints": [
+      "理想群体中基因频率保持不变",
+      "基因型频率与等位基因频率的关系：p² + 2pq + q² = 1",
+      "Hardy-Weinberg平衡有严格的适用条件",
+      "偏离平衡可能意味着进化因素在作用"
+    ],
+    "commonMistakes": [
+      "认为任何群体都处于Hardy-Weinberg平衡",
+      "混淆等位基因频率和基因型频率",
+      "忽视Hardy-Weinberg平衡的适用条件"
+    ],
+    "quizQuestions": [
+      {
+        "question": "在一个群体中，等位基因A的频率p=0.8，等位基因a的频率q=0.2。根据Hardy-Weinberg平衡，基因型Aa的频率是多少？",
+        "options": ["0.16", "0.32", "0.64", "0.04"],
+        "correctAnswer": "0.32",
+        "explanation": "根据Hardy-Weinberg平衡公式，基因型Aa的频率为2pq = 2×0.8×0.2 = 0.32"
+      },
+      {
+        "question": "Hardy-Weinberg平衡适用的条件不包括？",
+        "options": [
+          "无限大的群体",
+          "随机交配",
+          "存在自然选择",
+          "无突变和迁移"
+        ],
+        "correctAnswer": "存在自然选择",
+        "explanation": "Hardy-Weinberg平衡要求无选择、无突变、无迁移、无限大群体和随机交配。存在自然选择会使群体偏离平衡"
+      }
+    ]
+  }
+}

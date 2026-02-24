@@ -75,6 +75,10 @@ export const InteractionFeedback = {
     scale: 0.95,
     duration: 100,
   },
+  doubleClick: {
+    scale: 1.1,
+    duration: 150,
+  },
   select: {
     borderWidth: 3,
     borderColor: '#FF5722',
@@ -83,6 +87,21 @@ export const InteractionFeedback = {
   drag: {
     cursor: 'grabbing',
     opacity: 0.8,
+  },
+  scroll: {
+    cursor: 'grab',
+    opacity: 0.9,
+    duration: 150,
+  },
+  zoom: {
+    scale: 1.1,
+    opacity: 0.9,
+    duration: 150,
+  },
+  pinch: {
+    scale: 1.15,
+    opacity: 0.85,
+    duration: 120,
   },
 } as const;
 

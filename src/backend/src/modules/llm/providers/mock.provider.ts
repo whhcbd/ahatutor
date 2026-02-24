@@ -353,6 +353,20 @@ export class MockProvider {
       });
     }
 
+    if (contentLower.includes('你是遗传学教育专家') || contentLower.includes('用户问题：') || contentLower.includes('请提供：')) {
+      const questionMatch = content.match(/用户问题：(.+)/);
+      const userQuestion = questionMatch ? questionMatch[1].trim() : content;
+
+      const response = {
+        textAnswer: `你好！我是你的遗传学 AI 助教。我可以帮助你理解各种遗传学概念，包括孟德尔定律、基因型与表现型、伴性遗传等。\n\n针对你的问题："${userQuestion}"，我需要更多具体信息来提供详细回答。请尝试提出更具体的遗传学问题，例如：\n\n1. 什么是孟德尔分离定律？\n2. 基因如何影响生物的表型？\n3. 伴性遗传有什么特点？\n4. DNA复制的过程是怎样的？\n5. 减数分裂和有丝分裂有什么区别？`,
+        needVisualization: false,
+        followUpQuestions: ['孟德尔分离定律是什么？', '基因如何影响生物的表型？', '伴性遗传有什么特点？'],
+        relatedConcepts: ['孟德尔定律', '基因型', '表现型', '伴性遗传']
+      };
+
+      return JSON.stringify(response);
+    }
+
     return JSON.stringify({
       response: '这是一个模拟的响应。实际使用时请配置真实的 LLM API Key。',
       originalQuery: content,

@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface PCRVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function PCRVisualization({ data, colors }: PCRVisualizationProps) {
+export function PCRVisualization({ colors }: PCRVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'denaturation' | 'annealing' | 'extension' | 'cycles'>('denaturation');
 
   const defaultColors = {
@@ -205,7 +204,7 @@ export function PCRVisualization({ data, colors }: PCRVisualizationProps) {
                 </g>
               </g>
 
-              <path dM="350,100 L390,100" stroke="#10B981" strokeWidth="4" markerEnd="url(#arrow-blue)"/>
+              <path d="350,100 L390,100" stroke="#10B981" strokeWidth="4" markerEnd="url(#arrow-blue)"/>
 
               <g transform="translate(400, 50)">
                 <text x="100" y="15" textAnchor="middle" fontSize="12" fill="#666">双引物结合</text>

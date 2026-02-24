@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Neo4jService } from './neo4j.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
  */
 @Injectable()
 export class GraphBuilderService {
+  private readonly logger = new Logger(GraphBuilderService.name);
   constructor(private readonly neo4j: Neo4jService) {}
 
   /**
@@ -23,7 +24,8 @@ export class GraphBuilderService {
     edgesCreated: number;
   }> {
     if (!this.neo4j.isConnected()) {
-      throw new Error('Neo4j is not connected');
+      this.logger.warn('Neo4j is not connected, skipping graph building');
+      return { rootId: '', nodesCreated: 0, edgesCreated: 0 };
     }
 
     const { concept, tree, domain = 'genetics' } = data;
@@ -128,7 +130,8 @@ export class GraphBuilderService {
     nodes: Map<string, any>;
   }): Promise<void> {
     if (!this.neo4j.isConnected()) {
-      throw new Error('Neo4j is not connected');
+      this.logger.warn('Neo4j is not connected, skipping graph building');
+      return;
     }
 
     // 创建所有节点
@@ -163,6 +166,10 @@ export class GraphBuilderService {
    * 清空图谱
    */
   async clearGraph(domain?: string): Promise<void> {
+    if (!this.neo4j.isConnected()) {
+      this.logger.warn('Neo4j is not connected, skipping graph clearing');
+      return;
+    }
     if (domain) {
       await this.neo4j.run(
         `

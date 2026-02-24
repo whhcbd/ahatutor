@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { VisualizationColors } from '../../constants/visualization-colors';
 
 interface ChromosomalAberrationVisualizationProps {
-  data: any;
   colors?: Record<string, string>;
 }
 
-export function ChromosomalAberrationVisualization({ data, colors }: ChromosomalAberrationVisualizationProps) {
+export function ChromosomalAberrationVisualization({ colors }: ChromosomalAberrationVisualizationProps) {
   const [activeTab, setActiveTab] = useState<'deletion' | 'duplication' | 'inversion' | 'translocation'>('deletion');
 
   const defaultColors = {

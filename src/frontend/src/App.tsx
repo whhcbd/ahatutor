@@ -10,7 +10,6 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const SpeedModePage = lazy(() => import('./pages/SpeedModePage'));
 const DepthModePage = lazy(() => import('./pages/DepthModePage'));
 const VisualizePage = lazy(() => import('./pages/VisualizePage'));
-const NarrativePage = lazy(() => import('./pages/NarrativePage'));
 const MistakeBookPage = lazy(() => import('./pages/MistakeBookPage'));
 const ReportPage = lazy(() => import('./pages/ReportPage'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
@@ -47,7 +46,6 @@ function App() {
                 <Route path="/speed" element={<SpeedModePage />} />
                 <Route path="/depth" element={<DepthModePage />} />
                 <Route path="/visualize" element={<VisualizePage />} />
-                <Route path="/narrative" element={<NarrativePage />} />
                 <Route path="/mistakes" element={<MistakeBookPage />} />
                 <Route path="/report" element={<ReportPage />} />
                 <Route path="*" element={<ErrorPage />} />

@@ -1,14 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMService } from '../../llm/llm.service';
 import { WebSearchService } from './web-search.service';
-import {
-  ResourceRecommendInput,
-  ResourceRecommendOutput,
-  ResourceRecommendation,
-  ResourceType,
-  SkillExecutionResult,
-  SkillType,
-} from '@shared/types/skill.types';
+import { ResourceRecommendInput, ResourceRecommendOutput, ResourceRecommendation, ResourceType, SkillExecutionResult, SkillType } from '@shared/types/skill.types';
+import {  } from '@shared/types/agent.types';
 
 /**
  * 资源推荐服务
