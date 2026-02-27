@@ -1,4 +1,4 @@
-import type { QuizQuestion } from './genetics.types';
+import type { QuizQuestion, ChiSquareTestData, BacterialConjugationData, QuantitativeTraitsData, ChromosomeAberrationData } from './genetics.types';
 
 /**
  * Agent 相关类型定义
@@ -264,7 +264,7 @@ export interface ChromosomeBehaviorData {
 }
 
 export interface VisualizationSuggestion {
-  type: 'knowledge_graph' | 'animation' | 'chart' | 'diagram' | 'punnett_square' | 'inheritance_path' | 'pedigree_chart' | 'probability_distribution' | 'meiosis_animation' | 'chromosome_behavior' | 'test_cross' | 'three_point_test_cross';
+  type: 'knowledge_graph' | 'animation' | 'chart' | 'diagram' | 'punnett_square' | 'inheritance_path' | 'pedigree_chart' | 'probability_distribution' | 'meiosis_animation' | 'chromosome_behavior' | 'test_cross' | 'three_point_test_cross' | 'chi_square_test' | 'bacterial_conjugation' | 'quantitative_traits' | 'chromosome_aberration';
   title: string;               // 可视化标题
   description: string;         // 这个可视化要说明什么问题
 
@@ -294,6 +294,10 @@ export interface VisualizationSuggestion {
     | ProbabilityDistributionData
     | MeiosisAnimationData
     | ChromosomeBehaviorData
+    | ChiSquareTestData
+    | BacterialConjugationData
+    | QuantitativeTraitsData
+    | ChromosomeAberrationData
     | Record<string, unknown>  // 允许其他类型的数据
   );
 
@@ -351,6 +355,46 @@ export interface SixAgentOutput {
   quiz?: QuizQuestion;
 }
 
+// 可视化配色方案类型（用于可视化组件）
+export type VisualizationColors = Record<string, string> & {
+  backbone?: string;
+  hydrogenBond?: string;
+  adenine?: string;
+  thymine?: string;
+  guanine?: string;
+  cytosine?: string;
+  dominant?: string;
+  recessive?: string;
+  carrier?: string;
+  normal?: string;
+  affected?: string;
+  male?: string;
+  female?: string;
+  chromosome1?: string;
+  chromosome2?: string;
+  chromosomeX?: string;
+  chromosomeY?: string;
+  gene?: string;
+  locus?: string;
+  promoter?: string;
+  enhancer?: string;
+  exon?: string;
+  intron?: string;
+  hover?: string;
+  selected?: string;
+  disabled?: string;
+  background?: string;
+  border?: string;
+  textPrimary?: string;
+  textSecondary?: string;
+  textDisabled?: string;
+};
+
+// 可视化数据类型（通用）
+export interface VisualizationData extends Record<string, unknown> {
+  [key: string]: unknown;
+}
+
 // 可视化问答响应
 export interface VisualizationAnswerResponse {
   textAnswer: string;           // 文字回答
@@ -361,6 +405,11 @@ export interface VisualizationAnswerResponse {
     parameters: Record<string, any>;
     schema: any;
   }; // A2UI模板蓝图（供应用内agent填充和前端渲染）
+  a2uiTemplates?: Array<{
+    templateId: string;
+    a2uiTemplate: any;
+    parameters: Record<string, any>;
+  }>; // 多个A2UI模板（支持多可视化请求）
   examples?: Array<{ title: string; description: string }>; // 举例
   followUpQuestions?: string[]; // 后续建议问题
   relatedConcepts?: string[];   // 相关概念

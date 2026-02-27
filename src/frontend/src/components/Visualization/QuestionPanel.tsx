@@ -2,9 +2,37 @@ import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Send, Loader2, Sparkles, Eye, BookOpen } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { agentApi } from '../../api/agent';
 import type { VisualizationSuggestion } from '@shared/types/agent.types';
 import { renderVisualization } from './VisualDesignerView';
+
+const CustomCodeBlock = ({ children, className, ...props }: any) => {
+  const match = /language-(\w+)/.exec(className || '');
+  return match ? (
+    <code className="bg-gray-100 px-2 py-1 rounded font-mono text-sm" {...props}>
+      {children}
+    </code>
+  ) : (
+    <code className="bg-gray-100 px-2 py-1 rounded font-mono text-sm" {...props}>
+      {children}
+    </code>
+  );
+};
+
+const CustomPreBlock = ({ children }: any) => {
+  return (
+    <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto my-2">
+      {children}
+    </pre>
+  );
+};
+
+const markdownComponents = {
+  code: CustomCodeBlock,
+  pre: CustomPreBlock,
+};
 
 interface QuestionPanelProps {
   concept: string;
@@ -176,7 +204,7 @@ export function QuestionPanel({
                     }`}
                   >
                     <div className="text-sm">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]} components={markdownComponents}>{message.content}</ReactMarkdown>
                     </div>
 
                     {/* 显示可视化 */}

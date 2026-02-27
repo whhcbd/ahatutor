@@ -1,11 +1,12 @@
-import type { VisualizationData, VisualizationColors } from '@shared/types/agent.types';
+import type { VisualizationData } from '@shared/types/agent.types';
+import { VisualizationColors as DefaultColors } from '../../constants/visualization-colors';
 
 interface EpigeneticsVisualizationProps {
   data: VisualizationData;
-  colors: VisualizationColors;
+  colors?: Record<string, string>;
 }
 
-export function DNAMethylationVisualization({ data, colors }: EpigeneticsVisualizationProps) {
+export function DNAMethylationVisualization({ data, colors = DefaultColors }: EpigeneticsVisualizationProps) {
   const mechanism = data.mechanism as {
     enzyme: string;
     substrate: string;
@@ -94,19 +95,13 @@ export function DNAMethylationVisualization({ data, colors }: EpigeneticsVisuali
   );
 }
 
-export function HistoneModificationVisualization({ data, colors }: EpigeneticsVisualizationProps) {
+export function HistoneModificationVisualization({ data, colors = DefaultColors }: EpigeneticsVisualizationProps) {
   const modifications = data.modifications as Array<{
     type: string;
     enzyme: string;
     removal: string;
     effect: string;
     example: string;
-  }>;
-  const chromatinStates = data.chromatinStates as Array<{
-    name: string;
-    marks: string;
-    structure: string;
-    expression: string;
   }>;
 
   return (
@@ -183,7 +178,7 @@ export function HistoneModificationVisualization({ data, colors }: EpigeneticsVi
   );
 }
 
-export function RNAInterferenceVisualization({ data, colors }: EpigeneticsVisualizationProps) {
+export function RNAInterferenceVisualization({ data, colors = DefaultColors }: EpigeneticsVisualizationProps) {
   const pathways = data.pathways as Array<{
     name: string;
     source: string;
@@ -259,7 +254,7 @@ export function RNAInterferenceVisualization({ data, colors }: EpigeneticsVisual
   );
 }
 
-export function ChromatinRemodelingVisualization({ data, colors }: EpigeneticsVisualizationProps) {
+export function ChromatinRemodelingVisualization({ data, colors = DefaultColors }: EpigeneticsVisualizationProps) {
   const families = data.families as Array<{
     name: string;
     subunits: string;
@@ -352,7 +347,7 @@ export function ChromatinRemodelingVisualization({ data, colors }: EpigeneticsVi
   );
 }
 
-export function NoncodingRNAVisualization({ data, colors }: EpigeneticsVisualizationProps) {
+export function NoncodingRNAVisualization({ data, colors = DefaultColors }: EpigeneticsVisualizationProps) {
   const categories = data.categories as Array<{
     name: string;
     size: string;
@@ -401,25 +396,13 @@ export function NoncodingRNAVisualization({ data, colors }: EpigeneticsVisualiza
   );
 }
 
-export function GenomicImprintingVisualization({ data, colors }: EpigeneticsVisualizationProps) {
-  const mechanism = data.mechanism as {
-    establishment: string;
-    maintenance: string;
-    erasure: string;
-    reestablishment: string;
-  };
+export function GenomicImprintingVisualization({ data, colors = DefaultColors }: EpigeneticsVisualizationProps) {
   const imprintedGenes = data.imprintedGenes as Array<{
     name: string;
     chromosome: string;
     paternalExpression: string;
     maternalExpression: string;
     disorder: string;
-  }>;
-  const disorders = data.disorders as Array<{
-    name: string;
-    cause: string;
-    features: string[];
-    pattern: string;
   }>;
 
   return (

@@ -25,11 +25,68 @@ export function adaptComponentProps(
   const adaptedProps: Record<string, any> = { ...a2uiProps };
 
   switch (componentType) {
+    case 'error-card':
+      adaptedProps.title = adaptedProps.title || '错误';
+      adaptedProps.variant = adaptedProps.variant || 'error';
+      adaptedProps.shadow = adaptedProps.shadow ?? true;
+      break;
+
+    case 'error-icon':
+      adaptedProps.name = adaptedProps.name || 'error';
+      adaptedProps.color = adaptedProps.color || '#F44336';
+      adaptedProps.size = adaptedProps.size || 48;
+      break;
+
+    case 'error-message':
+      adaptedProps.content = adaptedProps.content || '发生错误';
+      adaptedProps.variant = adaptedProps.variant || 'body2';
+      adaptedProps.color = adaptedProps.color || 'textSecondary';
+      break;
+
+    case 'retry-button':
+      adaptedProps.label = adaptedProps.label || '重新尝试';
+      adaptedProps.variant = adaptedProps.variant || 'contained';
+      adaptedProps.color = adaptedProps.color || 'primary';
+      adaptedProps.onClick = adaptedProps.onClick || (() => console.log('Retry clicked'));
+      break;
+
+    case 'button':
+      adaptedProps.label = adaptedProps.label || '按钮';
+      adaptedProps.variant = adaptedProps.variant || 'contained';
+      adaptedProps.color = adaptedProps.color || 'primary';
+      break;
+
     case 'ahatutor-punnett-square':
       adaptedProps.data = adaptedProps.data || {};
       adaptedProps.interactive = adaptedProps.interactive ?? true;
       adaptedProps.showLabels = adaptedProps.showLabels ?? true;
       adaptedProps.knowledgePoints = adaptedProps.knowledgePoints || {};
+
+      const data = adaptedProps.data;
+      if (!data.maleGametes) {
+        data.maleGametes = ['A', 'a'];
+      }
+      if (!data.femaleGametes) {
+        data.femaleGametes = ['A', 'a'];
+      }
+      if (!data.offspring) {
+        data.offspring = [
+          { genotype: 'AA', phenotype: '显性', probability: 0.25 },
+          { genotype: 'Aa', phenotype: '显性', probability: 0.5 },
+          { genotype: 'aa', phenotype: '隐性', probability: 0.25 }
+        ];
+      }
+      if (!data.parentalCross) {
+        data.parentalCross = {
+          male: { genotype: 'Aa', phenotype: '显性' },
+          female: { genotype: 'Aa', phenotype: '显性' }
+        };
+      }
+      if (!data.description) {
+        data.description = '经典孟德尔杂交实验';
+      }
+
+      adaptedProps.data = data;
       break;
 
     case 'ahatutor-inheritance-path':
@@ -64,6 +121,49 @@ export function adaptComponentProps(
       adaptedProps.colors = adaptedProps.colors || [];
       adaptedProps.title = adaptedProps.title || '概率分布';
       adaptedProps.total = adaptedProps.total || '';
+      break;
+
+    case 'ahatutor-dna-helix':
+      adaptedProps.data = adaptedProps.data || {};
+      adaptedProps.colors = adaptedProps.colors || {};
+
+      const dnaData = adaptedProps.data;
+      if (!dnaData.basePairs) {
+        dnaData.basePairs = [
+          { base1: 'A', base2: 'T', bonds: 2, color1: '#FF6B6B', color2: '#4ECDC4' },
+          { base1: 'C', base2: 'G', bonds: 3, color1: '#45B7D1', color2: '#FFE66D' }
+        ];
+      }
+      if (!dnaData.structure) {
+        dnaData.structure = {
+          strands: 2,
+          orientation: '反向平行',
+          helixTurn: '右旋'
+        };
+      }
+
+      const dnaColors = adaptedProps.colors;
+      if (!dnaColors.adenine) {
+        dnaColors.adenine = '#FF6B6B';
+      }
+      if (!dnaColors.thymine) {
+        dnaColors.thymine = '#4ECDC4';
+      }
+      if (!dnaColors.guanine) {
+        dnaColors.guanine = '#45B7D1';
+      }
+      if (!dnaColors.cytosine) {
+        dnaColors.cytosine = '#FFE66D';
+      }
+      if (!dnaColors.hydrogenBond) {
+        dnaColors.hydrogenBond = '#95A5A6';
+      }
+      if (!dnaColors.backbone) {
+        dnaColors.backbone = '#455A64';
+      }
+
+      adaptedProps.data = dnaData;
+      adaptedProps.colors = dnaColors;
       break;
 
     default:

@@ -9,6 +9,7 @@ export interface A2UITemplate {
   templateId: string;
   visualizationType: VisualizationSuggestion['type'];
   complexity: 'low' | 'medium' | 'high';
+  category?: '核心工具' | '重要方法' | '原理演示' | '实验技术';
   schema: {
     type: string;
     properties: Record<string, any>;
@@ -35,6 +36,7 @@ export const A2UI_TEMPLATES: A2UITemplate[] = [
     templateId: 'punnett_square_v1',
     visualizationType: 'punnett_square',
     complexity: 'low',
+    category: '核心工具',
     schema: {
       type: 'object',
       properties: {
@@ -129,6 +131,7 @@ export const A2UI_TEMPLATES: A2UITemplate[] = [
     templateId: 'probability_distribution_v1',
     visualizationType: 'probability_distribution',
     complexity: 'low',
+    category: '重要方法',
     schema: {
       type: 'object',
       properties: {
@@ -189,6 +192,7 @@ export const A2UI_TEMPLATES: A2UITemplate[] = [
     templateId: 'knowledge_graph_v1',
     visualizationType: 'knowledge_graph',
     complexity: 'high',
+    category: '原理演示',
     schema: {
       type: 'object',
       properties: {

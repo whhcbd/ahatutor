@@ -1,17 +1,13 @@
-import type { VisualizationData, VisualizationColors } from '@shared/types/agent.types';
+import type { VisualizationData } from '@shared/types/agent.types';
+import { VisualizationColors as DefaultColors } from '../../constants/visualization-colors';
 
 interface TrisomyDetailedVisualizationProps {
   data: VisualizationData;
-  colors: VisualizationColors;
+  colors?: Record<string, string>;
 }
 
-export function TrisomyDetailedVisualization({ data, colors }: TrisomyDetailedVisualizationProps) {
+export function TrisomyDetailedVisualization({ data, colors = DefaultColors }: TrisomyDetailedVisualizationProps) {
   const mechanism = data.mechanism as string;
-  const nondisjunction = data.nondisjunction as {
-    meiosis1: string;
-    meiosis2: string;
-    result: string;
-  };
   const commonTrisomies = data.commonTrisomies as Array<{
     chromosome: string;
     name: string;
@@ -93,7 +89,7 @@ export function TrisomyDetailedVisualization({ data, colors }: TrisomyDetailedVi
   );
 }
 
-export function AneuploidyVisualization({ data, colors }: TrisomyDetailedVisualizationProps) {
+export function AneuploidyVisualization({ data, colors = DefaultColors }: TrisomyDetailedVisualizationProps) {
   const types = data.types as Array<{
     name: string;
     description: string;

@@ -3,6 +3,7 @@ import type { A2UIPayload, A2UIComponent } from '@shared/types/a2ui.types';
 import { adaptA2UIComponent, adaptComponentProps, createWrappedComponent, createFallbackComponent } from './adapters';
 import { getA2UIComponentRegistration, adaptComponentProps as adaptFromRegistry } from './registry';
 import { useA2UIStore } from '../../stores/a2uiStore';
+import { A2UIErrorBoundary, A2UIErrorFallback } from './A2UIErrorBoundary';
 interface A2UIRendererProps {
   payload: A2UIPayload;
   fallback?: React.ComponentType<{ component: A2UIComponent; error?: Error }>;
@@ -18,6 +19,7 @@ export function A2UIRenderer({
 }: A2UIRendererProps): React.ReactElement {
   const { setCurrentPayload, setRendering, setRenderError, updatePerformance } = useA2UIStore();
   const [errors, setErrors] = useState<Map<string, Error>>(new Map());
+  const [retryCount, setRetryCount] = useState(0);
 
   // 提取知识点内容
   const knowledgePoints = payload.dataModel?._knowledgePoints;
@@ -48,6 +50,7 @@ export function A2UIRenderer({
       surface.components,
       FallbackComponent,
       (error) => {
+        console.error('Component rendering error:', error);
         setErrors(prev => new Map(prev).set(rootComponent.id, error));
         setRenderError(error);
         onComponentError?.(rootComponent.id, error);
@@ -57,25 +60,47 @@ export function A2UIRenderer({
     );
   }, [payload, FallbackComponent, onComponentError, showDebugInfo]);
 
+  const handleRetry = (): void => {
+    setErrors(new Map());
+    setRetryCount(prev => prev + 1);
+    setRenderError(null);
+  };
+
+  const handleError = (error: Error, errorInfo: React.ErrorInfo): void => {
+    console.error('A2UI Error Boundary caught error:', error, errorInfo);
+    setRenderError(error);
+    onComponentError?.('root', error);
+  };
+
+  const hasErrors = errors.size > 0 || payload.dataModel?._knowledgePoints?.error;
+
   return (
-    <div className="a2ui-renderer" data-payload-version={payload.version}>
-      {errors.size > 0 && (
-        <div className="a2ui-errors" style={{ padding: '8px', backgroundColor: '#ffebee', color: '#c62828', borderRadius: '4px', marginBottom: '16px' }}>
-          <strong>渲染警告:</strong> {errors.size} 个组件渲染失败
+    <A2UIErrorBoundary
+      fallback={<A2UIErrorFallback title="A2UI渲染错误" message="可视化组件渲染失败" onRetry={handleRetry} showDetails={showDebugInfo} />}
+      onError={handleError}
+    >
+      <div className="a2ui-renderer" data-payload-version={payload.version} key={retryCount}>
+        {hasErrors && (
+          <A2UIErrorFallback
+            title={payload.dataModel?._knowledgePoints?.errorMessage || '可视化组件错误'}
+            message={payload.dataModel?._knowledgePoints?.details?.requestedComponent ? `不支持的可视化组件: ${payload.dataModel._knowledgePoints.details.requestedComponent}` : '组件渲染过程中发生错误'}
+            onRetry={handleRetry}
+            showDetails={showDebugInfo}
+          />
+        )}
+        <div className="a2ui-content">
+          {renderedComponents}
         </div>
-      )}
-      <div className="a2ui-content">
-        {renderedComponents}
+        {showDebugInfo && (
+          <div className="a2ui-debug" style={{ marginTop: '16px', padding: '16px', backgroundColor: '#f5f5f5', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
+            <h4>A2UI Debug Info</h4>
+            <pre style={{ fontSize: '12px', overflow: 'auto' }}>
+              {JSON.stringify(payload, null, 2)}
+            </pre>
+          </div>
+        )}
       </div>
-      {showDebugInfo && (
-        <div className="a2ui-debug" style={{ marginTop: '16px', padding: '16px', backgroundColor: '#f5f5f5', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
-          <h4>A2UI Debug Info</h4>
-          <pre style={{ fontSize: '12px', overflow: 'auto' }}>
-            {JSON.stringify(payload, null, 2)}
-          </pre>
-        </div>
-      )}
-    </div>
+    </A2UIErrorBoundary>
   );
 }
 

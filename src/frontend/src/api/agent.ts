@@ -253,6 +253,11 @@ class AgentApiClient {
       parameters?: Record<string, any>;
       schema?: any;
     };
+    a2uiTemplates?: Array<{
+      templateId: string;
+      a2uiTemplate: any;
+      parameters: Record<string, any>;
+    }>;
     followUpQuestions?: string[];
     relatedConcepts?: string[];
     examples?: string[];
@@ -318,15 +323,6 @@ class AgentApiClient {
     };
 
     return eventSource;
-  }
-
-  async getHardcodedConcepts(): Promise<Array<{
-    concept: string;
-    title: string;
-    type: string;
-    description: string;
-  }>> {
-    return this.request('/agent/visualize/concepts');
   }
 
   async sendUserAction(action: {

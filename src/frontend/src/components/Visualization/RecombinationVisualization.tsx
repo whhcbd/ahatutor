@@ -1,11 +1,12 @@
-import type { VisualizationData, VisualizationColors } from '@shared/types/agent.types';
+import type { VisualizationData } from '@shared/types/agent.types';
+import { VisualizationColors as DefaultColors } from '../../constants/visualization-colors';
 
 interface RecombinationVisualizationProps {
   data: VisualizationData;
-  colors: VisualizationColors;
+  colors?: Record<string, string>;
 }
 
-export function SynapsisVisualization({ data, colors }: RecombinationVisualizationProps) {
+export function SynapsisVisualization({ data, colors = DefaultColors }: RecombinationVisualizationProps) {
   const stages = data.stages as Array<{
     name: string;
     description: string;
@@ -53,7 +54,7 @@ export function SynapsisVisualization({ data, colors }: RecombinationVisualizati
   );
 }
 
-export function HomologousRecombinationVisualization({ data, colors }: RecombinationVisualizationProps) {
+export function HomologousRecombinationVisualization({ data, colors = DefaultColors }: RecombinationVisualizationProps) {
   const process = data.process as Array<{
     step: number;
     name: string;

@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Play, RotateCw, CheckCircle, XCircle, Zap, Loader2, BookOpen, Target, Bot, Eye, MessageSquare, Send, PenTool, BookText, GraduationCap, AlertCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { quizApi, QuizQuestion, AnswerEvaluationResult } from '@/utils/api-quiz';
 import { agentApi } from '@/api/agent';
 import { GENETICS_TOPICS } from '@/data/genetics-topics';
@@ -10,9 +12,34 @@ import { renderVisualization } from '@/components/Visualization/VisualDesignerVi
 import EssayAnswerPanel from '@/components/EssayAnswerPanel';
 import { A2UIComponentRenderer } from '@/components/A2UI/A2UIComponentRenderer';
 import { A2UIRenderer } from '@/components/A2UI/A2UIRenderer';
-import type { VisualizationSuggestion } from '@shared/types/agent.types';
 import type { A2UIPayload } from '@shared/types/a2ui.types';
 import { Difficulty } from '@shared/types/genetics.types';
+
+const CustomCodeBlock = ({ children, className, ...props }: any) => {
+  const match = /language-(\w+)/.exec(className || '');
+  return match ? (
+    <code className="bg-gray-100 px-2 py-1 rounded font-mono text-sm" {...props}>
+      {children}
+    </code>
+  ) : (
+    <code className="bg-gray-100 px-2 py-1 rounded font-mono text-sm" {...props}>
+      {children}
+    </code>
+  );
+};
+
+const CustomPreBlock = ({ children }: any) => {
+  return (
+    <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto my-2">
+      {children}
+    </pre>
+  );
+};
+
+const markdownComponents = {
+  code: CustomCodeBlock,
+  pre: CustomPreBlock,
+};
 
 enum QuizState {
   CONFIG = 'config',
@@ -32,8 +59,8 @@ interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
-  visualization?: VisualizationSuggestion;
   a2uiTemplate?: any;
+  a2uiTemplates?: Array<{ templateId: string; a2uiTemplate: any; parameters: Record<string, any> }>;
   examples?: Array<{ title: string; description: string }>;
   followUpQuestions?: string[];
   relatedConcepts?: string[];
@@ -82,8 +109,8 @@ export default function SpeedModePage() {
   const [evaluation, setEvaluation] = useState<AnswerEvaluationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
-  const [aiVisualization, setAiVisualization] = useState<VisualizationSuggestion | null>(null);
   const [aiA2UITemplate, setAiA2UITemplate] = useState<any>(null);
+  const [aiA2UITemplates, setAiA2UITemplates] = useState<Array<{ templateId: string; a2uiTemplate: any; parameters: Record<string, any> }>>([]);
   const [aiExamples, setAiExamples] = useState<Array<{ title: string; description: string }>>([]);
   const [showEssayPanel, setShowEssayPanel] = useState(false);
   const [essayAnswer, setEssayAnswer] = useState<string>('');
@@ -261,7 +288,6 @@ export default function SpeedModePage() {
 
     setIsGeneratingAiExplanation(true);
     setAiExplanation(null);
-    setAiVisualization(null);
     setAiExamples([]);
     setAiFollowUpQuestions([]);
     setAiRelatedConcepts([]);
@@ -301,13 +327,14 @@ export default function SpeedModePage() {
 
       setAiExplanation(response.textAnswer);
 
-      if (response.a2uiTemplate) {
-        console.log('Setting A2UI template instead of visualization');
-        setAiA2UITemplate(response.a2uiTemplate);
-        setAiVisualization(null);
-      } else {
-        setAiVisualization(response.visualization || null);
+      if (response.a2uiTemplates && response.a2uiTemplates.length > 0) {
+        console.log(`Setting ${response.a2uiTemplates.length} A2UI templates`);
+        setAiA2UITemplates(response.a2uiTemplates);
         setAiA2UITemplate(null);
+      } else if (response.a2uiTemplate) {
+        console.log('Setting A2UI template');
+        setAiA2UITemplate(response.a2uiTemplate);
+        setAiA2UITemplates([]);
       }
       setAiExamples((response.examples || []).map((item, index) => typeof item === 'string' ? { title: `Example ${index + 1}`, description: item } : item));
       setAiFollowUpQuestions(response.followUpQuestions || []);
@@ -337,7 +364,6 @@ export default function SpeedModePage() {
       setSelectedAnswer(null);
       setEvaluation(null);
       setAiExplanation(null);
-      setAiVisualization(null);
       setAiA2UITemplate(null);
       setAiExamples([]);
       setAiFollowUpQuestions([]);
@@ -1058,7 +1084,7 @@ export default function SpeedModePage() {
                       <>
                         <div className="p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg">
                           <div className="text-base text-gray-700 leading-relaxed">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiExplanation || ''}</ReactMarkdown>
+                            <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]} components={markdownComponents}>{aiExplanation || ''}</ReactMarkdown>
                           </div>
                         </div>
 
@@ -1075,18 +1101,6 @@ export default function SpeedModePage() {
                                   <p className="text-sm text-gray-600">{example.description}</p>
                                 </div>
                               ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {aiVisualization && currentQuestion && (
-                          <div className="mt-4">
-                            <div className="flex items-center gap-2 mb-3">
-                              <Eye className="w-4 h-4 text-blue-600" />
-                              <span className="text-xs font-medium text-blue-600">相关可视化</span>
-                            </div>
-                            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                              {renderVisualization(aiVisualization, {}, undefined, undefined)}
                             </div>
                           </div>
                         )}
@@ -1109,6 +1123,35 @@ export default function SpeedModePage() {
                               ) : (
                                 <div className="text-red-500">无效的A2UI模板格式</div>
                               )}
+                            </div>
+                          </div>
+                        )}
+
+                        {aiA2UITemplates && aiA2UITemplates.length > 0 && currentQuestion && (
+                          <div className="mt-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Eye className="w-4 h-4 text-purple-600" />
+                              <span className="text-xs font-medium text-purple-600">多个交互式可视化</span>
+                            </div>
+                            <div className="space-y-4">
+                              {aiA2UITemplates.map((template, index) => (
+                                <div key={`${template.templateId}-${index}`} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                                  <div className="text-sm font-medium text-gray-700 mb-2">
+                                    可视化 {index + 1}: {template.templateId}
+                                  </div>
+                                  {template.a2uiTemplate?.surface ? (
+                                    <A2UIRenderer payload={template.a2uiTemplate as A2UIPayload} />
+                                  ) : template.a2uiTemplate ? (
+                                    <A2UIComponentRenderer
+                                      component={template.a2uiTemplate}
+                                      dataModel={template.parameters}
+                                      onAction={(action) => console.log('A2UI action:', action)}
+                                    />
+                                  ) : (
+                                    <div className="text-red-500">无效的A2UI模板格式</div>
+                                  )}
+                                </div>
+                              ))}
                             </div>
                           </div>
                         )}
@@ -1294,7 +1337,7 @@ export default function SpeedModePage() {
                         </div>
                       )}
                       <div className="text-sm leading-relaxed">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                        <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]} components={markdownComponents}>{message.content}</ReactMarkdown>
                       </div>
                       {message.examples && message.examples.length > 0 && (
                         <div className="mt-3 space-y-2">

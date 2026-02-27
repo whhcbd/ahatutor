@@ -1,11 +1,12 @@
-import type { VisualizationData, VisualizationColors } from '@shared/types/agent.types';
+import type { VisualizationData } from '@shared/types/agent.types';
+import { VisualizationColors as DefaultColors } from '../../constants/visualization-colors';
 
 interface ChromosomeDetailedVisualizationProps {
   data: VisualizationData;
-  colors: VisualizationColors;
+  colors?: Record<string, string>;
 }
 
-export function ChromosomeDetailedVisualization({ data, colors }: ChromosomeDetailedVisualizationProps) {
+export function ChromosomeDetailedVisualization({ data, colors = DefaultColors }: ChromosomeDetailedVisualizationProps) {
   const structure = data.structure as {
     type: string;
     chromatids: number;
@@ -98,7 +99,7 @@ export function ChromosomeDetailedVisualization({ data, colors }: ChromosomeDeta
   );
 }
 
-export function ChromosomeAberrationVisualization({ data, colors }: ChromosomeDetailedVisualizationProps) {
+export function ChromosomeAberrationVisualization({ data, colors = DefaultColors }: ChromosomeDetailedVisualizationProps) {
   const types = data.types as Array<{
     name: string;
     mechanism: string;

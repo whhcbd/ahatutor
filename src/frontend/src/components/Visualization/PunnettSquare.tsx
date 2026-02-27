@@ -30,7 +30,8 @@ export function PunnettSquare({ data, knowledgePoints }: PunnettSquareProps) {
   }
 
   if (!maleGametes || !femaleGametes || !offspring) {
-    return <div className="text-center text-gray-500 p-8">Punnett 方格数据不完整</div>;
+    console.warn('Punnett 方格数据不完整:', { maleGametes, femaleGametes, offspring, data });
+    return <div className="text-center text-gray-500 p-8">Punnett 方格数据不完整，正在重新加载数据...</div>;
   }
 
   // 使用标准配色方案

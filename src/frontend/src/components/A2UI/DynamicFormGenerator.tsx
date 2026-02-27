@@ -230,6 +230,10 @@ function getVisualizationTypeName(type: VisualizationSuggestion['type']): string
     chromosome_behavior: '染色体行为',
     test_cross: '测交分析',
     three_point_test_cross: '三点测交',
+    chi_square_test: '卡方检验',
+    bacterial_conjugation: '细菌接合',
+    quantitative_traits: '数量性状',
+    chromosome_aberration: '染色体畸变',
   };
   return names[type] || '可视化';
 }

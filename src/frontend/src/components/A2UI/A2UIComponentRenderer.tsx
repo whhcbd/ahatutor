@@ -41,12 +41,26 @@ export function A2UIComponentRenderer({
   }
   
   const componentProps = {
-    ...component.properties,
-    dataModel,
-    onAction
-  };
+  ...component.properties,
+  dataModel,
+  onAction
+};
 
-  return <ReactComponent {...componentProps} />;
+if (component.type === 'ahatutor-punnett-square') {
+  return (
+    <ReactComponent
+      data={{
+        maleGametes: component.properties.maleGametes,
+        femaleGametes: component.properties.femaleGametes,
+        parentalCross: component.properties.parentalCross,
+        offspring: component.properties.offspring,
+        description: component.properties.description,
+      }}
+    />
+  );
+}
+
+return <ReactComponent {...componentProps} />;
 }
 
 export default A2UIComponentRenderer;

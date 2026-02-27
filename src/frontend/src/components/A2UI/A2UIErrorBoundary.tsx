@@ -1,203 +1,127 @@
-import React, { Component, ErrorInfo, ReactNode, useState } from 'react';
-import type { A2UIComponent } from '@shared/types/a2ui.types';
+import React from 'react';
 
 export interface A2UIErrorBoundaryProps {
-  children: ReactNode;
-  fallback?: React.ComponentType<A2UIErrorFallbackProps>;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
-  enableRetry?: boolean;
-  maxRetries?: number;
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
 export interface A2UIErrorFallbackProps {
-  error: Error;
-  errorInfo?: ErrorInfo;
-  component?: A2UIComponent;
-  retryCount: number;
-  onRetry: () => void;
-  onReset: () => void;
+  title?: string;
+  message?: string;
+  onRetry?: () => void;
+  showDetails?: boolean;
+  error?: Error;
 }
 
-export class A2UIErrorBoundary extends Component<A2UIErrorBoundaryProps, {
+interface A2UIErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
-  errorInfo: ErrorInfo | null;
-  retryCount: number;
-  componentStack: string[];
-}> {
+  errorInfo: React.ErrorInfo | null;
+}
+
+export function useA2UIErrorReporting() {
+  const [errors, setErrors] = React.useState<Map<string, Error>>(new Map());
+
+  const reportError = React.useCallback((componentId: string, error: Error) => {
+    console.error(`[A2UI Error] Component ${componentId}:`, error);
+    setErrors(prev => new Map(prev).set(componentId, error));
+  }, []);
+
+  const clearError = React.useCallback((componentId: string) => {
+    setErrors(prev => {
+      const newErrors = new Map(prev);
+      newErrors.delete(componentId);
+      return newErrors;
+    });
+  }, []);
+
+  const clearAllErrors = React.useCallback(() => {
+    setErrors(new Map());
+  }, []);
+
+  return {
+    errors,
+    reportError,
+    clearError,
+    clearAllErrors,
+    hasErrors: errors.size > 0,
+  };
+}
+
+export function withA2UIErrorBoundary<P extends object>(
+  WrappedComponent: React.ComponentType<P>,
+  errorFallback?: React.ReactNode
+) {
+  return function WithErrorBoundary(props: P) {
+    return (
+      <A2UIErrorBoundary fallback={errorFallback}>
+        <WrappedComponent {...props} />
+      </A2UIErrorBoundary>
+    );
+  };
+}
+
+export class A2UIErrorBoundary extends React.Component<
+  A2UIErrorBoundaryProps,
+  A2UIErrorBoundaryState
+> {
   constructor(props: A2UIErrorBoundaryProps) {
     super(props);
     this.state = {
       hasError: false,
       error: null,
       errorInfo: null,
-      retryCount: 0,
-      componentStack: []
     };
   }
 
-  static getDerivedStateFromError(error: Error): Partial<A2UIErrorBoundary['state']> {
+  static getDerivedStateFromError(error: Error): Partial<A2UIErrorBoundaryState> {
     return {
       hasError: true,
-      error
+      error,
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('[A2UI Error Boundary] Caught an error:', error, errorInfo);
-    
-    this.setState({
-      errorInfo,
-      componentStack: this.extractComponentStack(errorInfo)
-    });
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+    console.error('A2UI Error Boundary caught an error:', error, errorInfo);
 
-    this.props.onError?.(error, errorInfo);
-
-    this.reportError(error, errorInfo);
-  }
-
-  private extractComponentStack(errorInfo: ErrorInfo): string[] {
-    const stack = errorInfo.componentStack || '';
-    const components: string[] = [];
-    
-    const componentPattern = /in (\w+)/g;
-    let match;
-    while ((match = componentPattern.exec(stack)) !== null) {
-      if (!components.includes(match[1])) {
-        components.push(match[1]);
-      }
-    }
-    
-    return components;
-  }
-
-  private reportError(error: Error, errorInfo: ErrorInfo): void {
-    const errorReport = {
-      message: error.message,
-      stack: error.stack,
-      componentStack: errorInfo.componentStack,
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-      url: window.location.href
-    };
-
-    try {
-      if (typeof window !== 'undefined' && window.onerror) {
-        console.error('[A2UI Error] Reporting error:', errorReport);
-      }
-
-      fetch('/api/a2ui/error-report', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(errorReport),
-      }).catch(reportError => {
-        console.error('[A2UI Error] Failed to report error:', reportError);
-      });
-
-    } catch (reportingError) {
-      console.error('[A2UI Error] Error reporting failed:', reportingError);
+    if (this.props.onError) {
+      this.props.onError(error, errorInfo);
     }
   }
 
   handleRetry = (): void => {
-    const { maxRetries = 3 } = this.props;
-    
-    if (this.state.retryCount >= maxRetries) {
-      console.warn('[A2UI Error Boundary] Max retries reached');
-      return;
-    }
-
     this.setState({
       hasError: false,
       error: null,
       errorInfo: null,
-      retryCount: this.state.retryCount + 1
     });
   };
 
-  handleReset = (): void => {
-    this.setState({
-      hasError: false,
-      error: null,
-      errorInfo: null,
-      retryCount: 0,
-      componentStack: []
-    });
-  };
-
-  render(): ReactNode {
+  render(): React.ReactNode {
     if (this.state.hasError) {
-      const { fallback: FallbackComponent, enableRetry = true, maxRetries = 3 } = this.props;
-      const { error, errorInfo, retryCount } = this.state;
-
-      if (FallbackComponent) {
-        return (
-          <FallbackComponent
-            error={error!}
-            errorInfo={errorInfo!}
-            retryCount={retryCount}
-            onRetry={enableRetry ? this.handleRetry : () => {}}
-            onReset={this.handleReset}
-          />
-        );
+      if (this.props.fallback) {
+        return this.props.fallback;
       }
 
-      return <DefaultA2UIErrorFallback 
-        error={error!}
-        errorInfo={errorInfo!}
-        retryCount={retryCount}
-        onRetry={enableRetry ? this.handleRetry : () => {}}
-        onReset={this.handleReset}
-        maxRetries={maxRetries}
-      />;
-    }
-
-    return this.props.children;
-  }
-}
-
-function DefaultA2UIErrorFallback({
-  error,
-  errorInfo,
-  retryCount,
-  onRetry,
-  onReset,
-  maxRetries = 3
-}: A2UIErrorFallbackProps & { maxRetries?: number }): React.ReactElement {
-  const [showDetails, setShowDetails] = useState(false);
-  const canRetry = retryCount < maxRetries;
-
-  return (
-    <div className="a2ui-error-fallback" style={{
-      padding: '20px',
-      border: '1px solid #ffcdd2',
-      borderRadius: '8px',
-      backgroundColor: '#ffebee',
-      color: '#c62828',
-      maxWidth: '600px',
-      margin: '16px 0'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="12" />
-          <line x1="12" y1="16" x2="12.01" y2="16" />
-        </svg>
-        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
-          可视化组件加载失败
-        </h3>
-      </div>
-
-      <p style={{ margin: '0 0 16px 0', fontSize: '14px', lineHeight: '1.5' }}>
-        抱歉，可视化组件遇到了问题。{error.message}
-      </p>
-
-      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-        {canRetry && (
+      return (
+        <div className="a2ui-error-boundary" style={{
+          padding: '24px',
+          border: '2px solid #ffcdd2',
+          borderRadius: '8px',
+          backgroundColor: '#ffebee',
+          color: '#c62828',
+          textAlign: 'center',
+        }}>
+          <div style={{ fontSize: '48px', marginBottom: '16px' }}>⚠️</div>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '18px' }}>
+            可视化组件加载失败
+          </h3>
+          <p style={{ margin: '0 0 16px 0', fontSize: '14px', color: '#8b0000' }}>
+            {this.state.error?.message || '组件渲染过程中发生错误'}
+          </p>
           <button
-            onClick={onRetry}
+            onClick={this.handleRetry}
             style={{
               padding: '8px 16px',
               backgroundColor: '#c62828',
@@ -206,133 +130,104 @@ function DefaultA2UIErrorFallback({
               borderRadius: '4px',
               cursor: 'pointer',
               fontSize: '14px',
-              fontWeight: '500'
+              fontWeight: '500',
             }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#b71c1c'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#c62828'}
           >
-            重试 ({retryCount + 1}/{maxRetries})
+            重新尝试
           </button>
-        )}
-
-        <button
-          onClick={onReset}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: 'white',
-            color: '#c62828',
-            border: '1px solid #c62828',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            fontWeight: '500'
-          }}
-        >
-          重置
-        </button>
-
-        <button
-          onClick={() => setShowDetails(!showDetails)}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: 'transparent',
-            color: '#c62828',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            textDecoration: 'underline'
-          }}
-        >
-          {showDetails ? '隐藏详情' : '显示详情'}
-        </button>
-      </div>
-
-      {showDetails && (
-        <div style={{
-          marginTop: '16px',
-          padding: '12px',
-          backgroundColor: 'rgba(255, 255, 255, 0.5)',
-          borderRadius: '4px',
-          fontSize: '12px',
-          maxHeight: '300px',
-          overflow: 'auto'
-        }}>
-          <details>
-            <summary style={{ cursor: 'pointer', fontWeight: '600', marginBottom: '8px' }}>
-              错误堆栈
-            </summary>
-            <pre style={{
-              margin: '8px 0 0 0',
-              padding: '8px',
-              backgroundColor: 'rgba(0, 0, 0, 0.05)',
-              borderRadius: '4px',
-              overflow: 'auto',
-              fontSize: '11px',
-              lineHeight: '1.4'
-            }}>
-              {error.stack}
-            </pre>
-          </details>
-
-          {errorInfo && (
-            <details style={{ marginTop: '12px' }}>
-              <summary style={{ cursor: 'pointer', fontWeight: '600', marginBottom: '8px' }}>
-                组件堆栈
+          {this.state.errorInfo && (
+            <details style={{ marginTop: '16px', textAlign: 'left' }}>
+              <summary style={{ cursor: 'pointer', marginBottom: '8px' }}>
+                错误详情
               </summary>
               <pre style={{
-                margin: '8px 0 0 0',
-                padding: '8px',
-                backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                padding: '12px',
+                backgroundColor: 'rgba(0,0,0,0.1)',
                 borderRadius: '4px',
+                fontSize: '12px',
                 overflow: 'auto',
-                fontSize: '11px',
-                lineHeight: '1.4'
               }}>
-                {errorInfo.componentStack}
+                {this.state.errorInfo.componentStack}
               </pre>
             </details>
           )}
         </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+export const A2UIErrorFallback: React.FC<A2UIErrorFallbackProps> = ({
+  title = '可视化组件错误',
+  message = '组件加载过程中发生错误，请稍后重试',
+  onRetry,
+  showDetails = false,
+  error,
+}) => {
+  const handleRetry = (): void => {
+    if (onRetry) {
+      onRetry();
+    }
+  };
+
+  return (
+    <div className="a2ui-error-fallback" style={{
+      padding: '24px',
+      border: '2px solid #ffcdd2',
+      borderRadius: '8px',
+      backgroundColor: '#ffebee',
+      color: '#c62828',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+        <div style={{ fontSize: '32px', marginRight: '12px' }}>⚠️</div>
+        <div>
+          <h3 style={{ margin: '0 0 4px 0', fontSize: '18px' }}>
+            {title}
+          </h3>
+          <p style={{ margin: '0', fontSize: '14px', color: '#8b0000' }}>
+            {message}
+          </p>
+        </div>
+      </div>
+
+      {onRetry && (
+        <button
+          onClick={handleRetry}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#c62828',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '500',
+            marginBottom: '12px',
+          }}
+        >
+          重新尝试
+        </button>
+      )}
+
+      {showDetails && error && (
+        <details style={{ marginTop: '12px' }}>
+          <summary style={{ cursor: 'pointer', marginBottom: '8px', fontSize: '13px' }}>
+            错误详情
+          </summary>
+          <pre style={{
+            padding: '12px',
+            backgroundColor: 'rgba(0,0,0,0.1)',
+            borderRadius: '4px',
+            fontSize: '12px',
+            overflow: 'auto',
+            maxHeight: '200px',
+          }}>
+            {error.stack || error.message}
+          </pre>
+        </details>
       )}
     </div>
   );
-}
-
-export function withA2UIErrorBoundary<P extends object>(
-  Component: React.ComponentType<P>,
-  errorBoundaryProps?: Partial<A2UIErrorBoundaryProps>
-): React.ComponentType<P> {
-  return function WithA2UIErrorBoundaryWrapper(props: P) {
-    return (
-      <A2UIErrorBoundary {...errorBoundaryProps}>
-        <Component {...props} />
-      </A2UIErrorBoundary>
-    );
-  };
-}
-
-export function useA2UIErrorReporting(): (error: Error, context?: Record<string, any>) => void {
-  return React.useCallback((error: Error, context?: Record<string, any>) => {
-    const errorReport = {
-      message: error.message,
-      stack: error.stack,
-      context,
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-      url: window.location.href
-    };
-
-    console.error('[A2UI Error] Reporting error:', errorReport);
-
-    fetch('/api/a2ui/error-report', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(errorReport),
-    }).catch(reportingError => {
-      console.error('[A2UI Error] Failed to report error:', reportingError);
-    });
-  }, []);
-}
+};

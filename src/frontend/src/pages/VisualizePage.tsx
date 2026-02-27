@@ -101,38 +101,8 @@ const TOPIC_CATEGORIES = [
 
 export default function VisualizePage() {
   const [selectedConcept, setSelectedConcept] = useState('孟德尔第一定律');
-  const [useHardcoded, setUseHardcoded] = useState(true);
-  const [hardcodedConcepts, setHardcodedConcepts] = useState<Array<{
-    concept: string;
-    title: string;
-    type: string;
-    description: string;
-  }>>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showCategoryFilter, setShowCategoryFilter] = useState(false);
-
-  // 获取硬编码概念列表并预加载
-  useEffect(() => {
-    agentApi.getHardcodedConcepts().then(async (concepts) => {
-      setHardcodedConcepts(concepts);
-      // 预加载前几个常用概念的数据
-      const quickLoadConcepts = ['孟德尔第一定律', '孟德尔第二定律', '伴性遗传'].slice(0, 3);
-      for (const concept of quickLoadConcepts) {
-        try {
-          await agentApi.designVisualization(concept, {
-            includeEnrichment: false,
-            includePrerequisites: false,
-          });
-        } catch (err) {
-          console.log(`Preload failed for ${concept}:`, err);
-        }
-      }
-    }).catch(console.error);
-  }, []);
-
-  // 过滤出硬编码的概念
-  const hardcodedConceptNames = hardcodedConcepts.map(c => c.concept);
-  const quickLoadConcepts = GENETICS_TOPICS.filter(t => hardcodedConceptNames.includes(t));
 
   // 根据选择的分类过滤主题
   const filteredTopics = selectedCategory === 'all'
@@ -200,24 +170,15 @@ export default function VisualizePage() {
       {/* 控制面板 */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
         <div className="grid md:grid-cols-4 gap-6">
-          {/* 快速加载开关 */}
+          {/* 加载模式说明 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">加载模式</label>
             <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="quickLoad"
-                checked={useHardcoded}
-                onChange={(e) => setUseHardcoded(e.target.checked)}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-              />
-              <label htmlFor="quickLoad" className="flex items-center gap-1 cursor-pointer">
-                <Sparkles className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm">快速加载</span>
-              </label>
+              <Sparkles className="w-4 h-4 text-blue-500" />
+              <span className="text-sm">AI动态生成</span>
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              {useHardcoded ? `使用预置内容 (${quickLoadConcepts.length}个)` : '使用AI生成'}
+              使用A2UI模板和AI生成动态可视化
             </p>
           </div>
 
@@ -239,7 +200,6 @@ export default function VisualizePage() {
               {filteredTopics.map((topic) => (
                 <option key={topic} value={topic}>
                   {topic}
-                  {useHardcoded && hardcodedConceptNames.includes(topic) && ' ⚡'}
                 </option>
               ))}
             </select>
@@ -250,27 +210,18 @@ export default function VisualizePage() {
 
       {/* 知识点概览卡片 */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
-        {TOPIC_CATEGORIES.map((category) => {
-          // 计算该分类中可快速加载的概念数量
-          const quickLoadCount = category.topics.filter(t => hardcodedConceptNames.includes(t)).length;
-          return (
-            <div
-              key={category.name}
-              className={`bg-white rounded-lg shadow-sm p-4 text-center cursor-pointer transition-colors ${
-                selectedCategory === category.name ? 'ring-2 ring-blue-500' : ''
-              }`}
-              onClick={() => setSelectedCategory(category.name)}
-            >
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-2xl font-bold text-blue-600">{category.topics.length}</span>
-                {quickLoadCount > 0 && (
-                  <span className="text-xs bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded-full">⚡ {quickLoadCount}</span>
-                )}
-              </div>
-              <div className="text-xs text-gray-600">{category.name}</div>
-            </div>
-          );
-        })}
+        {TOPIC_CATEGORIES.map((category) => (
+          <div
+            key={category.name}
+            className={`bg-white rounded-lg shadow-sm p-4 text-center cursor-pointer transition-colors ${
+              selectedCategory === category.name ? 'ring-2 ring-blue-500' : ''
+            }`}
+            onClick={() => setSelectedCategory(category.name)}
+          >
+            <div className="text-2xl font-bold text-blue-600 mb-1">{category.topics.length}</div>
+            <div className="text-sm font-medium text-gray-800">{category.name}</div>
+          </div>
+        ))}
       </div>
 
       {/* 主要内容区域 - 两列布局 */}
@@ -278,10 +229,10 @@ export default function VisualizePage() {
         {/* 左侧：可视化展示区域 */}
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl shadow-sm p-8">
-            <VisualizeView
-              key={`${selectedConcept}-${useHardcoded}`}
+            <VisualDesignerView
               concept={selectedConcept}
-              useHardcoded={useHardcoded}
+              useHardcoded={false}
+              onNodeClick={(node) => console.log('点击节点:', node)}
             />
           </div>
         </div>
@@ -295,21 +246,5 @@ export default function VisualizePage() {
         </div>
       </div>
     </div>
-  );
-}
-
-// 内部组件，处理 key 变化时的重新加载
-interface VisualizeViewProps {
-  concept: string;
-  useHardcoded: boolean;
-}
-
-function VisualizeView({ concept, useHardcoded }: VisualizeViewProps) {
-  return (
-    <VisualDesignerView
-      concept={concept}
-      useHardcoded={useHardcoded}
-      onNodeClick={(node) => console.log('点击节点:', node)}
-    />
   );
 }

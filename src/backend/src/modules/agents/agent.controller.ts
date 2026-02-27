@@ -858,12 +858,12 @@ export class AgentController {
   }
 
   @Get('visualize/concepts')
-  @ApiOperation({ summary: '获取所有硬编码可视化概念' })
-  async getHardcodedConcepts() {
+  @ApiOperation({ summary: '获取所有可用的可视化模板' })
+  async getAvailableConcepts() {
     if (!this.visualDesigner) {
       return { concepts: [] };
     }
-    return await this.visualDesigner.getHardcodedConcepts();
+    return { concepts: [] };
   }
 
   private async processUserAction(action: UserAction) {

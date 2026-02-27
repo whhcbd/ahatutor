@@ -210,3 +210,108 @@ export interface ChartData {
   type: 'pie' | 'bar' | 'line' | 'radar';
   data: Record<string, unknown>;
 }
+
+// 卡方检验数据
+export interface ChiSquareTestData {
+  observed: Array<{
+    category: string;
+    observedValue: number;
+    expectedValue: number;
+  }>;
+  expectedRatio: string;
+  crossDescription?: string;
+  chiSquare: {
+    value: number;
+    degreesOfFreedom: number;
+    criticalValue?: number;
+    pValue?: number;
+  };
+  conclusion: {
+    accepted: boolean;
+    interpretation: string;
+  };
+  title: string;
+}
+
+// 细菌接合作图数据
+export interface BacterialConjugationData {
+  donor: {
+    genotype: string;
+    plasmid: string;
+    markers?: string[];
+  };
+  recipient: {
+    genotype: string;
+    markers?: string[];
+  };
+  conjugationProcess: Array<{
+    time: number;
+    event: string;
+    genesTransferred: string[];
+  }>;
+  timePoints: Array<{
+    time: number;
+    recombinants: string[];
+    frequency: number;
+  }>;
+  geneMap: {
+    unit: string;
+    genes: Array<{
+      name: string;
+      position: number;
+    }>;
+  };
+  title: string;
+}
+
+// 数量性状统计数据
+export interface QuantitativeTraitsData {
+  trait: string;
+  populationSize: number;
+  distribution: Array<{
+    category: string;
+    value: number;
+    frequency: number;
+    count?: number;
+  }>;
+  statistics: {
+    mean: number;
+    variance: number;
+    standardDeviation: number;
+    range?: string;
+  };
+  geneticAnalysis?: {
+    vg: number;
+    ve: number;
+    h2: number;
+    h2Narrow?: number;
+  };
+  title: string;
+}
+
+// 染色体畸变图数据
+export interface ChromosomeAberrationData {
+  aberrationType: 'deletion' | 'duplication' | 'inversion' | 'translocation';
+  normalChromosome: {
+    name: string;
+    segments: Array<{
+      label: string;
+      start: number;
+      end: number;
+      color: string;
+    }>;
+  };
+  abnormalChromosome: {
+    name: string;
+    segments: Array<{
+      label: string;
+      start: number;
+      end: number;
+      color: string;
+      affected: boolean;
+    }>;
+  };
+  description?: string;
+  clinicalSignificance?: string;
+  title: string;
+}

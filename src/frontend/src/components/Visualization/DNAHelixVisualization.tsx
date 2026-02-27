@@ -1,11 +1,12 @@
-import type { VisualizationData, VisualizationColors } from '@shared/types/agent.types';
+import type { VisualizationData } from '@shared/types/agent.types';
+import { VisualizationColors as DefaultColors } from '../../constants/visualization-colors';
 
 interface DNAHelixVisualizationProps {
   data: VisualizationData;
-  colors: VisualizationColors;
+  colors?: Record<string, string>;
 }
 
-export function DNAHelixVisualization({ data, colors }: DNAHelixVisualizationProps) {
+export function DNAHelixVisualization({ data, colors = DefaultColors }: DNAHelixVisualizationProps) {
   const basePairs = data.basePairs as Array<{
     base1: string;
     base2: string;
@@ -13,7 +14,7 @@ export function DNAHelixVisualization({ data, colors }: DNAHelixVisualizationPro
     color1: string;
     color2: string;
   }>;
-  const structure = data.structure as { strands: number; orientation: string };
+  const structure = data.structure as { strands: number; orientation: string; helixTurn?: string };
 
   return (
     <div className="flex flex-col items-center space-y-6">

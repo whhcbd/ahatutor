@@ -4,6 +4,7 @@ import { ClaudeProvider } from './providers/claude.provider';
 import { DeepSeekProvider } from './providers/deepseek.provider';
 import { GLMProvider } from './providers/glm.provider';
 import { MockProvider } from './providers/mock.provider';
+import { EnhancedLocalEmbeddingService } from '../rag/services/enhanced-local-embedding.service';
 
 export interface ChatMessageTextPart {
   type: 'text';
@@ -47,6 +48,7 @@ export interface LLMResponse {
 export class LLMService {
   private readonly logger = new Logger(LLMService.name);
   private readonly defaultProvider = process.env.DEFAULT_LLM_PROVIDER || 'mock';
+  private readonly defaultEmbeddingProvider = process.env.DEFAULT_EMBEDDING_PROVIDER || 'local';
 
   constructor(
     private readonly openaiProvider: OpenAIProvider,
@@ -54,6 +56,7 @@ export class LLMService {
     private readonly deepseekProvider: DeepSeekProvider,
     private readonly glmProvider: GLMProvider,
     private readonly mockProvider: MockProvider,
+    private readonly localEmbeddingService: EnhancedLocalEmbeddingService,
   ) {}
 
   /**
@@ -130,12 +133,17 @@ export class LLMService {
    * 获取嵌入向量
    */
   async embed(text: string, provider?: string): Promise<number[]> {
-    const embedProvider = provider || this.defaultProvider;
+    const embedProvider = provider || this.defaultEmbeddingProvider;
 
     this.logger.debug(`Using embedding provider: ${embedProvider}`);
 
     try {
       switch (embedProvider) {
+        case 'local':
+          if (!this.localEmbeddingService) {
+            throw new Error('Local embedding service is not available. Please ensure EnhancedLocalEmbeddingService is properly configured.');
+          }
+          return await this.localEmbeddingService.embed(text);
         case 'openai':
           return await this.openaiProvider.embed(text);
         case 'claude':
@@ -147,6 +155,10 @@ export class LLMService {
         case 'mock':
           return await this.mockProvider.embed(text);
         default:
+          this.logger.log(`Unknown embedding provider: ${embedProvider}, falling back to local embedding`);
+          if (this.localEmbeddingService) {
+            return await this.localEmbeddingService.embed(text);
+          }
           return await this.mockProvider.embed(text);
       }
     } catch (error) {

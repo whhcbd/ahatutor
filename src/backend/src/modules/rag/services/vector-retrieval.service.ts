@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LLMService } from '../../llm/llm.service';
 import { LocalVectorStoreService } from './local-vector-store.service';
-import { VectorRetrievalInput, VectorRetrievalOutput, RetrievalResult, SkillExecutionResult, SkillType } from '@shared/types/skill.types';
-import {  } from '@shared/types/agent.types';
+import { VectorRetrievalInput, VectorRetrievalOutput, RetrievalResult, SkillExecutionResult, SkillType } from '@ahatutor/shared/types/skill.types';
+import {  } from '@ahatutor/shared/types/agent.types';
 
 @Injectable()
 export class VectorRetrievalService {

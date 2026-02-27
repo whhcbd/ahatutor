@@ -1,11 +1,12 @@
-import type { VisualizationData, VisualizationColors } from '@shared/types/agent.types';
+import type { VisualizationData } from '@shared/types/agent.types';
+import { VisualizationColors as DefaultColors } from '../../constants/visualization-colors';
 
 interface MitosisProcessVisualizationProps {
   data: VisualizationData;
-  colors: VisualizationColors;
+  colors?: Record<string, string>;
 }
 
-export function MitosisProcessVisualization({ data, colors }: MitosisProcessVisualizationProps) {
+export function MitosisProcessVisualization({ data, colors = DefaultColors }: MitosisProcessVisualizationProps) {
   const phases = data.phases as Array<{ name: string; events: string[] }>;
   const outcome = data.outcome as string;
 

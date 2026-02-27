@@ -1,11 +1,12 @@
-import type { VisualizationData, VisualizationColors } from '@shared/types/agent.types';
+import type { VisualizationData } from '@shared/types/agent.types';
+import { VisualizationColors as DefaultColors } from '../../constants/visualization-colors';
 
 interface KaryotypeVisualizationProps {
   data: VisualizationData;
-  colors: VisualizationColors;
+  colors?: Record<string, string>;
 }
 
-export function KaryotypeVisualization({ data, colors }: KaryotypeVisualizationProps) {
+export function KaryotypeVisualization({ data }: KaryotypeVisualizationProps) {
   const groups = data.karyotypeGroups as Array<{
     group: string;
     chromosomes: string;
@@ -72,7 +73,7 @@ export function KaryotypeVisualization({ data, colors }: KaryotypeVisualizationP
   );
 }
 
-export function RobertsonTranslocationVisualization({ data, colors }: KaryotypeVisualizationProps) {
+export function RobertsonTranslocationVisualization({ data, colors = DefaultColors }: KaryotypeVisualizationProps) {
   const mechanism = data.mechanism as {
     involved: string;
     process: string;

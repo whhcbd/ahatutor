@@ -6,7 +6,10 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": false,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {
+      "@shared/*": ["../shared/dist/*"]
+    }
   },
   "exclude": ["scripts/_archive/**/*"]
 }

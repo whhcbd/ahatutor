@@ -42,5 +42,8 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
   }
 }

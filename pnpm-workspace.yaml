@@ -3,6 +3,11 @@ packages:
   - src/backend
   - src/shared
 
+ignoredBuiltDependencies:
+  - faiss-node
+  - protobufjs
+  - sharp
+
 onlyBuiltDependencies:
   - '@nestjs/core'
   - bcrypt

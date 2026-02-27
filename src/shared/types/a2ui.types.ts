@@ -5,6 +5,22 @@ export interface A2UIComponent {
   metadata?: Record<string, any>;
   dataRef?: string;
   children?: string[];
+  child?: string;
+}
+
+export interface BoundValue {
+  path?: string;
+  literalString?: string;
+  literalNumber?: number;
+  literalBoolean?: boolean;
+}
+
+export interface ChildrenReference {
+  explicitList?: string[];
+  template?: {
+    dataBinding: string;
+    componentId: string;
+  };
 }
 
 export interface A2UIPayload {
@@ -20,6 +36,51 @@ export interface A2UIPayload {
     version?: string;
     fallbackLevel?: number;
     fallbackReason?: string;
+  };
+}
+
+export type A2UIMessage = 
+  | SurfaceUpdateMessage
+  | DataModelUpdateMessage
+  | BeginRenderingMessage
+  | DeleteSurfaceMessage;
+
+export interface SurfaceUpdateMessage {
+  surfaceUpdate: {
+    surfaceId: string;
+    components: Array<{
+      id: string;
+      component: Record<string, any>;
+    }>;
+  };
+}
+
+export interface DataModelUpdateMessage {
+  dataModelUpdate: {
+    surfaceId: string;
+    path?: string;
+    contents: Array<{
+      key: string;
+      valueString?: string;
+      valueNumber?: number;
+      valueBoolean?: boolean;
+      valueMap?: any;
+    }>;
+  };
+}
+
+export interface BeginRenderingMessage {
+  beginRendering: {
+    surfaceId: string;
+    root: string;
+    catalogId?: string;
+    styles?: Record<string, any>;
+  };
+}
+
+export interface DeleteSurfaceMessage {
+  deleteSurface: {
+    surfaceId: string;
   };
 }
 

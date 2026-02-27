@@ -1,11 +1,12 @@
-import type { VisualizationData, VisualizationColors } from '@shared/types/agent.types';
+import type { VisualizationData } from '@shared/types/agent.types';
+import { VisualizationColors as DefaultColors } from '../../constants/visualization-colors';
 
 interface MutationVisualizationProps {
   data: VisualizationData;
-  colors: VisualizationColors;
+  colors?: Record<string, string>;
 }
 
-export function MutationVisualization({ data, colors }: MutationVisualizationProps) {
+export function MutationVisualization({ data, colors = DefaultColors }: MutationVisualizationProps) {
   const pointMutations = data.pointMutations as Array<{
     name: string;
     description: string;

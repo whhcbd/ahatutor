@@ -29,7 +29,9 @@
     "react-katex": "^3.0.1",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.24.0",
+    "rehype-katex": "^7.0.1",
     "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
     "socket.io-client": "^4.7.5",
     "zustand": "^4.5.0"
   },

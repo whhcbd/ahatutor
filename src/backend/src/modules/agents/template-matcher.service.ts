@@ -349,7 +349,64 @@ export class TemplateMatcherService {
       params.showLaggingStrand = true;
       params.showOkazakiFragments = lowerQuestion.includes('冈崎片段');
     } else if (template.templateId === 'punnett_square_v1') {
-      if (lowerQuestion.includes('显性') && lowerQuestion.includes('隐性')) {
+      const genotypeMatch = question.match(/([A-Za-z]{1,2})[×\s]+([A-Za-z]{1,2})/i);
+      if (genotypeMatch) {
+        const parent1 = genotypeMatch[1].trim();
+        const parent2 = genotypeMatch[2].trim();
+        
+        const extractGametes = (genotype: string): string[] => {
+          if (genotype.length === 2) {
+            return genotype.split('').map(g => g.toUpperCase());
+          }
+          return [genotype.toUpperCase()];
+        };
+        
+        params.maleGametes = extractGametes(parent1);
+        params.femaleGametes = extractGametes(parent2);
+        
+        const getPhenotype = (genotype: string): string => {
+          if (genotype.includes('a') && genotype.includes('A')) {
+            return '红花';
+          } else if (genotype.toLowerCase().includes('a')) {
+            return '白花';
+          }
+          return '红花';
+        };
+        
+        params.parentalCross = {
+          male: { genotype: parent1, phenotype: getPhenotype(parent1) },
+          female: { genotype: parent2, phenotype: getPhenotype(parent2) }
+        };
+        
+        const generateOffspring = (gametes1: string[], gametes2: string[]) => {
+          const offspring = [];
+          const combinations = gametes1.flatMap(g1 => 
+            gametes2.map(g2 => {
+              const genotype = [g1, g2].sort().join('');
+              const isDominant = genotype.includes('A');
+              return { genotype, phenotype: isDominant ? '红花' : '白花', probability: 0 };
+            })
+          );
+          
+          const genotypeCounts: Record<string, any> = {};
+          combinations.forEach(o => {
+            if (!genotypeCounts[o.genotype]) {
+              genotypeCounts[o.genotype] = { ...o, count: 0 };
+            }
+            genotypeCounts[o.genotype].count++;
+          });
+          
+          const total = combinations.length;
+          return Object.values(genotypeCounts).map((o: any) => ({
+            genotype: o.genotype,
+            phenotype: o.phenotype,
+            probability: o.count / total
+          }));
+        };
+        
+        params.offspring = generateOffspring(params.maleGametes, params.femaleGametes);
+        params.description = `杂交实验：${parent1} × ${parent2}`;
+      } else if (lowerQuestion.includes('显性') && lowerQuestion.includes('隐性')) {
         params.maleGametes = ['A', 'a'];
         params.femaleGametes = ['A', 'a'];
         params.parentalCross = {

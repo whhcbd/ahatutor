@@ -47,7 +47,6 @@ import { TestCross } from './TestCross';
 
 interface VisualDesignerViewProps {
   concept: string;
-  useHardcoded?: boolean;
   onNodeClick?: (node: any) => void;
 }
 
@@ -79,11 +78,9 @@ const visualizationCache = new Map<string, {
  */
 export function VisualDesignerView({
   concept,
-  useHardcoded = true,
   onNodeClick,
 }: VisualDesignerViewProps) {
   const [loading, setLoading] = useState(true);
-  const [usingHardcoded, setUsingHardcoded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<{
     visualization: VisualizationSuggestion;
@@ -99,44 +96,19 @@ export function VisualDesignerView({
     };
   } | null>(null);
 
-  const cacheKey = useMemo(() => `${concept}-${useHardcoded}`, [concept, useHardcoded]);
+  const cacheKey = useMemo(() => `${concept}`, [concept]);
 
   const loadVisualization = useCallback(async () => {
     const cached = visualizationCache.get(cacheKey);
     if (cached) {
       setData(cached);
       setLoading(false);
-      setUsingHardcoded(useHardcoded);
       return;
     }
 
     setLoading(true);
     setError(null);
 
-    // 如果启用硬编码优先，先尝试获取硬编码概念列表
-    if (useHardcoded) {
-      setUsingHardcoded(true);
-      try {
-        const hardcodedConcepts = await agentApi.getHardcodedConcepts();
-        const conceptNames = hardcodedConcepts.map(c => c.concept);
-
-        if (conceptNames.includes(concept)) {
-          const result = await agentApi.designVisualization(concept, {
-            includeEnrichment: false,
-            includePrerequisites: false,
-          });
-
-          visualizationCache.set(cacheKey, result);
-          setData(result);
-          setLoading(false);
-          return;
-        }
-      } catch (err) {
-        console.log('Failed to load hardcoded data, falling back to AI generation:', err);
-      }
-    }
-
-    setUsingHardcoded(false);
     try {
       const result = await agentApi.designVisualization(concept, {
         includeEnrichment: true,
@@ -149,7 +121,7 @@ export function VisualDesignerView({
     } finally {
       setLoading(false);
     }
-  }, [concept, useHardcoded, cacheKey]);
+  }, [concept, cacheKey]);
 
   useEffect(() => {
     loadVisualization();
@@ -161,11 +133,9 @@ export function VisualDesignerView({
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
           <p className="text-gray-600">
-            {usingHardcoded ? '⚡ 能快速加载' : '正在生成可视化方案...'}
+            正在生成可视化方案...
           </p>
-          {!usingHardcoded && (
-            <p className="text-sm text-gray-500 mt-2">AI生成需要几秒钟，请稍候</p>
-          )}
+          <p className="text-sm text-gray-500 mt-2">AI生成需要几秒钟，请稍候</p>
         </div>
       </div>
     );
@@ -200,11 +170,6 @@ export function VisualDesignerView({
         <div className="flex items-center justify-center gap-2 mb-2">
           {visualization.title && (
             <h3 className="text-xl font-bold text-gray-800">{visualization.title}</h3>
-          )}
-          {usingHardcoded && (
-            <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium flex items-center gap-1">
-              ⚡ 快速加载
-            </span>
           )}
         </div>
         {visualization.description && (

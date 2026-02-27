@@ -6,6 +6,7 @@ import { ClaudeProvider } from './providers/claude.provider';
 import { DeepSeekProvider } from './providers/deepseek.provider';
 import { GLMProvider } from './providers/glm.provider';
 import { MockProvider } from './providers/mock.provider';
+import { EnhancedLocalEmbeddingService } from '../rag/services/enhanced-local-embedding.service';
 
 @Module({})
 export class LLMModule {
@@ -20,6 +21,7 @@ export class LLMModule {
         DeepSeekProvider,
         GLMProvider,
         MockProvider,
+        EnhancedLocalEmbeddingService,
       ],
       exports: [LLMService],
       global: true,
