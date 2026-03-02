@@ -28,14 +28,24 @@
 
 ## 快速开始
 
+### 1. 依赖安装
+
+项目使用 **pnpm** 作为包管理器，支持工作区配置。请确保先安装 pnpm：
+
 ```bash
-# 1. 安装依赖
-npm install
+# 安装 pnpm（如果尚未安装）
+npm install -g pnpm
 
-# 2. 配置环境变量（见下方说明）
+# 1. 安装所有依赖
+pnpm install
 
-# 3. 启动开发服务器（同时启动前后端）
-npm run dev
+# 2. 构建共享包（必须执行）
+pnpm run build:shared
+
+# 3. 配置环境变量（见下方说明）
+
+# 4. 启动开发服务器（同时启动前后端）
+pnpm run dev
 
 访问 http://localhost:5173
 ```
@@ -44,16 +54,76 @@ npm run dev
 
 ```bash
 # 终端1 - 后端 (端口 3001)
-cd src/backend && npm run dev
+cd src/backend && pnpm run dev
 
 # 终端2 - 前端 (端口 5173)
-cd src/frontend && npm run dev
+cd src/frontend && pnpm run dev
 ```
 
-**注意：** 项目需要先构建 shared 包，如果遇到 shared 包导入问题，请运行：
+### 2. 依赖安装详细说明
 
+#### 核心依赖包
+
+| 依赖类别 | 包名 | 用途 | 版本 |
+|---------|------|------|------|
+| **前端核心** | React 18.3 | 前端框架 | ^18.3.1 |
+| | TypeScript 5.5 | 类型系统 | ^5.5.3 |
+| | Vite 5.4 | 构建工具 | ^5.4.1 |
+| | TailwindCSS 3.4 | 样式框架 | ^3.4.4 |
+| | D3.js 7.9 | 数据可视化 | ^7.9.0 |
+| | ECharts 5.5 | 图表库 | ^5.5.0 |
+| **后端核心** | NestJS 10.3 | 后端框架 | ^10.3.2 |
+| | TypeScript 5.5 | 类型系统 | ^5.5.3 |
+| | LangChain 0.1.33 | LLM 集成 | ^0.1.33 |
+| | Swagger 7.1 | API 文档 | ^7.1.17 |
+| | JWT 10.2 | 认证 | ^10.2.0 |
+| **AI 服务** | OpenAI | GPT 模型 | ^4.47.1 |
+| | Anthropic | Claude 模型 | ^0.25.0 |
+| | DeepSeek | DeepSeek 模型 | ^0.1.1 |
+| | GLM | 智谱 AI 模型 | 自定义实现 |
+| **数据库** | Neo4j | 知识图谱 | ^5.18.0 |
+| | Redis | 缓存 | ^4.6.15 |
+| **向量存储** | FAISS | 本地向量库 | ^0.5.1 |
+| | ChromaDB | 向量数据库 | ^3.3.2 |
+| | Pinecone | 云向量数据库 | ^3.0.1 |
+| | Weaviate | 向量搜索引擎 | ^4.4.1 |
+
+#### 安装注意事项
+
+1. **使用 pnpm**：项目配置了 pnpm 工作区，推荐使用 pnpm 以获得最佳依赖管理
+2. **构建 shared 包**：必须先构建共享包，否则前后端会出现导入错误
+3. **网络环境**：安装过程需要稳定的网络环境，特别是安装 LLM 相关包时
+4. **Node.js 版本**：推荐使用 Node.js 18.17.0 或更高版本
+
+#### 常见依赖问题及解决方案
+
+**问题 1: shared 包导入失败**
 ```bash
-npm run build:shared
+# 解决方案
+pnpm run build:shared
+```
+
+**问题 2: 缺少 @langchain/core 依赖**
+```bash
+# 解决方案
+pnpm add @langchain/core -F @ahatutor/backend
+```
+
+**问题 3: 网络超时**
+```bash
+# 解决方案：使用镜像源
+pnpm config set registry https://registry.npmmirror.com
+```
+
+**问题 4: 内存不足**
+```bash
+# 解决方案：增加 Node.js 内存限制
+NODE_OPTIONS="--max-old-space-size=8192" pnpm install
+```
+
+**问题 5: GLM API 配置**
+```bash
+# 解决方案：参考 GLM-API-Guide.md 文件
 ```
 
 ### 当前运行状态
